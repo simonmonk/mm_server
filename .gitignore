@@ -74,3 +74,4 @@ bower.json
 
 # Ignore Byebug command history file.
 .byebug_history
+app/models/product_retailer.rb
