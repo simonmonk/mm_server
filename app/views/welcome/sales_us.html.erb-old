@@ -1,0 +1,151 @@
+<h1>Sales USA</h1>
+
+<% num_weeks = 6 %>
+
+<h2>Amazon.com Last 52 Weeks Sales by Count</h2>
+
+<table>
+<tr>
+    <th>Product</th>
+    <th>SKU</th>
+<% 
+this_week = Sale.current_week_of_epoch()
+(this_week - num_weeks - 1).upto this_week do | week |
+%>
+    <th><%= Sale.date_for_week_of_epoch(week).strftime("%d/%m") %></th>
+<% end %>
+    <th>Total</th>
+    <th>Average</th>
+    <th>Stock</th>
+    <th>Weeks Left</th>
+</tr>
+    
+<%
+amazon = Retailer.find_by_name('amazon.com')
+amazon.product_retailers.order(weekly_sales_avg: :desc).each do | pr |
+    total = 0
+    p = pr.product
+%>
+<tr>
+    <td><%=p.name%></td>
+    <td><%=p.sku%></td>
+<% 
+(this_week - num_weeks - 1).upto this_week do | week |
+    sale = Sale.where(:retailer_id => amazon.id, :product_id => p.id, :week => week).first
+    count = 0
+    if (sale)
+        count = sale.count
+    end
+    total += count
+%>
+    <td><%= count %></td>
+<% end %>
+    <td><%= total.round(1) %></td>
+    <td><%= avg = (total / num_weeks).round(1) %></td>
+    <td><%= stock = pr.lookup_stock %></td>
+    <%
+    pr.weekly_sales_avg = avg
+    pr.save
+    %>
+    <td><%= (stock.to_i / avg).round(1) %></td>
+</tr>
+<% end %>
+
+</table>
+
+<canvas id="amazonUsCount" ></canvas>
+<script>
+var ctx = document.getElementById("amazonUsCount");
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: <%=Sale.week_labels(52).html_safe%>,
+        datasets: [
+        
+        <% 
+            amazon = Retailer.find_by_name('amazon.com')
+            i = 0
+        %>
+        
+        <%= Sale.chart_data_count_all(52, amazon.id).html_safe %>
+            borderColor: colors[<%= i %>],
+            borderWidth: 4,
+            fill: false
+        },
+        
+        <%
+            amazon.product_retailers.each do | pr |
+                i += 1
+        %>        
+        
+            <%= Sale.chart_data_count(52, amazon.id, pr.product.id).html_safe %>
+            borderColor: colors[<%= i %>],
+            borderWidth: 2,
+            fill: false,
+            hidden: true
+        },
+        <% end %>
+    ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+<h2>Amazon.com Last 52 Weeks Sales by Value ($)</h2>
+
+<canvas id="amazonUsValue" ></canvas>
+<script>
+var ctx = document.getElementById("amazonUsValue");
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: <%=Sale.week_labels(52).html_safe%>,
+        datasets: [
+        
+        <% 
+            amazon = Retailer.find_by_name('amazon.com')
+            i = 0
+        %>
+        
+        <%= Sale.chart_data_value_all(52, amazon.id).html_safe %>
+            borderColor: colors[<%= i %>],
+            borderWidth: 4,
+            fill: false
+        },
+        
+        <%
+
+            amazon.product_retailers.each do | pr |
+                i += 1
+        %>        
+        
+            <%= Sale.chart_data_value(52, amazon.id, pr.product.id).html_safe %>
+            borderColor: colors[<%= i %>],
+            borderWidth: 2,
+            fill: false,
+            hidden: true
+        },
+        <% end %>
+    ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+

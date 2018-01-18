@@ -1,0 +1,84 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+table {
+color: #333;
+font-family: Helvetica, Arial, sans-serif;
+border-collapse:
+collapse; border-spacing: 0;
+}
+
+td, th {
+border: 1px solid transparent; /* No more visible border */
+height: 30px;
+text-align: left;
+vertical-align: text-top;
+transition: all 0.3s; /* Simple transition for hover effect */
+}
+
+th {
+background: #DFDFDF; /* Darken header a bit */
+font-weight: bold;
+}
+
+td {
+text-align: left;
+}
+
+.warning {
+background: #ff8080;
+}
+
+
+
+.actions {
+   border-top: 1px solid #96d1f8;
+   background: #e0e0e0;
+   padding: 5px 10px;
+   border-radius: 8px;
+   color: white;
+   font-size: 12px;
+   font-family: Georgia, serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+.actions:hover {
+   border-top-color: #28597a;
+   background: #28597a;
+   color: #ccc;
+   }
+.actions:active {
+   border-top-color: #1b435e;
+   background: #1b435e;
+   }
+
+
+.priority1 {
+    color: red;
+    font-weight: bold;
+}
+
+.priority2 {
+    color: hotpink;
+}
+
+.priority3 {
+    color: grey;
+}
+
+.bordered {
+    border: 1px solid black;
+}

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>SQU:</strong>
+  <%= @product.sku %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product.name %>
+</p>
+
+<p>
+  <strong>Labour:</strong>
+  <%= @product.labour %>
+</p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @product.qty %>
+</p>
+
+<%= link_to 'Back', edit_product_path(@product) %> |
+
