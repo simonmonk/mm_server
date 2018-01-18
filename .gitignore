@@ -76,3 +76,4 @@ bower.json
 .byebug_history
 app/models/product_retailer.rb
 app/controllers/apis_controller.rb
+config/secrets.yml
