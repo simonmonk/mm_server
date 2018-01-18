@@ -19,16 +19,7 @@ def import_order_item(item, woe, amazon)
     sku = item['SellerSKU']
     qty = item['QuantityOrdered'].to_i
     value = item['ItemPrice']['Amount'].to_f
-<<<<<<< HEAD
-    
-    puts "*******************"
-    puts sku
-    puts qty
-    puts value            
-    puts "*******************"
-    
-=======
->>>>>>> 348d7164d546a6767e388f81fa199bd34729613c
+
     product = Product.lookup_sku(sku)
     if (! product)
         puts "NO PRODUCT"
@@ -51,10 +42,7 @@ def import_order_item(item, woe, amazon)
     sale.count = sale.count + qty
     sale.value = sale.value + value
     sale.save
-<<<<<<< HEAD
-    
-=======
->>>>>>> 348d7164d546a6767e388f81fa199bd34729613c
+
 end
 
 
@@ -73,21 +61,12 @@ def import_orders_amazon_uk_week(woe)
     amazon = Retailer.find_by_name('amazon.co.uk')
     Sale.delete_all(["week = ? AND retailer_id = ?", woe, amazon.id])
     
-<<<<<<< HEAD
-    client = MWS.orders(
-  primary_marketplace_id: "A1F83G8C2ARO7P",
-  merchant_id: "A2NKUVTUJUJ8KU",
-  aws_access_key_id: "AKIAIICZLJ3JE4FHSINQ",
-  aws_secret_access_key: "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"
-        )
-=======
     client = MWS.fulfillment_inventory(
             primary_marketplace_id: Rails.application.secrets.AM_UK_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_UK_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_UK_ACCESS_KEY,
             aws_secret_access_key: Rails.application.secrets.AM_UK_SECRET_KEY)
     
->>>>>>> 348d7164d546a6767e388f81fa199bd34729613c
     parser = client.list_orders(opts = {:created_after => created_after, :created_before => created_before})
     x = parser.parse
     x['Orders']['Order'].each do |order|
@@ -130,20 +109,12 @@ def import_orders_amazon_com_week(woe)
     amazon = Retailer.find_by_name('amazon.com')
     Sale.delete_all(["week = ? AND retailer_id = ?", woe, amazon.id])
     
-<<<<<<< HEAD
-    client = MWS.orders(
-  primary_marketplace_id: "ATVPDKIKX0DER",
-  merchant_id: "A14D2WDBSBCN3L",
-  aws_access_key_id: "AKIAISNBGVKB2MW7DNJQ",
-  aws_secret_access_key: "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"
-        )
-=======
     client = MWS.fulfillment_inventory(
             primary_marketplace_id: Rails.application.secrets.AM_US_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_US_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_US_ACCESS_KEY,
             aws_secret_access_key: Rails.application.secrets.AM_US_SECRET_KEY)
->>>>>>> 348d7164d546a6767e388f81fa199bd34729613c
+
     parser = client.list_orders(opts = {:created_after => created_after, :created_before => created_before})
     x = parser.parse
     x['Orders']['Order'].each do |order|
