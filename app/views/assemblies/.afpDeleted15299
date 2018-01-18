@@ -1,0 +1,101 @@
+<script>
+    
+function add_part() {
+    var list = document.getElementById("parts_list");
+    var part_id = list.options[list.selectedIndex].value;
+    var qty = document.getElementById("part_qty_field").value
+    document.location = "/assemblies/add_part?part_id=" + part_id + "&amp;assembly_id=<%= assembly.id %>&amp;qty="+qty
+}    
+    
+function deduct(qty) {
+    n_max = <%= assembly.possible_makes %>
+    if (qty > n_max) {
+        alert("You only have parts for a maximum of " + n_max)
+    }
+    else {
+        if (confirm("Are you sure?")) {
+            document.location = "/assemblies/deduct_stock?assembly_id=<%= assembly.id %>&amp;qty="+qty
+        }
+    }
+        
+}
+</script>
+
+
+
+
+<%= form_for(assembly) do |f| %>
+  <% if assembly.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(assembly.errors.count, "error") %> prohibited this assembly from being saved:</h2>
+
+      <ul>
+      <% assembly.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+<table><tr>
+    
+
+<td><table>
+<tr><td>Name</td><td><%= f.text_field :name %></td></tr>
+<tr><td>Quantity</td><td><%= f.number_field :qty %></td></tr>
+<tr><td>Stock warning level</td><td><%= f.number_field :stock_warning_level %></td></tr>
+    
+<tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+</table>
+  <div class="actions">
+    <%= f.submit "Save" %>
+  </div>
+<% end %>
+</td>
+
+<td>
+        <p>The manufacturing cost of this assembly is £ <%= assembly.production_cost.round(2) %></p>
+        <p>You have enough parts to make: <%= assembly.possible_makes %> of this assembly.</p>
+            <p>Deduct <input id="n" type="number"/> sets of the parts used in this assembly from stock. 
+            <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value)"/></p>
+    </td>
+</tr></table>
+<hr/>
+
+<h2>Parts Used</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Qty</th>
+      <th>Cost</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @assembly.assembly_parts.each do |assembly_part| %>
+      <tr>
+        <td><%= assembly_part.part.name %></td>
+        <td><%= assembly_part.qty %></td>
+        <td><%= (assembly_part.part.purchase_cost * assembly_part.qty).round(3) %></td>  
+        <td><%= button_to 'Remove', assembly_part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
+
+<p></p>
+
+
+<select id="parts_list">
+<% parts = Part.all.order(name: :asc)
+    parts.each do |part| %>
+    <option value='<%= part.id %>'><%= part.name %></option>option>
+<% end %>
+</select>    
+qty <input type="number" id="part_qty_field" value="1"/> 
+<input type="button" value="Add" onClick="javascript:add_part()"/>
+
+<p></p>

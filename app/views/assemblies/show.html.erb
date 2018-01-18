@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @assembly.name %>
+</p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @assembly.qty %>
+</p>
+
+<p>
+  <strong>Labour:</strong>
+  <%= @assembly.labour %>
+</p>
+
+<%= link_to 'Edit', edit_assembly_path(@assembly) %> |
+<%= link_to 'Back', assemblies_path %>

@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Orders (Goods Inwards)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Supplier</th>
+      <th>Order Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_ins.each do |order| %>
+      <tr>
+        <td><%= order.supplier.name %></td>
+        <td><%= order.placed_date %></td>
+        <td><%= link_to 'Edit', edit_order_in_path(order) %></td>
+        <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Order', new_order_in_path %>

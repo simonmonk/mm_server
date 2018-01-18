@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Transactions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date and Time</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.created_at %></td>
+        <td><%= transaction.transaction_type %></td>
+        <td><%= transaction.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

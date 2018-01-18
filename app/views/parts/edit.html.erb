@@ -1,0 +1,17 @@
+<h1>Editing Part: <%= @part.name %></h1>
+
+<p>This part is used in the following products: 
+<% 
+	@part.product_parts.each do |product_part| %>
+      <%= 
+    	begin
+    		product_part.product.name 
+    	rescue Exception
+    		""
+    	end
+      %>;
+<% end %>
+</p>
+
+<%= render 'form', part: @part %>
+

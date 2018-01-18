@@ -1,0 +1,202 @@
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema.define(version: 20170928141327) do
+
+  create_table "assemblies", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "qty"
+    t.decimal  "labour",              precision: 10, scale: 3
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.integer  "stock_warning_level"
+  end
+
+  create_table "assembly_parts", force: :cascade do |t|
+    t.integer  "qty"
+    t.integer  "part_id"
+    t.integer  "assembly_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["assembly_id"], name: "index_assembly_parts_on_assembly_id"
+    t.index ["part_id"], name: "index_assembly_parts_on_part_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.boolean  "dismissed"
+    t.text     "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "priority"
+  end
+
+  create_table "order_in_lines", force: :cascade do |t|
+    t.integer  "qty"
+    t.integer  "order_in_id"
+    t.integer  "part_id"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.decimal  "price",       precision: 10, scale: 3
+    t.integer  "qty_in"
+    t.index ["order_in_id"], name: "index_order_in_lines_on_order_in_id"
+    t.index ["part_id"], name: "index_order_in_lines_on_part_id"
+  end
+
+  create_table "order_ins", force: :cascade do |t|
+    t.boolean  "open"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.date     "placed_date"
+    t.integer  "supplier_id"
+    t.text     "notes"
+    t.string   "currency"
+    t.decimal  "exch_rate",   precision: 10, scale: 3
+    t.decimal  "shipping",    precision: 10, scale: 3
+  end
+
+  create_table "part_suppliers", force: :cascade do |t|
+    t.string   "url"
+    t.integer  "part_id"
+    t.integer  "supplier_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "code"
+    t.index ["part_id"], name: "index_part_suppliers_on_part_id"
+    t.index ["supplier_id"], name: "index_part_suppliers_on_supplier_id"
+  end
+
+  create_table "parts", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "qty"
+    t.decimal  "cost",                precision: 10, scale: 3
+    t.string   "currency"
+    t.decimal  "exch_rate",           precision: 10, scale: 3
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.integer  "stock_warning_level"
+    t.boolean  "active",                                       default: true
+    t.decimal  "shipping_cost",       precision: 10, scale: 3
+    t.text     "notes"
+  end
+
+  create_table "product_assemblies", force: :cascade do |t|
+    t.integer  "qty"
+    t.integer  "product_id"
+    t.integer  "assembly_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["assembly_id"], name: "index_product_assemblies_on_assembly_id"
+    t.index ["product_id"], name: "index_product_assemblies_on_product_id"
+  end
+
+  create_table "product_parts", force: :cascade do |t|
+    t.integer  "part_id"
+    t.integer  "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "fieldname"
+    t.integer  "qty"
+    t.index ["part_id"], name: "index_product_parts_on_part_id"
+    t.index ["product_id"], name: "index_product_parts_on_product_id"
+  end
+
+  create_table "product_retailers", force: :cascade do |t|
+    t.string   "url"
+    t.integer  "product_id"
+    t.integer  "retailer_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "warn_qty"
+    t.float    "weekly_sales_avg"
+    t.index ["product_id"], name: "index_product_retailers_on_product_id"
+    t.index ["retailer_id"], name: "index_product_retailers_on_retailer_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "qty"
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.string   "sku"
+    t.decimal  "labour",              precision: 10, scale: 3
+    t.integer  "stock_warning_level"
+    t.boolean  "active",                                       default: true
+    t.decimal  "wholesale_price",     precision: 10, scale: 3
+    t.decimal  "retail_price",        precision: 10, scale: 3
+    t.text     "notes"
+  end
+
+  create_table "retailers", force: :cascade do |t|
+    t.string   "name"
+    t.string   "contact_name"
+    t.string   "contact_email"
+    t.text     "notes"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "regex_qty"
+    t.string   "regex_oos"
+  end
+
+  create_table "sales", force: :cascade do |t|
+    t.integer  "week"
+    t.integer  "count"
+    t.decimal  "value",       precision: 10, scale: 3
+    t.integer  "product_id"
+    t.integer  "retailer_id"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.index ["product_id"], name: "index_sales_on_product_id"
+    t.index ["retailer_id"], name: "index_sales_on_retailer_id"
+  end
+
+  create_table "shipment_products", force: :cascade do |t|
+    t.integer  "shipment_id"
+    t.integer  "product_id"
+    t.integer  "qty"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["product_id"], name: "index_shipment_products_on_product_id"
+    t.index ["shipment_id"], name: "index_shipment_products_on_shipment_id"
+  end
+
+  create_table "shipments", force: :cascade do |t|
+    t.integer  "retailer_id"
+    t.date     "dispatched"
+    t.text     "notes"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.boolean  "stock_subtracted"
+    t.string   "retailer_shipment_id"
+    t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
+  end
+
+  create_table "suppliers", force: :cascade do |t|
+    t.string   "name"
+    t.string   "contact_name"
+    t.string   "contact_email"
+    t.text     "notes"
+    t.string   "text"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "regex_qty"
+    t.string   "regex_oos"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string   "transaction_time"
+    t.string   "transaction_type"
+    t.text     "description"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+end
