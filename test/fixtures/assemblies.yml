@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  qty: 1
+  labour: 1.5
+
+two:
+  name: MyString
+  qty: 1
+  labour: 1.5

@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Shipments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Retailer</th>
+      <th>Dispatched</th>
+      <th>Retailer Shipping ID</th>
+      <th>Subtracted from stock</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shipments.each do |shipment| %>
+      <tr>
+        <td><%= shipment.retailer.name %></td>
+        <td><%= shipment.dispatched %></td>
+        <td><%= shipment.retailer_shipment_id %></td>
+        <td><%= shipment.stock_subtracted %></td>
+        <td><%= link_to 'Edit', edit_shipment_path(shipment) %></td>
+        <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Shipment', new_shipment_path %>

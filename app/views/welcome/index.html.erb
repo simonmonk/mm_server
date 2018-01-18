@@ -1,0 +1,39 @@
+<h1>Notifications</h1>
+
+<div class="priority1">Priority 1 Out of stock with retailer.</div>
+<div class="priority2">Priority 2 Low stock with retailer.</div>
+<div class="priority3">Priority 3 Unusual amazon purchases.</div>
+
+<input type="button" value="Restore All" onClick='javascript:document.location = "welcome/restore_notifications"'/>
+
+
+<hr/>
+
+<script>
+
+function dismiss_notification(notification_id) {
+    document.location = 'welcome/dismiss_notification?id='+notification_id
+}
+
+</script>
+
+<% notifications = Notification.where(dismissed: false).order(created_at: :desc)
+    notifications.each do |n| %>
+
+<div class="priority<%=n.priority%>"><input type="button" value="X" onClick='javascript:dismiss_notification("<%=n.id%>")'/>
+    <%= n.updated_at.to_formatted_s(:short) %>
+    <%= n.message.html_safe %></div>
+
+<% end %>
+
+<h1>Stock Take: <%=Time.now().strftime("%d/%m/%Y")%></h1>
+
+<div class="bordered">
+<table>
+<tr><td></td><td>£</td></tr>
+<tr><td>Value of Parts</td><td><%= parts = Part.total_value.round(2) %></td></tr>
+<tr><td>Value of Assemblies</td><td><%= assemblies = Assembly.total_value.round(2) %></td></tr>
+<tr><td>Value of Products</td><td><%= products = Product.total_value.round(2) %></td></tr>
+    <tr><td><b>Total</b></td><td><b><%= parts + assemblies + products %></b></td></tr>
+</table>
+</div>
