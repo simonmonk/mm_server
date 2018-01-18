@@ -13,17 +13,11 @@ class ProductRetailer < ApplicationRecord
       if (self.retailer.name.strip.downcase == "amazon.co.uk")
         # Amazon.co.uk - use official API
         client = MWS.fulfillment_inventory(
-<<<<<<< HEAD
-            primary_marketplace_id: "A1F83G8C2ARO7P",
-            merchant_id: "A2NKUVTUJUJ8KU",
-            aws_access_key_id: "AKIAIICZLJ3JE4FHSINQ",
-            aws_secret_access_key: "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")
-=======
+
             primary_marketplace_id: Rails.application.secrets.AM_UK_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_UK_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_UK_ACCESS_KEY,
             aws_secret_access_key: Rails.application.secrets.AM_UK_SECRET_KEY)
->>>>>>> 348d7164d546a6767e388f81fa199bd34729613c
         parser = client.list_inventory_supply(opts = {:seller_skus => [self.product.sku]})
         x = parser.parse
         stock = x['InventorySupplyList']['member']['TotalSupplyQuantity']
@@ -31,17 +25,10 @@ class ProductRetailer < ApplicationRecord
       elsif (self.retailer.name.strip.downcase == "amazon.com")
         # Amazon.com - use official API
         client = MWS.fulfillment_inventory(
-<<<<<<< HEAD
-            primary_marketplace_id: "ATVPDKIKX0DER",
-            merchant_id: "A14D2WDBSBCN3L",
-            aws_access_key_id: "AKIAISNBGVKB2MW7DNJQ",
-            aws_secret_access_key: "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")
-=======
             primary_marketplace_id: Rails.application.secrets.AM_US_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_US_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_US_ACCESS_KEY,
             aws_secret_access_key: Rails.application.secrets.AM_US_SECRET_KEY)
->>>>>>> 348d7164d546a6767e388f81fa199bd34729613c
         parser = client.list_inventory_supply(opts = {:seller_skus => [self.product.sku]})
         x = parser.parse
         stock = x['InventorySupplyList']['member']['TotalSupplyQuantity']
