@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Assemblies</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Qty</th>
+      <th>Production Cost £</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% assemblies = Assembly.all.order(name: :asc)
+    assemblies.each do |assembly| 
+        style_class = ""
+        if (assembly.qty <= assembly.stock_warning_level)
+            style_class = "warning"
+        end
+    %>
+      <tr class="<%=style_class%>">
+        <td><%= link_to assembly.name, edit_assembly_path(assembly) %></td>
+        <td><%= assembly.qty %></td>
+        <td><%= assembly.production_cost.round(2) %></td>
+        <td><%= link_to 'Delete', assembly, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Assembly', new_assembly_path %>

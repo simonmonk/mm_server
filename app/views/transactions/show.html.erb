@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Time:</strong>
+  <%= @transaction.created_at %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @transaction.transaction_type %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @transaction.description %>
+</p>
+
+<%= link_to 'Back', transactions_path %>

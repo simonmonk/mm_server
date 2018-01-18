@@ -1,0 +1,33 @@
+<%= form_for(supplier) do |f| %>
+  <% if supplier.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(supplier.errors.count, "error") %> prohibited this supplier from being saved:</h2>
+
+      <ul>
+      <% supplier.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+    <tr><td>Name</td><td><%= f.text_field :name %></td></tr>    
+    <tr><td>Contact name</td><td><%= f.text_field :contact_name %></td></tr>    
+    <tr><td>Contact email</td><td><%= f.text_field :contact_email %></td></tr>    
+    <tr><td>Notes</td><td><%= f.text_area :notes, cols: "50", rows: "5"%></td></tr>    
+</table>
+
+  <div class="actions">
+    <%= f.submit "Save" %>
+  </div>
+<% end %>
+
+<hr/>
+
+<h2>Parts from this supplier</h2>
+<ul>
+<% @supplier.part_suppliers.find_each do |ps| %>
+  <li><%= ps.part.name %></li>
+<% end %>
+</ul>
