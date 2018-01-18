@@ -1,0 +1,6 @@
+Part Name, Cost GBP
+<% parts = Part.all.order(name: :asc)
+    parts.each do |part| 
+%>
+"<%=part.name%>",<%=part.purchase_cost%> 
+<% end %>

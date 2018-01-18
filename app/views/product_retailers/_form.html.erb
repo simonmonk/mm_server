@@ -1,0 +1,49 @@
+<script>
+
+    function testRequest() {
+        $.get("<%= product_retailer.url %>", callbackLoaded);
+    }
+    
+    function callbackLoaded(data, status) {
+        alert(status);        
+        var resultsDiv = document.getElementById("testResult");
+        var regex = <%= product_retailer.retailer.regex_qty %>;
+        var result = regex.exec(data);
+        var numRegex = /[0-9]+/
+        var num = numRegex.exec(result);
+        resultsDiv.innerHTML = num;
+    }
+    
+
+</script>
+
+<%= form_for(product_retailer) do |f| %>
+  <% if product_retailer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product_retailer.errors.count, "error") %> prohibited this product_retailer from being saved:</h2>
+
+      <ul>
+      <% product_retailer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+  <tr><td>URL</td><td><%= f.text_field :url, :maxlength=>"100" %></td></tr>
+  <tr><td>Weekly sales average</td><td><%= product_retailer.weekly_sales_avg.round(1) %></td></tr>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+  <div class="actions">
+    <input type="button" value="Test" onClick="javascript:testRequest()"/>
+  </div>
+
+  <div id="testResult">
+  </div>

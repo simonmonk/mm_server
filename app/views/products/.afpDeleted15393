@@ -1,0 +1,163 @@
+<script>
+    
+function add_part() {
+    var list = document.getElementById("parts_list");
+    var part_id = list.options[list.selectedIndex].value;
+    var qty = document.getElementById("part_qty_field").value
+    document.location = "/products/add_part?part_id=" + part_id + "&amp;product_id=<%= product.id %>&amp;qty="+qty
+}    
+    
+function delete_part(product_part_id) {
+    if (confirm("Are you sure")) {
+        document.location = "/products/delete_part?product_part_id=" + product_part_id
+    }
+}    
+    
+function add_assembly() {
+    var list = document.getElementById("assemblies_list");
+    var assembly_id = list.options[list.selectedIndex].value;
+    var qty = document.getElementById("assembly_qty_field").value
+    document.location = "/products/add_assembly?assembly_id=" + assembly_id + "&amp;product_id=<%= product.id %>&amp;qty="+qty
+}    
+    
+function deduct(qty) {
+    n_max = <%= product.possible_makes %>
+    if (qty > n_max) {
+        alert("You only have parts for a maximum of " + n_max)
+    }
+    else {
+        if (confirm("Are you sure?")) {
+            document.location = "/products/deduct_stock?product_id=<%= product.id %>&amp;qty="+qty
+        }
+    }
+        
+}
+</script>
+
+<%= form_for(product) do |f| %>
+  <% if product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>    
+<table><tr>
+    <td><table>
+    <tr><td>Name</td><td> <%= f.text_field :name, :maxlength=>"50"%></td></tr>
+    <tr><td>Active</td><td> <%= f.check_box :active %></td></tr>
+    <tr><td>SKU</td><td>  <%= f.text_field :sku %></td></tr>
+    <tr><td>Quantity</td><td> <%= f.number_field :qty %></td></tr>
+    <tr><td>Wholesale price</td><td> <%= f.text_field :wholesale_price %> (suggested £<%= @product.suggested_wholesale.round(2) %>)</td></tr>
+    <tr><td>Retail price</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td></tr>        
+    <tr><td>Stock level warning</td><td> <%= f.number_field :stock_warning_level %></td></tr>
+        
+    <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+    </table> 
+    
+    <div class="actions">
+        <%= f.submit "Save" %>
+    </div>
+ <% end %>    
+    </td>
+
+    <td>
+        <p>The manufacturing cost of this product is £ <%= product.production_cost.round(2) %></p>
+        <p>You have enough parts and assemblies to make: <%= product.possible_makes %> of this product.</p>
+        <p>Deduct <input id="n" type="number"/> sets of the parts and assemblies used in this product from stock. 
+            <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value)"/></p>
+        <% @product.product_retailers.each do |pr| %>
+            <p><%=pr.retailer.name%> has <%=pr.lookup_stock %> in stock.</p>  
+        <% end %>
+
+    </td>
+</tr></table>
+
+<hr/>
+
+<table><tr>
+
+<td>
+<h2>Parts Used</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Qty</th>
+      <th>Cost £</th>
+      <th>Qty in stock</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @product.product_parts.each do |product_part| %>
+      <tr>
+        <td><%= product_part.part.name %></td>
+        <td><%= product_part.qty %></td>
+        <td><%= (product_part.part.purchase_cost * product_part.qty).round(3) %></td>
+        <td><%= product_part.part.qty%></td>
+        <td><input type="button" value="Delete" onClick="javascript:delete_part(<%= product_part.id%>)"/></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p></p>
+
+    
+<select id="parts_list">
+<% parts = Part.where(active: true).order(name: :asc)
+    parts.each do |part| %>
+    <option value='<%= part.id %>'><%= part.name %></option>option>
+<% end %>
+</select>    
+qty <input type="number" id="part_qty_field" value="1"/> 
+<input type="button" value="Add" onClick="javascript:add_part()"/>
+    
+    
+    
+</td>
+    
+<td width="100px"/>
+
+<td>
+<h2>Assemblies Used</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Assembly</th>
+      <th>Qty</th>
+      <th>Cost £</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @product.product_assemblies.each do |product_assembly| %>
+      <tr>
+        <td><%= product_assembly.assembly.name %></td>
+        <td><%= product_assembly.qty %></td>
+        <td><%= (product_assembly.assembly.production_cost * product_assembly.qty).round(3) %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p></p>
+
+<select id="assemblies_list">
+<% assemblies = Assembly.all.order(name: :asc)
+    assemblies.each do |assembly| %>
+    <option value='<%= assembly.id %>'><%= assembly.name %></option>option>
+<% end %>
+</select>    
+qty <input type="number" id="assembly_qty_field" value="1"/> 
+<input type="button" value="Add" onClick="javascript:add_assembly()"/>
+    
+    
+</td>
+</tr></table>

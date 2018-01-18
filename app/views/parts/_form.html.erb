@@ -1,0 +1,97 @@
+<script>
+    
+function add_supplier() {
+    var list = document.getElementById("suppliers_list");
+    var supplier_id = list.options[list.selectedIndex].value;
+    var code = document.getElementById("code_field").value
+    document.location = "/parts/add_supplier?supplier_id=" + supplier_id + "&amp;part_id=<%= part.id %>&amp;code="+code
+}    
+    
+function remove_part_supplier(part_supplier_id) {
+    document.location = "/parts/remove_part_supplier?part_supplier_id=" + part_supplier_id + "&amp;part_id=<%= part.id %>"
+}    
+    
+</script>
+
+<%= form_for(part) do |f| %>
+  <% if part.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(part.errors.count, "error") %> prohibited this part from being saved:</h2>
+
+      <ul>
+      <% part.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+  <tr><td>Part Name</td><td><%= f.text_field :name %></td></tr>
+  <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
+  <tr><td>Quantity</td><td><%= f.number_field :qty %></td></tr>
+  <tr><td>Stock warning level</td><td><%= f.number_field :stock_warning_level %></td></tr>
+    
+ <tr><td>Cost</td><td><%= f.text_field :cost %>
+     
+    <% currency = part.currency %>
+    <select name="part[currency]" id="part_currency">
+        <option value="GBP" <%= (currency == "GBP")?'selected="selected"':''%>>GBP</option>
+        <option value="USD" <%= (currency == "USD")?'selected="selected"':''%>>USD</option>
+        <option value="EUR" <%= (currency == "EUR")?'selected="selected"':''%>>EUR</option>
+    </select>
+  </td>
+</tr>
+
+    <tr><td>Exchange rate (E.g. 1.3)</td><td><%= f.text_field :exch_rate %></td></tr>
+    <tr><td>Cost (£)</td><td><%= part.purchase_cost.round(3) %></td></tr>
+    <tr><td>Shipping cost (£)</td><td><%= f.text_field :shipping_cost %>
+        ( 5%=<%= (part.purchase_cost * 0.05).round(3) %>, 10%=<%= (part.purchase_cost * 0.1).round(3) %>, 15%=<%= (part.purchase_cost * 0.15).round(3) %>)
+        
+        </td></tr>
+    <tr><td>Total value (£)</td><td><%= part.purchase_cost_all_stock.round(3) %></td></tr>
+    
+    <tr><td>Notes</td><td><%= f.text_area :notes, size: '50x10' %></td></tr>
+    
+</table>
+    
+
+  <div class="actions">
+    <%= f.submit "Save" %>
+  </div>
+<% end %>
+
+
+<h2>Available from Suppliers</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Supplier</th>
+      <th>Code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @part.part_suppliers.each do |part_supplier| %>
+      <tr>
+        <td><%= part_supplier.supplier.name %></td>
+        <td><%= part_supplier.code %></td>
+        <td><input type="button" value="Remove" onClick="javascript:remove_part_supplier(<%= part_supplier.id %>)"/></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p></p>
+    
+<select id="suppliers_list">
+<% suppliers = Supplier.all.order(name: :asc)
+    suppliers.each do |supplier| %>
+    <option value='<%= supplier.id %>'><%= supplier.name %></option>option>
+<% end %>
+</select>    
+Code <input type="text" id="code_field" value=""/> 
+<input type="button" value="Add" onClick="javascript:add_supplier()"/>
+    
+
+

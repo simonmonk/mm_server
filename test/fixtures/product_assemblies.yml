@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  qty: 1
+  product: one
+  assembly: one
+
+two:
+  qty: 1
+  product: two
+  assembly: two

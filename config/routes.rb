@@ -1,0 +1,70 @@
+Rails.application.routes.draw do
+
+  resources :transactions
+  resources :suppliers
+  resources :product_retailers
+  
+  get '/sales_uk/', to: 'welcome#sales_uk'
+  get '/sales_us/', to: 'welcome#sales_us'
+    
+  resources :parts do
+    collection do
+      get :add_supplier
+      get :remove_part_supplier
+        get :export_parts
+    end
+  end
+  
+  resources :products do
+    collection do
+      get :deduct_stock
+      get :add_part
+      get :add_assembly
+      get :delete_part
+    end
+  end
+  resources :assemblies do
+    collection do
+      get :deduct_stock
+      get :add_part
+      get :delete_part
+    end
+  end
+  resources :retailers do
+    collection do
+      get :add_product
+    end
+  end
+  resources :shipments do
+    collection do
+      get :add_product
+      get :import_shipment_uk
+      get :import_shipment_com
+      get :subtract_products
+    end
+  end
+  resources :order_ins do
+    collection do
+      get :add_part
+      get :delete_part
+      get :rx_part
+    end
+  end
+  resources :apis do
+    collection do
+      get :import_orders_amazon_uk
+      get :import_all_orders
+      get :check_stock_levels
+      get :nightly
+    end
+  end
+    
+  resources :welcome do
+      collection do
+          get :dismiss_notification
+          get :restore_notifications
+      end
+  end
+    
+  root 'welcome#index'
+end
