@@ -57,7 +57,11 @@ def subtract_products
     end
     t = Transaction.new
     t.transaction_type = 'Shipment to ' + shipment.retailer.name
-    t.description = "Removed " + count.to_s + " products from stock for shipment " + shipment.retailer_shipment_id + ". " + message
+    puts("***************************")
+    puts(shipment)
+    puts("***************************")
+    
+    t.description = "Removed " + count.to_s + " products from stock for shipment " + shipment.id.to_s + ". " + message
     t.save
     redirect_to :action => "edit", :id => shipment_id, notice: message
 end      
@@ -72,12 +76,11 @@ def import_shipment_uk
     ShipmentProduct.where(:shipment_id => shipment_id).destroy_all
     message = ''
     begin
-        client = MWS.fulfillment_inbound_shipment(
-  primary_marketplace_id: "A1F83G8C2ARO7P",
-  merchant_id: "A2NKUVTUJUJ8KU",
-  aws_access_key_id: "AKIAIICZLJ3JE4FHSINQ",
-  aws_secret_access_key: "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"
-        )
+        client = MWS.fulfillment_inventory(
+            primary_marketplace_id: Rails.application.secrets.AM_UK_PRIMARY_MARKETPLACE_ID,
+            merchant_id: Rails.application.secrets.AM_UK_MERCHANT_ID,
+            aws_access_key_id: Rails.application.secrets.AM_UK_ACCESS_KEY,
+            aws_secret_access_key: Rails.application.secrets.AM_UK_SECRET_KEY)
         parser = client.list_inbound_shipment_items(opts = {:shipment_id => shipment_code})
         x = parser.parse
 
@@ -106,12 +109,11 @@ def import_shipment_com
     ShipmentProduct.where(:shipment_id => shipment_id).destroy_all
     message = ''
     begin
-        client = MWS.fulfillment_inbound_shipment(
-  primary_marketplace_id: "ATVPDKIKX0DER",
-  merchant_id: "A14D2WDBSBCN3L",
-  aws_access_key_id: "AKIAISNBGVKB2MW7DNJQ",
-  aws_secret_access_key: "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"
-       )
+        client = MWS.fulfillment_inventory(
+            primary_marketplace_id: Rails.application.secrets.AM_US_PRIMARY_MARKETPLACE_ID,
+            merchant_id: Rails.application.secrets.AM_US_MERCHANT_ID,
+            aws_access_key_id: Rails.application.secrets.AM_US_ACCESS_KEY,
+            aws_secret_access_key: Rails.application.secrets.AM_US_SECRET_KEY)
         parser = client.list_inbound_shipment_items(opts = {:shipment_id => shipment_code})
         x = parser.parse
 
