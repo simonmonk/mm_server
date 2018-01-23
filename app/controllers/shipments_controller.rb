@@ -76,7 +76,7 @@ def import_shipment_uk
     ShipmentProduct.where(:shipment_id => shipment_id).destroy_all
     message = ''
     begin
-        client = MWS.fulfillment_inventory(
+        client = MWS.fulfillment_inbound_shipment(
             primary_marketplace_id: Rails.application.secrets.AM_UK_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_UK_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_UK_ACCESS_KEY,
@@ -109,7 +109,7 @@ def import_shipment_com
     ShipmentProduct.where(:shipment_id => shipment_id).destroy_all
     message = ''
     begin
-        client = MWS.fulfillment_inventory(
+        client = MWS.fulfillment_inbound_shipment(
             primary_marketplace_id: Rails.application.secrets.AM_US_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_US_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_US_ACCESS_KEY,
