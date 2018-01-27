@@ -61,7 +61,7 @@
      cat = PartCategory.find_by name: 'UNCATEGORIZED'
      parts.each do |part|
        if not part.part_category
-          part.category_id = cat.id
+          part.part_category_id = cat.id
           part.save
         end
      end
