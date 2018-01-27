@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Part Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @part_categories.each do |part_category| %>
+      <tr>
+        <td><%= part_category.name %></td>
+        <td><%= link_to 'Show', part_category %></td>
+        <td><%= link_to 'Edit', edit_part_category_path(part_category) %></td>
+        <td><%= link_to 'Destroy', part_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Part Category', new_part_category_path %>

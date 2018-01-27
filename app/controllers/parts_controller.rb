@@ -53,8 +53,8 @@ end
   def create
     @part = Part.new(part_params)
     if @part.save
-        #redirect_to :action => "index"
-        render :edit
+      redirect_to :action => "edit", :id => @part.id
+        #render :edit
     else
         render :new
     end
