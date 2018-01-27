@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :part_categories
   resources :transactions
   resources :suppliers
   resources :product_retailers

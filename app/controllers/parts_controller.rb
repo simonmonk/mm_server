@@ -20,10 +20,12 @@ class PartsController < ApplicationController
   # GET /parts/new
   def new
     @part = Part.new
+    @categories = PartCategory.all
   end
 
   # GET /parts/1/edit
   def edit
+    @categories = PartCategory.all
   end
     
 def add_supplier
@@ -81,10 +83,11 @@ end
     # Use callbacks to share common setup or constraints between actions.
     def set_part
       @part = Part.find(params[:id])
+      @categories = PartCategory.all
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def part_params
-      params.require(:part).permit(:name, :active, :qty, :cost, :currency, :exch_rate, :stock_warning_level, :shipping_cost, :notes)
+      params.require(:part).permit(:name, :part_category_id, :active, :qty, :cost, :currency, :exch_rate, :stock_warning_level, :shipping_cost, :notes)
     end
 end

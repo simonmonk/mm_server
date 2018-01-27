@@ -61,7 +61,7 @@ def import_orders_amazon_uk_week(woe)
     amazon = Retailer.find_by_name('amazon.co.uk')
     Sale.delete_all(["week = ? AND retailer_id = ?", woe, amazon.id])
     
-    client = MWS.fulfillment_inventory(
+    client = MWS.orders(
             primary_marketplace_id: Rails.application.secrets.AM_UK_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_UK_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_UK_ACCESS_KEY,
@@ -109,7 +109,7 @@ def import_orders_amazon_com_week(woe)
     amazon = Retailer.find_by_name('amazon.com')
     Sale.delete_all(["week = ? AND retailer_id = ?", woe, amazon.id])
     
-    client = MWS.fulfillment_inventory(
+    client = MWS.orders(
             primary_marketplace_id: Rails.application.secrets.AM_US_PRIMARY_MARKETPLACE_ID,
             merchant_id: Rails.application.secrets.AM_US_MERCHANT_ID,
             aws_access_key_id: Rails.application.secrets.AM_US_ACCESS_KEY,

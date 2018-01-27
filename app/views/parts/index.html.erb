@@ -6,6 +6,12 @@
 
 <p></p>
 
+
+  <% PartCategory.all.each do |cat| %>
+
+    <h1><%= cat.name %></h1>
+
+
 <table border="1">
   <thead>
     <tr>
@@ -17,7 +23,7 @@
   </thead>
 
   <tbody>
-    <% parts = Part.all.order(name: :asc)
+    <% parts = cat.parts.order(name: :asc)
     parts.each do |part| 
         style_class = ""
         if (part.qty <= part.stock_warning_level)
@@ -36,5 +42,7 @@
 
 <br>
 
+  <hr/>
 
+<%end%>
 

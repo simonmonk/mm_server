@@ -27,6 +27,11 @@ function remove_part_supplier(part_supplier_id) {
   <% end %>
 
 <table>
+  <tr><td>Part Category</td>
+    <td>
+      <%= f.collection_select(:part_category_id, @categories, :id, :name) %>
+    </td>
+  </tr>
   <tr><td>Part Name</td><td><%= f.text_field :name %></td></tr>
   <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
   <tr><td>Quantity</td><td><%= f.number_field :qty %></td></tr>

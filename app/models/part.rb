@@ -2,6 +2,7 @@ class Part < ApplicationRecord
     has_many :product_parts
     has_many :assembly_parts
     has_many :part_suppliers
+    belongs_to :part_category
     
     validates :name, presence: true
     validates :qty, numericality: { greater_than_or_equal_to: 0 }
