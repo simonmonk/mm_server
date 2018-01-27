@@ -46,3 +46,30 @@
 
 <%end%>
 
+<table border="1">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Qty</th>
+    <th>Purchase Cost £</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% parts = Part.all
+     parts.each do |part|
+       style_class = ""
+       if (part.qty <= part.stock_warning_level)
+           style_class = "warning"
+       end
+%>
+    <tr class="<%=style_class%>">
+      <td><%= link_to part.name, edit_part_path(part) %></td>
+      <td><%= part.qty %></td>
+      <td><%= part.purchase_cost.round(3) %></td>
+      <td><%= link_to 'Delete', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
