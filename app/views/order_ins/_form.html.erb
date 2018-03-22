@@ -1,4 +1,10 @@
 <script>
+    
+$(function() {
+    $('#edit_order_in_<%=order_in.id%>').areYouSure();
+});    
+
+    
 function add_part() {
     var list = document.getElementById("parts_list");
     var part_id = list.options[list.selectedIndex].value;

@@ -1,5 +1,10 @@
 <script>
     
+$(function() {
+    $('#edit_part_<%=part.id%>').areYouSure();
+});    
+
+    
 function add_supplier() {
     var list = document.getElementById("suppliers_list");
     var supplier_id = list.options[list.selectedIndex].value;

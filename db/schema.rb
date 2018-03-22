@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180125073437) do
+ActiveRecord::Schema.define(version: 20180307104729) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -131,15 +131,22 @@ ActiveRecord::Schema.define(version: 20180125073437) do
   create_table "products", force: :cascade do |t|
     t.string   "name"
     t.integer  "qty"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
     t.string   "sku"
-    t.decimal  "labour",              precision: 10, scale: 3
+    t.decimal  "labour",                  precision: 10, scale: 3
     t.integer  "stock_warning_level"
-    t.boolean  "active",                                       default: true
-    t.decimal  "wholesale_price",     precision: 10, scale: 3
-    t.decimal  "retail_price",        precision: 10, scale: 3
+    t.boolean  "active",                                           default: true
+    t.decimal  "wholesale_price",         precision: 10, scale: 3
+    t.decimal  "retail_price",            precision: 10, scale: 3
     t.text     "notes"
+    t.decimal  "wholesale_price_usd",     precision: 10, scale: 3
+    t.decimal  "retail_price_usd",        precision: 10, scale: 3
+    t.string   "harmoized_tarrif_number"
+    t.string   "country_of_origin"
+    t.text     "short_description"
+    t.text     "long_description"
+    t.text     "product_photo_uri"
   end
 
   create_table "retailers", force: :cascade do |t|

@@ -1,0 +1,165 @@
+MM Server Backlog
+==================
+
+Refactoring
+-----------
+Add a currency table
+
+
+
+Retailers
+----------
+
+Add fields: 
++ address for billing
++ address for delivery (and 'same as' box)
++ VATable flag
++ their VAT number
++ Prefered shipping provider - with their account number
++ Prefered currency
+
+
+
+
+Shipment 1:1 with Order - so rename to be 'Order'
+---------
+Add fields
++ date order received
++ dispatched date
++ invoice sent date
++ payment reminder date - defaulted to invoice sent date + 10 days
++ order email link
++ Their PO reference
++ Auto generate invoice number YYYYMMnnn
++ Currency (belongs to Retailer)
++ Shipping cost
++ shipping provider (defaulted from retailers preference)
++ discount (amount of money)
+
+
+Add function
++ Add a follow on Order
++ Generate PDF Invoice
+
+
+Catalog - not historic - only ever 2 instances, current dollar, current £
+--------
++ Valid from
++ valid to
++ Ts and Cs
+
+
+
+Product
+--------
++ wholesale price USD
++ SRP for USD
++ Harmoized tarrif number
++ Country of origin
++ active flag
++ photo
+. make names correct
++ short description
+******* description for customs
+
+
+RetailerProduct
+---------------
++ part number
+
+
+Suppliers
+---------
++ website
++ login credentials
++ payment details - bank, paypal etc
++ active checkbox - and option to show actives
+
+
+Order In
+--------
++ VAT invoice received - yes / no / na
++ Date order submitted
+
+-- change the way that this works so that the price for the part defaults to what it was last time, but you can edit it. Once edited, that then becomes the new price for the part and the parts price should honor the currency used in the order.
+
+Generate PO function - to email as attachment to some suppliers etc.
+
+
++ Manufacturing Jobs // supports only complete jobs that are 'kitted' and finish
+---------------------
++ start date
++ target completion date
++ worker
++ product being made
++ assembly being made
++ quantity total
++ quantity completed
++ quantity collected - but write collection to transaction log
++ hours worked (e.g. Katie / Jackie)
++ piece work price per unit
++ payment type hourly / piece
++ amount earnt for this job
++ amount received for this job
+
+function to check parts/assemblies out of stock
+function to check products/assemblies into stock - checkbox for physically collected
+function to produce parts / assemblies list
+
+
++ Worker
+--------
++ name
+calc field for amount to pay
+function to pay worker
+
+
+
+Dashboard
+---------
+
+List of outstanding orders.
+Overdue payments. invoice date + 
+Oustanding VAT invoices - all orders where VAT invoice received == no
+Partially complete orders (not all items received)
+Catlogs out of date
+Calcultae meaningful low stock info based on lead times.
+
+generate VAT report - cost of products sold and shipping and vat due.
+ 					- think about same for goods bought. // prob not as too complicated to map onto exisitng spreadsheet.
+
+
+UI review
+----
+Dashboard
+--
+Stock take only done on 31 Dec and needs to show stock at both Amazons
+
+Supplier list - go to website
+- alphasbetical order
+- remove contact name and emial columns
+- prts from suppier show part number and hyperlink to product page
+- parts from supplier add cols: code, num in stock, low stock level
+
+
+Order list of goods
+- way to add 0 of everything they sell, or at least be reminded of everything they sell.
+
+Parts list - only show if used in an assembly or product, but check-box to show all.
+
+Assemblies list - only show if used in an active product
+
+Retailers get rid of columns in middle
+
+
+Shipments list show: + reatiler shipping id or purchase order and hyperlink it. color code for unpaid orders in shipments/orders list.
+show most recent at top.
+
+
+Check what happens when deduct products for shipments if there aren't enough ditto for parts and assemblies for a product. Introduce transactions.
+
+
+
+
+
+

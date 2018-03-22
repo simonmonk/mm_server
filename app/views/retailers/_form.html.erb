@@ -1,4 +1,10 @@
 <script>
+    
+$(function() {
+    $('#edit_retailer_<%=retailer.id%>').areYouSure();
+});    
+
+    
 function add_product() {
     var list = document.getElementById("products_list");
     var product_id = list.options[list.selectedIndex].value;

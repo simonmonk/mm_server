@@ -1,5 +1,10 @@
 <script>
     
+$(function() {
+    $('#edit_assembly_<%=assembly.id%>').areYouSure();
+});    
+
+    
 function add_part() {
     var list = document.getElementById("parts_list");
     var part_id = list.options[list.selectedIndex].value;
