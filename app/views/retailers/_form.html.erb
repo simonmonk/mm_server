@@ -10,6 +10,17 @@ function add_product() {
     var product_id = list.options[list.selectedIndex].value;
     document.location = "/retailers/add_product?product_id=" + product_id + "&amp;retailer_id=<%= retailer.id %>"
 }  
+    
+function copy_address() {
+    $('#retailer_delivery_ad_line1').val($('#retailer_billing_ad_line1').val());
+    $('#retailer_delivery_ad_line2').val($('#retailer_billing_ad_line2').val());
+    $('#retailer_delivery_ad_city').val($('#retailer_billing_ad_city').val());
+    $('#retailer_delivery_ad_postal_code').val($('#retailer_billing_ad_postal_code').val());
+    $('#retailer_delivery_ad_country').val($('#retailer_billing_ad_country').val());
+    $('#retailer_delivery_ad_tel').val($('#retailer_billing_ad_tel').val());
+    alert("Copied address won't be saved until you click 'Save'")
+}    
+    
 </script>
 
 <table><tr>
@@ -30,8 +41,37 @@ function add_product() {
 
 <table>
     <tr><td>Name</td><td><%= f.text_field :name %></td></tr>    
-    <tr><td>Contact name</td><td><%= f.text_field :contact_name %></td></tr>    
+    <tr><td>General contact name</td><td><%= f.text_field :contact_name %></td></tr>    
     <tr><td>Contact email</td><td><%= f.text_field :contact_email %></td></tr>    
+    <tr><td>Pref Currency</td><td><%= f.text_field :pref_currency %></td></tr> 
+    <tr><td>Vatable</td><td><%= f.check_box :vatable %></td></tr> 
+    <tr><td>VAT Number</td><td><%= f.text_field :vat_number %></td></tr>
+    
+    <tr><th>Billing</th></tr>
+    <tr><td>Billing FAO</td><td><%= f.text_field :fao_billing %></td></tr>    
+    <tr><td>Addr Line 1</td><td><%= f.text_field :billing_ad_line1 %></td></tr>   
+    <tr><td>Line 2</td><td><%= f.text_field :billing_ad_line2 %></td></tr>   
+    <tr><td>City</td><td><%= f.text_field :billing_ad_city %></td></tr>   
+    <tr><td>Postal Code</td><td><%= f.text_field :billing_ad_postal_code %></td></tr>   
+    <tr><td>Country</td><td><%= f.text_field :billing_ad_country %></td></tr>   
+    <tr><td>Billing Tel</td><td><%= f.text_field :billing_ad_tel %></td></tr>   
+    <tr><td><input type="button" value="Copy Billing Address to Delivery Address" onclick='javascript:copy_address()'/></td></tr>
+
+    <tr><th>Delivery</th></tr>
+    <tr><td>Delivery FAO</td><td><%= f.text_field :fao_delivery %></td></tr>    
+    <tr><td>Addr Line 1</td><td><%= f.text_field :delivery_ad_line1 %></td></tr>   
+    <tr><td>Line 2</td><td><%= f.text_field :delivery_ad_line2 %></td></tr>   
+    <tr><td>City</td><td><%= f.text_field :delivery_ad_city %></td></tr>   
+    <tr><td>Postal Code</td><td><%= f.text_field :delivery_ad_postal_code %></td></tr>   
+    <tr><td>Country</td><td><%= f.text_field :delivery_ad_country %></td></tr>   
+    <tr><td>Delivery Tel</td><td><%= f.text_field :delivery_ad_tel %></td></tr>   
+    <tr><td>Prefered Shipping Provider</td><td><%= f.text_field :pref_shipping_provider %></td></tr>
+    <tr><td>Prefered Shipping Provider A/C</td><td><%= f.text_field :pref_shipping_provider_ac_no %></td></tr>
+    
+    <tr/>
+    
+    
+    
     <tr><td>Notes</td><td><%= f.text_area :notes, cols: "50", rows: "5"%></td></tr>    
     <tr><td>Reg. Exp. qty</td><td><%= f.text_field :regex_qty, :maxlength=>"50" %></td></tr>  
     <tr><td>E.g. /Only [0-9]+ left in stock./</td><td></td></tr>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322103102) do
+ActiveRecord::Schema.define(version: 20180322110304) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -155,10 +155,29 @@ ActiveRecord::Schema.define(version: 20180322103102) do
     t.string   "contact_name"
     t.string   "contact_email"
     t.text     "notes"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.string   "regex_qty"
     t.string   "regex_oos"
+    t.string   "fao_billing"
+    t.string   "billing_ad_line1"
+    t.string   "billing_ad_line2"
+    t.string   "billing_ad_city"
+    t.string   "billing_ad_postal_code"
+    t.string   "billing_ad_country"
+    t.string   "billing_ad_tel"
+    t.string   "fao_delivery"
+    t.string   "delivery_ad_line1"
+    t.string   "delivery_ad_line2"
+    t.string   "delivery_ad_city"
+    t.string   "delivery_ad_postal_code"
+    t.string   "delivery_ad_country"
+    t.string   "delivery_ad_tel"
+    t.         "vatable"
+    t.string   "vat_number"
+    t.string   "pref_shipping_provider"
+    t.string   "pref_shipping_provider_ac_no"
+    t.string   "pref_currency"
   end
 
   create_table "sales", force: :cascade do |t|

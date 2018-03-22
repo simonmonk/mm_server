@@ -11,7 +11,9 @@ Retailers
 ----------
 
 Add fields: 
++ Billing FAO field
 + address for billing
++ Delivery FAO field
 + address for delivery (and 'same as' box)
 + VATable flag
 + their VAT number
@@ -50,7 +52,7 @@ Catalog - not historic - only ever 2 instances, current dollar, current £
 
 
 
-Product
+Product DONE
 --------
 + wholesale price USD
 + SRP for USD
@@ -60,7 +62,7 @@ Product
 + photo
 . make names correct
 + short description
-******* description for customs
++ description for customs
 
 
 RetailerProduct
