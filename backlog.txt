@@ -159,6 +159,10 @@ show most recent at top.
 Check what happens when deduct products for shipments if there aren't enough ditto for parts and assemblies for a product. Introduce transactions.
 
 
+Nice to have
+--
+
+Automatic email when shipment sent.
 
 
 

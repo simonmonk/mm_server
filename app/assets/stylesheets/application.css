@@ -25,7 +25,7 @@ td, th {
 border: 1px solid transparent; /* No more visible border */
 height: 30px;
 text-align: left;
-vertical-align: text-top;
+vertical-align: top;
 transition: all 0.3s; /* Simple transition for hover effect */
 }
 
