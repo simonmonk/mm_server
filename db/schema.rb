@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322110304) do
+ActiveRecord::Schema.define(version: 20180322153200) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -206,10 +206,21 @@ ActiveRecord::Schema.define(version: 20180322110304) do
     t.integer  "retailer_id"
     t.date     "dispatched"
     t.text     "notes"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
     t.boolean  "stock_subtracted"
     t.string   "retailer_shipment_id"
+    t.date     "date_order_received"
+    t.date     "date_dispatched"
+    t.date     "date_invoice_sent"
+    t.date     "date_payment_reminder"
+    t.string   "order_email_link"
+    t.string   "po_reference"
+    t.string   "invoice_number"
+    t.decimal  "shipping_cost",           precision: 10, scale: 3
+    t.string   "shipping_provider"
+    t.string   "shipping_provider_ac_no"
+    t.decimal  "discount",                precision: 10, scale: 3
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

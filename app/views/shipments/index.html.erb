@@ -1,14 +1,33 @@
 <p id="notice"><%= notice %></p>
 
+<script>
+
+function new_shipment() {
+    var list = document.getElementById("retailers_list");
+    var retailer_id = list.options[list.selectedIndex].value;
+    document.location = "/shipments/new?retailer_id=" + retailer_id
+}  
+
+</script>
+
 <h1>Shipments</h1>
+
+<select id="retailers_list">
+<% retailers = Retailer.all.order(name: :asc)
+    retailers.each do |retailer| %>
+    <option value='<%= retailer.id %>'><%= retailer.name %></option>option>
+<% end %>
+</select> 
+
+<input type="button" value="New Shipment" onclick="javascript:new_shipment()"/>
+
+<p></p>
 
 <table>
   <thead>
     <tr>
+      <th>Invoice Number</th>
       <th>Retailer</th>
-      <th>Dispatched</th>
-      <th>Retailer Shipping ID</th>
-      <th>Subtracted from stock</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,10 +35,8 @@
   <tbody>
     <% @shipments.each do |shipment| %>
       <tr>
+        <td><%= shipment.invoice_number %></td>
         <td><%= shipment.retailer.name %></td>
-        <td><%= shipment.dispatched %></td>
-        <td><%= shipment.retailer_shipment_id %></td>
-        <td><%= shipment.stock_subtracted %></td>
         <td><%= link_to 'Edit', edit_shipment_path(shipment) %></td>
         <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
@@ -29,4 +46,4 @@
 
 <br>
 
-<%= link_to 'New Shipment', new_shipment_path %>
+

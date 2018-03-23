@@ -1,4 +1,4 @@
-<h1>New Shipment</h1>
+<h1>Shipment:  <%= @shipment.invoice_number %> to <%= @shipment.retailer.name %></h1>
 
 <%= render 'form', shipment: @shipment %>
 

@@ -1,5 +1,6 @@
 class ShipmentsController < ApplicationController
   before_action :set_shipment, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token 
 
   # GET /shipments
   # GET /shipments.json
@@ -15,12 +16,34 @@ class ShipmentsController < ApplicationController
   # GET /shipments/new
   def new
     @shipment = Shipment.new
-    @shipment.retailer = Retailer.find_by_name('amazon.co.uk')
-    @shipment.save
+    @shipment.retailer = Retailer.find(params['retailer_id'])
+    @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
+    @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no
+    @shipment.invoice_number = Shipment.find_next_invoice_number()  
+    # @shipment.save
   end
 
   # GET /shipments/1/edit
   def edit
+  end
+    
+    
+  def update
+      if @shipment.update(shipment_params)
+        redirect_to :action => "edit", :id =>@shipment.id
+      end   
+  end
+    
+    
+  # POST /shipments
+  # POST /shipments.json
+  def create
+    @shipment = Shipment.new(shipment_params)
+    if @shipment.save
+         redirect_to :action => "edit", :id =>@shipment.id
+    else
+        render :new
+    end
   end
     
 def add_product
@@ -133,21 +156,8 @@ def import_shipment_com
 end   
     
 
-  # POST /shipments
-  # POST /shipments.json
-  def create
-    @shipment = Shipment.new(shipment_params)
-    if @shipment.save
-         redirect_to :action => "edit", :id =>@shipment.id
-    end
-  end
 
 
-  def update
-      if @shipment.update(shipment_params)
-        redirect_to :action => "edit", :id =>@shipment.id
-      end   
-  end
     
     
 
@@ -169,6 +179,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipment_params
-      params.require(:shipment).permit(:retailer_id, :dispatched, :notes)
+      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount)
     end
 end

@@ -45,9 +45,18 @@ function import_shipment_com() {
   <% end %>
 
 <table>
-    <tr><td>Retailer</td><td><%= f.select :retailer_id, 
-        options_for_select(Retailer.all.map{|s|[s.name, s.id]}, :selected => shipment.retailer.id) %></td></tr>
+    <tr><td>Invoice number</td><td><%= f.text_field :invoice_number %></td></tr>
+    <tr><td>Retailer</td><td><%=shipment.retailer.name %><%=f.hidden_field :retailer_id%></td></tr>
+    
+    <tr><td>Order received date:</td><td><%= f.date_select :date_order_received %></td></tr>
+    <tr><td>Invoice sent date:</td><td><%= f.date_select :date_invoice_sent %></td></tr>
+    <tr><td>Dispatched date:</td><td><%= f.date_select :date_dispatched %></td></tr>
+    <tr><td>Payment due reminder date:</td><td><%= f.date_select :date_payment_reminder %></td></tr>
     <tr><td>Dispatch date:</td><td><%= f.date_select :dispatched %></td></tr>
+    <tr><td>Shipping Cost</td><td> <%= f.text_field :shipping_cost %> </td></tr>  
+    <tr><td>Shipping Provider</td><td> <%= f.text_field :shipping_provider %> </td></tr>
+    <tr><td>Shipping Provider Acc Num</td><td> <%= f.text_field :shipping_provider_ac_no %> </td></tr>
+    <tr><td>Discount</td><td> <%= f.text_field :discount %> </td></tr>
     <tr><td>Notes:</td><td><%= f.text_area :notes %></td></tr>
 </table>
 

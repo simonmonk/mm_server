@@ -7,7 +7,7 @@ Add a currency table
 
 
 
-Retailers
+Retailers  DONE
 ----------
 
 Add fields: 
@@ -23,25 +23,29 @@ Add fields:
 
 
 
-Shipment 1:1 with Order - so rename to be 'Order'
+Shipment 1:1 with Order - so actually its an Order but renaming too hard.
 ---------
-Add fields
+Add fields DONE
 + date order received
 + dispatched date
 + invoice sent date
 + payment reminder date - defaulted to invoice sent date + 10 days
 + order email link
 + Their PO reference
-+ Auto generate invoice number YYYYMMnnn
++ Auto generate invoice number YYYYMMDDnn
 + Currency (belongs to Retailer)
 + Shipping cost
 + shipping provider (defaulted from retailers preference)
++ shipping provider ac no (defaulted from retailers preference)
 + discount (amount of money)
+
+
+Also need flags for: despatched (may be there), invoice sent, payment received.
 
 
 Add function
 + Add a follow on Order
-+ Generate PDF Invoice
++ Generate Invoice HTML then save as PDF
 
 
 Catalog - not historic - only ever 2 instances, current dollar, current £
