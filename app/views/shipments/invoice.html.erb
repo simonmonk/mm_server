@@ -1,0 +1,252 @@
+
+
+<style>
+
+p {
+    text-align: left;
+    margin-top: 1px;  
+    margin-bottom: 1px;  
+    font: 15px arial, sans-serif;
+}
+    
+.smallprint {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 12px arial, sans-serif;
+}
+    
+h2 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 24px arial, bold, sans-serif;
+}    
+    
+h3 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 20px arial, bold, sans-serif;
+}   
+    
+table {
+    border-collapse: collapse;
+}
+    
+td {
+    vertical-align: top;  
+}
+    
+    
+.prod_table_th {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: bold 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td_money {
+    border: 1px solid black;   
+    text-align: right;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}  
+    
+.prod_table_td_sig {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 30;
+    font: 14px/1.5 Arial, sans-serif;
+    color: lightgray;
+}  
+
+</style>
+
+
+<table width="100%">
+<tr>
+<td width="60%" align="left" colspan="2">
+    <h2>MonkMakes Ltd. Commercial Invoice</h2>
+    <img src="/images/logo.png" width="200"/>
+    <p>&nbsp;</p>
+</td>    
+    
+    <td width="30%"/>
+    
+<td width="40%">
+    <p>12 Cuerden Close</p>
+    <p>Bamber Bridge</p>
+    <p>Preston</p>
+    <p>PR5 6BX</p>
+    <p>United Kingdom</p>
+    <p>Tel +44 1772 437879</p>
+    <p>or +44 7951 907467</p>
+    <p>linda@monkmakes.com</p>
+</td>    
+</tr>
+</table>
+
+<hr/>
+<p>&nbsp;</p>
+
+
+<table width="100%">
+<tr>
+<td width="30%" align="left">
+    <h3>Shipper:</h3>
+</td>   
+    
+<td width="30%" align="left">
+    <h3>Ship To:</h3>
+</td>  
+    
+<td width="30%" align="left">
+
+</td>  
+</tr>
+<tr>
+<td>
+    <p>MonkMakes Ltd</p>
+    <p>12 Cuerden Close</p>
+    <p>Bamber Bridge</p>
+    <p>Preston</p>
+    <p>PR5 6BX</p>
+    <p>United Kingdom</p>
+</td>
+
+<td>
+    <p><%=@shipment.retailer.name%></p>
+    <p><%=@shipment.retailer.delivery_ad_line1%></p>
+    <p><%=@shipment.retailer.delivery_ad_line2%></p>
+    <p><%=@shipment.retailer.delivery_ad_city%></p>
+    <p><%=@shipment.retailer.delivery_ad_postal_code%></p>
+    <p><%=@shipment.retailer.delivery_ad_country%></p>
+</td>
+    
+    
+<td width="30%" align="left">
+    <h3>Ship Date: <%=@shipment.date_invoice_sent%></h3>
+    <h3>Invoice Number: <%=@shipment.invoice_number%></h3>
+    <h3>P.O. Reference: <%=@shipment.po_reference%></h3>
+</td>      
+    
+</tr>
+</table>
+
+<p>&nbsp;</p>
+
+
+<h3>Items Shipped</h3>
+
+<table width="100%" class="prod_table">
+<tr>
+    <th class="prod_table_th">Qty</th>
+    <th class="prod_table_th">SKU</th>
+    <th class="prod_table_th"><%=@shipment.retailer.name%> SKU</th>
+    <th class="prod_table_th">Description</th>
+    <th class="prod_table_th">H. Tarrif</th>
+    <th class="prod_table_th">Origin</th>
+    <th class="prod_table_th">Unit Price (GBP)</th>
+    <th class="prod_table_th">Total Price (GBP)</th>
+</tr>
+
+<%
+total = 0
+if (not @shipment.shipping_cost)
+    @shipment.shipping_cost = 0
+end
+if (not @shipment.discount)
+    @shipment.discount = 0
+end
+@shipment.shipment_products.each do | sp |
+    line_total = sp.qty * sp.product.wholesale_price
+    total += line_total
+%>
+<tr>
+    <td class="prod_table_td"><%=sp.qty%></td>
+    <td class="prod_table_td"><%=sp.product.sku%></td>
+    <td class="prod_table_td">todo</td>
+    <td class="prod_table_td"><%=sp.product.name%></td>
+    <td class="prod_table_td"><%=sp.product.harmoized_tarrif_number%></td>
+    <td class="prod_table_td"><%=sp.product.country_of_origin%></td>
+    <td class="prod_table_td_money"><%=number_to_currency(sp.product.wholesale_price, unit: "£", separator: ".", delimiter: ",")%></td>
+    <td class="prod_table_td_money"><%=number_to_currency(line_total, unit: "£", separator: ".", delimiter: ",")%></td>
+</tr>
+<% end %>
+
+<% total += @shipment.shipping_cost %>    
+    
+<tr>
+    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Shipping</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.shipping_cost, unit: "£", separator: ".", delimiter: ",")%></td>
+</tr>
+    
+<% 
+    if (@shipment.discount > 0)
+        total -= @shipment.discount
+%>
+<tr>
+    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Discount</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: "£", separator: ".", delimiter: ",")%></td>
+</tr>
+
+<% end %>    
+    
+<tr>
+    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: "£", separator: ".", delimiter: ",")%></td>
+</tr>
+    
+<% 
+    if (@shipment.retailer.vatable == 1)
+        vat_rate = 20
+        vat = (total + @shipment.shipping_cost) * 20 / 100
+%>
+<tr>
+    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: "£", separator: ".", delimiter: ",")%></td>
+</tr>
+<tr>
+    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Invoice Total</td><td class="prod_table_td_money"><%=number_to_currency(total+vat, unit: "£", separator: ".", delimiter: ",")%></td>
+</tr>
+<% end %>
+
+</table>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<table width="100%">
+<tr>
+    <td width="30%">
+<h3>Terms and Conditions:</h3>
+<p class="smallprint">Payment by BACS within 7 days please</p>
+<p class="smallprint">Bank: Barclays Bank</p>
+<p class="smallprint">Account in name of: Monk Makes Ltd</p>
+<p class="smallprint">Account Number: 43975053</p>
+<p class="smallprint">Sort Code: 20-69-85</p>
+<p class="smallprint">IBAN GB37 BARC 2069 8543 9750 53</p>
+<p class="smallprint">SWIFTBIC BARCGB22</p>
+<p class="smallprint">Thank you very much.</p>
+    </td>
+    <td width="10%"/>
+    <td width="60%">
+        <table width="100%">
+            <tr><td class="prod_table_td">Purpose of Shipment</td><td class="prod_table_td">Commercial</td></tr>
+            <tr><td class="prod_table_td">Total number of packages</td><td class="prod_table_td">1</td></tr>
+            <tr><td class="prod_table_td" colspan="2">I declare that all the information contained in this invoice to be true and correct.</td>
+            <tr><td class="prod_table_td_sig" colspan="2">Signature/Title/Date</td><td></td></tr>
+        </table>
+    
+    </td>
+</tr>
+</table>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p style="text-align: center;">Monk Makes Ltd is registered in the UK. Company Number 8797771. VAT number GB 222 6746 15</p>

@@ -1,0 +1,81 @@
+<script>
+
+function add_product() {
+    var list = document.getElementById("products_list");
+    var product_id = list.options[list.selectedIndex].value;
+    var qty = document.getElementById("product_qty_field").value
+    document.location = "/shipments/add_product?product_id=" + product_id + "&amp;shipment_id=<%= shipment.id %>&amp;qty="+qty
+}  
+    
+function subtract_products() {
+    if (confirm("Are you sure? HAVE YOU SAVED THE SHIPMENT?")) {
+        document.location = "/shipments/subtract_products?shipment_id=<%= shipment.id %>"
+    }
+}  
+
+function import_shipment_uk() {
+    var shipment_code = document.getElementById("shipment_code_field").value
+    document.location = "/shipments/import_shipment_uk?shipment_code=" + shipment_code + "&amp;shipment_id=<%= shipment.id %>"
+}  
+    
+function import_shipment_com() {
+    var shipment_code = document.getElementById("shipment_code_field").value
+    document.location = "/shipments/import_shipment_com?shipment_code=" + shipment_code + "&amp;shipment_id=<%= shipment.id %>"
+}  
+    
+    
+function create_invoice() {
+    window.open("/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>", '_blank')
+}
+    
+</script>
+
+
+<h2>Shipping the following items</h2>
+
+<div class="priority1"><%= params[:notice] %></div>
+
+<% if (shipment.retailer.name == 'amazon.co.uk')  %>
+<p>
+    Amazon.co.uk Shipment Code: <input type="text" id="shipment_code_field"/> 
+    <input type="button" value="Import from Amazon.co.uk" onClick="javascript:import_shipment_uk()"/>
+</p>
+<% elsif (shipment.retailer.name == 'amazon.com') %>
+<p>
+    Amazon.com Shipment Code: <input type="text" id="shipment_code_field"/> 
+    <input type="button" value="Import from Amazon.com" onClick="javascript:import_shipment_com()"/>
+</p>
+<% end %>
+
+
+
+<table>
+    <tr><th>Product</th><th>SKU</th><th>Qty</th></tr>
+<%
+shipment.shipment_products.each do | sp |
+%>
+    <tr><td><%= sp.product.name %></td><td><%= sp.product.sku %></td><td><%=sp.qty%></td></tr>
+<% end %>
+</table>
+
+<% if (! shipment.retailer.name.start_with?('amazon.'))  %>
+
+<select id="products_list">
+<% product_retailers = shipment.retailer.product_retailers.all
+    product_retailers.each do | pr | %>
+    <option value='<%= pr.product.id %>'><%= pr.product.name %></option>option>
+<% end %>
+</select>    
+qty <input type="number" id="product_qty_field" value="1"/> 
+<input type="button" value="Add" onClick="javascript:add_product()"/>
+<% end %>    
+<hr/>
+
+<% if (shipment.stock_subtracted == true) %>
+<div class="priority1">Products have been subtracted from MonkMakes stock for this shipment</div>
+<% else %>
+<input type="button" value="Subtract Shipment Products from Stock" onClick="javascript:subtract_products()"/>
+<% end %>
+
+
+<input type="button" value="Create Invoice" onClick="javascript:create_invoice()"/>

@@ -1,5 +1,5 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: [:show, :edit, :update, :destroy]
+  before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice]
   skip_before_filter :verify_authenticity_token 
 
   # GET /shipments
@@ -17,6 +17,7 @@ class ShipmentsController < ApplicationController
   def new
     @shipment = Shipment.new
     @shipment.retailer = Retailer.find(params['retailer_id'])
+    @shipment.date_order_received = Date.current()
     @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
     @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no
     @shipment.invoice_number = Shipment.find_next_invoice_number()  
@@ -25,6 +26,10 @@ class ShipmentsController < ApplicationController
 
   # GET /shipments/1/edit
   def edit
+  end
+    
+  def invoice
+      render :layout => false
   end
     
     

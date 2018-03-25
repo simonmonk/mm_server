@@ -39,8 +39,15 @@ Add fields DONE
 + shipping provider ac no (defaulted from retailers preference)
 + discount (amount of money)
 
-
-Also need flags for: despatched (may be there), invoice sent, payment received.
+May need
+--
+Payment received date - useful for seeing who pays fast.
+add address 'state' fields to both retailer addresses
+product_retails needs field for retailer_sku
+Remove duplicate sent date
+List of shipments, show colors: 
+- red - not paid and payment due reminder past
+- yellow - not paid but invoice sent
 
 
 Add function

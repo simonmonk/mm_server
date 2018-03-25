@@ -5,31 +5,12 @@ $(function() {
 });    
 
     
-function add_product() {
-    var list = document.getElementById("products_list");
-    var product_id = list.options[list.selectedIndex].value;
-    var qty = document.getElementById("product_qty_field").value
-    document.location = "/shipments/add_product?product_id=" + product_id + "&amp;shipment_id=<%= shipment.id %>&amp;qty="+qty
-}  
-    
-function subtract_products() {
-    if (confirm("Are you sure? HAVE YOU SAVED THE SHIPMENT?")) {
-        document.location = "/shipments/subtract_products?shipment_id=<%= shipment.id %>"
-    }
-}  
+function set_date(field_name, date) {
+    $(field_name).val(date);
+}
 
-function import_shipment_uk() {
-    var shipment_code = document.getElementById("shipment_code_field").value
-    document.location = "/shipments/import_shipment_uk?shipment_code=" + shipment_code + "&amp;shipment_id=<%= shipment.id %>"
-}  
-    
-function import_shipment_com() {
-    var shipment_code = document.getElementById("shipment_code_field").value
-    document.location = "/shipments/import_shipment_com?shipment_code=" + shipment_code + "&amp;shipment_id=<%= shipment.id %>"
-}  
-    
-    
 </script>
+
 
 <%= form_for(shipment) do |f| %>
   <% if shipment.errors.any? %>
@@ -47,12 +28,11 @@ function import_shipment_com() {
 <table>
     <tr><td>Invoice number</td><td><%= f.text_field :invoice_number %></td></tr>
     <tr><td>Retailer</td><td><%=shipment.retailer.name %><%=f.hidden_field :retailer_id%></td></tr>
+    <tr><td>Order received date:</td><td><%= datepicker_input f, :date_order_received %></td><td><a href="javascript:set_date('#shipment_date_order_received', '<%=Date.current%>')">Today</a></td></tr>
     
-    <tr><td>Order received date:</td><td><%= f.date_select :date_order_received %></td></tr>
-    <tr><td>Invoice sent date:</td><td><%= f.date_select :date_invoice_sent %></td></tr>
-    <tr><td>Dispatched date:</td><td><%= f.date_select :date_dispatched %></td></tr>
-    <tr><td>Payment due reminder date:</td><td><%= f.date_select :date_payment_reminder %></td></tr>
-    <tr><td>Dispatch date:</td><td><%= f.date_select :dispatched %></td></tr>
+    <tr><td>Invoice sent date:</td><td><%= datepicker_input f, :date_invoice_sent %></td><td><a href="javascript:set_date('#shipment_date_invoice_sent', '<%=Date.current%>')">Today</a></td></tr>
+    <tr><td>Payment due reminder date:</td><td><%= datepicker_input f, :date_payment_reminder %></td><td><a href="javascript:set_date('#shipment_date_payment_reminder', '<%=Date.current + 7.days%>')">Today + 7 days</a></tr>
+    <tr><td>Dispatched date:</td><td><%= datepicker_input f, :date_dispatched %></td><td><a href="javascript:set_date('#shipment_date_dispatched', '<%=Date.current%>')">Today</a></tr>
     <tr><td>Shipping Cost</td><td> <%= f.text_field :shipping_cost %> </td></tr>  
     <tr><td>Shipping Provider</td><td> <%= f.text_field :shipping_provider %> </td></tr>
     <tr><td>Shipping Provider Acc Num</td><td> <%= f.text_field :shipping_provider_ac_no %> </td></tr>
@@ -64,56 +44,8 @@ function import_shipment_com() {
   <div class="actions">
     <%= f.submit %>
   </div>
+
+
 <% end %>
 
 <hr/>
-
-<h2>Shipping the following items</h2>
-
-<div class="priority1"><%= params[:notice] %></div>
-
-<% if (shipment.retailer.name == 'amazon.co.uk')  %>
-<p>
-    Amazon.co.uk Shipment Code: <input type="text" id="shipment_code_field"/> 
-    <input type="button" value="Import from Amazon.co.uk" onClick="javascript:import_shipment_uk()"/>
-</p>
-<% elsif (shipment.retailer.name == 'amazon.com') %>
-<p>
-    Amazon.com Shipment Code: <input type="text" id="shipment_code_field"/> 
-    <input type="button" value="Import from Amazon.com" onClick="javascript:import_shipment_com()"/>
-</p>
-<% end %>
-
-<table>
-    <tr><th>Product</th><th>SKU</th><th>Qty</th></tr>
-
-<%
-shipment.shipment_products.each do | sp |
-    
-%>
-    <tr><td><%= sp.product.name %></td><td><%= sp.product.sku %></td><td><%=sp.qty%></td></tr>
-
-<% end %>
-</table>
-
-<% if (! shipment.retailer.name.start_with?('amazon.'))  %>
-
-<select id="products_list">
-<% product_retailers = shipment.retailer.product_retailers.all
-    product_retailers.each do | pr | %>
-    <option value='<%= pr.product.id %>'><%= pr.product.name %></option>option>
-<% end %>
-</select>    
-qty <input type="number" id="product_qty_field" value="1"/> 
-<input type="button" value="Add" onClick="javascript:add_product()"/>
-<% end %>    
-<hr/>
-
-<% if (shipment.stock_subtracted == true) %>
-<div class="priority1">Products have been subtracted from MonkMakes stock for this shipment</div>
-<% else %>
-<input type="button" value="Subtract Shipment Products from Stock" onClick="javascript:subtract_products()"/>
-<% end %>
-
-
-<input type="button" value="Print Packing List" onClick="javascript:packing_list()"/>

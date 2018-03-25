@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get '/sales_uk/', to: 'welcome#sales_uk'
   get '/sales_us/', to: 'welcome#sales_us'
     
+  get 'shipments/invoice/*other', to: 'shipments#invoice'
+    
   resources :parts do
     collection do
       get :add_supplier
@@ -42,6 +44,7 @@ Rails.application.routes.draw do
       get :import_shipment_uk
       get :import_shipment_com
       get :subtract_products
+      get :invoice
     end
   end
   resources :order_ins do
