@@ -15,6 +15,7 @@ function copy_address() {
     $('#retailer_delivery_ad_line1').val($('#retailer_billing_ad_line1').val());
     $('#retailer_delivery_ad_line2').val($('#retailer_billing_ad_line2').val());
     $('#retailer_delivery_ad_city').val($('#retailer_billing_ad_city').val());
+    $('#retailer_delivery_ad_state').val($('#retailer_billing_ad_state').val());
     $('#retailer_delivery_ad_postal_code').val($('#retailer_billing_ad_postal_code').val());
     $('#retailer_delivery_ad_country').val($('#retailer_billing_ad_country').val());
     $('#retailer_delivery_ad_tel').val($('#retailer_billing_ad_tel').val());
@@ -51,7 +52,8 @@ function copy_address() {
     <tr><td>Billing FAO</td><td><%= f.text_field :fao_billing %></td></tr>    
     <tr><td>Addr Line 1</td><td><%= f.text_field :billing_ad_line1 %></td></tr>   
     <tr><td>Line 2</td><td><%= f.text_field :billing_ad_line2 %></td></tr>   
-    <tr><td>City</td><td><%= f.text_field :billing_ad_city %></td></tr>   
+    <tr><td>City</td><td><%= f.text_field :billing_ad_city %></td></tr>
+    <tr><td>State/County/District</td><td><%= f.text_field :billing_ad_state %></td></tr>  
     <tr><td>Postal Code</td><td><%= f.text_field :billing_ad_postal_code %></td></tr>   
     <tr><td>Country</td><td><%= f.text_field :billing_ad_country %></td></tr>   
     <tr><td>Billing Tel</td><td><%= f.text_field :billing_ad_tel %></td></tr>   
@@ -62,6 +64,7 @@ function copy_address() {
     <tr><td>Addr Line 1</td><td><%= f.text_field :delivery_ad_line1 %></td></tr>   
     <tr><td>Line 2</td><td><%= f.text_field :delivery_ad_line2 %></td></tr>   
     <tr><td>City</td><td><%= f.text_field :delivery_ad_city %></td></tr>   
+    <tr><td>State/County/District</td><td><%= f.text_field :delivery_ad_state %></td></tr> 
     <tr><td>Postal Code</td><td><%= f.text_field :delivery_ad_postal_code %></td></tr>   
     <tr><td>Country</td><td><%= f.text_field :delivery_ad_country %></td></tr>   
     <tr><td>Delivery Tel</td><td><%= f.text_field :delivery_ad_tel %></td></tr>   

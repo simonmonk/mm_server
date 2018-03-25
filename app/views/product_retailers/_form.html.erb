@@ -30,8 +30,13 @@
     </div>
   <% end %>
 
+<% if (not product_retailer.weekly_sales_avg) 
+    product_retailer.weekly_sales_avg = 0 
+end %>
+
 <table>
   <tr><td>URL</td><td><%= f.text_field :url, :maxlength=>"100" %></td></tr>
+  <tr><td>sku</td><td><%= f.text_field :sku %></td></tr>
   <tr><td>Weekly sales average</td><td><%= product_retailer.weekly_sales_avg.round(1) %></td></tr>
 </table>
 

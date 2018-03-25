@@ -3,7 +3,7 @@ MM Server Backlog
 
 Refactoring
 -----------
-Add a currency table
+Menu system
 
 
 
@@ -41,9 +41,11 @@ Add fields DONE
 
 May need
 --
-Payment received date - useful for seeing who pays fast.
-add address 'state' fields to both retailer addresses
-product_retails needs field for retailer_sku
+DONE Payment received date - useful for seeing who pays fast.
+DONE add address 'state' fields to both retailer addresses
+DONE fix broken 'vatable' field in customer table - see schema file
+DONE product_retailers needs field for retailer_sku
+DONE clever columns in invoice - dont show if no data - customer SKU, H-tarif and Origin
 Remove duplicate sent date
 List of shipments, show colors: 
 - red - not paid and payment due reminder past

@@ -70,6 +70,6 @@ class ProductRetailersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_retailer_params
-      params.require(:product_retailer).permit(:url)
+      params.require(:product_retailer).permit(:url, :sku)
     end
 end

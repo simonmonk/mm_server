@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322153200) do
+ActiveRecord::Schema.define(version: 20180325160224) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 20180322153200) do
     t.datetime "updated_at",       null: false
     t.integer  "warn_qty"
     t.float    "weekly_sales_avg"
+    t.string   "sku"
     t.index ["product_id"], name: "index_product_retailers_on_product_id"
     t.index ["retailer_id"], name: "index_product_retailers_on_retailer_id"
   end
@@ -173,11 +174,13 @@ ActiveRecord::Schema.define(version: 20180322153200) do
     t.string   "delivery_ad_postal_code"
     t.string   "delivery_ad_country"
     t.string   "delivery_ad_tel"
-    t.         "vatable"
+    t.boolean  "vatable"
     t.string   "vat_number"
     t.string   "pref_shipping_provider"
     t.string   "pref_shipping_provider_ac_no"
     t.string   "pref_currency"
+    t.string   "billing_ad_state"
+    t.string   "delivery_ad_state"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -221,6 +224,7 @@ ActiveRecord::Schema.define(version: 20180322153200) do
     t.string   "shipping_provider"
     t.string   "shipping_provider_ac_no"
     t.decimal  "discount",                precision: 10, scale: 3
+    t.date     "date_payment_received"
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

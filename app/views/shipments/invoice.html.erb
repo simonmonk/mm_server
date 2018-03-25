@@ -6,7 +6,7 @@ p {
     text-align: left;
     margin-top: 1px;  
     margin-bottom: 1px;  
-    font: 15px arial, sans-serif;
+    font: 14px arial, sans-serif;
 }
     
 .smallprint {
@@ -17,10 +17,10 @@ p {
 }
     
 h2 {
-    text-align: left;
+    text-align: center;
     margin-top: 2px;  
     margin-bottom: 2px;  
-    font: 24px arial, bold, sans-serif;
+    font: 36px arial, bold, sans-serif;
 }    
     
 h3 {
@@ -70,18 +70,30 @@ td {
 
 </style>
 
+<%
+
+def should_show(column_name)
+    result = false
+    @shipment.shipment_products.each do | sp |
+       if (sp.product[column_name] and not sp.product[column_name].empty?) 
+           result = true
+       end
+    end
+    return result
+end
+
+%>
+
 
 <table width="100%">
 <tr>
-<td width="60%" align="left" colspan="2">
-    <h2>MonkMakes Ltd. Commercial Invoice</h2>
+<td width="70%" align="left" colspan="2">
     <img src="/images/logo.png" width="200"/>
     <p>&nbsp;</p>
 </td>    
     
-    <td width="30%"/>
     
-<td width="40%">
+<td width="30%">
     <p>12 Cuerden Close</p>
     <p>Bamber Bridge</p>
     <p>Preston</p>
@@ -94,6 +106,8 @@ td {
 </tr>
 </table>
 
+<h2>MonkMakes Ltd Commercial Invoice</h2>
+
 <hr/>
 <p>&nbsp;</p>
 
@@ -101,41 +115,50 @@ td {
 <table width="100%">
 <tr>
 <td width="30%" align="left">
-    <h3>Shipper:</h3>
+    <h3>Invoice To:</h3>
 </td>   
     
-<td width="30%" align="left">
-    <h3>Ship To:</h3>
+<td width="20%" align="left">
+    <h3>Deliver To:</h3>
 </td>  
     
+<td width="10%"/>    
+    
 <td width="30%" align="left">
-
+    <h3>Invoice Details</h3>
 </td>  
 </tr>
 <tr>
 <td>
-    <p>MonkMakes Ltd</p>
-    <p>12 Cuerden Close</p>
-    <p>Bamber Bridge</p>
-    <p>Preston</p>
-    <p>PR5 6BX</p>
-    <p>United Kingdom</p>
+    <p><%=@shipment.retailer.name%></p>
+    <p><%=@shipment.retailer.billing_ad_line1%></p>
+    <p><%=@shipment.retailer.billing_ad_line2%></p>
+    <p><%=@shipment.retailer.billing_ad_city%></p>
+    <p><%=@shipment.retailer.billing_ad_state%></p>
+    <p><%=@shipment.retailer.billing_ad_postal_code%></p>
+    <p><%=@shipment.retailer.billing_ad_country%></p>
 </td>
 
-<td>
-    <p><%=@shipment.retailer.name%></p>
-    <p><%=@shipment.retailer.delivery_ad_line1%></p>
-    <p><%=@shipment.retailer.delivery_ad_line2%></p>
-    <p><%=@shipment.retailer.delivery_ad_city%></p>
-    <p><%=@shipment.retailer.delivery_ad_postal_code%></p>
-    <p><%=@shipment.retailer.delivery_ad_country%></p>
+<td class="prod_table_td">
+    <p><b><%=@shipment.retailer.name%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_line1%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_line2%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_city%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_state%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_postal_code%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_country%></b></p>
 </td>
     
+<td/>    
     
 <td width="30%" align="left">
-    <h3>Ship Date: <%=@shipment.date_invoice_sent%></h3>
-    <h3>Invoice Number: <%=@shipment.invoice_number%></h3>
-    <h3>P.O. Reference: <%=@shipment.po_reference%></h3>
+    <p>Invoice Number: <%=@shipment.invoice_number%></p>
+    <p>Invoice Date: <%=@shipment.date_invoice_sent%></p>
+    <p>Payment Due: <%=@shipment.date_payment_reminder%></p>
+    <p>P.O. Reference: <%=@shipment.po_reference%></p>
+<% if (@shipment.retailer.vatable) %>
+    <p>Your VAT Number: <%=@shipment.retailer.vat_number%></p>
+<% end %>
 </td>      
     
 </tr>
@@ -152,8 +175,12 @@ td {
     <th class="prod_table_th">SKU</th>
     <th class="prod_table_th"><%=@shipment.retailer.name%> SKU</th>
     <th class="prod_table_th">Description</th>
+<% if (should_show('harmoized_tarrif_number')) %>
     <th class="prod_table_th">H. Tarrif</th>
+<% end %>            
+<% if (should_show('country_of_origin')) %>
     <th class="prod_table_th">Origin</th>
+<% end %>
     <th class="prod_table_th">Unit Price (GBP)</th>
     <th class="prod_table_th">Total Price (GBP)</th>
 </tr>
@@ -169,14 +196,22 @@ end
 @shipment.shipment_products.each do | sp |
     line_total = sp.qty * sp.product.wholesale_price
     total += line_total
+    product_retailer = ProductRetailer.where(product_id: sp.product.id, retailer_id: sp.shipment.retailer.id)[0]
+    puts "*************"
+    puts product_retailer.sku
+    foreign_sku = product_retailer.sku
 %>
 <tr>
     <td class="prod_table_td"><%=sp.qty%></td>
     <td class="prod_table_td"><%=sp.product.sku%></td>
-    <td class="prod_table_td">todo</td>
+    <td class="prod_table_td"><%=foreign_sku%></td>
     <td class="prod_table_td"><%=sp.product.name%></td>
+<% if (should_show('harmoized_tarrif_number')) %>
     <td class="prod_table_td"><%=sp.product.harmoized_tarrif_number%></td>
+<% end %>            
+<% if (should_show('country_of_origin')) %>       
     <td class="prod_table_td"><%=sp.product.country_of_origin%></td>
+<% end %>
     <td class="prod_table_td_money"><%=number_to_currency(sp.product.wholesale_price, unit: "£", separator: ".", delimiter: ",")%></td>
     <td class="prod_table_td_money"><%=number_to_currency(line_total, unit: "£", separator: ".", delimiter: ",")%></td>
 </tr>
@@ -185,7 +220,10 @@ end
 <% total += @shipment.shipping_cost %>    
     
 <tr>
-    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Shipping</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.shipping_cost, unit: "£", separator: ".", delimiter: ",")%></td>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/>
+    <td/><td class="prod_table_td" colspan="2">Shipping</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.shipping_cost, unit: "£", separator: ".", delimiter: ",")%></td>
 </tr>
     
 <% 
@@ -193,25 +231,33 @@ end
         total -= @shipment.discount
 %>
 <tr>
-    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Discount</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: "£", separator: ".", delimiter: ",")%></td>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">Discount</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: "£", separator: ".", delimiter: ",")%></td>
 </tr>
 
 <% end %>    
     
 <tr>
-    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: "£", separator: ".", delimiter: ",")%></td>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: "£", separator: ".", delimiter: ",")%></td>
 </tr>
     
 <% 
-    if (@shipment.retailer.vatable == 1)
+    if (@shipment.retailer.vatable)
         vat_rate = 20
-        vat = (total + @shipment.shipping_cost) * 20 / 100
+        vat = total * 20 / 100
 %>
 <tr>
-    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: "£", separator: ".", delimiter: ",")%></td>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: "£", separator: ".", delimiter: ",")%></td>
 </tr>
 <tr>
-    <td/><td/><td/><td/><td/><td class="prod_table_td" colspan="2">Invoice Total</td><td class="prod_table_td_money"><%=number_to_currency(total+vat, unit: "£", separator: ".", delimiter: ",")%></td>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2"><b>Invoice Total</b></td><td class="prod_table_td_money"><b><%=number_to_currency(total+vat, unit: "£", separator: ".", delimiter: ",")%></b></td>
 </tr>
 <% end %>
 
