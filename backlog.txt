@@ -39,22 +39,9 @@ Add fields DONE
 + shipping provider ac no (defaulted from retailers preference)
 + discount (amount of money)
 
-May need
---
-DONE Payment received date - useful for seeing who pays fast.
-DONE add address 'state' fields to both retailer addresses
-DONE fix broken 'vatable' field in customer table - see schema file
-DONE product_retailers needs field for retailer_sku
-DONE clever columns in invoice - dont show if no data - customer SKU, H-tarif and Origin
-Remove duplicate sent date
-List of shipments, show colors: 
-- red - not paid and payment due reminder past
-- yellow - not paid but invoice sent
-
 
 Add function
 + Add a follow on Order
-+ Generate Invoice HTML then save as PDF
 
 
 Catalog - not historic - only ever 2 instances, current dollar, current £
@@ -78,12 +65,8 @@ Product DONE
 + description for customs
 
 
-RetailerProduct
----------------
-+ part number
 
-
-Suppliers
+Suppliers - DONE
 ---------
 + website
 + login credentials
@@ -93,12 +76,12 @@ Suppliers
 
 Order In
 --------
+* Make creating a new order In work the same way as creating a shipment. SO have to choose supplier at the time and then its immutable. DONE
 + VAT invoice received - yes / no / na
-+ Date order submitted
 
 -- change the way that this works so that the price for the part defaults to what it was last time, but you can edit it. Once edited, that then becomes the new price for the part and the parts price should honor the currency used in the order.
 
-Generate PO function - to email as attachment to some suppliers etc.
+Generate PO function - to email as attachment to some suppliers etc. Good if this could integrate with gmail to automatically write html into email.
 
 
 + Manufacturing Jobs // supports only complete jobs that are 'kitted' and finish

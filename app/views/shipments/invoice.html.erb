@@ -197,8 +197,6 @@ end
     line_total = sp.qty * sp.product.wholesale_price
     total += line_total
     product_retailer = ProductRetailer.where(product_id: sp.product.id, retailer_id: sp.shipment.retailer.id)[0]
-    puts "*************"
-    puts product_retailer.sku
     foreign_sku = product_retailer.sku
 %>
 <tr>
@@ -246,13 +244,12 @@ end
     
 <% 
     if (@shipment.retailer.vatable)
-        vat_rate = 20
-        vat = total * 20 / 100
+        vat = total * @shipment.vat_rate / 100
 %>
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: "£", separator: ".", delimiter: ",")%></td>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=@shipment.vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: "£", separator: ".", delimiter: ",")%></td>
 </tr>
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>

@@ -1,6 +1,27 @@
+<script>
+    function hideInactive() {
+        $('.inactive').hide();
+        $('#hide_button').hide();
+        $('#show_button').show();
+    }
+    
+    function showInactive() {
+        $('.inactive').show();
+        $('#hide_button').show();
+        $('#show_button').hide();
+    }
+    
+</script>
+
 <p id="notice"><%= notice %></p>
 
 <h1>Assemblies</h1>
+
+<%= link_to 'New Assembly', new_assembly_path %>
+<br/>
+
+<a id="show_button" href="javascript:showInactive()">Show Inactive Assemblies</a>
+<a id="hide_button" href="javascript:hideInactive()">Hide Inactive Assemblies</a>
 
 <table>
   <thead>
@@ -19,6 +40,9 @@
         if (assembly.qty <= assembly.stock_warning_level)
             style_class = "warning"
         end
+        if (not assembly.active)
+            style_class = "inactive"
+        end
     %>
       <tr class="<%=style_class%>">
         <td><%= link_to assembly.name, edit_assembly_path(assembly) %></td>
@@ -30,6 +54,4 @@
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Assembly', new_assembly_path %>
+<script>hideInactive()</script>

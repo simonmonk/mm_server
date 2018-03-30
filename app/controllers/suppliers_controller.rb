@@ -38,18 +38,11 @@ class SuppliersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /suppliers/1
-  # PATCH/PUT /suppliers/1.json
+
   def update
-    respond_to do |format|
       if @supplier.update(supplier_params)
-        format.html { redirect_to @supplier, notice: 'Supplier was successfully updated.' }
-        format.json { render :show, status: :ok, location: @supplier }
-      else
-        format.html { render :edit }
-        format.json { render json: @supplier.errors, status: :unprocessable_entity }
-      end
-    end
+        redirect_to :action => "edit", :id =>@supplier.id
+      end   
   end
 
   # DELETE /suppliers/1
@@ -70,6 +63,6 @@ class SuppliersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supplier_params
-      params.require(:supplier).permit(:name, :contact_name, :contact_email, :notes, :regex_qty, :regex_oos)
+      params.require(:supplier).permit(:name, :contact_name, :contact_email, :notes, :regex_qty, :regex_oos, :website, :active, :login_details, :payment_details)
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180325160224) do
+ActiveRecord::Schema.define(version: 20180329095344) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20180325160224) do
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
     t.integer  "stock_warning_level"
+    t.boolean  "active"
   end
 
   create_table "assembly_parts", force: :cascade do |t|
@@ -181,6 +182,7 @@ ActiveRecord::Schema.define(version: 20180325160224) do
     t.string   "pref_currency"
     t.string   "billing_ad_state"
     t.string   "delivery_ad_state"
+    t.boolean  "active"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -225,6 +227,7 @@ ActiveRecord::Schema.define(version: 20180325160224) do
     t.string   "shipping_provider_ac_no"
     t.decimal  "discount",                precision: 10, scale: 3
     t.date     "date_payment_received"
+    t.decimal  "vat_rate",                precision: 10, scale: 3
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 
@@ -234,10 +237,14 @@ ActiveRecord::Schema.define(version: 20180325160224) do
     t.string   "contact_email"
     t.text     "notes"
     t.string   "text"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "regex_qty"
     t.string   "regex_oos"
+    t.string   "website"
+    t.string   "login_details"
+    t.string   "payment_details"
+    t.boolean  "active"
   end
 
   create_table "transactions", force: :cascade do |t|

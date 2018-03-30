@@ -3,7 +3,8 @@ class OrderInsController < ApplicationController
     
   def new
     @order_in = OrderIn.new
-    @order_in.supplier = Supplier.first
+    @order_in.supplier = Supplier.find(params['supplier_id'])
+    @order_in.placed_date = Date.current()
     @order_in.save
     redirect_to :action => "edit", :id =>@order_in.id
   end

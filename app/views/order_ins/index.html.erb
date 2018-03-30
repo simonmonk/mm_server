@@ -1,6 +1,24 @@
 <p id="notice"><%= notice %></p>
+<script>
+function new_order_in() {
+    var list = document.getElementById("suppliers_list");
+    var supplier_id = list.options[list.selectedIndex].value;
+    alert(supplier_id)
+    document.location = "/order_ins/new?supplier_id=" + supplier_id
+}  
+</script>
 
 <h1>Orders (Goods Inwards)</h1>
+
+<select id="suppliers_list">
+<% 
+    suppliers = Supplier.all.order(name: :asc)
+    suppliers.each do |supplier| %>
+    <option value='<%= supplier.id %>'><%= supplier.name %></option>option>
+<% end %>
+</select> 
+
+<input type="button" value="New Order In" onclick="javascript:new_order_in()"/>
 
 <table>
   <thead>

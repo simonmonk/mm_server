@@ -1,6 +1,29 @@
+<script>
+    function hideInactive() {
+        $('.inactive').hide();
+        $('#hide_button').hide();
+        $('#show_button').show();
+    }
+    
+    function showInactive() {
+        $('.inactive').show();
+        $('#hide_button').show();
+        $('#show_button').hide();
+    }
+    
+</script>
+
+
 <p id="notice"><%= notice %></p>
 
 <h1>Retailers</h1>
+
+<%= link_to 'New Retailer', new_retailer_path %>
+
+<br/>
+
+<a id="show_button" href="javascript:showInactive()">Show Inactive Retaliers</a>
+<a id="hide_button" href="javascript:hideInactive()">Hide Inactive Retailers</a>
 
 <table>
   <thead>
@@ -13,9 +36,15 @@
   </thead>
 
   <tbody>
-    <% @retailers.each do |retailer| %>
-      <tr>
-        <td><%= link_to retailer.name, edit_retailer_path(retailer) %></td>
+    <% @retailers.all.order(name: :asc).each do |retailer| 
+        status_class = "active"
+        if (not retailer.active)
+            status_class = "inactive"
+        end
+    
+    %>  
+      <tr class="<%= status_class %>">
+        <td><%= link_to retailer.name, edit_retailer_path(retailer), class: status_class%></td>
         <td><%= retailer.contact_name %></td>
         <td><%= retailer.contact_email %></td>
         <td><%= link_to 'Destroy', retailer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -26,4 +55,5 @@
 
 <br>
 
-<%= link_to 'New Retailer', new_retailer_path %>
+
+<script>hideInactive()</script>

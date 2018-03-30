@@ -79,17 +79,10 @@ class AssembliesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /assemblies/1
-  # PATCH/PUT /assemblies/1.json
+  
   def update
-    respond_to do |format|
-      if @assembly.update(assembly_params)
-        format.html { redirect_to @assembly, notice: 'Assembly was successfully updated.' }
-        format.json { render :show, status: :ok, location: @assembly }
-      else
-        format.html { render :edit }
-        format.json { render json: @assembly.errors, status: :unprocessable_entity }
-      end
+    if @assembly.update(assembly_params)
+        render :edit
     end
   end
 
@@ -111,6 +104,6 @@ class AssembliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def assembly_params
-      params.require(:assembly).permit(:name, :qty, :labour, :stock_warning_level)
+      params.require(:assembly).permit(:name, :qty, :labour, :stock_warning_level, :active)
     end
 end

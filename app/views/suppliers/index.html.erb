@@ -1,23 +1,46 @@
+<script>
+    function hideInactive() {
+        $('.inactive').hide();
+        $('#hide_button').hide();
+        $('#show_button').show();
+    }
+    
+    function showInactive() {
+        $('.inactive').show();
+        $('#hide_button').show();
+        $('#show_button').hide();
+    }
+    
+</script>
+
 <p id="notice"><%= notice %></p>
 
 <h1>Suppliers</h1>
+
+<%= link_to 'New Supplier', new_supplier_path %>
+
+<br/>
+
+<a id="show_button" href="javascript:showInactive()">Show Inactive Suppliers</a>
+<a id="hide_button" href="javascript:hideInactive()">Hide Inactive Suppliers</a>
 
 <table>
   <thead>
     <tr>
       <th>Name</th>
-      <th>Contact name</th>
-      <th>Contact email</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @suppliers.each do |supplier| %>
-      <tr>
-        <td><%= link_to supplier.name, edit_supplier_path(supplier) %></td>
-        <td><%= supplier.contact_name %></td>
-        <td><%= supplier.contact_email %></td>
+    <% @suppliers.all.order(name: :asc).each do |supplier| 
+        status_class = "active"
+        if (not supplier.active)
+            status_class = "inactive"
+        end
+    %>  
+      <tr class="<%= status_class %>">
+        <td><%= link_to supplier.name, edit_supplier_path(supplier), class: status_class%></td>
         <td><%= link_to 'Delete', supplier, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -26,4 +49,4 @@
 
 <br>
 
-<%= link_to 'New Supplier', new_supplier_path %>
+<script>hideInactive()</script>

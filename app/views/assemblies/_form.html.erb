@@ -54,6 +54,7 @@ function deduct(qty) {
 
 <td><table>
 <tr><td>Name</td><td><%= f.text_field :name %></td></tr>
+<tr><td>Active</td><td><%= f.check_box :active %></td></tr>
 <tr><td>Quantity</td><td><%= f.number_field :qty %></td></tr>
 <tr><td>Stock warning level</td><td><%= f.number_field :stock_warning_level %></td></tr>
     

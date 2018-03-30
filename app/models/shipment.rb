@@ -19,5 +19,17 @@ class Shipment < ApplicationRecord
         return candidate
     end
   end
+
+  def priority()
+    if (date_payment_received and date_payment_received <= Date.current)
+        return 3
+    else
+        if (date_payment_reminder and Date.current < date_payment_reminder)
+            return 2
+        else
+            return 1
+        end
+    end
+  end
     
 end

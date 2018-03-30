@@ -21,6 +21,7 @@ class ShipmentsController < ApplicationController
     @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
     @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no
     @shipment.invoice_number = Shipment.find_next_invoice_number()  
+    @shipment.vat_rate = 20  
     # @shipment.save
   end
 
@@ -184,6 +185,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipment_params
-      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount)
+      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount, :vat_rate)
     end
 end

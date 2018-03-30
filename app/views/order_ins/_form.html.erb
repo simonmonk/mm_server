@@ -50,8 +50,7 @@ function rx_part(order_in_line_id) {
 
 <table>
     <tr><td>Order ID (automatic)</td><td><%= order_in.id %></td></tr>
-    <tr><td>Supplier</td><td><%= f.select :supplier_id, 
-        options_for_select(Supplier.all.map{|s|[s.name, s.id]}, :selected => order_in.supplier.id) %></td></tr>
+    <tr><td>Supplier</td><td><%=order_in.supplier.name%></td></tr>
     <tr><td>Order placed:</td><td><%= f.date_select :placed_date %></td></tr>
      <tr><td>Currency</td><td><%= f.select :currency, 
         options_for_select(['GBP', 'USD', 'EUR'].map{|s|[s, s]}, :selected => order_in.currency) %></td></tr>

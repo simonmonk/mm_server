@@ -83,3 +83,7 @@ background: #ff8080;
 .bordered {
     border: 1px solid black;
 }
+
+.inactive {
+    color: lightgrey;
+}

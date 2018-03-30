@@ -1,8 +1,28 @@
+<script>
+    function hideInactive() {
+        $('.inactive').hide();
+        $('#hide_button').hide();
+        $('#show_button').show();
+    }
+    
+    function showInactive() {
+        $('.inactive').show();
+        $('#hide_button').show();
+        $('#show_button').hide();
+    }
+    
+</script>
+
 <p id="notice"><%= notice %></p>
 
 <h1>Parts</h1>
 
 <%= link_to 'New Part', new_part_path %>  &nbsp; <a href="parts/export_parts.csv">parts.csv</a>
+
+<br/>
+
+<a id="show_button" href="javascript:showInactive()">Show Inactive Parts</a>
+<a id="hide_button" href="javascript:hideInactive()">Hide Inactive Parts</a>
 
 <p></p>
 
@@ -29,6 +49,9 @@
         if (part.qty <= part.stock_warning_level)
             style_class = "warning"
         end
+        if (not part.active)
+            style_class = "inactive"
+        end
     %>
       <tr class="<%=style_class%>">
         <td><%= link_to part.name, edit_part_path(part) %></td>
@@ -46,4 +69,5 @@
 
 <%end%>
 
+<script>hideInactive()</script>
 

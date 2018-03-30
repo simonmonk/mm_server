@@ -34,6 +34,7 @@ function set_date(field_name, date) {
     <tr><td>Dispatched date:</td><td><%= datepicker_input f, :date_dispatched %></td><td><a href="javascript:set_date('#shipment_date_dispatched', '<%=Date.current%>')">Today</a></tr>
     <tr><td>Payment due date:</td><td><%= datepicker_input f, :date_payment_reminder %></td><td><a href="javascript:set_date('#shipment_date_payment_reminder', '<%=Date.current + 7.days%>')">Today + 7 days</a></tr>
     <tr><td>Payment received date:</td><td><%= datepicker_input f, :date_payment_received %></td><td><a href="javascript:set_date('#shipment_date_payment_received', '<%=Date.current%>')">Today</a></tr>
+    <tr><td>VAT Rate (%)</td><td> <%= f.text_field :vat_rate %> </td></tr>  
     <tr><td>Shipping Cost</td><td> <%= f.text_field :shipping_cost %> </td></tr>  
     <tr><td>P.O. Number</td><td> <%= f.text_field :po_reference %> </td></tr>
     <tr><td>Shipping Provider</td><td> <%= f.text_field :shipping_provider %> </td></tr>
