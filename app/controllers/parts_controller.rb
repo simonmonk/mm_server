@@ -52,6 +52,7 @@ end
   # POST /parts.json
   def create
     @part = Part.new(part_params)
+    @categories = PartCategory.all
     if @part.save
       redirect_to :action => "edit", :id => @part.id
         #render :edit
