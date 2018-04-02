@@ -90,8 +90,8 @@ class Product < ApplicationRecord
         return total
     end
 
-    # deduct quatities of all the parts and assemblies used for qty of this product.
-    def deduct_stock(qty)
+    # deduct quatities of all the parts and assemblies used for n of this product.
+    def deduct_stock(n)
         self.product_parts.each do |pp|
             pp.part.qty = pp.part.qty - pp.qty * n
             pp.part.save
