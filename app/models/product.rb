@@ -106,7 +106,6 @@ class Product < ApplicationRecord
         t.transaction_type = 'Deduct Stock for Product'
         t.description = "Removed parts and assemblies from stock to make " + n.to_s + " new " + self.name
         t.save
-        redirect_to :action => "edit", :id => product_id
     end
 
 end
