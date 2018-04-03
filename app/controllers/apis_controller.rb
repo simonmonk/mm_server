@@ -147,12 +147,17 @@ def import_orders_amazon_com_week(woe)
     end
 end    
     
-# http://localhost:3000/apis/import_all_orders   
+# http://localhost:3000/apis/import_all_orders  
+# import last 10 weeks
 def import_all_orders()
-    2467.downto(2459) do |woe| 
+    w = current_week_of_epoch()
+    w.downto(w-10) do |woe| 
         import_orders_amazon_com_week(woe)
+        import_orders_amazon_uk_week(woe)
     end
 end
+    
+
     
 #{"OrderItems"=>
 #        {"OrderItem"=>[     ****** if only 1 item there is no array
