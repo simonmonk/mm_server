@@ -106,6 +106,8 @@ end
 </tr>
 </table>
 
+<p>&nbsp;</p>
+
 <h2>MonkMakes Ltd Commercial Invoice</h2>
 
 <hr/>
@@ -173,8 +175,9 @@ end
 <tr>
     <th class="prod_table_th">Qty</th>
     <th class="prod_table_th">SKU</th>
-    <th class="prod_table_th"><%=@shipment.retailer.name%> SKU</th>
-    <th class="prod_table_th">Description</th>
+    <th class="prod_table_th">Product</th>
+ <!--    <th class="prod_table_th"><%=@shipment.retailer.name%> SKU</th> CPC only -->
+    <th class="prod_table_th">Customs Description</th>
 <% if (should_show('harmoized_tarrif_number')) %>
     <th class="prod_table_th">H. Tarrif</th>
 <% end %>            
@@ -202,8 +205,9 @@ end
 <tr>
     <td class="prod_table_td"><%=sp.qty%></td>
     <td class="prod_table_td"><%=sp.product.sku%></td>
-    <td class="prod_table_td"><%=foreign_sku%></td>
+<!--    <td class="prod_table_td"><%=foreign_sku%></td> only for CPC -->
     <td class="prod_table_td"><%=sp.product.name%></td>
+    <td class="prod_table_td"><%=sp.product.customs_description%></td>
 <% if (should_show('harmoized_tarrif_number')) %>
     <td class="prod_table_td"><%=sp.product.harmoized_tarrif_number%></td>
 <% end %>            

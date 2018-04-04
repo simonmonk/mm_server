@@ -1,6 +1,13 @@
 MM Server Backlog
 ==================
 
+Rails Cheat sheet
+$ rails server
+$ bin/rails generate migration AddStateToRetailerAddreses
+$ rails db:migrate
+
+
+
 Refactoring
 -----------
 Menu system

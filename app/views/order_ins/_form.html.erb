@@ -32,6 +32,9 @@ function rx_part(order_in_line_id) {
         + "&amp;order_in_id=" + order_in_id 
 }      
     
+function set_date(field_name, date) {
+    $(field_name).val(date);
+}    
     
 </script>
 
@@ -51,7 +54,7 @@ function rx_part(order_in_line_id) {
 <table>
     <tr><td>Order ID (automatic)</td><td><%= order_in.id %></td></tr>
     <tr><td>Supplier</td><td><%=order_in.supplier.name%></td></tr>
-    <tr><td>Order placed:</td><td><%= f.date_select :placed_date %></td></tr>
+    <tr><td>Order placed:</td><td><%= datepicker_input f, :placed_date %></td><td><a href="javascript:set_date('#order_in_placed_date', '<%=Date.current%>')">Today</a></tr> 
      <tr><td>Currency</td><td><%= f.select :currency, 
         options_for_select(['GBP', 'USD', 'EUR'].map{|s|[s, s]}, :selected => order_in.currency) %></td></tr>
     <tr><td>Shipping Cost</td><td><%= f.text_field :shipping %></td></tr>
@@ -83,7 +86,7 @@ order_in.order_in_lines.each do | sp |
     part_ids.append(sp.part_id)
     part_supplier = PartSupplier.where(part_id: sp.part_id, supplier_id: order_in.supplier_id)[0]
 %>
-    <tr><td><%= sp.part.name %></td>
+    <tr><td><a href="/parts/<%=sp.part.id%>/edit"><%= sp.part.name %></a></td>
         <td><%= part_supplier.code %></td>
         <td><%=sp.qty%></td>
         <td><%=sp.qty_in%></td>
@@ -95,6 +98,8 @@ order_in.order_in_lines.each do | sp |
         <% if (sp.qty_in != sp.qty)%>
         <td><input type="number" id="rx_qty_<%= sp.id %>" value="<%= sp.qty - sp.qty_in %>"/></td>
         <td><input type="button" value="Received" onClick="javascript:rx_part('<%= sp.id %>')"/></td>
+        <% else %>
+        <td>Received <%= distance_of_time_in_words_to_now(sp.updated_at)%> ago</td>
         <% end %>
     </tr>
 <% end %>
