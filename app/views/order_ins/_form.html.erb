@@ -100,6 +100,7 @@ order_in.order_in_lines.each do | sp |
         <td><input type="button" value="Received" onClick="javascript:rx_part('<%= sp.id %>')"/></td>
         <% else %>
         <td>Received <%= distance_of_time_in_words_to_now(sp.updated_at)%> ago</td>
+        <td><a href="">Edit</a></td>
         <% end %>
     </tr>
 <% end %>

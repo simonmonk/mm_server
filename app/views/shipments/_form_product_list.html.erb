@@ -24,8 +24,8 @@ function import_shipment_com() {
 }  
     
     
-function create_invoice() {
-    window.open("/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>", '_blank')
+function create_invoice(pages) {
+    window.open("/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>&pages=" + pages, '_blank')
 }
     
 </script>
@@ -78,4 +78,5 @@ qty <input type="number" id="product_qty_field" value="1"/>
 <% end %>
 
 
-<input type="button" value="Create Invoice" onClick="javascript:create_invoice()"/>
+<input type="button" value="Create Invoice 1 page" onClick="javascript:create_invoice(1)"/>
+<input type="button" value="Create Invoice 2 pages" onClick="javascript:create_invoice(2)"/>
