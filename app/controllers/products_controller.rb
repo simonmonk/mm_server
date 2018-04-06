@@ -16,6 +16,11 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
+    @product.active = true
+    @product.qty = 0
+    @product.stock_warning_level = 0
+    @product.wholesale_price = 0
+    @product.retail_price = 0  
   end
 
   # GET /products/1/edit

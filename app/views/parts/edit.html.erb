@@ -1,3 +1,9 @@
+<script>
+$(function() {
+    $('#edit_part_<%=@part.id%>').areYouSure();
+});    
+</script>
+
 <h1>Editing Part: <%= @part.name %></h1>
 
 <p>This part is used in the following products: 

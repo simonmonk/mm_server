@@ -16,6 +16,7 @@ class RetailersController < ApplicationController
   # GET /retailers/new
   def new
     @retailer = Retailer.new
+    @retailer.active = true
   end
 
   # GET /retailers/1/edit

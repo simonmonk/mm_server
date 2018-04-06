@@ -3,7 +3,7 @@
 $(function() {
     $('#edit_assembly_<%=assembly.id%>').areYouSure();
 });    
-
+    
     
 function add_part() {
     var list = document.getElementById("parts_list");
@@ -75,41 +75,4 @@ function deduct(qty) {
 </tr></table>
 <hr/>
 
-<h2>Parts Used</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Part</th>
-      <th>Qty</th>
-      <th>Cost</th>
-    <th>Qty in stock</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @assembly.assembly_parts.each do |assembly_part| %>
-      <tr>
-        <td><a href="/parts/<%= assembly_part.part.id %>/edit"><%= assembly_part.part.name %></a></td>
-        <td><%= assembly_part.qty %></td>
-        <td><%= (assembly_part.part.purchase_cost * assembly_part.qty).round(3) %></td>  
-        <td><%= assembly_part.part.qty%></td>
-        <td><input type="button" value="Delete" onClick="javascript:delete_part(<%= assembly_part.id%>)"/></td>
-      </tr>
-    <% end %>
-  </tbody>
 
-</table>
-
-<p></p>
-
-
-<select id="parts_list">
-<% parts = Part.all.order(name: :asc)
-    parts.each do |part| %>
-    <option value='<%= part.id %>'><%= part.name %></option>
-<% end %>
-</select>    
-qty <input type="number" id="part_qty_field" value="1"/> 
-<input type="button" value="Add" onClick="javascript:add_part()"/>
-
-<p></p>

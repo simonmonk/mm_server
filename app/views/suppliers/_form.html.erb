@@ -1,13 +1,3 @@
-<script>
-
-$(function() {
-    $('#edit_supplier_<%=supplier.id%>').areYouSure();
-});    
-
-
-</script>
-
-
 
 <%= form_for(supplier) do |f| %>
   <% if supplier.errors.any? %>

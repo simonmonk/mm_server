@@ -1,3 +1,9 @@
+<script>
+$(function() {
+    $('#edit_shipment_<%=@shipment.id%>').areYouSure();
+});    
+</script>
+
 <h1>Shipment:  <%= @shipment.invoice_number %> to <a href="/retailers/<%=@shipment.retailer_id%>/edit"><%= @shipment.retailer.name %></a></h1>
 
 <%= render 'form', shipment: @shipment %>

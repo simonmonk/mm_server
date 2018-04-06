@@ -1,3 +1,9 @@
+<script>
+$(function() {
+    $('#edit_supplier_<%=@supplier.id%>').areYouSure();
+});    
+</script>
+
 <h1>Editing Supplier</h1>
 
 <%= render 'form', supplier: @supplier %>

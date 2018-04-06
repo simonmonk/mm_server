@@ -16,6 +16,7 @@ class SuppliersController < ApplicationController
   # GET /suppliers/new
   def new
     @supplier = Supplier.new
+    @supplier.active = true
   end
 
   # GET /suppliers/1/edit

@@ -20,6 +20,11 @@ class PartsController < ApplicationController
   # GET /parts/new
   def new
     @part = Part.new
+    @part.active = true
+    @part.qty = 0
+    @part.stock_warning_level = 0
+    @part.cost = 0
+      
     @categories = PartCategory.all
   end
 

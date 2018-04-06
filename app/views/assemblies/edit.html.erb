@@ -1,5 +1,11 @@
+<script>
+$(function() {
+    $('#edit_assembly_<%=@assembly.id%>').areYouSure();
+});  
+</script>
+
 <h1>Editing Assembly: <%= @assembly.name%></h1>
 
 <%= render 'form', assembly: @assembly %>
+<%= render 'form_parts_list', assembly: @assembly %>
 
-<%= link_to 'Cancel', assemblies_path %> 

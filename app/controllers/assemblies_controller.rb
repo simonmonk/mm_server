@@ -15,6 +15,9 @@ class AssembliesController < ApplicationController
   # GET /assemblies/new
   def new
     @assembly = Assembly.new
+    @assembly.active = true
+    @assembly.qty = 0
+    @assembly.stock_warning_level = 0
   end
 
   # GET /assemblies/1/edit
@@ -63,19 +66,12 @@ class AssembliesController < ApplicationController
   end
     
 
-  # POST /assemblies
-  # POST /assemblies.json
   def create
     @assembly = Assembly.new(assembly_params)
-
-    respond_to do |format|
-      if @assembly.save
-        format.html { redirect_to @assembly, notice: 'Assembly was successfully created.' }
-        format.json { render :show, status: :created, location: @assembly }
-      else
-        format.html { render :new }
-        format.json { render json: @assembly.errors, status: :unprocessable_entity }
-      end
+    if @assembly.save
+        redirect_to @assembly, notice: 'Product was successfully created.'
+    else
+        render :new
     end
   end
 
