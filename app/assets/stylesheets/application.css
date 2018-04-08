@@ -45,7 +45,7 @@ background: #ff8080;
 
 
 
-.actions {
+.menu {
    border-top: 1px solid #96d1f8;
    background: #e0e0e0;
    padding: 5px 10px;
@@ -56,15 +56,19 @@ background: #ff8080;
    text-decoration: none;
    vertical-align: middle;
    }
-.actions:hover {
-   border-top-color: #28597a;
-   background: #28597a;
-   color: #ccc;
+
+.menu_selected {
+   border-top: 1px solid #96d1f8;
+   background: #e0e0ff;
+   padding: 5px 10px;
+   border-radius: 8px;
+   color: white;
+   font-size: 12px;
+   font-family: Georgia, serif;
+   text-decoration: none;
+   vertical-align: middle;
    }
-.actions:active {
-   border-top-color: #1b435e;
-   background: #1b435e;
-   }
+
 
 
 .priority1 {

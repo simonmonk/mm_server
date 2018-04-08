@@ -7,20 +7,21 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
+  
+    
   <body>
-    <a class="actions" href="/">DASHBOARD</a> 
-    <a class="actions" href="/suppliers">SUPPLIERS</a>  
-    <a class="actions" href="/order_ins">ORDER IN</a>    
-    <a class="actions" href="/parts">PARTS</a>  
-    <a class="actions" href="/assemblies">ASSEMBLIES</a>
-    <a class="actions" href="/products">PRODUCTS</a>  
-    <a class="actions" href="/retailers">RETAILERS</a>
-    <a class="actions" href="/shipments">SHIPMENTS</a>
+    <a class="menu" href="/">DASHBOARD</a> 
+    <a class="<%= current_page?(controller: 'suppliers')?'menu_selected':'menu'%>" href="/suppliers">SUPPLIERS</a>  
+    <a class="<%= current_page?(controller: 'order_ins')?'menu_selected':'menu'%>" href="/order_ins">ORDER IN</a>    
+    <a class="<%= current_page?(controller: 'parts')?'menu_selected':'menu'%>" href="/parts">PARTS</a>  
+    <a class="<%= current_page?(controller: 'assemblies')?'menu_selected':'menu'%>" href="/assemblies">ASSEMBLIES</a>
+    <a class="<%= current_page?(controller: 'products')?'menu_selected':'menu'%>" href="/products">PRODUCTS</a>  
+    <a class="<%= current_page?(controller: 'retailers')?'menu_selected':'menu'%>" href="/retailers">RETAILERS</a>
+    <a class="<%= current_page?(controller: 'shipments')?'menu_selected':'menu'%>" href="/shipments">SHIPMENTS</a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a class="actions" href="/sales_uk">SALES UK</a> 
-    <a class="actions" href="/sales_us">SALES USA</a> 
-    <a class="actions" href="/transactions">TRANSACTIONS</a>  
+    <a class="menu" href="/sales_uk">SALES UK</a> 
+    <a class="menu" href="/sales_us">SALES USA</a> 
+    <a class="<%= current_page?(controller: 'transactions')?'menu_selected':'menu'%>" href="/transactions">TRANSACTIONS</a>  
       
     <hr/>
       
