@@ -82,6 +82,14 @@ def should_show(column_name)
     return result
 end
 
+currency_name = 'GBP'
+currency_symbol = '£'
+if (@shipment.retailer.pref_currency)
+    currency_name = @shipment.retailer.pref_currency
+end
+if (currency_name == 'USD')
+    currency_symbol = '$'
+end
 %>
 
 
@@ -195,8 +203,8 @@ end
 <% if (should_show('country_of_origin')) %>
     <th class="prod_table_th">Origin</th>
 <% end %>
-    <th class="prod_table_th">Unit Price (GBP)</th>
-    <th class="prod_table_th">Total Price (GBP)</th>
+    <th class="prod_table_th">Unit Price (<%=currency_name%>)</th>
+    <th class="prod_table_th">Total Price (<%=currency_name%>)</th>
 </tr>
 
 <%
@@ -225,8 +233,8 @@ end
 <% if (should_show('country_of_origin')) %>       
     <td class="prod_table_td"><%=sp.product.country_of_origin%></td>
 <% end %>
-    <td class="prod_table_td_money"><%=number_to_currency(sp.product.wholesale_price, unit: "£", separator: ".", delimiter: ",")%></td>
-    <td class="prod_table_td_money"><%=number_to_currency(line_total, unit: "£", separator: ".", delimiter: ",")%></td>
+    <td class="prod_table_td_money"><%=number_to_currency(sp.product.wholesale_price, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="prod_table_td_money"><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
 <% end %>
 
@@ -236,7 +244,7 @@ end
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
     <td/><td/>
-    <td/><td class="prod_table_td" colspan="2">Shipping</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.shipping_cost, unit: "£", separator: ".", delimiter: ",")%></td>
+    <td/><td class="prod_table_td" colspan="2">Shipping</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.shipping_cost, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
     
 <% 
@@ -246,7 +254,7 @@ end
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td/><td/><td/><td class="prod_table_td" colspan="2">Discount</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: "£", separator: ".", delimiter: ",")%></td>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">Discount</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
 
 <% end %>    
@@ -254,7 +262,7 @@ end
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td/><td/><td/><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: "£", separator: ".", delimiter: ",")%></td>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
     
 <% 
@@ -264,12 +272,12 @@ end
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=@shipment.vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: "£", separator: ".", delimiter: ",")%></td>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=@shipment.vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td/><td/><td/><td class="prod_table_td" colspan="2"><b>Invoice Total</b></td><td class="prod_table_td_money"><b><%=number_to_currency(total+vat, unit: "£", separator: ".", delimiter: ",")%></b></td>
+    <td/><td/><td/><td class="prod_table_td" colspan="2"><b>Invoice Total</b></td><td class="prod_table_td_money"><b><%=number_to_currency(total+vat, unit: currency_symbol, separator: ".", delimiter: ",")%></b></td>
 </tr>
 <% end %>
 
