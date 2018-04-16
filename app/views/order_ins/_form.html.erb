@@ -99,7 +99,7 @@ order_in.order_in_lines.each do | sp |
         <td><input type="number" id="rx_qty_<%= sp.id %>" value="<%= sp.qty - sp.qty_in %>"/></td>
         <td><input type="button" value="Received" onClick="javascript:rx_part('<%= sp.id %>')"/></td>
         <% else %>
-        <td>Received <%= distance_of_time_in_words_to_now(sp.updated_at)%> ago</td>
+        <td>Received <%= sp.date_line_received%></td>
         <td><a href="">Edit</a></td>
         <% end %>
     </tr>
@@ -110,7 +110,7 @@ order_in.order_in_lines.each do | sp |
 <% 
     part_suppliers = order_in.supplier.part_suppliers.all
     part_suppliers.each do | pr | 
-        if (not part_ids.include?(pr.part_id))
+        if (pr.part and not part_ids.include?(pr.part_id))
 %>
     <option value='<%= pr.part.id %>'><%= pr.part.name %> (<%= pr.code %>)</option>option>
 <% 

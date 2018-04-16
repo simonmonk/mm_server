@@ -60,6 +60,7 @@ class OrderInsController < ApplicationController
     order_in_line = OrderInLine.find(order_in_line_id)
     qty_in = params[:qty_in].to_i
     order_in_line.qty_in += qty_in
+    order_in_line.date_line_received = Date.current
     order_in_line.save
     old_qty = order_in_line.part.qty
     order_in_line.part.qty += qty_in
@@ -85,7 +86,7 @@ class OrderInsController < ApplicationController
   end
 
   def index
-      @order_ins = OrderIn.all
+      @order_ins = OrderIn.all.order(created_at: :desc)
   end
     
   def destroy

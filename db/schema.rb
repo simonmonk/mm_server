@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180329095344) do
+ActiveRecord::Schema.define(version: 20180409210431) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -44,10 +44,11 @@ ActiveRecord::Schema.define(version: 20180329095344) do
     t.integer  "qty"
     t.integer  "order_in_id"
     t.integer  "part_id"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.decimal  "price",       precision: 10, scale: 3
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.decimal  "price",              precision: 10, scale: 3
     t.integer  "qty_in"
+    t.date     "date_line_received"
     t.index ["order_in_id"], name: "index_order_in_lines_on_order_in_id"
     t.index ["part_id"], name: "index_order_in_lines_on_part_id"
   end

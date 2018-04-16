@@ -6,24 +6,24 @@ class Supplier < ApplicationRecord
     
     
     def fastest_delivery()
-        min_time = 999
+        min_days = 999
         self.order_ins.each do |order|
             t0 = order.placed_date
-                puts "*******************"
-                puts order.order_in_lines.length
-            order.order_in_lines do | line |
-                t1 = line.updated_at
-                puts "***"
+            order.order_in_lines.each do | line |
+puts "** LINE **"
+                t1 = line.date_line_received
+puts t1
+puts "***"
                 if (t0 and t1)
-                    t = t1 - t0
-                    if (t < min_time) 
-                        min_time = t
+                    t = (t1 - t0).to_i
+                    if (t < min_days) 
+                        min_days = t
                     end
                 end
             end
         end
-        if (min_time < 999)
-            return min_time
+        if (min_days < 999)
+            return min_days
         else
             return 0
         end
