@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       get :import_shipment_uk
       get :import_shipment_com
       get :subtract_products
+      get :delete_shipment_line
       get :invoice
     end
   end

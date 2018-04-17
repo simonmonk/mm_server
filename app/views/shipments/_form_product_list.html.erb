@@ -12,6 +12,10 @@ function subtract_products() {
         document.location = "/shipments/subtract_products?shipment_id=<%= shipment.id %>"
     }
 }  
+    
+function delete_shipment_line(sp_id) {
+    document.location = "/shipments/delete_shipment_line?shipment_product_id=" + sp_id
+}
 
 function import_shipment_uk() {
     var shipment_code = document.getElementById("shipment_code_field").value
@@ -54,7 +58,7 @@ function create_invoice(pages) {
 <%
 shipment.shipment_products.each do | sp |
 %>
-    <tr><td><%= sp.product.name %></td><td><%= sp.product.sku %></td><td><%=sp.qty%></td></tr>
+    <tr><td><%= sp.product.name %></td><td><%= sp.product.sku %></td><td><%=sp.qty%></td><td><input type="button" value="Delete" onClick="javascript:delete_shipment_line(<%=sp.id%>)"/></td></tr>
 <% end %>
 </table>
 

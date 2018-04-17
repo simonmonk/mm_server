@@ -68,6 +68,15 @@ def add_product
     redirect_to :action => "edit", :id => shipment_id
 end   
     
+    
+def delete_shipment_line
+    sp = ShipmentProduct.find(params[:shipment_product_id])
+    if (sp)
+        sp.destroy
+    end
+    redirect_to :action => "edit", :id => sp.shipment_id
+end       
+    
 def subtract_products
     message = ''
     shipment_id = params[:shipment_id]
