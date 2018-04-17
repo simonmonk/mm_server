@@ -84,6 +84,24 @@ background: #ff8080;
     color: grey;
 }
 
+.priority10 {
+    color: blue;
+    font-weight: bold;
+}
+
+.priority11 {
+    color: black;
+}
+
+.priority12 {
+    color: green;
+}
+
+.priority13 {
+    color: red;
+}
+
+
 .bordered {
     border: 1px solid black;
 }
