@@ -44,7 +44,7 @@ function copy_address() {
     <tr><td>Pref Currency (GBP/USD/EUR)</td><td><%= f.text_field :pref_currency %></td></tr> 
     <tr><td>Vatable</td><td><%= f.check_box :vatable %></td></tr> 
     <tr><td>VAT Number</td><td><%= f.text_field :vat_number %></td></tr>
-    
+    <tr><td>Show Their SKU in invoice</td><td><%= f.check_box :show_foreign_sku %></td></tr>
     <tr><th>Billing</th></tr>
     <tr><td>Billing FAO</td><td><%= f.text_field :fao_billing %></td></tr>    
     <tr><td>Addr Line 1</td><td><%= f.text_field :billing_ad_line1 %></td></tr>   

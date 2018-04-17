@@ -20,6 +20,10 @@ class Shipment < ApplicationRecord
     end
   end
 
+  # black - paid and complete
+  # blue for in progress - no invoice sent date
+  # green - shipped and not outside payment terms
+  # red - overdue
   def priority()
     if (date_payment_received and date_payment_received <= Date.current)
         return 3

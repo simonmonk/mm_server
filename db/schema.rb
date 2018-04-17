@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180409210431) do
+ActiveRecord::Schema.define(version: 20180417133728) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 20180409210431) do
     t.string   "billing_ad_state"
     t.string   "delivery_ad_state"
     t.boolean  "active"
+    t.boolean  "show_foreign_sku"
   end
 
   create_table "sales", force: :cascade do |t|

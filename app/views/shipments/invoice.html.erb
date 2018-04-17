@@ -195,7 +195,6 @@ end
     <th class="prod_table_th">Qty</th>
     <th class="prod_table_th">SKU</th>
     <th class="prod_table_th">Product</th>
- <!--    <th class="prod_table_th"><%=@shipment.retailer.name%> SKU</th> CPC only -->
     <th class="prod_table_th">Customs Description</th>
 <% if (should_show('harmoized_tarrif_number')) %>
     <th class="prod_table_th">H. Tarrif</th>
@@ -220,11 +219,14 @@ end
     total += line_total
     product_retailer = ProductRetailer.where(product_id: sp.product.id, retailer_id: sp.shipment.retailer.id)[0]
     foreign_sku = product_retailer.sku
+    sku = sp.product.sku
+    if (@shipment.retailer.show_foreign_sku == true)
+        sku = foreign_sku
+    end
 %>
 <tr>
     <td class="prod_table_td"><%=sp.qty%></td>
-    <td class="prod_table_td"><%=sp.product.sku%></td>
-<!--    <td class="prod_table_td"><%=foreign_sku%></td> only for CPC -->
+    <td class="prod_table_td"><%=sku%></td>
     <td class="prod_table_td"><%=sp.product.name%></td>
     <td class="prod_table_td"><%=sp.product.customs_description%></td>
 <% if (should_show('harmoized_tarrif_number')) %>

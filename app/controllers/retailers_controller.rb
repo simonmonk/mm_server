@@ -75,6 +75,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def retailer_params
-      params.require(:retailer).permit(:name, :contact_name, :contact_email, :notes, :regex_qty, :regex_oos, :pref_currency, :billing_ad_line1, :billing_ad_line2, :billing_ad_city, :billing_ad_postal_code, :billing_ad_country, :billing_ad_tel, :fao_delivery, :delivery_ad_line1, :delivery_ad_line2, :delivery_ad_city, :delivery_ad_postal_code, :delivery_ad_country, :delivery_ad_tel, :vatable, :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :active)
+      params.require(:retailer).permit(:name, :contact_name, :contact_email, :notes, :regex_qty, :regex_oos, :pref_currency, :billing_ad_line1, :billing_ad_line2, :billing_ad_city, :billing_ad_postal_code, :billing_ad_country, :billing_ad_tel, :fao_delivery, :delivery_ad_line1, :delivery_ad_line2, :delivery_ad_city, :delivery_ad_postal_code, :delivery_ad_country, :delivery_ad_tel, :vatable, :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :active, :show_foreign_sku)
     end
 end
