@@ -1,5 +1,9 @@
 <script>
 
+    $(function() {
+        $('#edit_product_retailer_<%=product_retailer.id%>').areYouSure();
+    });    
+    
     function testRequest() {
         $.get("<%= product_retailer.url %>", callbackLoaded);
     }
@@ -47,7 +51,7 @@ end %>
 
 
   <div class="actions">
-    <input type="button" value="Test" onClick="javascript:testRequest()"/>
+    <input type="button" value="Test web request for scraping stock" onClick="javascript:testRequest()"/>
   </div>
 
   <div id="testResult">

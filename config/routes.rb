@@ -53,6 +53,9 @@ Rails.application.routes.draw do
       get :add_part
       get :delete_part
       get :rx_part
+      get :save_part
+      get :po
+      get :qr
     end
   end
   resources :apis do

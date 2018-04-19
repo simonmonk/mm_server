@@ -41,14 +41,8 @@ class ProductRetailersController < ApplicationController
   # PATCH/PUT /product_retailers/1
   # PATCH/PUT /product_retailers/1.json
   def update
-    respond_to do |format|
-      if @product_retailer.update(product_retailer_params)
-        format.html { redirect_to @product_retailer, notice: 'Product retailer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @product_retailer }
-      else
-        format.html { render :edit }
-        format.json { render json: @product_retailer.errors, status: :unprocessable_entity }
-      end
+    if @product_retailer.update(product_retailer_params)
+        render :edit
     end
   end
 

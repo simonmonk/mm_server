@@ -1,5 +1,5 @@
 class OrderInsController < ApplicationController
-      before_action :set_order_in, only: [:show, :edit, :update, :destroy]
+  before_action :set_order_in, only: [:show, :edit, :update, :destroy, :po, :qr]
     
   def new
     @order_in = OrderIn.new
@@ -16,34 +16,22 @@ class OrderInsController < ApplicationController
     end
   end
     
+  def qr
+      render :layout => false
+  end
+    
+  def po
+      render :layout => false
+  end
+  
+  # add a part order line to the order_in
   def add_part
     part_id = params[:part_id]
     order_in_id = params[:order_in_id]
     qty = params[:qty].to_i
     price = params[:price].to_f
-    part = Part.find(part_id)
-    old_price = part.cost
-    part.cost = price
-    part.save
-    order_line = nil
-    results = OrderInLine.where(order_in_id: order_in_id, part_id: part_id)
-    if (results.length > 0)
-        order_line = results[0]
-        order_line.qty = qty 
-        order_line.qty_in = 0
-        order_line.price = price
-        order_line.save
-    else
-        order_line = OrderInLine.new(:order_in_id => order_in_id, :part_id => part_id, :qty => qty, :qty_in => 0, :price => price)
-        order_line.save
-    end
-    if (old_price.round(2) != price.round(2)) 
-        t = Transaction.new
-        t.transaction_type = 'Part cost change'
-        t.description = "Part " + part.name + " changed price from " + old_price.to_s + " to " + price.to_s +
-          " as a result of order (goods in) from " + order_line.order_in.supplier.name 
-        t.save
-    end
+    order_in = OrderIn.find(order_in_id)
+    order_in.add_order_line(part_id, qty, price)
     redirect_to :action => "edit", :id => order_in_id
   end   
 
@@ -72,6 +60,16 @@ class OrderInsController < ApplicationController
     redirect_to :action => "edit", :id => order_in_id
   end
 
+  def save_part
+    order_in_id = params[:order_in_id]
+    order_in_line_id = params[:order_in_line_id]
+    order_in_line = OrderInLine.find(order_in_line_id)
+    order_in_line.qty = params[:qty].to_i
+    order_in_line.price = params[:price].to_f
+    order_in_line.save
+      
+    redirect_to :action => "edit", :id => order_in_id
+  end      
 
   def update
       if @order_in.update(order_in_params)

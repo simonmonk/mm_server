@@ -1,0 +1,24 @@
+
+<%= @order_in.supplier.contact_email %>
+
+
+<pre>
+Hi <%= @order_in.supplier.contact_name %>,
+
+Please could you give me prices for the following items:
+
+<% @order_in.order_in_lines.each do | line | 
+    part_supplier = PartSupplier.where(part_id: line.part_id, supplier_id: @order_in.supplier_id)[0]
+    ps_code = ""
+    if (part_supplier.code and part_supplier.code.length > 0)
+        ps_code = "(" + part_supplier.code + ")"
+    end
+%>
+    <%=line.qty%> x <%=line.part.name%> <%= ps_code %>  
+<% end %>
+
+Kind Regards,
+
+Linda.
+    
+</pre>

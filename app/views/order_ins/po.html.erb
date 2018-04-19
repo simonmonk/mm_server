@@ -1,0 +1,47 @@
+
+
+<style>
+
+p {
+    text-align: left;
+    margin-top: 1px;  
+    margin-bottom: 1px;  
+    font: 14px courier, sans-serif;
+}
+    
+</style>
+
+<%
+
+currency_name = 'GBP'
+currency_symbol = '£'
+if (@order_in.currency == "USD")
+    currency_name == 'USD'
+    currency_symbol = '$'
+end
+%>
+
+
+<%= @order_in.supplier.contact_email %>
+
+
+<pre>
+Hi <%= @order_in.supplier.contact_name %>,
+
+Please consider this email to be a purchase order for the following items. All prices in <%= currency_name %>.
+
+<% @order_in.order_in_lines.each do | line | 
+    part_supplier = PartSupplier.where(part_id: line.part_id, supplier_id: @order_in.supplier_id)[0]
+    ps_code = ""
+    if (part_supplier.code and part_supplier.code.length > 0)
+        ps_code = "(" + part_supplier.code + ")"
+    end
+%>
+    <%=line.qty%> x <%=line.part.name%> <%= ps_code %> at <%= currency_symbol %> <%=number_to_currency(line.price, unit: currency_symbol, separator: ".", delimiter: ",")%> 
+<% end %>
+
+Kind Regards,
+
+Linda.
+    
+</pre>

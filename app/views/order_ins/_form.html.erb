@@ -5,32 +5,6 @@ $(function() {
 });    
 
     
-function add_part() {
-    var list = document.getElementById("parts_list");
-    var part_id = list.options[list.selectedIndex].value;
-    var qty = document.getElementById("part_qty_field").value
-    var price = document.getElementById("part_price_field").value
-    var order_in_id = "<%= order_in.id %>"
-    
-    document.location = "/order_ins/add_part?part_id=" + part_id 
-        + "&amp;order_in_id=" + order_in_id 
-        + "&amp;qty=" + qty + "&amp;price=" + price
-}  
-    
-function delete_part(order_in_line_id) {
-    var order_in_id = "<%= order_in.id %>"
-    document.location = "/order_ins/delete_part?order_in_line_id=" + order_in_line_id 
-        + "&amp;order_in_id=" + order_in_id 
-}  
-    
-function rx_part(order_in_line_id) {
-    var qty_in = document.getElementById("rx_qty_" + order_in_line_id).value
-    var order_in_id = "<%= order_in.id %>"
-    
-    document.location = "/order_ins/rx_part?order_in_line_id=" + order_in_line_id
-        + "&amp;qty_in=" + qty_in
-        + "&amp;order_in_id=" + order_in_id 
-}      
     
 function set_date(field_name, date) {
     $(field_name).val(date);
@@ -72,53 +46,5 @@ function set_date(field_name, date) {
 
 <hr/>
 
-<h2>Order (Goods Inwards) has the following items</h2>
 
-<div class="priority1"><%= params[:notice] %></div>
-
-
-<table>
-    <tr><th>Part</th><th>Supplier Code</th><th>Qty Ordered</th><th>Qty Received</th><th>Unit price</th><th>Total</th></tr>
-
-<%
-part_ids = []
-order_in.order_in_lines.each do | sp |
-    part_ids.append(sp.part_id)
-    part_supplier = PartSupplier.where(part_id: sp.part_id, supplier_id: order_in.supplier_id)[0]
-%>
-    <tr><td><a href="/parts/<%=sp.part.id%>/edit"><%= sp.part.name %></a></td>
-        <td><%= part_supplier.code %></td>
-        <td><%=sp.qty%></td>
-        <td><%=sp.qty_in%></td>
-        <td><%=sp.price%></td>
-        <td><%= (sp.price * sp.qty).round(2)%></td>
-        <% if (sp.qty_in == 0)%>
-        <td><input type="button" value="Delete" onClick="javascript:delete_part('<%= sp.id %>')"/></td>
-        <% end %>
-        <% if (sp.qty_in != sp.qty)%>
-        <td><input type="number" id="rx_qty_<%= sp.id %>" value="<%= sp.qty - sp.qty_in %>"/></td>
-        <td><input type="button" value="Received" onClick="javascript:rx_part('<%= sp.id %>')"/></td>
-        <% else %>
-        <td>Received <%= sp.date_line_received%></td>
-        <td><a href="">Edit</a></td>
-        <% end %>
-    </tr>
-<% end %>
-</table>
-
-<select id="parts_list">
-<% 
-    part_suppliers = order_in.supplier.part_suppliers.all
-    part_suppliers.each do | pr | 
-        if (pr.part and not part_ids.include?(pr.part_id))
-%>
-    <option value='<%= pr.part.id %>'><%= pr.part.name %> (<%= pr.code %>)</option>option>
-<% 
-        end
-    end
-%>
-</select>    
-Qty: <input type="number" id="part_qty_field" value="1"/> 
-Price: <input type="number" id="part_price_field" value="0"/> 
-<input type="button" value="Add" onClick="javascript:add_part()"/>
 

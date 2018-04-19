@@ -1,6 +1,11 @@
+<script>
+    $(function() {
+        $('#edit_product_retailer_<%=@product_retailer.id%>').areYouSure();
+    }); 
+</script>
+
 <h1>Product: <%= @product_retailer.product.name %> for <%= @product_retailer.retailer.name %></h1>
 
 <%= render 'form', product_retailer: @product_retailer %>
 
-<%= link_to 'Show', @product_retailer %> |
-<%= link_to 'Back', product_retailers_path %>
+

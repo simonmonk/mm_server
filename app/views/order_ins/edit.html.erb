@@ -1,3 +1,23 @@
+<script>
+
+function create_quotation_request() {
+    window.open("/order_ins/qr?id=<%= @order_in.id %>")
+}    
+    
+function create_purchase_order() {
+    window.open("/order_ins/po?id=<%= @order_in.id %>")
+}
+
+</script>
+
+
 <h1>Editing Order (Goods Incoming)</h1>
 
 <%= render 'form', order_in: @order_in %>
+
+<%= render 'form_order_lines', order_in: @order_in %>
+<br/>
+<br/>
+
+<input type="button" value="Create Quotation Request" onClick="javascript:create_quotation_request()"/>
+<input type="button" value="Create Purchase Order" onClick="javascript:create_purchase_order()"/>
