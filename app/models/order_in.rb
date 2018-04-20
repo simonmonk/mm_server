@@ -36,8 +36,12 @@ class OrderIn < ApplicationRecord
           return "nothing"
       end
       first_item = self.order_in_lines[0]
+      first_name = "missing part"
+      if (first_item.part)
+          first_name = first_item.part.name
+      end
       if (num_items == 1)
-         return first_item.qty.to_s + " x " + first_item.part.name  
+         return first_item.qty.to_s + " x " + first_name  
       end
       if (num_items == 2)
           return first_item.part.name + " and one other item."
