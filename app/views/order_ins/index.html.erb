@@ -19,19 +19,27 @@ function new_order_in() {
 
 <input type="button" value="New Order In" onclick="javascript:new_order_in()"/>
 
+<p></p>
+
+<i class="priority12">In progress (unpriced)</i>
+<i class="priority11">Complete and received</i>
+<i class="priority13">Oustanding (ordered but not received)</i>
+
+<p></p>
+
 <table>
   <thead>
     <tr>
       <th>Supplier</th>
       <th>Order Date</th>
-      <th>Summary</th>
+      <th>Order Summary</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @order_ins.each do |order| %>
-      <tr>
+      <tr class="priority<%= order.priority %>">
         <td><%= order.supplier.name %></td>
         <td><%= order.placed_date %></td>
         <td><%= order.summary %></td>

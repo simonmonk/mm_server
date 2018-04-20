@@ -45,4 +45,39 @@ class OrderIn < ApplicationRecord
       return first_item.part.name + " and " + (num_items - 1).to_s + " other items."
   end
     
+        
+  def complete?()
+     complete = true
+     self.order_in_lines.each do |line|
+          if (line.qty <= line.qty_in)
+              complete = false
+          end
+     end
+    return complete
+  end
+
+
+
+  def priced?()
+     priced = true
+     self.order_in_lines.each do |line|
+          if (not line.price or line.price == 0)
+              priced = false
+          end
+     end
+    return priced
+  end
+    
+  def priority()
+    if (self.complete?)
+        return 11 # Complete
+    end
+    if (self.priced?)
+        return 13 # Oustanding
+    else
+        return 12 # In progress (unpriced)
+    end
+  end
+    
+    
 end
