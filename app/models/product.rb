@@ -10,6 +10,15 @@ class Product < ApplicationRecord
     validates :labour, presence: true
     
     
+    # return all the Active products
+    # sorted alphabeticaly for use in lists
+    def Product.active_products
+        Product.all.where(active: true).order(name: :asc)
+    end
+    
+    # used as a local cache to indicate that the product is already sold by a retailer
+    attr_accessor :local_scope
+    
     # calculate the production cost by adding up the costs of all the parts and assemblies
     # finally add in the labor cost for the product. Note that assemblies will have their own
     # labour cost.

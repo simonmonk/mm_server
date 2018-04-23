@@ -32,6 +32,19 @@ function create_invoice(pages) {
     window.open("/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>&pages=" + pages, '_blank')
 }
     
+
+function hideInactive() {
+    $('.inactive').hide();
+    $('#hide_button').hide();
+    $('#show_button').show();
+}
+    
+function showInactive() {
+    $('.inactive').show();
+    $('#hide_button').show();
+    $('#show_button').hide();
+}
+    
 </script>
 
 
@@ -63,13 +76,21 @@ shipment.shipment_products.each do | sp |
 </table>
 
 <% if (! shipment.retailer.name.start_with?('amazon.'))  %>
-
 <select id="products_list">
-<% product_retailers = shipment.retailer.product_retailers.all
-    product_retailers.each do | pr | %>
-    <option value='<%= pr.product.id %>'><%= pr.product.name %></option>option>
-<% end %>
+
+<% 
+    local_products = shipment.shipment_products.map { | pr | pr.product }
+    all_products = Product.active_products
+    all_products.each do | p | 
+        style_class = ""
+        if (! local_products.include? p)
+            style_class = "inactive"
+        end
+%>
+    <option class="<%=style_class%>" value='<%= p.id %>'><%= p.name %></option>
+   <% end %>
 </select>    
+<a id="show_button" href="javascript:showInactive()">All Products</a>
 qty <input type="number" id="product_qty_field" value="1"/> 
 <input type="button" value="Add" onClick="javascript:add_product()"/>
 <% end %>    
@@ -84,3 +105,5 @@ qty <input type="number" id="product_qty_field" value="1"/>
 
 <input type="button" value="Create Invoice 1 page" onClick="javascript:create_invoice(1)"/>
 <input type="button" value="Create Invoice 2 pages" onClick="javascript:create_invoice(2)"/>
+
+<script>hideInactive()</script>

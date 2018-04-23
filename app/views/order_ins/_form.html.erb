@@ -15,7 +15,7 @@ function set_date(field_name, date) {
 <%= form_for(order_in) do |f| %>
   <% if order_in.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(shipment.errors.count, "error") %> prohibited this order in from being saved:</h2>
+      <h2><%= pluralize(order_in.errors.count, "error") %> prohibited this order in from being saved:</h2>
 
       <ul>
       <% order_in.errors.full_messages.each do |message| %>
@@ -26,9 +26,10 @@ function set_date(field_name, date) {
   <% end %>
 
 <table>
-    <tr><td>Order ID (automatic)</td><td><%= order_in.id %></td></tr>
-    <tr><td>Supplier</td><td><%=order_in.supplier.name%></td></tr>
+    <tr><td>Order Number (automatic)</td><td><%= order_in.order_number %></td></tr>
+    <tr><td>Supplier</td><td><%=order_in.supplier.name%><%=f.hidden_field :supplier_id%></td></tr>
     <tr><td>Order placed:</td><td><%= datepicker_input f, :placed_date %></td><td><a href="javascript:set_date('#order_in_placed_date', '<%=Date.current%>')">Today</a></tr> 
+    <tr><td>Quotation Request Sent:</td><td><%= datepicker_input f, :date_qr_sent %></td><td><a href="javascript:set_date('#order_in_placed_date', '<%=Date.current%>')">Today</a></tr> 
      <tr><td>Currency</td><td><%= f.select :currency, 
         options_for_select(['GBP', 'USD', 'EUR'].map{|s|[s, s]}, :selected => order_in.currency) %></td></tr>
     <tr><td>Shipping Cost</td><td><%= f.text_field :shipping %></td></tr>

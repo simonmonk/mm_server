@@ -7,48 +7,24 @@ $ bin/rails generate migration AddStateToRetailerAddreses
 $ rails db:migrate
 
 
-
-Refactoring
------------
-Menu system
-
+Global
+======
+Make all drop-down lists honor the "active" flags for products, assemblies and parts
 
 
-Retailers  DONE
-----------
-
-Add fields: 
-+ Billing FAO field
-+ address for billing
-+ Delivery FAO field
-+ address for delivery (and 'same as' box)
-+ VATable flag
-+ their VAT number
-+ Prefered shipping provider - with their account number
-+ Prefered currency
+Shipments 
+==========
+Make list of products ALL products not just products already sold by that retailer. 
+If its a product not sold by that retailer but added to the shipment then associate the 
+product with that shipment in the database.
 
 
+Orders In
+==========
+As per shipments, would be nice to have ability to pick from all parts.
+Waiting for quotation flag - and color code
++ VAT invoice received - yes / no / na
 
-
-Shipment 1:1 with Order - so actually its an Order but renaming too hard.
----------
-Add fields DONE
-+ date order received
-+ dispatched date
-+ invoice sent date
-+ payment reminder date - defaulted to invoice sent date + 10 days
-+ order email link
-+ Their PO reference
-+ Auto generate invoice number YYYYMMDDnn
-+ Currency (belongs to Retailer)
-+ Shipping cost
-+ shipping provider (defaulted from retailers preference)
-+ shipping provider ac no (defaulted from retailers preference)
-+ discount (amount of money)
-
-
-Add function
-+ Add a follow on Order
 
 
 Catalog - not historic - only ever 2 instances, current dollar, current £
@@ -57,38 +33,6 @@ Catalog - not historic - only ever 2 instances, current dollar, current £
 + valid to
 + Ts and Cs
 
-
-
-Product DONE
---------
-+ wholesale price USD
-+ SRP for USD
-+ Harmoized tarrif number
-+ Country of origin
-+ active flag
-+ photo
-. make names correct
-+ short description
-+ description for customs
-
-
-
-Suppliers - DONE
----------
-+ website
-+ login credentials
-+ payment details - bank, paypal etc
-+ active checkbox - and option to show actives
-
-
-Order In
---------
-* Make creating a new order In work the same way as creating a shipment. SO have to choose supplier at the time and then its immutable. DONE
-+ VAT invoice received - yes / no / na
-
--- change the way that this works so that the price for the part defaults to what it was last time, but you can edit it. Once edited, that then becomes the new price for the part and the parts price should honor the currency used in the order.
-
-Generate PO function - to email as attachment to some suppliers etc. Good if this could integrate with gmail to automatically write html into email.
 
 
 + Manufacturing Jobs // supports only complete jobs that are 'kitted' and finish
@@ -168,7 +112,3 @@ Nice to have
 --
 
 Automatic email when shipment sent.
-
-
-
-

@@ -1,18 +1,19 @@
 class OrderInsController < ApplicationController
   before_action :set_order_in, only: [:show, :edit, :update, :destroy, :po, :qr]
+  skip_before_filter :verify_authenticity_token 
     
   def new
     @order_in = OrderIn.new
     @order_in.supplier = Supplier.find(params['supplier_id'])
     @order_in.placed_date = Date.current()
-    @order_in.save
-    redirect_to :action => "edit", :id =>@order_in.id
   end
 
   def create
     @order_in = OrderIn.new(order_in_params)
     if @order_in.save
          redirect_to :action => "edit", :id =>@order_in.id
+    else
+        render :new
     end
   end
     
@@ -100,7 +101,7 @@ private
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_in_params
-      params.require(:order_in).permit(:supplier_id, :placed_date, :currency, :shipping, :notes)
+      params.require(:order_in).permit(:supplier_id, :placed_date, :currency, :shipping, :notes, :exch_rate, :date_qr_sent, :order_number)
     end
     
 end

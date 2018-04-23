@@ -4,7 +4,7 @@ $(function() {
 });    
 </script>
 
-<h1>Shipment:  <%= @shipment.invoice_number %> to <a href="/retailers/<%=@shipment.retailer_id%>/edit"><%= @shipment.retailer.name %></a></h1>
+<h1>Shipment:  <%= @shipment.invoice_number %> to <%= @shipment.retailer.name %></h1>
 
 <%= render 'form', shipment: @shipment %>
 

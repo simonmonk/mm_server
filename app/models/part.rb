@@ -10,6 +10,12 @@ class Part < ApplicationRecord
     validates :cost, presence: true
     
     
+    # return all the Active parts
+    # sorted alphabeticaly for use in lists
+    def Part.active_parts
+        Part.all.where(active: true).order(name: :asc)
+    end
+    
     def purchase_cost_all_stock
         if (self.qty)
             return self.purchase_cost * self.qty

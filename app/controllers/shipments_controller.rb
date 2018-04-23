@@ -22,7 +22,6 @@ class ShipmentsController < ApplicationController
     @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no
     @shipment.invoice_number = Shipment.find_next_invoice_number()  
     @shipment.vat_rate = 20  
-    # @shipment.save
   end
 
   # GET /shipments/1/edit
@@ -41,8 +40,6 @@ class ShipmentsController < ApplicationController
   end
     
     
-  # POST /shipments
-  # POST /shipments.json
   def create
     @shipment = Shipment.new(shipment_params)
     if @shipment.save
@@ -95,9 +92,6 @@ def subtract_products
     end
     t = Transaction.new
     t.transaction_type = 'Shipment to ' + shipment.retailer.name
-    puts("***************************")
-    puts(shipment)
-    puts("***************************")
     
     t.description = "Removed " + count.to_s + " products from stock for shipment " + shipment.id.to_s + ". " + message
     t.save
@@ -194,6 +188,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipment_params
-      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount, :vat_rate)
+      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount, :vat_rate, :date_payment_received)
     end
 end

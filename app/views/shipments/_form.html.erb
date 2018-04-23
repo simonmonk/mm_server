@@ -22,7 +22,7 @@ function set_date(field_name, date) {
 
 <table>
     <tr><td>Invoice number</td><td><%= f.text_field :invoice_number %></td></tr>
-    <tr><td>Retailer</td><td><%=shipment.retailer.name %><%=f.hidden_field :retailer_id%></td></tr>
+    <tr><td>Retailer</td><td><a href="/retailers/<%=shipment.retailer_id%>/edit"><%=shipment.retailer.name %></a><%=f.hidden_field :retailer_id%></td></tr>
     <tr><td>Order received date:</td><td><%= datepicker_input f, :date_order_received %></td><td><a href="javascript:set_date('#shipment_date_order_received', '<%=Date.current%>')">Today</a></td></tr>
     
     <tr><td>Invoice sent date:</td><td><%= datepicker_input f, :date_invoice_sent %></td><td><a href="javascript:set_date('#shipment_date_invoice_sent', '<%=Date.current%>')">Today</a></td></tr>

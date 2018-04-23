@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180417133728) do
+ActiveRecord::Schema.define(version: 20180421070418) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -55,14 +55,15 @@ ActiveRecord::Schema.define(version: 20180417133728) do
 
   create_table "order_ins", force: :cascade do |t|
     t.boolean  "open"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.date     "placed_date"
     t.integer  "supplier_id"
     t.text     "notes"
     t.string   "currency"
-    t.decimal  "exch_rate",   precision: 10, scale: 3
-    t.decimal  "shipping",    precision: 10, scale: 3
+    t.decimal  "exch_rate",    precision: 10, scale: 3
+    t.decimal  "shipping",     precision: 10, scale: 3
+    t.date     "date_qr_sent"
   end
 
   create_table "part_categories", force: :cascade do |t|

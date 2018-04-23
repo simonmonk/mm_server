@@ -38,6 +38,18 @@ function save_part(order_in_line_id) {
         + "&amp;order_in_id=" + "<%= order_in.id %>" 
 }       
     
+function hideInactive() {
+    $('.inactive').hide();
+    $('#hide_button').hide();
+    $('#show_button').show();
+}
+    
+function showInactive() {
+    $('.inactive').show();
+    $('#hide_button').show();
+    $('#show_button').hide();
+}    
+    
 </script>
 
 <h2>Order (Goods Inwards) has the following items</h2>
@@ -78,16 +90,25 @@ order_in.order_in_lines.each do | sp |
 
 <select id="parts_list">
 <% 
-    part_suppliers = order_in.supplier.part_suppliers.all
-    part_suppliers.each do | pr | 
-        if (pr.part and not part_ids.include?(pr.part_id))
+    local_parts = order_in.supplier.part_suppliers.map { | ps | ps.part }
+    all_parts = Part.active_parts
+
+    all_parts.each do | part | 
+        if (not part_ids.include?(part.id))
+            style_class = ""
+            if (! local_parts.include? part)
+                style_class = "inactive"
+            end
 %>
-    <option value='<%= pr.part.id %>'><%= pr.part.name %> (<%= pr.code %>)</option>option>
+    <option class="<%=style_class%>" value='<%= part.id %>'><%= part.name %></option>option>
 <% 
         end
     end
 %>
 </select>    
+<a id="show_button" href="javascript:showInactive()">All Parts</a>
 Qty: <input type="number" id="part_qty_field" value="1"/> 
 Unit Price: <input type="number" id="part_price_field" value="0"/> 
 <input type="button" value="Add" onClick="javascript:add_part()"/>
+
+<script>hideInactive()</script>
