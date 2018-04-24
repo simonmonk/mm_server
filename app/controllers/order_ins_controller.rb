@@ -6,6 +6,7 @@ class OrderInsController < ApplicationController
     @order_in = OrderIn.new
     @order_in.supplier = Supplier.find(params['supplier_id'])
     @order_in.placed_date = Date.current()
+    @order_in.vat_info_collected = "N/A"
   end
 
   def create
@@ -101,7 +102,7 @@ private
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_in_params
-      params.require(:order_in).permit(:supplier_id, :placed_date, :currency, :shipping, :notes, :exch_rate, :date_qr_sent, :order_number)
+      params.require(:order_in).permit(:supplier_id, :placed_date, :currency, :shipping, :notes, :exch_rate, :date_qr_sent, :order_number, :vat_info_collected, :quotation_received)
     end
     
 end

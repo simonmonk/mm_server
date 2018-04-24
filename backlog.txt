@@ -9,19 +9,10 @@ $ rails db:migrate
 
 Global
 ======
-Make all drop-down lists honor the "active" flags for products, assemblies and parts
-
-
-Shipments 
-==========
-Make list of products ALL products not just products already sold by that retailer. 
-If its a product not sold by that retailer but added to the shipment then associate the 
-product with that shipment in the database.
 
 
 Orders In
 ==========
-As per shipments, would be nice to have ability to pick from all parts.
 Waiting for quotation flag - and color code
 + VAT invoice received - yes / no / na
 
