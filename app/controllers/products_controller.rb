@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :catalog]
     skip_before_filter :verify_authenticity_token 
 
   # GET /products
@@ -25,6 +25,10 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
+  end
+    
+  def pricelist
+      render :layout => false
   end
 
   # deduct quatities of all the parts and assemblies used for qty of this product.
@@ -119,6 +123,6 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description)
+      params.require(:product).permit(:name, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url)
     end
 end

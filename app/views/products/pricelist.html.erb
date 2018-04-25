@@ -1,0 +1,179 @@
+<style>
+
+
+    
+.smallprint {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 12px arial, sans-serif;
+}
+    
+h1 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 80px arial, bold, sans-serif;
+}   
+    
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+    
+h3 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 20px arial, bold, sans-serif;
+}       
+    
+table {
+    border-collapse: collapse;
+}
+    
+td {
+    vertical-align: top;  
+}
+    
+    
+.prod_table_th {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: bold 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_th_right {
+    border: 1px solid black;   
+    text-align: right;
+    padding: 3;
+    font: bold 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td { 
+    text-align: left;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td_money {
+    text-align: right;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}  
+    
+.prod_table_td_sig {
+    text-align: left;
+    padding: 30;
+    font: 14px/1.5 Arial, sans-serif;
+    color: lightgray;
+}  
+
+</style>
+
+
+<%
+
+currency_name = params['currency']
+currency_symbol = '£'
+if (currency_name == 'USD')
+    currency_symbol = '$'
+end
+
+valid_until_date = params['date']
+
+%>
+
+<table width="100%">
+<tr>
+<td align="left" colspan="2">
+    <img src="/images/logo.png" width="200"/>
+    <p>&nbsp;</p>
+</td>    
+    
+<td><h1>Catalog and Price List</h1><h2>Valid until <%= valid_until_date %></h2></td>
+</tr>
+</table>
+
+<p></p>
+<p>For sales, please contact: linda@monkmakes.com, tel: +44 1772 437879 or mobile: +44 7544 373 418.</p>
+
+<p>Please note that the minimum order value is 
+    <% if (currency_name == 'GBP') %>
+<%=number_to_currency(200, unit: currency_symbol, separator: ".", delimiter: ",")%>
+    <% else %>
+<%=number_to_currency(300, unit: currency_symbol, separator: ".", delimiter: ",")%>
+    <% end %>
+. For your first order only this may be open to negotiation.
+</p>
+
+
+<p>All prices exclude VAT and post and packaging and duty for international orders.</p>
+
+<p>All prices in <%=currency_name%> (<%=currency_symbol%>).</p>
+<p></p>
+<p></p>
+
+<table>
+<%
+Product.where(include_in_catalog: true).order(name: :asc).each do | product |
+%>
+<tr>
+<td class="prod_table_td"><img src="<%=product.product_photo_uri%>" width="100"/></td>
+<td>
+    <table>
+        <tr>
+        <td class="prod_table_th" width="450"><%=product.sku%>. <%=product.name%></td>
+        <td class="prod_table_th_right" width="350">
+    <% if (currency_name == 'GBP') %>
+Wholesale price <%=number_to_currency(product.wholesale_price, unit: currency_symbol, separator: ".", delimiter: ",")%>.
+SRP <%=number_to_currency(product.retail_price, unit: currency_symbol, separator: ".", delimiter: ",")%>
+    <% else %>
+Wholesale price <%=number_to_currency(product.wholesale_price_usd, unit: currency_symbol, separator: ".", delimiter: ",")%>.
+SRP <%=number_to_currency(product.retail_price_usd, unit: currency_symbol, separator: ".", delimiter: ",")%>
+    <% end %>
+        </td>
+        </tr>
+        <tr>
+            <td class="prod_table_td" colspan="2" width="800"><%=product.long_description.html_safe%></td>
+        </tr>
+        <tr>
+            <td class="prod_table_td" colspan="2" width="800">See also: <%=product.product_url%></td>
+        </tr>
+    </table>
+</td>
+</tr>
+ 
+
+<%    
+end
+%>
+</table>
+
+<br/><br/><br/><br/>
+
+
+<h3>Monk Makes Ltd – What you need to know to trade with us</h3>
+
+<p>Our prices do not include VAT or any other tax/duty that may apply.</p>
+
+<p>If you are within the EU (but outside the UK) we will zero rate your invoice only if you provide us with your VAT number.</p> 
+
+<p>If you are outside of the EU we will not charge VAT but you are responsible for any custom charges (tax or duty or any other cost applied by customs) that may be applied.</p>
+
+<p>Prices do not include shipping. We are happy to quote for shipping or to use your own courier account. Once we have passed the goods onto the courier they are no longer our responsibility and you are responsible for any loss or damage.</p>
+
+<p>For your first order payment must be made before shipping. Subsequent orders are to be paid within 7 days of shipping. Please note that we accept payment by either bank transfer or PayPal - any deductions made by either payment method are your responsibility.</p>
+
+<p>In the unlikely event that any of our goods are faulty we will either refund or replace.</p>
+
+<p>Please note that the minimum order value is now £200. For your first order only this may be open to negotiation.</p>
+
+
+<p>Linda Monk.   Monk Makes Ltd</p>
+
+<p style="text-align: center;">Monk Makes Ltd. 12 Cuerden Close, Bamber Bridge, Preston, PR5 6BX, UK</p>
+<p style="text-align: center;">Monk Makes Ltd is registered in the UK. Company Number 8797771. VAT number GB 222 6746 15</p>

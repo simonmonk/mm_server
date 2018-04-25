@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424060346) do
+ActiveRecord::Schema.define(version: 20180425143455) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -154,6 +154,8 @@ ActiveRecord::Schema.define(version: 20180424060346) do
     t.text     "long_description"
     t.text     "product_photo_uri"
     t.string   "customs_description"
+    t.boolean  "include_in_catalog"
+    t.string   "product_url"
   end
 
   create_table "retailers", force: :cascade do |t|

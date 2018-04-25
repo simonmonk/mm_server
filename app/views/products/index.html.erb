@@ -1,8 +1,24 @@
 <p id="notice"><%= notice %></p>
 
+<script>
+
+function create_pricelist() {
+    window.open("/products/pricelist?date=" + $('#valid_until_field').val() + "&currency=" + $('#currency_select').val(), '_blank')
+}
+
+</script>
+
 <h1>Products</h1>
 
-<%= link_to 'New Product', new_product_path %>
+<%= button_to 'New Product', new_product_path, :method => "get" %>
+
+<p></p>
+
+Valid Until <input type="text" value="<%=Date.current.next_month.next_month.next_month.end_of_month.strftime("%-d %B %Y")%>" id="valid_until_field"/>
+Currency <select id="currency_select"><option value="GBP">GBP</option><option value="USD">USD</option></select>
+<input type="button" value="Create Price List" onClick="javascript:create_pricelist()"/>
+
+<p></p>
 
 <table>
   <thead>

@@ -10,20 +10,11 @@ $ rails db:migrate
 Global
 ======
 
-
-Orders In
-==========
-Waiting for quotation flag - and color code
-+ VAT invoice received - yes / no / na
-
-
-
 Catalog - not historic - only ever 2 instances, current dollar, current £
 --------
-+ Valid from
-+ valid to
-+ Ts and Cs
-
++ Products need a flag - in_catalog - not the same as 'active'
+Generate html page that can be saved - like the invoice
+Small images of products - more of a price-list
 
 
 + Manufacturing Jobs // supports only complete jobs that are 'kitted' and finish
