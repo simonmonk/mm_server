@@ -21,10 +21,14 @@ class ProductsController < ApplicationController
     @product.stock_warning_level = 0
     @product.wholesale_price = 0
     @product.retail_price = 0  
+    @product.weight_g = 0
   end
 
   # GET /products/1/edit
   def edit
+      if (not @product.weight_g)
+          @product.weight_g = 0
+      end
   end
     
   def pricelist
@@ -123,6 +127,6 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url)
+      params.require(:product).permit(:name, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url, :weight_g)
     end
 end

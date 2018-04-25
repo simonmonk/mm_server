@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180425143455) do
+ActiveRecord::Schema.define(version: 20180425153205) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 20180425143455) do
     t.string   "customs_description"
     t.boolean  "include_in_catalog"
     t.string   "product_url"
+    t.decimal  "weight_g",                precision: 10, scale: 3
   end
 
   create_table "retailers", force: :cascade do |t|
