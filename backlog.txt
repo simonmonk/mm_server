@@ -10,6 +10,9 @@ $ rails db:migrate
 Global
 ======
 
+** really easy win - add shipment weight calc from product weights **
+
+
 Catalog - not historic - only ever 2 instances, current dollar, current £
 --------
 + Products need a flag - in_catalog - not the same as 'active'

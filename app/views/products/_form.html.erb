@@ -56,9 +56,9 @@ function deduct(qty) {
     <tr><td>SKU</td><td>  <%= f.text_field :sku, size: '40' %></td></tr>
     <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '40' %> </td></tr>    
     <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '40' %> </td></tr> 
-    <tr valign="top"><td>Customs Description</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
-    <tr><td>Short Description (Invoices)</td><td> <%= f.text_area :short_description, size: '50x3' %> </td></tr>  
-    <tr><td>Catalog Description (HTML allowed)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>      
+    <tr valign="top"><td>Customs Description (invoice)</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
+ <!--   <tr><td>Short Description (Invoices)</td><td> <%= f.text_area :short_description, size: '50x3' %> </td></tr>  -->
+    <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>      
     <tr><td>Quantity</td><td> <%= f.number_field :qty %></td></tr>
     <tr><td>Wholesale price GBP</td><td> <%= f.text_field :wholesale_price %> (suggested £<%= @product.suggested_wholesale.round(2) %>)</td></tr>
     <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td></tr>        
