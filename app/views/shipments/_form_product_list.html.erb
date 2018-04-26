@@ -48,6 +48,17 @@ function showInactive() {
 </script>
 
 
+<%
+currency_name = 'GBP'
+currency_symbol = '£'
+if (@shipment.retailer.pref_currency)
+    currency_name = @shipment.retailer.pref_currency
+end
+if (currency_name == 'USD')
+    currency_symbol = '$'
+end
+%>
+
 <h2>Shipping the following items</h2>
 
 <div class="priority1"><%= params[:notice] %></div>
@@ -67,12 +78,31 @@ function showInactive() {
 
 
 <table>
-    <tr><th>Product</th><th>SKU</th><th>Qty</th></tr>
+    <tr><th>Qty</th><th>SKU</th><th>Product</th><th>Unit Price</th><th>Extended Price</th></tr>
 <%
+total = 0
+weight = 0
+weight_message = ""
 shipment.shipment_products.each do | sp |
+    line_total = sp.wholesale_in_currency * sp.qty
+    total += line_total
+    if (not sp.product.weight_g)
+        sp.product.weight_g = 0
+        weight_message += "No weight entered for " + sp.product.name + ", "
+    end
+    weight += sp.product.weight_g * sp.qty
 %>
-    <tr><td><%= sp.product.name %></td><td><%= sp.product.sku %></td><td><%=sp.qty%></td><td><input type="button" value="Delete" onClick="javascript:delete_shipment_line(<%=sp.id%>)"/></td></tr>
+    <tr>
+        <td><%=sp.qty%></td>
+        <td><%= sp.product.sku %></td>
+        <td><%= sp.product.name %></td>
+        <td><%=number_to_currency(sp.wholesale_in_currency, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+        <td><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+        
+        <td><input type="button" value="Delete" onClick="javascript:delete_shipment_line(<%=sp.id%>)"/></td></tr>
 <% end %>
+    <tr><th>Total order value</th><th colspan="3"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></th></tr>
+    <tr><th>Total order weight</th><th colspan="3"><%=weight/1000.0%>kg (<%= weight * 0.00220462%>lbs)</th></tr>
 </table>
 
 <% if (! shipment.retailer.name.start_with?('amazon.'))  %>

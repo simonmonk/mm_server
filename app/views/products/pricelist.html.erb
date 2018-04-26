@@ -13,7 +13,7 @@ h1 {
     text-align: center;
     margin-top: 2px;  
     margin-bottom: 2px;  
-    font: 80px arial, bold, sans-serif;
+    font: 40px arial, bold, sans-serif;
 }   
     
 h2 {
@@ -28,6 +28,7 @@ h3 {
     margin-top: 2px;  
     margin-bottom: 2px;  
     font: 20px arial, bold, sans-serif;
+    page-break-before:always;
 }       
     
 table {
@@ -38,12 +39,18 @@ td {
     vertical-align: top;  
 }
     
+tr {
+    page-break-inside: avoid;
+}
+    
+    
     
 .prod_table_th {
     border: 1px solid black;   
     text-align: left;
     padding: 3;
     font: bold 14px/1.5 Arial, sans-serif;
+    page-break-inside: avoid; 
 }    
     
 .prod_table_th_right {
@@ -51,26 +58,24 @@ td {
     text-align: right;
     padding: 3;
     font: bold 14px/1.5 Arial, sans-serif;
+    page-break-inside: avoid; 
 }    
     
 .prod_table_td { 
     text-align: left;
     padding: 3;
     font: 14px/1.5 Arial, sans-serif;
+    page-break-inside: avoid; 
 }    
     
 .prod_table_td_money {
     text-align: right;
     padding: 3;
     font: 14px/1.5 Arial, sans-serif;
+    page-break-inside: avoid; 
 }  
     
-.prod_table_td_sig {
-    text-align: left;
-    padding: 30;
-    font: 14px/1.5 Arial, sans-serif;
-    color: lightgray;
-}  
+    
 
 </style>
 
@@ -94,7 +99,7 @@ valid_until_date = params['date']
     <p>&nbsp;</p>
 </td>    
     
-<td><h1>Catalog and Price List</h1><h2>Valid until <%= valid_until_date %></h2></td>
+<td><h1>Catalog and Price List</h1><h1>Valid until <%= valid_until_date %></h1></td>
 </tr>
 </table>
 
@@ -119,7 +124,7 @@ valid_until_date = params['date']
 
 <table>
 <%
-Product.where(include_in_catalog: true).order(name: :asc).each do | product |
+Product.where(include_in_catalog: true).order(sku: :asc).each do | product |
 %>
 <tr>
 <td class="prod_table_td"><img src="<%=product.product_photo_uri%>" width="100"/></td>
@@ -146,7 +151,7 @@ SRP <%=number_to_currency(product.retail_price_usd, unit: currency_symbol, separ
     </table>
 </td>
 </tr>
- 
+<tr><td>&nbsp;</td></tr> 
 
 <%    
 end

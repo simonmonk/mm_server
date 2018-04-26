@@ -9,15 +9,7 @@ $ rails db:migrate
 
 Global
 ======
-
-** really easy win - add shipment weight calc from product weights **
-
-
-Catalog - not historic - only ever 2 instances, current dollar, current £
---------
-+ Products need a flag - in_catalog - not the same as 'active'
-Generate html page that can be saved - like the invoice
-Small images of products - more of a price-list
+DB TRANSACTIONS
 
 
 + Manufacturing Jobs // supports only complete jobs that are 'kitted' and finish
@@ -85,9 +77,6 @@ Assemblies list - only show if used in an active product
 
 Retailers get rid of columns in middle
 
-
-Shipments list show: + reatiler shipping id or purchase order and hyperlink it. color code for unpaid orders in shipments/orders list.
-show most recent at top.
 
 
 Check what happens when deduct products for shipments if there aren't enough ditto for parts and assemblies for a product. Introduce transactions.
