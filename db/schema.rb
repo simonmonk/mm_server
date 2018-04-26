@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180425153205) do
+ActiveRecord::Schema.define(version: 20180426100112) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -30,6 +30,14 @@ ActiveRecord::Schema.define(version: 20180425153205) do
     t.datetime "updated_at",  null: false
     t.index ["assembly_id"], name: "index_assembly_parts_on_assembly_id"
     t.index ["part_id"], name: "index_assembly_parts_on_part_id"
+  end
+
+  create_table "currencies", force: :cascade do |t|
+    t.string   "name"
+    t.string   "symbol"
+    t.decimal  "per_pound",  precision: 10, scale: 2
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   create_table "notifications", force: :cascade do |t|

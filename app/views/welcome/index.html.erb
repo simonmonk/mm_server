@@ -17,6 +17,8 @@ function dismiss_notification(notification_id) {
 
 </script>
 
+<p>Using exchange rate of <%= Currency.dollars_per_pound %> USD/GBP updated <%= time_ago_in_words( Currency.dollar_rate_set_date)%> ago</p>
+
 <% notifications = Notification.where(dismissed: false).order(created_at: :desc)
     notifications.each do |n| %>
 

@@ -10,10 +10,7 @@ class Supplier < ApplicationRecord
         self.order_ins.each do |order|
             t0 = order.placed_date
             order.order_in_lines.each do | line |
-puts "** LINE **"
                 t1 = line.date_line_received
-puts t1
-puts "***"
                 if (t0 and t1)
                     t = (t1 - t0).to_i
                     if (t < min_days) 

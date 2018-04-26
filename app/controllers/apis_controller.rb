@@ -201,6 +201,7 @@ def nightly()
    import_orders_amazon_com_week(this_week)
    import_orders_amazon_uk_week(this_week)
    check_stock_levels()
+   Currency.set_usd_rate
 end
     
 end
