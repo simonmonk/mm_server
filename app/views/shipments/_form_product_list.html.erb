@@ -109,7 +109,7 @@ shipment.shipment_products.each do | sp |
 <select id="products_list">
 
 <% 
-    local_products = shipment.shipment_products.map { | pr | pr.product }
+    local_products = shipment.retailer.product_retailers.map { | pr | pr.product }
     all_products = Product.active_products
     all_products.each do | p | 
         style_class = ""
