@@ -2,6 +2,7 @@ class Product < ApplicationRecord
     has_many :product_parts
     has_many :product_assemblies
     has_many :product_retailers
+    has_many :shipment_products
     
     validates :name, presence: true
     validates :qty, numericality: { greater_than_or_equal_to: 0 }
@@ -39,6 +40,28 @@ class Product < ApplicationRecord
             total += self.labour
         end
         return total
+    end
+    
+    def units_and_value_shipped(start_date, end_date)
+        #shipments = Shipment.where("date_order_received >= :start_date AND date_order_received < :end_date", {start_date: start_date, end_date: end_date})
+        units_sold = 0
+        value_sold = 0
+        profit_total = 0
+        self.shipment_products.each do | sp |
+            if (sp.shipment)
+                sp_date = sp.shipment.date_order_received
+                if (sp_date and sp_date > start_date and sp_date <= end_date)
+                    units_sold += sp.qty
+                    value_sold += sp.wholesale_in_currency * qty
+                    profit_total += sp.qty * sp.product.profit
+                end
+            end
+        end
+        return [units_sold, value_sold, profit_total]
+    end
+    
+    def profit
+        return [self.wholesale_price - self.production_cost, 0].max
     end
 
     # suggested wholesale price add 40% to manufacturing cost

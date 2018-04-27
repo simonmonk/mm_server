@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     collection do
       get :add_supplier
       get :remove_part_supplier
-        get :export_parts
+      get :export_parts
     end
   end
   
@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       get :add_part
       get :add_assembly
       get :delete_part
+      get :sales_by_product
     end
   end
   resources :assemblies do

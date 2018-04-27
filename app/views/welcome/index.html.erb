@@ -17,7 +17,16 @@ function dismiss_notification(notification_id) {
 
 </script>
 
-<p>Using exchange rate of <%= Currency.dollars_per_pound %> USD/GBP updated <%= time_ago_in_words( Currency.dollar_rate_set_date)%> ago</p>
+<div>Using exchange rate of <%= Currency.dollars_per_pound %> USD/GBP updated <%= time_ago_in_words( Currency.dollar_rate_set_date)%> ago</div>
+
+<%
+  n = 7
+  sales_and_profit = Shipment.invoiced_sales_profit(Date.current-n.days, Date.current)
+%>
+
+<div>Sales in the last <%=n%> days: £<%=sales_and_profit[0]%></div>
+<div>Profit in the last <%=n%> days: £<%=sales_and_profit[1]%></div>
+<br/>
 
 <% notifications = Notification.where(dismissed: false).order(created_at: :desc)
     notifications.each do |n| %>
@@ -38,4 +47,4 @@ function dismiss_notification(notification_id) {
 <tr><td>Value of Products</td><td><%= products = Product.total_value.round(2) %></td></tr>
     <tr><td><b>Total</b></td><td><b><%= parts + assemblies + products %></b></td></tr>
 </table>
-</div>
+</div>(JavaScript Object Notation) is a way of structuring data returned from a web request.

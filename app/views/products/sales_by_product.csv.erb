@@ -1,0 +1,23 @@
+<%
+    days = params['days'].to_i
+    from_date = Date.current - days.days
+    to_date = Date.current
+%>
+Sales Report by Product from <%=from_date%> to <%=to_date%>.
+
+"Name","Production Cost","Wholesale","Profit","Profit Percent","Units Sold","Sales Value","Total Profit"
+<%
+    products = Product.all.order(name: :asc)
+    products.each do |product| 
+        profit = 0
+        if (product.wholesale_price and product.wholesale_price > 0)
+            profit = product.wholesale_price - product.production_cost
+        end
+        profit_pc = (profit * 100 / product.production_cost).to_i
+        units_and_value_shipped = product.units_and_value_shipped(from_date, to_date)
+        units = units_and_value_shipped[0]
+        value = units_and_value_shipped[1]
+        profit_total = units_and_value_shipped[2]
+%>
+"<%=product.name%>","<%=product.production_cost%>","<%=product.wholesale_price%>","<%=product.profit%>","<%=profit_pc%>","<%=units%>","<%=value%>","<%=profit_total%>",
+<% end %>

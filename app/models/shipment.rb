@@ -34,5 +34,35 @@ class Shipment < ApplicationRecord
         end
     end
   end
+
+  def total_value_profit_gbp
+    sales_total = 0
+    profit_total = 0
+    currency = self.retailer.pref_currency
+    lines = self.shipment_products
+    lines.each do | line |
+      sale = line.qty * line.product.wholesale_price
+      if (currency == 'USD')
+        sale = sale / Currency.dollars_per_pound
+      end
+      sales_total += sale
+      profit = line.qty * line.product.profit
+      profit_total += profit
+    end
+    return [sales_total.to_i, profit_total.to_i]
+  end
+
+
+  def Shipment.invoiced_sales_profit(start_date, end_date)
+    shipments = Shipment.where("date_order_received >= :start_date AND date_order_received < :end_date", {start_date: start_date, end_date: end_date})
+    sales_total = 0
+    profit_total = 0
+    shipments.each do | shipment |
+      sales_and_profits = shipment.total_value_profit_gbp
+      sales_total += sales_and_profits[0]
+      profit_total += sales_and_profits[1]
+    end
+    return [sales_total, profit_total]
+  end
     
 end

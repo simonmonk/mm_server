@@ -34,6 +34,9 @@ class ProductsController < ApplicationController
   def pricelist
       render :layout => false
   end
+    
+  def sales_by_product
+  end
 
   # deduct quatities of all the parts and assemblies used for qty of this product.
   def deduct_stock

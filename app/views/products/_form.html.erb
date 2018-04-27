@@ -55,29 +55,38 @@ function deduct(qty) {
   <% end %>    
 <table><tr>
     <td><table>
+    <tr><th colspan="2">Basic</th></tr>
     <tr><td>Name</td><td> <%= f.text_field :name, :maxlength=>"50"%></td></tr>
     <tr><td>Active</td><td> <%= f.check_box :active %></td></tr>
-    <tr><td>Include in Catalog</td><td> <%= f.check_box :include_in_catalog %></td></tr>
     <tr><td>SKU</td><td>  <%= f.text_field :sku, size: '40' %></td></tr>
-    <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '40' %> </td></tr>    
-    <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '40' %> </td></tr> 
+    <tr><td>Quantity (for emergency manual ajustments)</td><td> <%= f.number_field :qty %></td></tr>
+    <tr><td>Stock level warning</td><td> <%= f.number_field :stock_warning_level %></td></tr>  
+    <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+        
+    <tr><th colspan="2">Catalog</th></tr>    
+    <tr><td>Include in Catalog</td><td> <%= f.check_box :include_in_catalog %></td></tr>    
+    <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>    
+    <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
     <tr valign="top"><td>Customs Description (invoice)</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
  <!--   <tr><td>Short Description (Invoices)</td><td> <%= f.text_area :short_description, size: '50x3' %> </td></tr>  -->
-    <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>      
-    <tr><td>Quantity</td><td> <%= f.number_field :qty %></td></tr>
+    <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
+    
+    <tr><th colspan="2">Pricing</th></tr>
+        <tr><td colspan="2">The manufacturing cost of this product is £<%= product.production_cost.round(2) %></td><td>
     <tr><td>Wholesale price GBP</td><td> <%= f.text_field :wholesale_price %> (suggested £<%= @product.suggested_wholesale.round(2) %>)</td></tr>
-    <tr><td>Profit on GBP sale</td><td>£<%= (@product.wholesale_price-@product.production_cost).round(2) %></td></tr>
+    <tr><td>Profit on GBP sale</td><td>£<%= (@product.profit).round(2) %></td></tr>
     <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td></tr>    
+        
     <tr><td colspan="2">Using exchange rate of <%= Currency.dollars_per_pound %> USD/GBP updated <%= time_ago_in_words( Currency.dollar_rate_set_date)%> ago</td></tr>
     <tr><td>Wholesale price USD</td><td> <%= f.text_field :wholesale_price_usd %> (suggested $<%= @product.suggested_wholesale_usd.round(2) %>)</td></tr>
     <tr><td>Profit on USD sale</td><td>£<%= (@product.wholesale_price_usd/Currency.dollars_per_pound - @product.production_cost).round(2) %></td></tr>
     <tr><td>Retail price USD</td><td> <%= f.text_field :retail_price_usd %> (suggested $<%= @product.suggested_retail_usd.round(2) %>)</td></tr>  
-    <tr><td>Country of Origin</td><td> <%= f.text_field :country_of_origin, size: '20' %> </td></tr>  
-    <tr><td>Weight(grams)</td><td> <%= f.number_field :weight_g %> (<%=product.weight_g/1000%>kg, <%=product.weight_g*0.00220462%>lbs)</td></tr>
-    <tr><td>Harmonized Tarrif Number</td><td> <%= f.text_field :harmoized_tarrif_number, size: '40' %> </td></tr>    
-    <tr><td>Stock level warning</td><td> <%= f.number_field :stock_warning_level %></td></tr>
         
-    <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+    <tr><th colspan="2">Shipping</th></tr>    
+    <tr><td>Country of Origin</td><td> <%= f.text_field :country_of_origin, size: '20' %> </td></tr>  
+    <tr><td>Weight(grams)</td><td> <%= f.number_field :weight_g %> (<%=product.weight_g/1000%>kg, <%=product.weight_g*0.00220462.round(2)%>lbs)</td></tr>
+    <tr><td>Harmonized Tarrif Number</td><td> <%= f.text_field :harmoized_tarrif_number, size: '40' %> </td></tr>    
+    
     </table> 
     
     <div class="actions">
@@ -87,7 +96,7 @@ function deduct(qty) {
     </td>
 
     <td>
-        <p>The manufacturing cost of this product is £ <%= product.production_cost.round(2) %></p>
+        <img src="<%=@product.product_photo_uri%>" width="400"/>
         <p>You have enough parts and assemblies to make: <%= product.possible_makes %> of this product.</p>
         <p>Deduct <input id="n" type="number"/> sets of the parts and assemblies used in this product from stock. 
             <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value)"/></p>
