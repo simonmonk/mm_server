@@ -152,5 +152,15 @@ class Product < ApplicationRecord
         t.description = "Removed parts and assemblies from stock to make " + n.to_s + " new " + self.name
         t.save
     end
+    
+    def Product.last_barcode
+        bc = 0
+        Product.all.each do |prod|
+            if (prod.barcode_value.to_i > bc)
+                bc = prod.barcode_value.to_i
+            end
+        end 
+        return bc
+    end
 
 end

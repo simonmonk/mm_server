@@ -6,6 +6,8 @@ $(function() {
 
 <h1>New Product</h1>
 
+<p>Last barcode used: <%= Product.last_barcode %></p>
+
 <%= render 'form', product: @product %>
 
 <%= link_to 'Back', products_path %>
