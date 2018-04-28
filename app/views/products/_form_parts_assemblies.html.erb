@@ -1,0 +1,84 @@
+
+<table><tr>
+
+<td>
+<h2>Parts Used</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Qty used</th>
+      <th>Cost £</th>
+      <th>Qty in stock</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @product.product_parts.each do |product_part| %>
+      <tr>
+        <td><a href="/parts/<%= product_part.part.id %>/edit"><%= product_part.part.name %></a></td>
+        <td><%= product_part.qty %></td>
+        <td><%= (product_part.part.purchase_cost_with_shipping * product_part.qty).round(3) %></td>
+        <td><%= product_part.part.qty%></td>
+        <td><input type="button" value="Delete" onClick="javascript:delete_part(<%= product_part.id%>)"/></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p></p>
+
+    
+<select id="parts_list">
+<% parts = Part.where(active: true).order(name: :asc)
+    parts.each do |part| %>
+    <option value='<%= part.id %>'><%= part.name %></option>option>
+<% end %>
+</select>    
+qty <input type="number" id="part_qty_field" value="1"/> 
+<input type="button" value="Add" onClick="javascript:add_part()"/>
+    
+    
+    
+</td>
+    
+<td width="100px"/>
+
+<td>
+<h2>Assemblies Used</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Assembly</th>
+      <th>Qty used</th>
+      <th>Cost £</th>
+      <th>Qty in stock</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @product.product_assemblies.each do |product_assembly| %>
+      <tr>
+        <td><a href="/assemblies/<%= product_assembly.assembly.id %>/edit"><%= product_assembly.assembly.name %></a></td>
+        <td><%= product_assembly.qty %></td>
+        <td><%= (product_assembly.assembly.production_cost * product_assembly.qty).round(3) %></td>
+        <td><%= product_assembly.assembly.qty%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p></p>
+
+<select id="assemblies_list">
+<% assemblies = Assembly.all.order(name: :asc)
+    assemblies.each do |assembly| %>
+    <option value='<%= assembly.id %>'><%= assembly.name %></option>option>
+<% end %>
+</select>    
+qty <input type="number" id="assembly_qty_field" value="1"/> 
+<input type="button" value="Add" onClick="javascript:add_assembly()"/>
+    
+    
+</td>
+</tr></table>

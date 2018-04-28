@@ -60,7 +60,6 @@ end
     @categories = PartCategory.all
     if @part.save
       redirect_to :action => "edit", :id => @part.id
-        #render :edit
     else
         render :new
     end

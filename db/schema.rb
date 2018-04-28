@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426100112) do
+ActiveRecord::Schema.define(version: 20180428060521) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -165,6 +165,11 @@ ActiveRecord::Schema.define(version: 20180426100112) do
     t.boolean  "include_in_catalog"
     t.string   "product_url"
     t.decimal  "weight_g",                precision: 10, scale: 3
+    t.string   "barcode_file_name"
+    t.string   "barcode_content_type"
+    t.integer  "barcode_file_size"
+    t.datetime "barcode_updated_at"
+    t.string   "barcode_value"
   end
 
   create_table "retailers", force: :cascade do |t|

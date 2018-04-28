@@ -87,27 +87,37 @@ class ProductsController < ApplicationController
     redirect_to :action => "edit", :id => product_id
   end
     
-    
+
 
   # POST /products
   # POST /products.json
   def create
-    @product = Product.new(product_params)
-
-    respond_to do |format|
-      if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
-        format.json { render :show, status: :created, location: @product }
-      else
-        format.html { render :new }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+      @product = Product.new(product_params)
+      if (product_params['barcode'])
+        filename = product_params['barcode'].original_filename
+        if (filename and filename.length > 4)
+            @product.barcode_value = filename[0..-5]
+        end
       end
+
+    if @product.save
+        redirect_to :action => "edit", :id => @product.id, notice: 'Product was successfully created.' 
+    else
+        render :new 
     end
   end
 
 
   def update
+      if (product_params['barcode'])
+        filename = product_params['barcode'].original_filename
+        if (filename and filename.length > 4)
+            @product.barcode_value = filename[0..-5]
+        end
+      end
       if @product.update(product_params)
+        render :edit, notice: 'Part was successfully updated.' 
+      else
         render :edit
       end
   end
@@ -130,6 +140,6 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url, :weight_g)
+      params.require(:product).permit(:name, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url, :weight_g, :barcode, :barcode_value)
     end
 end

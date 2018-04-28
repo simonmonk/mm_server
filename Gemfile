@@ -57,3 +57,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'chart-js-rails'
 
 gem 'bootstrap-datepicker-rails'
+gem "paperclip", "~> 6.0.0"

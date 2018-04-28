@@ -9,7 +9,10 @@ class Product < ApplicationRecord
     validates :stock_warning_level, numericality: { greater_than_or_equal_to: 0 }
     validates :sku, presence: true
     validates :labour, presence: true
+    validates :barcode_value, presence: true, uniqueness: true
     
+    has_attached_file :barcode, styles: { medium: "230x154>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
+    validates_attachment_content_type :barcode, content_type: /\Aimage\/.*\z/
     
     # return all the Active products
     # sorted alphabeticaly for use in lists
