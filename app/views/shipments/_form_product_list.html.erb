@@ -112,12 +112,13 @@ shipment.shipment_products.each do | sp |
         <td><%= sp.product.sku %></td>
         <td><%= sp.product.name %></td>
         <td><span id="wt_<%=sp.id%>"><%=(sp.product.weight_g / 1000.0).round(3)%></span> kg 
-            <button onclick="copyToClipboard('#wt_<%=sp.id%>')">Copy Wt</button></td>
+            <button onclick="copyToClipboard('#wt_<%=sp.id%>')">Copy</button></td>
         <td><span id="htn_<%=sp.id%>"><%= sp.product.harmoized_tarrif_number %></span>
-            <button onclick="copyToClipboard('#htn_<%=sp.id%>')">Copy HTN</button></td>
+            <button onclick="copyToClipboard('#htn_<%=sp.id%>')">Copy</button></td>
         <td><%=number_to_currency(sp.wholesale_in_currency, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
         <td><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
-        
+        <td><span style='display:none' id="desc_<%=sp.id%>"><%=sp.product.customs_description%></span>
+        <button onclick="copyToClipboard('#desc_<%=sp.id%>')">Copy Customs Desc</button></td>
         <td><input type="button" value="Delete" onClick="javascript:delete_shipment_line(<%=sp.id%>)"/></td></tr>
 <% end %>
     <tr><th>Total order value</th><th colspan="3"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></th></tr>
