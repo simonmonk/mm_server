@@ -58,6 +58,9 @@
         <td><%= part.qty %></td>
         <td><%= part.purchase_cost.round(3) %></td>
         <td><%= link_to 'Delete', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if (part.is_unused?) %>
+            <td>This part is not used in any products or assemblies.</td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

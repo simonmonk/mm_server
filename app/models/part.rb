@@ -23,6 +23,11 @@ class Part < ApplicationRecord
         return 0
     end
     
+    def is_unused?
+       return self.product_parts.length == 0 && self.assembly_parts.length == 0 
+        #return false
+    end
+    
     def purchase_cost
         if (self.active && self.cost)
             if (self.currency == "GBP")

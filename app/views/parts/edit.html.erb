@@ -9,9 +9,11 @@ $(function() {
 <p>This part is used in the following products: 
 <% 
 	@part.product_parts.each do |product_part| %>
-      <%= 
+      <% 
     	begin
-    		product_part.product.name 
+      %>
+    <a href="/products/<%=product_part.product_id %>/edit"><%= product_part.product.name %></a>
+      <%
     	rescue Exception
     		""
     	end

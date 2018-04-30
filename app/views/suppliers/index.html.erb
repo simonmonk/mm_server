@@ -11,6 +11,15 @@
         $('#show_button').hide();
     }
     
+    function open_website_tab(website) {
+        if (website.startsWith("http")) {
+            window.open(website, '_blank')
+        }
+        else {
+            window.open("http://" + website, '_blank')
+        }
+    }
+    
 </script>
 
 <p id="notice"><%= notice %></p>
@@ -43,6 +52,11 @@
       <tr class="<%= status_class %>">
         <td><%= link_to supplier.name, edit_supplier_path(supplier), class: status_class%></td>
         <td><%=supplier.fastest_delivery%></td>
+          <td>
+              <% if (supplier.website and supplier.website.length > 5) %>
+              <a href="javascript:open_website_tab('<%=supplier.website%>')">Website</a>
+              <% end %>
+          </td>
         <td><%= link_to 'Delete', supplier, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
