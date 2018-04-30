@@ -62,7 +62,16 @@ function deduct(qty) {
     <tr><td>Active</td><td> <%= f.check_box :active %></td></tr>
     <tr><td>SKU</td><td>  <%= f.text_field :sku, size: '40' %></td></tr>
     <tr><td>Barcode file</td><td><%= f.file_field :barcode %><%= image_tag @product.barcode.url(:medium) %></td></tr>
-    <tr><td>Barcode</td><td><%=product.barcode_value%></td></tr>
+    <tr><td>Barcode</td><td><%=product.barcode_value%>
+    <% 
+        products_with_this_barcode = Product.where("barcode_value = ?", @product.barcode_value)
+        if (@product.barcode_value and @product.barcode_value.length > 0 and products_with_this_barcode.length > 1) 
+            products_list = products_with_this_barcode.map {| p | p.name}
+    %>
+        <span class="priority1">Warning: This barcode is in use with more than one product: <%= products_list %></span>
+        
+    <% end %>
+    </td></tr>
     <tr><td>Quantity (for emergency manual ajustments)</td><td> <%= f.number_field :qty %></td></tr>
     <tr><td>Stock level warning</td><td> <%= f.number_field :stock_warning_level %></td></tr>  
     <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
