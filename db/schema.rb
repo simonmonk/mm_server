@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180428060521) do
+ActiveRecord::Schema.define(version: 20180501185053) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(version: 20180428060521) do
     t.decimal  "discount",                precision: 10, scale: 3
     t.date     "date_payment_received"
     t.decimal  "vat_rate",                precision: 10, scale: 3
+    t.string   "invoice_comment"
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

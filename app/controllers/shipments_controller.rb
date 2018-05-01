@@ -188,6 +188,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipment_params
-      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount, :vat_rate, :date_payment_received)
+      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount, :vat_rate, :date_payment_received, :invoice_comment)
     end
 end

@@ -35,7 +35,8 @@ function set_date(field_name, date) {
     <tr><td>Shipping Provider</td><td> <%= f.text_field :shipping_provider %> </td></tr>
     <tr><td>Shipping Provider Acc Num</td><td> <%= f.text_field :shipping_provider_ac_no %> </td></tr>
     <tr><td>Discount</td><td> <%= f.text_field :discount %> </td></tr>
-    <tr><td>Notes:</td><td><%= f.text_area :notes %></td></tr>
+    <tr><td>Notes:</td><td><%= f.text_area :notes, size: '50x5' %></td></tr>
+    <tr><td>Invoice Comment:</td><td><%= f.text_area :invoice_comment, size: '50x5' %></td></tr>
 </table>
 
 
