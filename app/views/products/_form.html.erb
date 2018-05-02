@@ -15,6 +15,12 @@ function delete_part(product_part_id) {
     }
 }    
     
+function delete_assembly(product_assembly_id) {
+    if (confirm("Are you sure")) {
+        document.location = "/products/delete_assembly?product_assembly_id=" + product_assembly_id
+    }
+}    
+    
 function add_assembly() {
     var list = document.getElementById("assemblies_list");
     var assembly_id = list.options[list.selectedIndex].value;

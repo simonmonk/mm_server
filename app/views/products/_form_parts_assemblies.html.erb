@@ -63,6 +63,7 @@ qty <input type="number" id="part_qty_field" value="1"/>
         <td><%= product_assembly.qty %></td>
         <td><%= (product_assembly.assembly.production_cost * product_assembly.qty).round(3) %></td>
         <td><%= product_assembly.assembly.qty%></td>
+        <td><input type="button" value="Delete" onClick="javascript:delete_assembly(<%= product_assembly.id%>)"/></td>
       </tr>
     <% end %>
   </tbody>

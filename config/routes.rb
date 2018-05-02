@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       get :add_part
       get :add_assembly
       get :delete_part
+      get :delete_assembly
       get :sales_by_product
     end
   end

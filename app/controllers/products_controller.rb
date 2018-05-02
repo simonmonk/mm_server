@@ -87,6 +87,14 @@ class ProductsController < ApplicationController
     redirect_to :action => "edit", :id => product_id
   end
     
+  def delete_assembly
+    product_assembly_id = params[:product_assembly_id]
+    prod_assembly = ProductAssembly.find(product_assembly_id)
+    product_id = prod_assembly.product.id
+    prod_assembly.destroy
+    redirect_to :action => "edit", :id => product_id
+  end
+    
 
 
   # POST /products
