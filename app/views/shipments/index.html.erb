@@ -40,10 +40,17 @@ function new_shipment() {
   </thead>
 
   <tbody>
-    <% @shipments.all.order(invoice_number: :desc).each do |shipment| %>
+    <% @shipments.all.order(updated_at: :desc).each do |shipment| %>
       <tr class="priority<%= shipment.priority %>">
-        <td><%= link_to shipment.invoice_number, edit_shipment_path(shipment) %></td>
+        <td>
+            <% if (shipment.invoice_number and shipment.invoice_number.length > 0) %>
+                <%= shipment.invoice_number%>
+            <%else%>
+                Not Invoiced
+            <%end%>
+        </td>
         <td><%= shipment.retailer.name %></td>
+        <td><%= link_to "Edit", edit_shipment_path(shipment) %></td>
         <td><a href="/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>">Invoice</a></td>
         <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

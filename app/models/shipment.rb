@@ -2,7 +2,7 @@ class Shipment < ApplicationRecord
   belongs_to :retailer
   has_many :shipment_products
     
-  validates_uniqueness_of :invoice_number
+  validates :invoice_number, uniqueness: true, if: 'invoice_number.present?'
     
   # generate unique invoice number in format YYYYMMDDnn
   def Shipment.find_next_invoice_number()
@@ -33,6 +33,11 @@ class Shipment < ApplicationRecord
             return 13    # Overdue - red
         end
     end
+  end
+
+  # generated each time a quotation is created - allows saving of PDF quotes with this number in the file name
+  def quotation_number()
+    return Time.new().strftime("Q%Y%m%d%I%M")
   end
 
   def total_value_profit_gbp

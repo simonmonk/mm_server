@@ -4,7 +4,7 @@ $(function() {
 });    
 </script>
 
-<h1>Shipment:  <%= @shipment.invoice_number %> to <%= @shipment.retailer.name %></h1>
+<h1>Order/Shipment:  <%= @shipment.invoice_number %> to <%= @shipment.retailer.name %></h1>
 
 <%= render 'form', shipment: @shipment %>
 

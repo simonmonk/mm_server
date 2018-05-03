@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/sales_us/', to: 'welcome#sales_us'
     
   get 'shipments/invoice/*other', to: 'shipments#invoice'
+  get 'shipments/quote/*other', to: 'shipments#quote'
   get 'products/pricelist', to: 'products#pricelist'
     
   resources :parts do

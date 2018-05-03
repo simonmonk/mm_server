@@ -31,6 +31,10 @@ function import_shipment_com() {
 function create_invoice(pages) {
     window.open("/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>&pages=" + pages, '_blank')
 }
+                
+function create_quote() {
+    window.open("/shipments/quote/<%= shipment.quotation_number%>?id=<%= shipment.id %>", '_blank')
+}
     
 
 function hideInactive() {
@@ -152,7 +156,7 @@ qty <input type="number" id="product_qty_field" value="1"/>
 <input type="button" value="Subtract Shipment Products from Stock" onClick="javascript:subtract_products()"/>
 <% end %>
 
-
+<input type="button" value="Create Quotation" onClick="javascript:create_quote()"/>
 <input type="button" value="Create Invoice 1 page" onClick="javascript:create_invoice(1)"/>
 <input type="button" value="Create Invoice 2 pages" onClick="javascript:create_invoice(2)"/>
 

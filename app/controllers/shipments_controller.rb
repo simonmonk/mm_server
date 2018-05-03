@@ -1,5 +1,5 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice]
+  before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice, :quote]
   skip_before_filter :verify_authenticity_token 
 
   # GET /shipments
@@ -19,8 +19,7 @@ class ShipmentsController < ApplicationController
     @shipment.retailer = Retailer.find(params['retailer_id'])
     @shipment.date_order_received = Date.current()
     @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
-    @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no
-    @shipment.invoice_number = Shipment.find_next_invoice_number()  
+    @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no 
     @shipment.vat_rate = 20  
   end
 
@@ -29,6 +28,14 @@ class ShipmentsController < ApplicationController
   end
     
   def invoice
+      if (not @shipment.invoice_number or @shipment.invoice_number.length == 0)
+        @shipment.invoice_number = Shipment.find_next_invoice_number() 
+        @shipment.save
+      end
+      render :layout => false
+  end
+    
+  def quote
       render :layout => false
   end
     
@@ -52,7 +59,15 @@ class ShipmentsController < ApplicationController
 def add_product
     product_id = params[:product_id]
     shipment_id = params[:shipment_id]
+    shipment = Shipment.find(shipment_id)
     qty = params[:qty].to_i
+    # if there is no product_retailer record, beacuse they haven't sold this before, create one
+    results = ProductRetailer.where(retailer_id: shipment.retailer_id, product_id: product_id)
+    if (results.length == 0)
+        pr = ProductRetailer.new(retailer_id: shipment.retailer_id, :product_id => product_id)
+        pr.save
+    end
+    # if there is a shipments_product record overwrite it else create a new one
     results = ShipmentProduct.where(shipment_id: shipment_id, product_id: product_id)
     if (results.length > 0)
         pp = results[0]

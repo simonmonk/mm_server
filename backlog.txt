@@ -12,6 +12,18 @@ Global
 DB TRANSACTIONS
 
 
+Shipments and Reatilers
+---------
+- Rename it or Orders/Shipments
+- Add Generate Quotation button - very like invoice button
+- Find a way of only allocating a invoice number when invoice is generated.
+
+
+Product make SKU optional
+
+
+
+
 + Manufacturing Jobs // supports only complete jobs that are 'kitted' and finish
 ---------------------
 + start date
@@ -61,8 +73,10 @@ Dashboard
 --
 Stock take only done on 31 Dec and needs to show stock at both Amazons
 
-- parts from suppier show part number and hyperlink to product page
 - parts from supplier add cols: code, num in stock, low stock level
+
+
+
 
 
 Order list of goods

@@ -1,0 +1,306 @@
+
+
+<style>
+
+p {
+    text-align: left;
+    margin-top: 1px;  
+    margin-bottom: 1px;  
+    font: 14px arial, sans-serif;
+}
+    
+.smallprint {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 12px arial, sans-serif;
+}
+    
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+    
+h3 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 20px arial, bold, sans-serif;
+}   
+    
+table {
+    border-collapse: collapse;
+}
+    
+td {
+    vertical-align: top;  
+}
+    
+    
+.prod_table_th {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: bold 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td_money {
+    border: 1px solid black;   
+    text-align: right;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}  
+    
+.prod_table_td_sig {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 30;
+    font: 14px/1.5 Arial, sans-serif;
+    color: lightgray;
+}  
+
+</style>
+
+<%
+
+def should_show(column_name)
+    result = false
+    @shipment.shipment_products.each do | sp |
+       if (sp.product[column_name] and not sp.product[column_name].empty?) 
+           result = true
+       end
+    end
+    return result
+end
+
+currency_name = 'GBP'
+currency_symbol = '£'
+if (@shipment.retailer.pref_currency)
+    currency_name = @shipment.retailer.pref_currency
+end
+if (currency_name == 'USD')
+    currency_symbol = '$'
+end
+%>
+
+
+<table width="100%">
+<tr>
+<td width="70%" align="left" colspan="2">
+    <img src="/images/logo.png" width="200"/>
+    <p>&nbsp;</p>
+</td>    
+    
+    
+<td width="30%">
+    <p>12 Cuerden Close</p>
+    <p>Bamber Bridge</p>
+    <p>Preston</p>
+    <p>PR5 6BX</p>
+    <p>United Kingdom</p>
+    <p>Tel +44 1772 437879</p>
+    <p>or +44 7951 907467</p>
+    <p>linda@monkmakes.com</p>
+</td>    
+</tr>
+</table>
+
+<p>&nbsp;</p>
+
+<% if (params['pages'].to_i == 2) %>
+</br></br></br></br></br></br></br>
+<% end %>
+
+<h2>MonkMakes Ltd Quotation</h2>
+
+<hr/>
+<p>&nbsp;</p>
+
+<% if (params['pages'].to_i == 2) %>
+</br></br></br></br></br></br></br>
+<% end %>
+
+<table width="100%">
+<tr>
+<td width="30%" align="left">
+    <h3>Invoice To:</h3>
+</td>   
+    
+<td width="20%" align="left">
+    <h3>Deliver To:</h3>
+</td>  
+    
+<td width="10%"/>    
+    
+<td width="30%" align="left">
+    <h3>Quotation Details</h3>
+</td>  
+</tr>
+<tr>
+<td>
+    <p><%=@shipment.retailer.name%></p>
+    <p><%=@shipment.retailer.billing_ad_line1%></p>
+    <p><%=@shipment.retailer.billing_ad_line2%></p>
+    <p><%=@shipment.retailer.billing_ad_city%></p>
+    <p><%=@shipment.retailer.billing_ad_state%></p>
+    <p><%=@shipment.retailer.billing_ad_postal_code%></p>
+    <p><%=@shipment.retailer.billing_ad_country%></p>
+</td>
+
+<td class="prod_table_td">
+    <p><b><%=@shipment.retailer.name%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_line1%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_line2%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_city%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_state%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_postal_code%></b></p>
+    <p><b><%=@shipment.retailer.delivery_ad_country%></b></p>
+</td>
+    
+<td/>    
+    
+<td width="30%" align="left">
+    <p>Quotation Number: <%=@shipment.quotation_number%></p>
+</td>      
+    
+</tr>
+</table>
+
+<p>&nbsp;</p>
+
+<% if (params['pages'].to_i == 2) %>
+</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+</br></br></br></br>
+<% end %>
+
+<h3>Items</h3>
+
+<table width="100%" class="prod_table">
+<tr>
+    <th class="prod_table_th">Qty</th>
+    <th class="prod_table_th">SKU</th>
+    <th class="prod_table_th">Product</th>
+    <th class="prod_table_th">Customs Description</th>
+<% if (should_show('harmoized_tarrif_number')) %>
+    <th class="prod_table_th">H. Tarrif</th>
+<% end %>            
+<% if (should_show('country_of_origin')) %>
+    <th class="prod_table_th">Origin</th>
+<% end %>
+    <th class="prod_table_th">Unit Price (<%=currency_name%>)</th>
+    <th class="prod_table_th">Total Price (<%=currency_name%>)</th>
+</tr>
+
+<%
+total = 0
+if (not @shipment.shipping_cost)
+    @shipment.shipping_cost = 0
+end
+if (not @shipment.discount)
+    @shipment.discount = 0
+end
+@shipment.shipment_products.each do | sp |
+    line_total = sp.qty * sp.wholesale_in_currency
+    total += line_total
+    product_retailer = ProductRetailer.where(product_id: sp.product.id, retailer_id: sp.shipment.retailer.id)[0]
+    foreign_sku = product_retailer.sku
+    sku = sp.product.sku
+    if (@shipment.retailer.show_foreign_sku == true)
+        sku = foreign_sku
+    end
+%>
+<tr>
+    <td class="prod_table_td"><%=sp.qty%></td>
+    <td class="prod_table_td"><%=sku%></td>
+    <td class="prod_table_td"><%=sp.product.name%></td>
+    <td class="prod_table_td"><%=sp.product.customs_description%></td>
+<% if (should_show('harmoized_tarrif_number')) %>
+    <td class="prod_table_td"><%=sp.product.harmoized_tarrif_number%></td>
+<% end %>            
+<% if (should_show('country_of_origin')) %>       
+    <td class="prod_table_td"><%=sp.product.country_of_origin%></td>
+<% end %>
+    <td class="prod_table_td_money"><%=number_to_currency(sp.wholesale_in_currency, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="prod_table_td_money"><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+</tr>
+<% end %>
+
+<% total += @shipment.shipping_cost %>    
+    
+<tr>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/>
+    <td/><td class="prod_table_td" colspan="2">Shipping</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.shipping_cost, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+</tr>
+    
+<% 
+    if (@shipment.discount > 0)
+        total -= @shipment.discount
+%>
+<tr>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">Discount</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+</tr>
+
+<% end %>    
+    
+<tr>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td colspan="3"><%=@shipment.invoice_comment%></td><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+</tr>
+    
+<% 
+    if (@shipment.retailer.vatable)
+        vat = total * @shipment.vat_rate / 100
+%>
+<tr>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">VAT (at <%=@shipment.vat_rate%>%)</td><td class="prod_table_td_money"><%=number_to_currency(vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+</tr>
+<tr>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2"><b>Invoice Total</b></td><td class="prod_table_td_money"><b><%=number_to_currency(total+vat, unit: currency_symbol, separator: ".", delimiter: ",")%></b></td>
+</tr>
+<% end %>
+
+</table>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<table width="100%">
+<tr>
+    <td width="30%">
+<h3>Terms and Conditions:</h3>
+<p class="smallprint">Payment by BACS within 7 days please</p>
+<p class="smallprint">Bank: Barclays Bank</p>
+<p class="smallprint">Account in name of: Monk Makes Ltd</p>
+<p class="smallprint">Account Number: 43975053</p>
+<p class="smallprint">Sort Code: 20-69-85</p>
+<p class="smallprint">IBAN GB37 BARC 2069 8543 9750 53</p>
+<p class="smallprint">SWIFTBIC BARCGB22</p>
+<p class="smallprint">Thank you very much.</p>
+    </td>
+    <td width="10%"/>
+    
+</tr>
+</table>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p style="text-align: center;">Monk Makes Ltd is registered in the UK. Company Number 8797771. VAT number GB 222 6746 15</p>
