@@ -3,6 +3,11 @@
 function set_date(field_name, date) {
     $(field_name).val(date);
 }
+    
+function assign_invoice_number() {
+    alert("Remember to save after setting the invoice number")
+    $('#shipment_invoice_number').val("<%=Shipment.find_next_invoice_number()%>")
+}
 
 </script>
 
@@ -21,7 +26,14 @@ function set_date(field_name, date) {
   <% end %>
 
 <table>
-    <tr><td>Invoice number</td><td><%= f.text_field :invoice_number %></td></tr>
+    <tr><td>Invoice number</td><td><%= f.text_field :invoice_number %></td>
+     <%
+    if (not @shipment.invoice_number or @shipment.invoice_number.length == 0)
+     %>
+        <td><a href="javascript:assign_invoice_number()">Assign Invoice Number</a></td>
+    <% end %>
+    
+    </tr>
     <tr><td>Retailer</td><td><a href="/retailers/<%=shipment.retailer_id%>/edit"><%=shipment.retailer.name %></a><%=f.hidden_field :retailer_id%></td></tr>
     <tr><td>Order received date:</td><td><%= datepicker_input f, :date_order_received %></td><td><a href="javascript:set_date('#shipment_date_order_received', '<%=Date.current%>')">Today</a></td></tr>
     
@@ -35,13 +47,13 @@ function set_date(field_name, date) {
     <tr><td>Shipping Provider</td><td> <%= f.text_field :shipping_provider %> </td></tr>
     <tr><td>Shipping Provider Acc Num</td><td> <%= f.text_field :shipping_provider_ac_no %> </td></tr>
     <tr><td>Discount</td><td> <%= f.text_field :discount %> </td></tr>
-    <tr><td>Notes:</td><td><%= f.text_area :notes, size: '50x5' %></td></tr>
-    <tr><td>Invoice Comment:</td><td><%= f.text_area :invoice_comment, size: '50x5' %></td></tr>
+    <tr><td>Notes:</td><td colspan="2"><%= f.text_area :notes, size: '40x5' %></td></tr>
+    <tr><td>Invoice Comment:</td><td colspan="2"><%= f.text_area :invoice_comment, size: '40x5' %></td></tr>
 </table>
 
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Save"  %>
   </div>
 
 

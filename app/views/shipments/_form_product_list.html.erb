@@ -157,7 +157,14 @@ qty <input type="number" id="product_qty_field" value="1"/>
 <% end %>
 
 <input type="button" value="Create Quotation" onClick="javascript:create_quote()"/>
+
+<%
+    if (@shipment.invoice_number and @shipment.invoice_number.length > 0)
+%>
+
 <input type="button" value="Create Invoice 1 page" onClick="javascript:create_invoice(1)"/>
 <input type="button" value="Create Invoice 2 pages" onClick="javascript:create_invoice(2)"/>
+
+<% end %>
 
 <script>hideInactive()</script>

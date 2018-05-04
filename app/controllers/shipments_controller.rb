@@ -28,10 +28,6 @@ class ShipmentsController < ApplicationController
   end
     
   def invoice
-      if (not @shipment.invoice_number or @shipment.invoice_number.length == 0)
-        @shipment.invoice_number = Shipment.find_next_invoice_number() 
-        @shipment.save
-      end
       render :layout => false
   end
     
