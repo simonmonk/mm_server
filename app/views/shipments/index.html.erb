@@ -35,6 +35,7 @@ function new_shipment() {
     <tr>
       <th>Invoice Number</th>
       <th>Retailer</th>
+      <th>Invoice Amount</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -50,6 +51,7 @@ function new_shipment() {
             <%end%>
         </td>
         <td><%= shipment.retailer.name %></td>
+        <td><%= shipment.retailer.pref_currency %> <%=shipment.total_invoice_amount%></td>
         <td><%= link_to "Edit", edit_shipment_path(shipment) %></td>
         <td><a href="/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>">Invoice</a></td>
         <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>

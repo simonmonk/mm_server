@@ -4,21 +4,6 @@ class Shipment < ApplicationRecord
     
   validates :invoice_number, uniqueness: true, if: 'invoice_number.present?'
     
-  # generate unique invoice number in format YYYYMMDDnn
-  def Shipment.find_next_invoice_number()
-    base = Time.new().strftime("%Y%m%d")
-    i = 1
-    candidate = base + (i<10?"0"+i.to_s():i.to_s())
-    while (i < 100 and Shipment.where(invoice_number: candidate).length > 0) do
-        candidate = base + (i<10?"0"+i.to_s():i.to_s())
-        i = i + 1
-    end
-    if (i >= 99)
-        return "all 99 invoice slots taken for today"
-    else
-        return candidate
-    end
-  end
 
   def priority()
     if (not date_invoice_sent)
@@ -40,7 +25,27 @@ class Shipment < ApplicationRecord
     return Time.new().strftime("Q%Y%m%d%I%M")
   end
 
-  def total_value_profit_gbp
+    
+  def total_invoice_amount()
+    sales_total = 0
+    lines = self.shipment_products
+    lines.each do | line |
+      sale = line.qty * line.product.wholesale_price
+      sales_total += sale
+    end
+    if (shipping_cost)
+        sales_total += shipping_cost
+    end
+    if (vat_rate and retailer.vatable == true)
+        vat = sales_total * vat_rate / 100
+        sales_total += vat
+    end
+    return sales_total
+  end
+
+    
+    
+  def total_value_profit_gbp()
     sales_total = 0
     profit_total = 0
     currency = self.retailer.pref_currency
@@ -68,6 +73,23 @@ class Shipment < ApplicationRecord
       profit_total += sales_and_profits[1]
     end
     return [sales_total, profit_total]
+  end
+   
+    
+  # generate unique invoice number in format YYYYMMDDnn
+  def Shipment.find_next_invoice_number()
+    base = Time.new().strftime("%Y%m%d")
+    i = 1
+    candidate = base + (i<10?"0"+i.to_s():i.to_s())
+    while (i < 100 and Shipment.where(invoice_number: candidate).length > 0) do
+        candidate = base + (i<10?"0"+i.to_s():i.to_s())
+        i = i + 1
+    end
+    if (i >= 99)
+        return "all 99 invoice slots taken for today"
+    else
+        return candidate
+    end
   end
     
 end
