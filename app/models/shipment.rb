@@ -5,18 +5,21 @@ class Shipment < ApplicationRecord
   validates :invoice_number, uniqueness: true, if: 'invoice_number.present?'
     
 
+  def paid?()
+      return (date_payment_received and date_payment_received <= Date.current)
+  end
+    
   def priority()
+    if (self.paid?)
+        return 11   # Paid and complete - black
+    end
     if (not date_invoice_sent)
         return 10   # In progress - blue
     end
-    if (date_payment_received and date_payment_received <= Date.current)
-        return 11   # Paid and complete - black
+    if (date_payment_reminder and Date.current < date_payment_reminder)
+        return 12    # Awaiting payment - green
     else
-        if (date_payment_reminder and Date.current < date_payment_reminder)
-            return 12    # Awaiting payment - green
-        else
-            return 13    # Overdue - red
-        end
+        return 13    # Overdue - red
     end
   end
 

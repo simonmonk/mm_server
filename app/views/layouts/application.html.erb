@@ -10,6 +10,11 @@
   
     
   <body>
+      
+    <% if (request.host == "localhost")%>
+      <h1 class='priority1'>-----------------TEST SYSTEM------------------</h1>
+    <%end%>
+      
     <a class="menu" href="/">DASHBOARD</a> 
     <a class="<%= current_page?(controller: 'suppliers')?'menu_selected':'menu'%>" href="/suppliers">SUPPLIERS</a>  
     <a class="<%= current_page?(controller: 'order_ins')?'menu_selected':'menu'%>" href="/order_ins">ORDER IN</a>    

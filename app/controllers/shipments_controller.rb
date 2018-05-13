@@ -28,13 +28,14 @@ class ShipmentsController < ApplicationController
   end
     
   def invoice
+      @shipment.date_invoice_sent = Date.current
+      @shipment.save
       render :layout => false
   end
     
   def quote
       render :layout => false
   end
-    
     
   def update
       if @shipment.update(shipment_params)
@@ -176,10 +177,6 @@ def import_shipment_com
 end   
     
 
-
-
-    
-    
 
   # DELETE /shipments/1
   # DELETE /shipments/1.json

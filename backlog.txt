@@ -7,20 +7,27 @@ $ bin/rails generate migration AddStateToRetailerAddreses
 $ rails db:migrate
 
 
+BUGS
+----
+OrderIns, setting price on an order line does not seem to update the price for the part, either when added to the list, or when marked as received.
+- Logic should be: set the price and currency when order line added, as long as the price is > 0
+
+
 Global
 ======
 DB TRANSACTIONS
 
 
+
 Shipments and Reatilers
 ---------
-- Rename it or Orders/Shipments
-- Add Generate Quotation button - very like invoice button
-- Find a way of only allocating a invoice number when invoice is generated.
+Sort out list view so that unallocated invoice numbers at the top then sorted by invoice number
 
 
-Product make SKU optional
+OrdersIn
+---------
 
+Need more info about parts - which products/assemblies used in and qty per product/assembly. Info button that makes hovering window to show?
 
 
 

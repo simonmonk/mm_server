@@ -10,7 +10,7 @@ function new_shipment() {
 
 </script>
 
-<h1>Shipments</h1>
+<h1>Orders/Shipments</h1>
 
 <select id="retailers_list">
 <% retailers = Retailer.all.order(name: :asc)
@@ -41,7 +41,25 @@ function new_shipment() {
   </thead>
 
   <tbody>
-    <% @shipments.all.order(updated_at: :desc).each do |shipment| %>
+    <% 
+      # Sort the shipments - ones with no invoice_number to the top
+      ships = @shipments.all
+      ships.sort do | a, b | 
+          result = 0
+          if (not a.invoice_number or not b.invoice_number)
+              result = -1
+          else
+            result = (a.invoice_number <=> b.invoice_number)
+          end
+          result
+      end
+      ships.each do |shipment|
+      #     @shipments.all.order(invoice_number: :desc).each do |shipment|
+        currency_symbol = '£'
+        if (shipment.retailer.pref_currency == 'USD')
+            currency_symbol = '$'
+        end
+      %>
       <tr class="priority<%= shipment.priority %>">
         <td>
             <% if (shipment.invoice_number and shipment.invoice_number.length > 0) %>
@@ -51,11 +69,11 @@ function new_shipment() {
             <%end%>
         </td>
         <td><%= shipment.retailer.name %></td>
-        <td><%= shipment.retailer.pref_currency %> <%=shipment.total_invoice_amount%></td>
+        <td><%=number_to_currency(shipment.total_invoice_amount, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
         <td><%= link_to "Edit", edit_shipment_path(shipment) %></td>
         <td><a href="/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>">Invoice</a></td>
         <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+    </tr>
     <% end %>
   </tbody>
 </table>
