@@ -5,7 +5,6 @@ class OrderInsController < ApplicationController
   def new
     @order_in = OrderIn.new
     @order_in.supplier = Supplier.find(params['supplier_id'])
-    @order_in.placed_date = Date.current()
     @order_in.vat_info_collected = "N/A"
   end
 

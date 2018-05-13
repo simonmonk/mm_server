@@ -69,20 +69,22 @@ class OrderIn < ApplicationRecord
     
         
   def complete?()
-     complete = true
+     if (self.order_in_lines.length == 0)
+         return false
+     end
      self.order_in_lines.each do |line|
-         puts "**********" + line.qty.to_s + " " + line.qty_in.to_s + "************"
-          if (line.qty <= line.qty_in)
-              complete = false
+          if (line.qty < line.qty_in)
+              return false
           end
      end
-    return complete
+    return true
   end
-
-
 
   def priced?()
      priced = true
+     if (self.order_in_lines.length == 0)
+         return false
+     end
      self.order_in_lines.each do |line|
           if (not line.price or line.price == 0)
               priced = false
@@ -90,15 +92,16 @@ class OrderIn < ApplicationRecord
      end
     return priced
   end
-    
+       
   def priority()
-    if (self.complete?)
-        return 12 # Complete - green
-    end
-    if (self.priced?)
-        return 13 # Oustanding - red
+    if (self.placed_date)
+        if (self.complete?)
+            return 11 # Complete
+        else
+            return 13 # Oustanding
+        end
     else
-        return 11 # In progress (unpriced) - black
+        return 12 # In progress
     end
   end
     

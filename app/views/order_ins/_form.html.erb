@@ -28,6 +28,9 @@ function set_date(field_name, date) {
 <table>
     <tr><td>Order Number (automatic)</td><td><%= order_in.order_number %></td></tr>
     <tr><td>Supplier</td><td><%=order_in.supplier.name%><%=f.hidden_field :supplier_id%></td></tr>
+    <% if (not order_in.placed_date) %>
+    <tr><td colspan="2" class="priority1">Set the Order Placed date to Mark the Order as being PLACED</td></tr>
+    <%end%>
     <tr><td>Order placed:</td><td><%= datepicker_input f, :placed_date %></td><td><a href="javascript:set_date('#order_in_placed_date', '<%=Date.current%>')">Today</a></tr> 
     <tr><td>Quotation Request Sent:</td><td><%= datepicker_input f, :date_qr_sent %></td><td><a href="javascript:set_date('#order_in_date_qr_sent', '<%=Date.current%>')">Today</a></tr> 
     <tr><td>Quotation Received:</td><td><%= datepicker_input f, :quotation_received %></td><td><a href="javascript:set_date('#order_in_quotation_received', '<%=Date.current%>')">Today</a></tr> 
