@@ -97,7 +97,11 @@ end
         <th>Unit weight</th>
         <th>Tarrif Number</th>
         <th>Unit Price</th>
-        <th>Extended Price</th></tr>
+        <th>Extended Price</th>
+        <th>Unit Retail Price USD</th>
+        <th>Extended Retail Price USD</th>
+    
+    </tr>
 <%
 total = 0
 weight = 0
@@ -121,6 +125,15 @@ shipment.shipment_products.each do | sp |
             <button onclick="copyToClipboard('#htn_<%=sp.id%>')">Copy</button></td>
         <td><%=number_to_currency(sp.wholesale_in_currency, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
         <td><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+        <% 
+            dollar_retail_price = sp.product.retail_price_usd
+            dollar_retail_total = 0
+            if (dollar_retail_price and sp.qty)
+                dollar_retail_total = dollar_retail_price * sp.qty
+            end
+        %>
+        <td><%=number_to_currency(dollar_retail_price, unit: "$", separator: ".", delimiter: ",")%></td>
+        <td><%=number_to_currency(dollar_retail_total, unit: "$", separator: ".", delimiter: ",")%></td>
         <td><span style='display:none' id="desc_<%=sp.id%>"><%=sp.product.customs_description%></span>
         <button onclick="copyToClipboard('#desc_<%=sp.id%>')">Copy Customs Desc</button></td>
         <td><input type="button" value="Delete" onClick="javascript:delete_shipment_line(<%=sp.id%>)"/></td></tr>

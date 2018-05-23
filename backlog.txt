@@ -7,6 +7,10 @@ $ bin/rails generate migration AddStateToRetailerAddreses
 $ rails db:migrate
 
 
+Shipment line items for Amazon.com should have extra columns for retail price dollars, extended price in dollars.
+---
+
+
 BUGS
 ----
 OrderIns, setting price on an order line does not seem to update the price for the part, either when added to the list, or when marked as received.
