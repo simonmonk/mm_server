@@ -8,6 +8,7 @@ $ rails db:migrate
 
 
 Shipment line items for Amazon.com should have extra columns for retail price dollars, extended price in dollars.
+This is done, but the total needs to be in dollars too. Also change the Copy Customs Dec field so that it prepends the name.
 ---
 
 
