@@ -43,18 +43,33 @@ function new_shipment() {
   <tbody>
     <% 
       # Sort the shipments - ones with no invoice_number to the top
-      ships = @shipments.all
-      ships = ships.sort do | a, b | 
-          result = 0
-          if (a.invoice_number.blank? or b.invoice_number.blank?)
-              result = -1
+      # First make 2 lists - with and without invoice date 
+
+      # Then sort all without invoice date by creation date order descending
+      # Then sort all with invoice_number descenting
+      # Combine the lists again
+      un_invoiced_shipments = []
+      invoiced_shipments = []
+
+      @shipments.each do | ship |
+          if ship.invoice_number.blank?
+              un_invoiced_shipments.push(ship)
           else
-            result = -(a.invoice_number <=> b.invoice_number)
+              invoiced_shipments.push(ship)
           end
-          result
       end
+
+      un_invoiced_shipments = un_invoiced_shipments.sort do | a, b | 
+          b.created_at <=> a.created_at
+      end
+
+      invoiced_shipments = invoiced_shipments.sort do | a, b | 
+          b.invoice_number <=> a.invoice_number
+      end
+
+      ships = un_invoiced_shipments + invoiced_shipments
+
       ships.each do |shipment|
-      #     @shipments.all.order(invoice_number: :desc).each do |shipment|
         currency_symbol = '£'
         if (shipment.retailer.pref_currency == 'USD')
             currency_symbol = '$'
@@ -79,5 +94,3 @@ function new_shipment() {
 </table>
 
 <br>
-
-
