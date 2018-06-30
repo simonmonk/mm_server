@@ -14,6 +14,9 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 
 BUGS
 ----
+
+In the shipments list the value of the shipment is shown with the amount converted to GBP - this should be original amount, not converted amount.
+
 OrderIns, setting price on an order line does not seem to update the price for the part, either when added to the list, or when marked as received.
 - Logic should be: set the price and currency when order line added, as long as the price is > 0
 

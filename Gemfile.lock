@@ -62,6 +62,13 @@ GEM
     ffi (1.9.18)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    gmail (0.6.0)
+      gmail_xoauth (>= 0.3.0)
+      mail (>= 2.2.1)
+    gmail_xoauth (0.4.2)
+      oauth (>= 0.3.6)
+    html_to_plain_text (1.0.5)
+      nokogiri (>= 1.4.0)
     i18n (0.8.1)
     jbuilder (2.6.3)
       activesupport (>= 3.0.0, < 5.2)
@@ -91,6 +98,7 @@ GEM
     nio4r (2.0.0)
     nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
+    oauth (0.5.4)
     paperclip (6.0.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -182,6 +190,8 @@ DEPENDENCIES
   byebug
   chart-js-rails
   coffee-rails (~> 4.2)
+  gmail
+  html_to_plain_text
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)

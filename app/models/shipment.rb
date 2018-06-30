@@ -77,6 +77,30 @@ class Shipment < ApplicationRecord
     end
     return [sales_total, profit_total]
   end
+    
+  def Shipment.create_from_forwarded_email(email_body)
+    my_addr = Socket.ip_address_list.detect(&:ipv4_private?).try(:ip_address) + ":3000"
+    matches = email_body.match(/<(.*)>/)
+    if (matches and matches.length > 0)
+        retailer_email = matches[1]
+        retailer_domain = retailer_email.match(/@(\S*)/)[1]
+        retailer = Retailer.with_domain(retailer_domain)
+        if (retailer)
+            shipment = Shipment.new
+            shipment.retailer = retailer
+            shipment.date_order_received = Date.current()
+            shipment.shipping_provider = retailer.pref_shipping_provider
+            shipment.shipping_provider_ac_no = retailer.pref_shipping_provider_ac_no 
+            shipment.order_email = email_body
+            shipment.save
+            return "ORDER CREATED for " + retailer.name + ". View Order " + "<a href='http://" + my_addr + "/shipments/" + shipment.id.to_s + "/edit'>here</a>"
+        else
+            return "NO ORDER CREATED: can't find a retailer with the domain: " + retailer_domain + "."
+        end
+    else
+        return "NO ORDER CREATED: email does not appear to be forwarded from a customer."
+    end
+  end
    
     
   # generate unique invoice number in format YYYYMMDDnn

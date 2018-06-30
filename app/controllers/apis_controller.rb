@@ -204,4 +204,34 @@ def nightly()
    Currency.set_usd_rate
 end
     
+def check_orders_email()
+    username = Rails.application.secrets.ORDERS_GMAIL_USERNAME
+    password = Rails.application.secrets.ORDERS_GMAIL_PASSWORD
+    Gmail.connect(username, password) do |gmail|
+        puts "************gmail*************"
+        if (gmail.logged_in?)
+            unread_emails = gmail.inbox.emails(:unread)
+            unread_emails.each do | email |
+                # body = HtmlToPlainText.plain_text(email.body.to_s)
+                reply_address = email.from[0].mailbox + "@" + email.from[0].host
+                body = email.body.parts[0].to_s
+                puts body
+                message = Shipment.create_from_forwarded_email(body)
+                
+                gmail.deliver do
+                    to reply_address
+                    subject "Automatic Response"
+                    html_part do
+                        content_type 'text/html; charset=UTF-8'
+                        body message
+                    end
+                end    
+                email.read!
+            end
+        end
+        puts "********************************"
+        
+    end
+end
+    
 end

@@ -44,12 +44,12 @@ function new_shipment() {
     <% 
       # Sort the shipments - ones with no invoice_number to the top
       ships = @shipments.all
-      ships.sort do | a, b | 
+      ships = ships.sort do | a, b | 
           result = 0
-          if (not a.invoice_number or not b.invoice_number)
+          if (a.invoice_number.blank? or b.invoice_number.blank?)
               result = -1
           else
-            result = (a.invoice_number <=> b.invoice_number)
+            result = -(a.invoice_number <=> b.invoice_number)
           end
           result
       end
@@ -62,7 +62,7 @@ function new_shipment() {
       %>
       <tr class="priority<%= shipment.priority %>">
         <td>
-            <% if (shipment.invoice_number and shipment.invoice_number.length > 0) %>
+            <% if (not shipment.invoice_number.blank?) %>
                 <%= shipment.invoice_number%>
             <%else%>
                 Not Invoiced

@@ -9,6 +9,14 @@ function assign_invoice_number() {
     $('#shipment_invoice_number').val("<%=Shipment.find_next_invoice_number()%>")
 }
 
+function show_order_email() {
+    $('#order_detail_field').show()
+} 
+    
+function hide_order_email() {
+    $('#order_detail_field').hide()
+} 
+                                      
 </script>
 
 
@@ -48,6 +56,13 @@ function assign_invoice_number() {
     <tr><td>Shipping Provider Acc Num</td><td> <%= f.text_field :shipping_provider_ac_no %> </td></tr>
     <tr><td>Discount</td><td> <%= f.text_field :discount %> </td></tr>
     <tr><td>Notes:</td><td colspan="2"><%= f.text_area :notes, size: '40x5' %></td></tr>
+    <tr><td>Order email: 
+        <a href="javascript:show_order_email()">show</a>/
+        <a href="javascript:hide_order_email()">hide</a>
+        </td>
+        <td colspan="2">
+        <pre id="order_detail_field"><%= @shipment.order_email %></pre>
+        </td></tr>
     <tr><td>Invoice Comment:</td><td colspan="2"><%= f.text_area :invoice_comment, size: '40x5' %></td></tr>
 </table>
 

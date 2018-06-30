@@ -68,6 +68,7 @@ Rails.application.routes.draw do
       get :import_all_orders
       get :check_stock_levels
       get :nightly
+      get :check_orders_email
     end
   end
     
