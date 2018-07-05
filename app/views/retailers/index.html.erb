@@ -29,6 +29,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Orders</th>
       <th>Contact name</th>
       <th>Contact email</th>
       <th colspan="3"></th>
@@ -45,6 +46,7 @@
     %>  
       <tr class="<%= status_class %>">
         <td><%= link_to retailer.name, edit_retailer_path(retailer), class: status_class%></td>
+        <td><%= retailer.shipments.length %></td>
         <td><%= retailer.contact_name %></td>
         <td><%= retailer.contact_email %></td>
         <td><%= link_to 'Destroy', retailer, method: :delete, data: { confirm: 'Are you sure?' } %></td>

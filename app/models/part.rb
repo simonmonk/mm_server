@@ -56,4 +56,39 @@ class Part < ApplicationRecord
         return total
     end
     
+    # list of all products used in whether directly or via an assembly
+    def products_used_in
+        products = []
+        self.product_parts.each do |pp|
+            if (pp.product)
+                products.append(pp.product)
+            end
+        end
+        assemblies = self.assembly_parts.collect {|ap| ap.assembly }
+        assemblies.each do | assembly |
+            assembly.product_assemblies.each do | pa |
+                if pa.product and pa.product.active
+                    products.append(pa.product)
+                end
+            end
+        end
+        return products
+    end
+    
+    def usage_summary()
+      prods = self.products_used_in()
+      num_items = prods.length
+      if (num_items == 0) 
+          return "nothing"
+      end
+      first_item = prods[0]
+      if (num_items == 1)
+         return first_item.name  
+      end
+      if (num_items == 2)
+          return first_item.name + " and one other product."
+      end
+      return first_item.name + " and " + (num_items - 1).to_s + " other products."
+  end
+    
 end
