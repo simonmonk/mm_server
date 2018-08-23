@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180629151910) do
+ActiveRecord::Schema.define(version: 20180716133044) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -251,6 +251,7 @@ ActiveRecord::Schema.define(version: 20180629151910) do
     t.decimal  "vat_rate",                precision: 10, scale: 3
     t.string   "invoice_comment"
     t.string   "order_email"
+    t.boolean  "apply_vat_to_shipping"
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

@@ -1,5 +1,6 @@
 class AssembliesController < ApplicationController
   before_action :set_assembly, only: [:show, :edit, :update, :destroy]
+    skip_before_filter :verify_authenticity_token 
 
   # GET /assemblies
   # GET /assemblies.json
@@ -39,6 +40,10 @@ class AssembliesController < ApplicationController
       t.description = "Removed parts from stock to make " + n.to_s + " new " + assembly.name
       t.save
       redirect_to :action => "edit", :id => assembly_id
+  end
+      
+    
+  def stock_report
   end
     
   def add_part

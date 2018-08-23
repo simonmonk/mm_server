@@ -122,7 +122,29 @@ function deduct(qty) {
         <% @product.product_retailers.each do |pr| %>
             <p><%=pr.retailer.name%> has <%=pr.lookup_stock %> in stock.</p>  
         <% end %>
-
+        <p>This product uses the following parts (including parts from assemblies).</p>
+        <table>
+            <tr><th>Part</th><th>Qty per product</th><th>Qty in stock</th></tr>
+            <%
+                part_hash = {}
+                @product.product_parts.each do |product_part|
+                    part_hash[product_part.part] = product_part.qty
+                end
+                @product.product_assemblies.each do |product_assembly|
+                    product_assembly.assembly.assembly_parts.each do |assembly_part|
+                        if (not part_hash[assembly_part.part])
+                            part_hash[assembly_part.part] = 0
+                        end
+                        part_hash[assembly_part.part] += (assembly_part.qty) * product_assembly.qty
+                    end
+                end
+                part_hash.each_pair do | part, qty | 
+                %>
+                <tr><td><%=part.name%></td><td><%=qty%></td><td><%=part.qty%></td></tr>
+                <%
+                end
+            %>
+        </table>
     </td>
 </tr></table>
 

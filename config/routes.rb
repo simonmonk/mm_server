@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       get :deduct_stock
       get :add_part
       get :delete_part
+      get :stock_report
     end
   end
   resources :retailers do

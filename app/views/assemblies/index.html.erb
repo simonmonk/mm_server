@@ -11,6 +11,10 @@
         $('#show_button').hide();
     }
     
+    function stock_report() {
+        window.open("/assemblies/stock_report.csv", '_blank')
+    }
+    
 </script>
 
 <p id="notice"><%= notice %></p>
@@ -19,6 +23,9 @@
 
 <%= link_to 'New Assembly', new_assembly_path %>
 <br/>
+<a href="javascript:stock_report()">Stock Report</a>
+<br/>
+
 
 <a id="show_button" href="javascript:showInactive()">Show Inactive Assemblies</a>
 <a id="hide_button" href="javascript:hideInactive()">Hide Inactive Assemblies</a>

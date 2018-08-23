@@ -1,0 +1,7 @@
+"Name", "Quantity", "Production Cost"
+<%
+    assemblies = Assembly.all.order(name: :asc)
+    assemblies.each do |ass| 
+%>
+"<%=ass.name%>",<%=ass.qty%>","<%=ass.production_cost.round(2)%>"
+<% end %>

@@ -12,8 +12,25 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 ---
 
 
+Stock Report
+-------------
+
+From welcome page add a button to generate stock report - also set a crontab to generate this on 31 Dec.
+
+3 sections - Parts, assemblies, products
+name, qty, cost (GBP), extended cost
+Total
+
+
+
 BUGS
 ----
+
+Invoives: Checkbox for VAT should be applied to shipping - Uncompleted and probably needs backing out.
+
+Just a reminder that it would be good if once invoices were issued the prices wouldn't automatically update!
+Also, I am confused because invoice 2018070101 shows on the shipment page as $945.50 and the invoice shows $1212.50.
+Thanks love :-)
 
 
 
