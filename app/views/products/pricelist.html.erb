@@ -10,10 +10,18 @@
 }
     
 h1 {
-    text-align: center;
+    text-align: left;
     margin-top: 2px;  
+    margin-left: 20px;
     margin-bottom: 2px;  
     font: 40px arial, bold, sans-serif;
+}   
+    
+.cat_heading {
+    text-align: left;
+    margin-top: 12px;  
+    margin-bottom: 6px;  
+    font: 32px arial, bold, sans-serif;
 }   
     
 h2 {
@@ -123,9 +131,16 @@ valid_until_date = params['date']
 <p></p>
 <p></p>
 
+<%
+categories = ProductCategory.all.order(priority: :asc)
+categories.each do | cat |
+%>
+
+<div class="cat_heading"><%=cat.name%></div>
+
 <table>
 <%
-Product.where(include_in_catalog: true).order(sku: :asc).each do | product |
+cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product |
 %>
 <tr>
 <td class="prod_table_td"><img src="<%=product.product_photo_uri%>" width="100"/></td>
@@ -155,9 +170,17 @@ SRP <%=number_to_currency(product.retail_price_usd, unit: currency_symbol, separ
 <tr><td>&nbsp;</td></tr> 
 
 <%    
+    end
+%>
+
+
+    
+</table>
+
+
+<%    
 end
 %>
-</table>
 
 <br/><br/><br/><br/>
 

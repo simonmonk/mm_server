@@ -4,6 +4,8 @@ class Product < ApplicationRecord
     has_many :product_retailers
     has_many :shipment_products
     
+    belongs_to :product_category
+    
     validates :name, presence: true
     validates :qty, numericality: { greater_than_or_equal_to: 0 }
     validates :stock_warning_level, numericality: { greater_than_or_equal_to: 0 }

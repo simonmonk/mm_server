@@ -143,11 +143,12 @@ class ProductsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
+      @categories = ProductCategory.all
       @product = Product.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url, :weight_g, :barcode, :barcode_value)
+      params.require(:product).permit(:name, :product_category_id, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url, :weight_g, :barcode, :barcode_value)
     end
 end

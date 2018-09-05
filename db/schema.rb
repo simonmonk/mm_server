@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180716133044) do
+ActiveRecord::Schema.define(version: 20180905084253) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -118,6 +118,13 @@ ActiveRecord::Schema.define(version: 20180716133044) do
     t.index ["product_id"], name: "index_product_assemblies_on_product_id"
   end
 
+  create_table "product_categories", force: :cascade do |t|
+    t.string   "name"
+    t.float    "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "product_parts", force: :cascade do |t|
     t.integer  "part_id"
     t.integer  "product_id"
@@ -170,6 +177,7 @@ ActiveRecord::Schema.define(version: 20180716133044) do
     t.integer  "barcode_file_size"
     t.datetime "barcode_updated_at"
     t.string   "barcode_value"
+    t.integer  "product_category_id"
   end
 
   create_table "retailers", force: :cascade do |t|
