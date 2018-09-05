@@ -15,6 +15,7 @@ class ProductsController < ApplicationController
 
   # GET /products/new
   def new
+    @categories = ProductCategory.all
     @product = Product.new
     @product.active = true
     @product.qty = 0
