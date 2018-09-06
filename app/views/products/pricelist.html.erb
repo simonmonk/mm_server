@@ -143,13 +143,19 @@ cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product 
         <tr>
         <td class="prod_table_th" width="450"><%=product.sku%>. <%=product.name%></td>
         <td class="prod_table_th_right" width="350">
-    <% if (currency_name == 'GBP') %>
-Wholesale price <%=number_to_currency(product.wholesale_price, unit: currency_symbol, separator: ".", delimiter: ",")%>.
-SRP <%=number_to_currency(product.retail_price, unit: currency_symbol, separator: ".", delimiter: ",")%>
-    <% else %>
-Wholesale price <%=number_to_currency(product.wholesale_price_usd, unit: currency_symbol, separator: ".", delimiter: ",")%>.
-SRP <%=number_to_currency(product.retail_price_usd, unit: currency_symbol, separator: ".", delimiter: ",")%>
-    <% end %>
+        <% 
+            if (product.wholesale_price == 0)
+                wholesale_price_string = "TBA"    
+            else
+                wholesale_price_string = number_to_currency(product.wholesale_price, unit: currency_symbol, separator: ".", delimiter: ",")
+            end
+            if (product.retail_price == 0)
+                retail_price_string = "TBA"    
+            else
+                retail_price_string = number_to_currency(product.retail_price, unit: currency_symbol, separator: ".", delimiter: ",")
+            end
+        %>
+            Wholesale price <%=wholesale_price_string%>. SRP <%=retail_price_string%>
         </td>
         </tr>
         <tr>
