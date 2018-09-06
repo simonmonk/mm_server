@@ -141,7 +141,13 @@ cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product 
 <td>
     <table>
         <tr>
-        <td class="prod_table_th" width="450"><%=product.sku%>. <%=product.name%></td>
+        <td class="prod_table_th" width="450">
+            <%
+            if (cat.priority != 1000)
+            %>
+                <%=product.sku%>. 
+            <% end %>
+            <%=product.name%></td>
         <td class="prod_table_th_right" width="350">
         <% 
             if (product.wholesale_price == 0)
