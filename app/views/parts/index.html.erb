@@ -39,6 +39,7 @@
       <th>Qty</th>
       <th>Purchase Cost £</th>   
       <th>Used In</th>
+      <th>Value of stock (£)</th>
       <th></th>
     </tr>
   </thead>
@@ -59,6 +60,7 @@
         <td><%= part.qty %></td>
         <td><%= part.purchase_cost.round(3) %></td>
         <td><%= part.usage_summary() %></td>
+        <td><%= (part.purchase_cost_with_shipping * part.qty).round() %></td>
         <td><%= link_to 'Delete', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

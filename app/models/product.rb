@@ -127,6 +127,17 @@ class Product < ApplicationRecord
         end
         return nil
     end
+    
+    def find_next_sku()
+        skus = []
+        Product.all.each do | p |
+            if (p.sku.start_with?("SKU"))
+                skus.append(p.sku[3..-1].to_i)
+            end
+        end
+        n = skus.sort.last+1
+        return "SKU" + n.to_s.rjust(4, "0")
+    end
 
     # Total value of all products in the system
     def Product.total_value

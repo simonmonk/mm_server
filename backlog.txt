@@ -5,6 +5,7 @@ Rails Cheat sheet
 $ rails server
 $ bin/rails generate migration AddStateToRetailerAddreses
 $ rails db:migrate
+$ rails g scaffold Post title:string body:string
 
 
 Shipment line items for Amazon.com should have extra columns for retail price dollars, extended price in dollars.
@@ -25,6 +26,8 @@ Total
 
 BUGS
 ----
+
+Parts no longer show what they are used in.
 
 Invoives: Checkbox for VAT should be applied to shipping - Uncompleted and probably needs backing out.
 

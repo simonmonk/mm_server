@@ -17,6 +17,7 @@ class ProductsController < ApplicationController
   def new
     @categories = ProductCategory.all
     @product = Product.new
+    @product.sku = @product.find_next_sku
     @product.active = true
     @product.qty = 0
     @product.stock_warning_level = 0
