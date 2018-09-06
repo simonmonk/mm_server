@@ -23,6 +23,7 @@ class ProductsController < ApplicationController
     @product.wholesale_price = 0
     @product.retail_price = 0  
     @product.weight_g = 0
+    @product.labour = 0
   end
 
   # GET /products/1/edit
@@ -125,7 +126,7 @@ class ProductsController < ApplicationController
         end
       end
       if @product.update(product_params)
-        render :edit, notice: 'Part was successfully updated.' 
+        render :edit, notice: 'Product was successfully updated.' 
       else
         render :edit
       end
@@ -150,6 +151,6 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :product_category_id, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :product_url, :weight_g, :barcode, :barcode_value)
+      params.require(:product).permit(:name, :product_category_id, :active, :qty, :sku, :labour, :stock_warning_level, :wholesale_price, :retail_price, :wholesale_price_usd, :retail_price_usd, :harmoized_tarrif_number, :country_of_origin, :short_description, :long_description, :product_photo_uri, :customs_description, :include_in_catalog, :release_date, :product_url, :weight_g, :barcode, :barcode_value)
     end
 end

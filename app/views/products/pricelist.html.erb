@@ -22,6 +22,7 @@ h1 {
     margin-top: 12px;  
     margin-bottom: 6px;  
     font: 32px arial, bold, sans-serif;
+    page-break-after: avoid;
 }   
     
 h2 {
@@ -33,9 +34,9 @@ h2 {
     
 h3 {
     text-align: left;
-    margin-top: 2px;  
-    margin-bottom: 2px;  
-    font: 20px arial, bold, sans-serif;
+    margin-top: 12px;  
+    margin-bottom: 6px;  
+    font: 32px arial, bold, sans-serif;
     page-break-before:always;
 }       
     
@@ -45,6 +46,13 @@ table {
     
 td {
     vertical-align: top;  
+}
+    
+th {
+    text-align: left;
+    vertical-align: top;  
+    font: bold;
+    padding-right: 20px;
 }
     
 tr {
@@ -108,26 +116,12 @@ valid_until_date = params['date']
     <p>&nbsp;</p>
 </td>    
     
-<td><h1>Catalog and Price List</h1><h1>Valid until <%= valid_until_date %></h1></td>
+<td><h1>Catalogue and Price List</h1><h1>Valid until <%= valid_until_date %></h1></td>
 </tr>
 </table>
 
-<p></p>
-<p>For sales, please contact: linda@monkmakes.com, tel: +44 1772 437879 or mobile: +44 7544 373 418.</p>
 
-<p>Please note that the minimum order value is 
-    <% if (currency_name == 'GBP') %>
-<%=number_to_currency(200, unit: currency_symbol, separator: ".", delimiter: ",")%>
-    <% else %>
-<%=number_to_currency(300, unit: currency_symbol, separator: ".", delimiter: ",")%>
-    <% end %>
-. For your first order only this may be open to negotiation.
-</p>
-
-
-<p>All prices exclude VAT and post and packaging and duty for international orders.</p>
-
-<p>All prices in <%=currency_name%> (<%=currency_symbol%>).</p>
+<p><b>All prices in <%=currency_name%> (<%=currency_symbol%>).</b></p>
 <p></p>
 <p></p>
 
@@ -159,7 +153,16 @@ SRP <%=number_to_currency(product.retail_price_usd, unit: currency_symbol, separ
         </td>
         </tr>
         <tr>
-            <td class="prod_table_td" colspan="2" width="800"><%=product.long_description.html_safe%></td>
+            <td class="prod_table_td" colspan="2" width="800">
+            <%
+                if (cat.priority == 1000 && product.release_date) # Coming Soon
+            %>
+                <b>Available from <%= product.release_date.strftime("%B %Y") %></b>. 
+            <%
+                end
+            %>
+            <%=product.long_description.html_safe%>
+            </td>
         </tr>
         <tr>
             <td class="prod_table_td" colspan="2" width="800">See also: <%=product.product_url%></td>
@@ -173,7 +176,6 @@ SRP <%=number_to_currency(product.retail_price_usd, unit: currency_symbol, separ
     end
 %>
 
-
     
 </table>
 
@@ -186,6 +188,8 @@ end
 
 
 <h3>Monk Makes Ltd – What you need to know to trade with us</h3>
+
+<p>For sales, please contact: linda@monkmakes.com</p>
 
 <p>Our prices do not include VAT or any other tax/duty that may apply.</p>
 
@@ -201,8 +205,18 @@ end
 
 <p>Please note that the minimum order value is now £200. For your first order only this may be open to negotiation.</p>
 
+<p>Linda Monk.</p>
 
-<p>Linda Monk.   Monk Makes Ltd</p>
+<br/><br/><br/><br/>
 
-<p style="text-align: center;">Monk Makes Ltd. 12 Cuerden Close, Bamber Bridge, Preston, PR5 6BX, UK</p>
-<p style="text-align: center;">Monk Makes Ltd is registered in the UK. Company Number 8797771. VAT number GB 222 6746 15</p>
+<div class="cat_heading">Company Information</div>
+
+<table>
+    <tr><th>Email:</th><td>linda@monkmakes.com</td></tr>
+    <tr><th>Website:</th><td>https://monkmakes.com</td></tr>
+    <tr><th>Twitter:</th><td>@monkmakes</td></tr>
+    <tr><th>Address:</th><td>Monk Makes Ltd.<br/>12 Cuerden Close<br/>Bamber Bridge<br/>Preston<br/>PR5 6BX<br/>United Kingdom</td></tr>
+    <tr><th>Company Number:</th><td>8797771 (registered in the UK)</td></tr>
+    <tr><th>VAT number:</th><td>GB 222 6746 15</td></tr>
+</table>
+

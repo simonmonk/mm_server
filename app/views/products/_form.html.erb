@@ -1,6 +1,8 @@
 <script>
  
-
+function set_date(field_name, date) {
+    $(field_name).val(date);
+}
     
 function add_part() {
     var list = document.getElementById("parts_list");
@@ -67,8 +69,8 @@ function deduct(qty) {
     <tr><td>Name</td><td> <%= f.text_field :name, :maxlength=>"50"%></td></tr>
         
     <tr><td>Product Category</td>
-    <td>
-      <%= f.collection_select(:product_category_id, @categories, :id, :name) %>
+    <td>  <!-- Something screwy here v- should be able to use @categories rather than ProductCategotry.all but its noit set by controller. -->
+      <%= f.collection_select(:product_category_id, ProductCategory.all, :id, :name) %>
     </td>
     </tr>
         
@@ -91,6 +93,7 @@ function deduct(qty) {
         
     <tr><th colspan="2">Catalog</th></tr>    
     <tr><td>Include in Catalog</td><td> <%= f.check_box :include_in_catalog %></td></tr>    
+    <tr><td>Release(d) date:</td><td><%= datepicker_input f, :release_date %></td><td><a href="javascript:set_date('#product_release_date', '<%=Date.current%>')">Today</a></td></tr>
     <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>    
     <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
     <tr valign="top"><td>Customs Description (invoice)</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
