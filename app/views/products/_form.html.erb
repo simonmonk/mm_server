@@ -97,7 +97,6 @@ function deduct(qty) {
     <tr><td>Release(d) date:</td><td><%= datepicker_input f, :release_date %></td><td><a href="javascript:set_date('#product_release_date', '<%=Date.current%>')">Today</a></td></tr>
     <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>    
     <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
-    <tr valign="top"><td>Customs Description (invoice)</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
  <!--   <tr><td>Short Description (Invoices)</td><td> <%= f.text_area :short_description, size: '50x3' %> </td></tr>  -->
     <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
     
@@ -115,6 +114,7 @@ function deduct(qty) {
     <tr><th colspan="2">Shipping</th></tr>    
     <tr><td>Country of Origin</td><td> <%= f.text_field :country_of_origin, size: '20' %> </td></tr>  
     <tr><td>Weight(grams)</td><td> <%= f.text_field :weight_g %> grams (<%=product.weight_g/1000%>kg, <%=product.weight_g*0.00220462.round(2)%>lbs)</td></tr>
+    <tr valign="top"><td>Customs Description (invoice)</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
     <tr><td>Harmonized Tarrif Number</td><td> <%= f.text_field :harmoized_tarrif_number, size: '40' %> </td></tr>    
     
     </table> 
