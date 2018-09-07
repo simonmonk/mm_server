@@ -1,6 +1,9 @@
 <style>
 
-
+@page {
+    margin-top: 2.5cm;
+    margin-bottom: 2.5cm;
+ }
     
 .smallprint {
     text-align: left;
@@ -22,7 +25,14 @@ h1 {
     margin-top: 12px;  
     margin-bottom: 6px;  
     font: 32px arial, bold, sans-serif;
-    page-break-after: avoid;
+    page-break-before:always;
+}   
+    
+.cat_heading_first {
+    text-align: left;
+    margin-top: 12px;  
+    margin-bottom: 6px;  
+    font: 32px arial, bold, sans-serif;
 }   
     
 h2 {
@@ -109,6 +119,7 @@ valid_until_date = params['date']
 %>
 
 
+
 <table width="100%">
 <tr>
 <td align="left" colspan="2">
@@ -127,10 +138,17 @@ valid_until_date = params['date']
 
 <%
 categories = ProductCategory.all.order(priority: :asc)
+i = 0
 categories.each do | cat |
-%>
-
-<div class="cat_heading"><%=cat.name%></div>
+    i += 1
+    if (i == 1)
+    %>
+        <div class="cat_heading_first"><%=cat.name%></div>
+    <%
+    else
+    %>
+        <div class="cat_heading"><%=cat.name%></div>
+    <% end %>
 
 <table>
 <%
