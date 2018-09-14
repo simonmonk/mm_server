@@ -37,8 +37,26 @@ Please consider this email to be a purchase order for the following items. All p
         ps_code = "(" + part_supplier.code + ")"
     end
 %>
-    <%=line.qty%> x <%=line.part.name%> <%= ps_code %> at <%= currency_symbol %> <%=number_to_currency(line.price, unit: currency_symbol, separator: ".", delimiter: ",")%> 
+    <%=line.qty%> x <%=line.part.name%> <%= ps_code %> at <%= currency_symbol %> <%=number_to_currency(line.price, unit: currency_symbol, separator: ".", delimiter: ",")%> each
 <% end %>
+
+Invoice Address:
+12 Cuerden Close
+Bamber Bridge
+Preston
+PR5 6BX
+United Kingdom
+Tel. +44 1772 437879
+Email. linda@monkmakes.com
+
+Delivery Address:
+12 Cuerden Close
+Bamber Bridge
+Preston
+PR5 6BX
+United Kingdom
+Tel. +44 1772 437879
+Email. linda@monkmakes.com
 
 Please quote reference <%= @order_in.order_number %> in any correspondance.
 

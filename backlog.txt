@@ -54,6 +54,8 @@ Shipments and Reatilers
 OrdersIn
 ---------
 
+Add delivery address to Purchase Order and make formal like the invoice. Both versions. Add MM as supplier and chose default delivery addresses for overide from the list of suppliers.
+
 Need more info about parts - which products/assemblies used in and qty per product/assembly. Info button that makes hovering window to show?
 
 
