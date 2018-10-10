@@ -1,0 +1,64 @@
+<style>
+
+.sortorder:after {
+  content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+}
+.sortorder.reverse:after {
+  content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
+}
+
+</style>
+    
+<h1>Angular version</h1>
+
+
+<p></p>
+
+<i class="priority10">In progress</i>
+<i class="priority12">Awaiting payment</i>
+<i class="priority11">Paid and complete</i>
+<i class="priority13">Overdue</i>
+
+<p></p>
+
+
+<div ng-app="myApp" ng-controller="shipmentsCtrl">
+
+    <h1>In Progress - make this tabs</h1>
+    
+    <h1 id="spinner" style="display:none;">Loading...</h1>
+    
+<table border="1">
+  <tr>
+    <th ng-click="sortBy('invoice_number')">Invoice Number
+      <span class="sortorder" ng-show="propertyName === 'invoice_number'" ng-class="{reverse: reverse}"></span></th>
+    <th ng-click="sortBy('retailer_name')">Retailer
+      <span class="sortorder" ng-show="propertyName === 'retailer_name'" ng-class="{reverse: reverse}"></span></th>
+    <th ng-click="sortBy('total_invoice_amount')">Invoice Amount
+      <span class="sortorder" ng-show="propertyName === 'total_invoice_amount'" ng-class="{reverse: reverse}"></span></th>
+  </tr>
+  <tr ng-repeat="x in shipments | orderBy:propertyName:reverse" class="priority{{x.priority}}">
+    <td>{{x.invoice_number}}</td>
+    <td>{{x.retailer_name}}</td>
+    <td>{{x.total_invoice_amount}}</td>
+  </tr>
+</table>
+
+</div>
+
+<script>
+$("#spinner").show();
+var app = angular.module('myApp', []);
+app.controller('shipmentsCtrl', function($scope, $http) {
+    $("#spinner").show();
+    $http.get("/shipments/get_shipments").then(
+        function(response) {
+            $scope.shipments = response.data;
+            $("#spinner").hide();
+    });
+    $scope.sortBy = function(propertyName) {
+        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+        $scope.propertyName = propertyName;
+    };
+});
+</script>

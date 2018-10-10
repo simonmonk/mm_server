@@ -1,14 +1,74 @@
 
 
+
 <style>
 
 p {
     text-align: left;
     margin-top: 1px;  
     margin-bottom: 1px;  
-    font: 14px courier, sans-serif;
+    font: 14px arial, sans-serif;
 }
     
+.smallprint {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 12px arial, sans-serif;
+}
+    
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+    
+h3 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 20px arial, bold, sans-serif;
+}   
+    
+table {
+    border-collapse: collapse;
+}
+    
+td {
+    vertical-align: top;  
+}
+    
+    
+.prod_table_th {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: bold 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td_money {
+    border: 1px solid black;   
+    text-align: right;
+    padding: 3;
+    font: 14px/1.5 Arial, sans-serif;
+}  
+    
+.prod_table_td_sig {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 30;
+    font: 14px/1.5 Arial, sans-serif;
+    color: lightgray;
+}  
+
 </style>
 
 <%
@@ -22,46 +82,123 @@ end
 %>
 
 
-<%= @order_in.supplier.contact_email %>
 
 
-<pre>
-Hi <%= @order_in.supplier.contact_name %>,
+<table width="100%">
+<tr>
+<td width="70%" align="left" colspan="2">
+    <img src="/images/logo.png" width="200"/>
+    <p>&nbsp;</p>
+</td>    
+    
+    
+<td width="30%">
+    <p>12 Cuerden Close</p>
+    <p>Bamber Bridge</p>
+    <p>Preston</p>
+    <p>PR5 6BX</p>
+    <p>United Kingdom</p>
+    <p>Tel +44 1772 437879</p>
+    <p>or +44 7951 907467</p>
+    <p>linda@monkmakes.com</p>
+</td>    
+</tr>
+</table>
 
-Please consider this email to be a purchase order for the following items. All prices in <%= currency_name %>.
+<p>&nbsp;</p>
 
-<% @order_in.order_in_lines.each do | line | 
+
+<h2>MonkMakes Ltd. Purchase Order</h2>
+
+<hr/>
+<p>&nbsp;</p>
+
+
+<table width="100%">
+<tr>
+<td width="30%" align="left">
+    <h3>Invoice To:</h3>
+</td>   
+    
+<td width="20%" align="left">
+    <h3>Deliver To:</h3>
+</td>  
+    
+<td width="10%"/>    
+    
+<td width="30%" align="left">
+    <h3>P.O. Details</h3>
+</td>  
+</tr>
+<tr>
+<td>
+    <p>MonkMakes Ltd.</p>
+    <p>12 Cuerden Close</p>
+    <p>Bamber Bridge</p>
+    <p>Preston</p>
+    <p>PR5 6BX</p>
+</td>
+
+<td class="prod_table_td">
+    <p>MonkMakes Ltd.</p>
+    <p>12 Cuerden Close</p>
+    <p>Bamber Bridge</p>
+    <p>Preston</p>
+    <p>PR5 6BX</p>
+</td>
+    
+<td/>    
+    
+<td width="30%" align="left">
+    <p>P.O. Number: <%=@order_in.order_number%></p>
+    <p>P.O. Date: <%=@order_in.placed_date%></p>
+    
+</td>      
+    
+</tr>
+</table>
+
+
+<h3>Items Required</h3>
+
+<table width="100%" class="prod_table">
+<tr>
+    <th class="prod_table_th">Qty</th>
+    <th class="prod_table_th">Description</th>
+    <th class="prod_table_th">Unit price (<%=currency_name%></th>
+    <th class="prod_table_th">Total Price (<%=currency_name%>)</th>
+</tr>
+
+    
+<%
+total = 0
+@order_in.order_in_lines.each do | line | 
     part_supplier = PartSupplier.where(part_id: line.part_id, supplier_id: @order_in.supplier_id)[0]
     ps_code = ""
     if (part_supplier.code and part_supplier.code.length > 0)
         ps_code = "(" + part_supplier.code + ")"
     end
+    line_total = line.price * line.qty
+    total += line_total
 %>
-    <%=line.qty%> x <%=line.part.name%> <%= ps_code %> at <%= currency_symbol %> <%=number_to_currency(line.price, unit: currency_symbol, separator: ".", delimiter: ",")%> each
+<tr>
+    <td><%=line.qty%></td>
+    <td><%=line.part.name%> <%= ps_code %></td>
+    <td><%=number_to_currency(line.price, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td></td>
+</tr>
 <% end %>
 
-Invoice Address:
-12 Cuerden Close
-Bamber Bridge
-Preston
-PR5 6BX
-United Kingdom
-Tel. +44 1772 437879
-Email. linda@monkmakes.com
-
-Delivery Address:
-12 Cuerden Close
-Bamber Bridge
-Preston
-PR5 6BX
-United Kingdom
-Tel. +44 1772 437879
-Email. linda@monkmakes.com
-
-Please quote reference <%= @order_in.order_number %> in any correspondance.
-
-Kind Regards,
-
-Linda.
     
-</pre>
+</table>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<p style="text-align: center;">Monk Makes Ltd is registered in the UK. Company Number 8797771. VAT number GB 222 6746 15</p>
+
+

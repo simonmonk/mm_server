@@ -15,3 +15,4 @@
 //= require_tree .
 //= require Chart
 //= require bootstrap-datepicker
+//= require angular

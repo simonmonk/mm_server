@@ -188,6 +188,21 @@ end
       format.json { head :no_content }
     end
   end
+    
+#
+    #
+    # JSON Interface
+    #
+#
+    
+def list
+    
+end
+    
+def get_shipments
+    render :json => Shipment.all, :methods => [:retailer_name, :total_invoice_amount, :priority]
+end
+    
 
   private
     # Use callbacks to share common setup or constraints between actions.

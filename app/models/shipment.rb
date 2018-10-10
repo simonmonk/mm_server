@@ -118,5 +118,11 @@ class Shipment < ApplicationRecord
         return candidate
     end
   end
+
+# for json interface
+
+def retailer_name
+  return self.retailer.name
+end
     
 end

@@ -60,3 +60,5 @@ gem 'bootstrap-datepicker-rails'
 gem "paperclip", "~> 6.0.0"
 gem "gmail"
 gem "html_to_plain_text"
+
+gem 'angularjs-rails'

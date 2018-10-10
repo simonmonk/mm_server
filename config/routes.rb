@@ -52,6 +52,8 @@ Rails.application.routes.draw do
       get :subtract_products
       get :delete_shipment_line
       get :invoice
+      get :list
+      get :get_shipments
     end
   end
   resources :order_ins do
