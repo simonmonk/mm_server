@@ -11,15 +11,15 @@ class Shipment < ApplicationRecord
     
   def priority()
     if (self.paid?)
-        return 11   # Paid and complete - black
+        return "Paid"   # Paid and complete - black
     end
     if (not date_invoice_sent)
-        return 10   # In progress - blue
+        return "InProgress"   # In progress - blue
     end
     if (date_payment_reminder and Date.current < date_payment_reminder)
-        return 12    # Awaiting payment - green
+        return "AwaitingPayment"    # Awaiting payment - green
     else
-        return 13    # Overdue - red
+        return "Overdue"    # Overdue - red
     end
   end
 

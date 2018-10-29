@@ -14,22 +14,22 @@
 
 <p></p>
 
-<i class="priority10">In progress</i>
-<i class="priority12">Awaiting payment</i>
-<i class="priority11">Paid and complete</i>
-<i class="priority13">Overdue</i>
+<i class="priorityInProgress">In progress</i>
+<i class="priorityAwaitingPayment">Awaiting payment</i>
+<i class="priorityPaid">Paid and complete</i>
+<i class="priorityOverdue">Overdue</i>
 
 <p></p>
 
 
 <div ng-app="myApp" ng-controller="shipmentsCtrl">
-
-    <h1>In Progress - make this tabs</h1>
     
     <h1 id="spinner" style="display:none;">Loading...</h1>
     
 <table border="1">
   <tr>
+    <th ng-click="sortBy('priority')">Status
+      <span class="sortorder" ng-show="propertyName === 'priority'" ng-class="{reverse: reverse}"></span></th>
     <th ng-click="sortBy('invoice_number')">Invoice Number
       <span class="sortorder" ng-show="propertyName === 'invoice_number'" ng-class="{reverse: reverse}"></span></th>
     <th ng-click="sortBy('retailer_name')">Retailer
@@ -38,9 +38,13 @@
       <span class="sortorder" ng-show="propertyName === 'total_invoice_amount'" ng-class="{reverse: reverse}"></span></th>
   </tr>
   <tr ng-repeat="x in shipments | orderBy:propertyName:reverse" class="priority{{x.priority}}">
+    <td>{{x.priority}}</td>
     <td>{{x.invoice_number}}</td>
     <td>{{x.retailer_name}}</td>
     <td>{{x.total_invoice_amount}}</td>
+    <td><%= link_to "Edit", edit_shipment_path(shipment) %></td>
+    <td><a href="/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>">Invoice</a></td>
+    <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 </table>
 

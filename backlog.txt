@@ -12,6 +12,13 @@ Shipment line items for Amazon.com should have extra columns for retail price do
 This is done, but the total needs to be in dollars too. Also change the Copy Customs Dec field so that it prepends the name.
 ---
 
+Javascriptifying
+----------------
+
+Working on Shipments
+Tabs for diffent statuses
+New shipment uses old form, but try angularing the form
+
 
 Stock Report
 -------------
@@ -22,6 +29,10 @@ From welcome page add a button to generate stock report - also set a crontab to 
 name, qty, cost (GBP), extended cost
 Total
 
+
+Nice stuff
+---------
+Parts and view of parts in order-in to show previous prices and who from.
 
 
 BUGS

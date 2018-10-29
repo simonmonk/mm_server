@@ -147,7 +147,11 @@ end
 </tr>
 <tr>
 <td>
-    <p><%=@shipment.retailer.name%></p>
+    <% if (@shipment.retailer.name == 'amazon.com') %>
+        <p>MonkMakes Ltd</p>
+    <% else %>
+        <p><%=@shipment.retailer.name%></p>
+    <% end %>
     <p><%=@shipment.retailer.billing_ad_line1%></p>
     <p><%=@shipment.retailer.billing_ad_line2%></p>
     <p><%=@shipment.retailer.billing_ad_city%></p>
@@ -264,7 +268,7 @@ end
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td colspan="3"><%=@shipment.invoice_comment%></td><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td colspan="3"><b><%=@shipment.invoice_comment%></b></td><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
     
 <% 

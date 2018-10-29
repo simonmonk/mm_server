@@ -84,19 +84,19 @@ background: #ff8080;
     color: grey;
 }
 
-.priority10 {
+.priorityInProgress {
     color: blue;
 }
 
-.priority11 {
+.priorityPaid {
     color: black;
 }
 
-.priority12 {
+.priorityAwaitingPayment {
     color: green;
 }
 
-.priority13 {
+.priorityOverdue {
     color: red;
 }
 

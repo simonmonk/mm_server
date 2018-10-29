@@ -137,6 +137,7 @@ end
     <p>Bamber Bridge</p>
     <p>Preston</p>
     <p>PR5 6BX</p>
+    <p>United Kingdom</p>
 </td>
 
 <td class="prod_table_td">
@@ -145,6 +146,7 @@ end
     <p>Bamber Bridge</p>
     <p>Preston</p>
     <p>PR5 6BX</p>
+    <p>United Kingdom</p>
 </td>
     
 <td/>    
@@ -182,14 +184,16 @@ total = 0
     total += line_total
 %>
 <tr>
-    <td><%=line.qty%></td>
-    <td><%=line.part.name%> <%= ps_code %></td>
-    <td><%=number_to_currency(line.price, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
-    <td><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
-    <td></td>
+    <td class="prod_table_td"><%=line.qty%></td>
+    <td class="prod_table_td"><%=line.part.name%> <%= ps_code %></td>
+    <td class="prod_table_td"><%=number_to_currency(line.price, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="prod_table_td"><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
 <% end %>
 
+<tr><td>&nbsp;</td></tr>    
+
+<tr><th>Total</th><td class="prod_table_td"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></td></tr>    
     
 </table>
 
