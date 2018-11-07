@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'shipments/invoice/*other', to: 'shipments#invoice'
   get 'shipments/quote/*other', to: 'shipments#quote'
   get 'products/pricelist', to: 'products#pricelist'
+  get 'products/productlist', to: 'products#productlist' # for the MM website so no prices
     
   resources :parts do
     collection do

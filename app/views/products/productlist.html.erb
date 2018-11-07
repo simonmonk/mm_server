@@ -1,0 +1,33 @@
+
+Monk Makes is known for its useful electronic kits and modules.
+
+We mostly sell out products on Amazon and through our network of resellers, but if you want to buy in bulk, or are interested in becoming a reseller then please email <strong>linda@monkmakes.com</strong>.
+
+Here is a list of our products, click on a product to visit the product page that will provide more information about the product including: where to buy it, FAQs, documentation, tutorials and community discussions.
+
+<%
+categories = ProductCategory.all.order(priority: :asc)
+i = 0
+categories.each do | cat |
+%>
+    <h2><%=cat.name%></h2>
+<%
+cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product |
+%>
+<strong><%=product.name%></strong>
+<img src="<%=product.product_photo_uri%>" class="wp-image-1739 alignright" width="100"/>
+<%
+    if (cat.priority == 1000 && product.release_date) # Coming Soon
+%>
+    <b>Available from <%= product.release_date.strftime("%B %Y") %></b>. 
+<%
+    end
+%>
+<%=product.long_description.html_safe%>
+ <a href='<%=product.product_url%>'>Product Information</a>
+<hr/>
+
+<%    
+    end
+end
+%>

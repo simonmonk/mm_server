@@ -37,6 +37,10 @@ class ProductsController < ApplicationController
   def pricelist
       render :layout => false
   end
+
+  def productlist
+    render :layout => false
+  end
     
   def sales_by_product
   end
