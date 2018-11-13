@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180906085607) do
+ActiveRecord::Schema.define(version: 20181113132130) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(version: 20180906085607) do
     t.string   "barcode_value"
     t.integer  "product_category_id"
     t.date     "release_date"
+    t.string   "high_res_image_share"
   end
 
   create_table "retailers", force: :cascade do |t|
