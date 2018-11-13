@@ -210,25 +210,34 @@ end
 
 <br/><br/><br/><br/>
 
+<h3>High Resolution Images</h3>
+<p>If you are listing our products, then please take anything you need from our website, 
+including the web-sized images. If you require higher resolution images then please use the following links. 
+Files with 'web' in the name are low resolution images the others are high resolution.</p>
+<p>Please note that some of the images show products in use and therefore shopw things that are 
+not actually included as part of the product. Images with the word 'main' in their name 
+show the product and only the product.</p>
 
+<table border="1">
+<tr><th>SKU</th><th>Name</th><th>Link for high res images</th></tr>
+<%
+Product.where(include_in_catalog: true).order(sku: :asc).each do | product |
+%>
+<tr><td><%=product.sku%></td><td><%=product.name%></td><td><%=product.high_res_image_share%></td></tr>
+<% end %>
+</table>
+
+<br/><br/><br/><br/>
 <h3>Monk Makes Ltd – What you need to know to trade with us</h3>
 
 <p>For sales, please contact: linda@monkmakes.com</p>
-
 <p>Our prices do not include VAT or any other tax/duty that may apply.</p>
-
 <p>If you are within the EU (but outside the UK) we will zero rate your invoice only if you provide us with your VAT number.</p> 
-
 <p>If you are outside of the EU we will not charge VAT but you are responsible for any custom charges (tax or duty or any other cost applied by customs) that may be applied.</p>
-
 <p>Prices do not include shipping. We are happy to quote for shipping or to use your own courier account. Once we have passed the goods onto the courier they are no longer our responsibility and you are responsible for any loss or damage. Please advise if you wish us to include insurance in the shipping cost.</p>
-
 <p>For your first order payment must be made before shipping. Subsequent orders are to be paid within 7 days of shipping. Please note that we accept payment by either bank transfer or PayPal - any deductions made by either payment method are your responsibility.</p>
-
 <p>In the unlikely event that any of our goods are faulty we will either refund or replace.</p>
-
 <p>Please note that the minimum order value is now £200. For your first order only this may be open to negotiation.</p>
-
 <p>Linda Monk.</p>
 
 <br/><br/><br/><br/>
