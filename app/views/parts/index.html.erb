@@ -62,6 +62,17 @@
         <td><%= part.usage_summary() %></td>
         <td><%= (part.purchase_cost_with_shipping * part.qty).round() %></td>
         <td><%= link_to 'Delete', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%
+        if (part.part_suppliers and part.part_suppliers.length > 0)
+          part.part_suppliers.each do | ps |
+            if (ps.supplier.product_url_base and ps.supplier.product_url_base.length > 0 and ps.code)
+          %>
+        <td><a href="<%=ps.supplier.product_url_base + ps.code%>"><%=ps.supplier.name%> (<%=ps.code%>)</a></td>
+          <%
+            end
+          end
+        end
+        %>
       </tr>
     <% end %>
   </tbody>

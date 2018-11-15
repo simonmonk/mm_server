@@ -13,12 +13,13 @@
   <% end %>
 
 <table>
-    <tr><td>Name</td><td><%= f.text_field :name %></td></tr>    
+    <tr><td>Name</td><td><%= f.text_field :name, size: "20" %></td></tr>    
     <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
-    <tr><td>Contact name</td><td><%= f.text_field :contact_name %></td></tr>    
-    <tr><td>Contact email</td><td><%= f.text_field :contact_email %></td></tr>  
-    <tr><td><a href="<%=@supplier.website%>">Website</a></td><td><%= f.text_field :website %></td></tr>   
-    <tr><td>Login Details (sername/password)</td><td><%= f.text_field :login_details %></td></tr>   
+    <tr><td>Contact name</td><td><%= f.text_field :contact_name, size: "20" %></td></tr>    
+    <tr><td>Contact email</td><td><%= f.text_field :contact_email, size:"20" %></td></tr>  
+    <tr><td><a href="<%=@supplier.website%>">Website</a></td><td><%= f.text_field :website, size:"30" %></td></tr>   
+    <tr><td>Product Base URL (ignore)</td><td><%= f.text_field :product_url_base, size:"30" %></td></tr>  
+    <tr><td>Login Details (sername/password)</td><td><%= f.text_field :login_details, size:"30" %></td></tr>   
     <tr><td>Payment details (Paypal, Bank transfer etc)</td><td><%= f.text_field :payment_details %></td></tr>   
     <tr><td>Notes</td><td><%= f.text_area :notes, cols: "50", rows: "5"%></td></tr>    
 </table>

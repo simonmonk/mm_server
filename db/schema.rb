@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181113132130) do
+ActiveRecord::Schema.define(version: 20181115164058) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -271,14 +271,15 @@ ActiveRecord::Schema.define(version: 20181113132130) do
     t.string   "contact_email"
     t.text     "notes"
     t.string   "text"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.string   "regex_qty"
     t.string   "regex_oos"
     t.string   "website"
     t.string   "login_details"
     t.string   "payment_details"
     t.boolean  "active"
+    t.string   "product_url_base"
   end
 
   create_table "transactions", force: :cascade do |t|
