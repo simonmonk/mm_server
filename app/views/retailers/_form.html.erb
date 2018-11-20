@@ -99,14 +99,20 @@ function copy_address() {
     </tr>
   </thead>
   <tbody>
-    <% @retailer.product_retailers.each do |product_retailer| %>
+    <% @retailer.product_retailers.each do |product_retailer| 
+      if (product_retailer.product)
+    %>
       <tr>
         <td><%= product_retailer.product.name %></td>
         <td><%= product_retailer.lookup_stock %></td>  
         <td><%= link_to "Setup", edit_product_retailer_path(product_retailer) %></td>
         <td><%= button_to 'Remove', product_retailer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-    <% end %>
+      <% 
+        else
+        product_retailer.delete
+        end
+      end %>
   </tbody>
 </table>
 
