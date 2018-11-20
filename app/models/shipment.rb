@@ -33,8 +33,12 @@ class Shipment < ApplicationRecord
     sales_total = 0
     lines = self.shipment_products
     lines.each do | line |
-      sale = line.qty * line.product.wholesale_price
-      sales_total += sale
+      if (line.product)
+        sale = line.qty * line.product.wholesale_price
+        sales_total += sale
+      else
+        line.delete # delete orphaned lines
+      end
     end
     if (shipping_cost)
         sales_total += shipping_cost
