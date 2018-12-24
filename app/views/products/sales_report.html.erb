@@ -1,0 +1,58 @@
+<%
+    days = params['days'].to_i
+    from_date = Date.current - days.days
+    to_date = Date.current
+%>
+<h1>Sales Report by Product from <%=from_date%> to <%=to_date%></h1>
+
+<table>
+<tr>
+    <th>Product Name</th>
+    <th>Units Sold</th>
+    <th>Sales Value</th>
+    <th>Total Profit</th>
+</tr>
+<%
+    products = Product.all.order(sku: :asc)
+    total_units = 0
+    total_value = 0
+    total_profit = 0
+    products.each do |product| 
+        if (product.active == true)
+            profit = 0
+            if (product.wholesale_price and product.wholesale_price > 0)
+                profit = product.wholesale_price - product.production_cost
+            end
+            profit_pc = (profit * 100 / product.production_cost).to_i
+            units_and_value_shipped = product.units_and_value_shipped(from_date, to_date)
+            units = units_and_value_shipped[0]
+            total_units += units
+            value = units_and_value_shipped[1].to_i
+            total_value += value
+            profit_total = units_and_value_shipped[2].to_i
+            total_profit += profit_total
+        end
+%>
+<tr>
+    <td><%=product.name%></td>
+    <td><%=units%></td>
+    <td><%=number_to_currency(value, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td><%=number_to_currency(profit_total, unit: '£', separator: ".", delimiter: ",")%></td>
+</tr>
+<% end %>
+
+<tr>
+    <th>Product Name</th>
+    <th>Units Sold</th>
+    <th>Sales Value</th>
+    <th>Total Profit</th>
+</tr>
+
+<tr>
+    <th>TOTALS</th>
+    <th><%=total_units%></th>
+    <th><%=number_to_currency(total_value, unit: '£', separator: ".", delimiter: ",")%></th>
+    <th><%=number_to_currency(total_profit, unit: '£', separator: ".", delimiter: ",")%></th>
+</tr>
+
+</table>

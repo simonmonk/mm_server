@@ -45,6 +45,9 @@ class ProductsController < ApplicationController
   def sales_by_product
   end
 
+  def sales_report
+  end
+
   # deduct quatities of all the parts and assemblies used for qty of this product.
   def deduct_stock
       product_id = params['product_id']
