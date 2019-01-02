@@ -42,9 +42,9 @@
     <td>{{x.invoice_number}}</td>
     <td>{{x.retailer_name}}</td>
     <td>{{x.total_invoice_amount}}</td>
-    <td><%= link_to "Edit", edit_shipment_path(shipment) %></td>
-    <td><a href="/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>">Invoice</a></td>
-    <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><a href="/shipments/{{x.id}}/edit">Edit</a></td>
+    <td><a href="/shipments/invoice/?id={{x.id}}">Invoice</a></td>
+    <td>Destroy</td>
   </tr>
 </table>
 
