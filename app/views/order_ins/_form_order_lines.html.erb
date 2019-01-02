@@ -4,6 +4,10 @@ function add_part() {
     var part_id = list.options[list.selectedIndex].value;
     var qty = document.getElementById("part_qty_field").value
     var price = document.getElementById("part_price_field").value
+    if (price <= 0) {
+        alert("You must enter the correct price. This will set the new cost of the product")
+        return
+    }
     var order_in_id = "<%= order_in.id %>"
     
     document.location = "/order_ins/add_part?part_id=" + part_id 
