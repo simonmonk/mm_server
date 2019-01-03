@@ -175,7 +175,7 @@ cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product 
         <td class="prod_table_th_right" width="350">
         
         <% 
-            if (cat.priority != 1000)
+            if (cat.priority != 1000 && product.wholesale_price > 0 && product.retail_price > 0)
                 wholesale_price_string = number_to_currency(product.wholesale_price, unit: currency_symbol, separator: ".", delimiter: ",")
                 retail_price_string = number_to_currency(product.retail_price, unit: currency_symbol, separator: ".", delimiter: ",")
         %>
@@ -229,23 +229,6 @@ end
 
 <br/><br/><br/><br/>
 
-<h3>High Resolution Images</h3>
-<p>If you are listing our products, then please take anything you need from our website, 
-including the web-sized images. If you require higher resolution images then please use the following links. 
-Files with 'web' in the name are low resolution images the others are high resolution.</p>
-<p>Please note that some of the images show products in use and therefore shopw things that are 
-not actually included as part of the product. Images with the word 'main' in their name 
-show the product and only the product.</p>
-
-<table border="1">
-<tr><th>SKU</th><th>Name</th><th>Link for high res images</th></tr>
-<%
-Product.where(include_in_catalog: true).order(sku: :asc).each do | product |
-    if (product.include_in_catalog)
-%>
-<tr><td><%=product.sku%></td><td><%=product.name%></td><td><%=product.high_res_image_share%></td></tr>
-<% end end %>
-</table>
 
 <br/><br/><br/><br/>
 <h3>Monk Makes Ltd – What you need to know to trade with us</h3>

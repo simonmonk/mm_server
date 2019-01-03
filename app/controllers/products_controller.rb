@@ -38,6 +38,10 @@ class ProductsController < ApplicationController
       render :layout => false
   end
 
+  def image_links
+    render :layout => false
+  end
+
   def productlist
     render :layout => false
   end
@@ -47,6 +51,7 @@ class ProductsController < ApplicationController
 
   def sales_report
   end
+
 
   # deduct quatities of all the parts and assemblies used for qty of this product.
   def deduct_stock

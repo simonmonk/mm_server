@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get :delete_assembly
       get :sales_by_product
       get :sales_report
+      get :image_links
     end
   end
   resources :assemblies do

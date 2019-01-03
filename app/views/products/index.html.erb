@@ -14,11 +14,17 @@ function create_sales_report() {
     window.open("/products/sales_report?days=" + $('#days_field').val(), '_blank')
 }
 
+function create_image_list() {
+    window.open("/products/image_links", '_blank')
+}
+
 </script>
 
 <h1>Products</h1>
 
 <%= button_to 'New Product', new_product_path, :method => "get" %>
+
+<input type="button" value="Export Hi Res Image Link List" onClick="javascript:create_image_list()"/>
 
 <p></p>
 
