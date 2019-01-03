@@ -100,7 +100,9 @@ tr {
     page-break-inside: avoid; 
 }  
     
-    
+.new_product {
+    padding: 0;
+}    
 
 </style>
 
@@ -159,11 +161,17 @@ cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product 
         <tr>
         <td class="prod_table_th" width="450">
             <%
+            if (product.new_in_catalog == true)
+            %>
+                <img class="new_product" src="/images/new_product_icon.jpg"/>
+            <% end %>
+            <%
             if (cat.priority != 1000)
             %>
                 <%=product.sku%>. 
             <% end %>
-            <%=product.name%></td>
+            <%=product.name%>
+        </td>
         <td class="prod_table_th_right" width="350">
         
         <% 
