@@ -39,18 +39,23 @@ Previous <input type="text" value="90" id="days_field"/> days
 
 <table>
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>SKU</th>    
-      <th>Qty in stock</th>
-      <th>Barcode</th>
-      <th colspan="3"></th>
-    </tr>
   </thead>
 
   <tbody>
-    <% products = Product.all.order(name: :asc)
-    products.each do |product| 
+    <% 
+    categories = ProductCategory.all.order(priority: :asc)
+    categories.each do | cat |
+    %>
+        <tr><td colspan="2"><h2><%= cat.name %></h2></td></tr>
+        <tr>
+            <th>Name</th>
+            <th>SKU</th>    
+            <th>Qty in stock</th>
+            <th>Barcode</th>
+            <th colspan="3"></th>
+        </tr>
+    <%
+    cat.products.all.order(sku: :asc).each do | product |
         profit = 0
         if (product.wholesale_price and product.wholesale_price > 0)
             profit = (product.profit * 100 / product.wholesale_price).to_i
@@ -70,7 +75,7 @@ Previous <input type="text" value="90" id="days_field"/> days
         <td><%= product.barcode_value%></td>
         <td><%= link_to 'Delete', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-    <% end %>
+    <% end end %>
   </tbody>
 </table>
 

@@ -180,7 +180,9 @@ cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product 
                 retail_price_string = number_to_currency(product.retail_price, unit: currency_symbol, separator: ".", delimiter: ",")
         %>
             Wholesale price <%=wholesale_price_string%>. SRP <%=retail_price_string%>
-            
+            <% if (product.new_price_in_catalog == true) %>
+                [PRICE CHANGE]
+            <% end %>
         <% end %>
         </td>
         </tr>
@@ -230,9 +232,10 @@ show the product and only the product.</p>
 <tr><th>SKU</th><th>Name</th><th>Link for high res images</th></tr>
 <%
 Product.where(include_in_catalog: true).order(sku: :asc).each do | product |
+    if (product.include_in_catalog)
 %>
 <tr><td><%=product.sku%></td><td><%=product.name%></td><td><%=product.high_res_image_share%></td></tr>
-<% end %>
+<% end end %>
 </table>
 
 <br/><br/><br/><br/>

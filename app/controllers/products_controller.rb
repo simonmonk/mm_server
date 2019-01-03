@@ -165,6 +165,7 @@ class ProductsController < ApplicationController
         :harmoized_tarrif_number, :country_of_origin, :short_description, 
         :long_description, :product_photo_uri, :customs_description, 
         :include_in_catalog, :release_date, :product_url, :weight_g, 
-        :barcode, :barcode_value, :high_res_image_share, :new_in_catalog)
+        :barcode, :barcode_value, :high_res_image_share, :new_in_catalog,
+        :new_price_in_catalog)
     end
 end
