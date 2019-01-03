@@ -67,9 +67,6 @@ Previous <input type="text" value="90" id="days_field"/> days
             profit = (product.profit * 100 / product.wholesale_price).to_i
         end
         style_class = ""
-        if (product.qty <= product.stock_warning_level)
-            style_class = "warning"
-        end
         if (not product.active)
             style_class = "inactive"
         end
