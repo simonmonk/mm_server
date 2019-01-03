@@ -196,6 +196,15 @@ cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product 
                 end
             %>
             <%=product.long_description.html_safe%>
+            <%
+            if (product.end_of_line_in_catalog == true)
+            %>
+                <p>
+                <i>End of Line. 
+                This product is being discontinued and is only available 
+                while stocks last.</i>
+                </p>
+            <%end%>
             </td>
         </tr>
         <tr>

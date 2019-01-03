@@ -97,6 +97,7 @@ function deduct(qty) {
     <tr><td>Include in Catalog</td><td> <%= f.check_box :include_in_catalog %></td></tr>    
     <tr><td>New in Catalog</td><td> <%= f.check_box :new_in_catalog %></td></tr>    
     <tr><td>New price in Catalog</td><td> <%= f.check_box :new_price_in_catalog %></td></tr>    
+    <tr><td>End of Line in Catalog</td><td> <%= f.check_box :end_of_line_in_catalog %></td></tr>        
     <tr><td>Release(d) date:</td><td><%= datepicker_input f, :release_date %></td><td><a href="javascript:set_date('#product_release_date', '<%=Date.current%>')">Today</a></td></tr>
     <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>   
     <tr><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '50' %> </td></tr>  

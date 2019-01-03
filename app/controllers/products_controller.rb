@@ -166,6 +166,6 @@ class ProductsController < ApplicationController
         :long_description, :product_photo_uri, :customs_description, 
         :include_in_catalog, :release_date, :product_url, :weight_g, 
         :barcode, :barcode_value, :high_res_image_share, :new_in_catalog,
-        :new_price_in_catalog)
+        :end_of_line_in_catalog)
     end
 end
