@@ -152,7 +152,7 @@ categories.each do | cat |
 
 <table>
 <%
-cat.products.where(include_in_catalog: true).order(new_in_catalog: :desc, sku: :asc).each do | product |
+cat.products.where(include_in_catalog: true).order(new_in_catalog: :asc, sku: :asc).each do | product |
 %>
 <tr>
 <td class="prod_table_td"><img src="<%=product.product_photo_uri%>" width="100"/></td>
