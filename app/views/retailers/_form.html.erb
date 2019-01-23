@@ -42,6 +42,7 @@ function copy_address() {
     <tr><td>General contact name</td><td><%= f.text_field :contact_name, size: '40' %></td></tr>    
     <tr><td>Contact email</td><td><%= f.text_field :contact_email, size: '40' %></td></tr>    
     <tr><td>Pref Currency (GBP/USD/EUR)</td><td><%= f.text_field :pref_currency %></td></tr> 
+    <tr><td>Customer pays RETAIL price</td><td><%= f.check_box :is_retail %></td></tr> 
     <tr><td>Vatable</td><td><%= f.check_box :vatable %></td></tr> 
     <tr><td>VAT Number</td><td><%= f.text_field :vat_number %></td></tr>
     <tr><td>Show Their SKU in invoice</td><td><%= f.check_box :show_foreign_sku %></td></tr>

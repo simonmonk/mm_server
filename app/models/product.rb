@@ -74,10 +74,6 @@ class Product < ApplicationRecord
         return self.production_cost * 1.4
     end
     
-    # Convert currency from todays exchange rate from GPB result
-    def suggested_wholesale_usd
-        return self.suggested_wholesale * Currency.dollars_per_pound
-    end
 
     # suggested retail 40% gross margin for retailer on wholesale price
     def suggested_retail
@@ -87,10 +83,6 @@ class Product < ApplicationRecord
         return self.wholesale_price / (1 - 0.4) # 40% margin
     end
     
-    # Convert currency from todays exchange rate from GPB result
-    def suggested_retail_usd
-        return self.suggested_retail * Currency.dollars_per_pound
-    end
 
     # calculate the number of products that can be made constrained by
     # the numbers of parts and assemplies available

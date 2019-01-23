@@ -109,7 +109,13 @@ total = 0
 weight = 0
 weight_message = ""
 shipment.shipment_products.each do | sp |
-    line_total = sp.wholesale_in_currency * sp.qty
+    # Lazy fix ShipmentProducts that don't have a price (before the price was copied
+    # by a one-off copy and save.
+    if (not sp.price)
+        sp.price = sp.invoice_price
+        sp.save
+    end
+    line_total = sp.price * sp.qty
     total += line_total
     if (not sp.product.weight_g)
         sp.product.weight_g = 0
@@ -125,7 +131,7 @@ shipment.shipment_products.each do | sp |
             <button onclick="copyToClipboard('#wt_<%=sp.id%>')">Copy</button></td>
         <td><span id="htn_<%=sp.id%>"><%= sp.product.harmoized_tarrif_number %></span>
             <button onclick="copyToClipboard('#htn_<%=sp.id%>')">Copy</button></td>
-        <td><%=number_to_currency(sp.wholesale_in_currency, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+        <td><%=number_to_currency(sp.price, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
         <td><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
         <td><span style='display:none' id="desc_<%=sp.id%>"><%=sp.product.customs_description%></span>
         <button onclick="copyToClipboard('#desc_<%=sp.id%>')">Copy Customs Desc</button></td>

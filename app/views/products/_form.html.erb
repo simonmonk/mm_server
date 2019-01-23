@@ -103,7 +103,6 @@ function deduct(qty) {
     <tr><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '50' %> </td></tr>  
     <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
     
- <!--   <tr><td>Short Description (Invoices)</td><td> <%= f.text_area :short_description, size: '50x3' %> </td></tr>  -->
     <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
     
     <tr><th colspan="2">Pricing</th></tr>
@@ -112,10 +111,6 @@ function deduct(qty) {
     <tr><td>Profit on GBP sale</td><td>£<%= (@product.profit).round(2) %></td></tr>
     <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td></tr>    
         
-    <tr><td colspan="2">Using exchange rate of <%= Currency.dollars_per_pound %> USD/GBP updated <%= time_ago_in_words( Currency.dollar_rate_set_date)%> ago</td></tr>
-    <tr><td>Wholesale price USD</td><td> <%= f.text_field :wholesale_price_usd %> (suggested $<%= @product.suggested_wholesale_usd.round(2) %>)</td></tr>
-    <tr><td>Profit on USD sale</td><td>£<%= (@product.wholesale_price_usd/Currency.dollars_per_pound - @product.production_cost).round(2) %></td></tr>
-    <tr><td>Retail price USD</td><td> <%= f.text_field :retail_price_usd %> (suggested $<%= @product.suggested_retail_usd.round(2) %>)</td></tr>  
         
     <tr><th colspan="2">Shipping</th></tr>    
     <tr><td>Country of Origin</td><td> <%= f.text_field :country_of_origin, size: '20' %> </td></tr>  

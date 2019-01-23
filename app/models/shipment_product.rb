@@ -20,5 +20,17 @@ class ShipmentProduct < ApplicationRecord
      end
      return product.wholesale_price
   end
+
+    # Use the wholesale or retail price depending on is_retail on the retailer
+    # is_retail indicates that customer pays retail price not wholesale price
+    def invoice_price
+        if (self.shipment.retailer.is_retail == true)
+            return self.product.retail_price
+        else
+            return self.product.wholesale_price
+        end
+    end
+
+
     
 end

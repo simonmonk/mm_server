@@ -219,7 +219,13 @@ if (not @shipment.discount)
     @shipment.discount = 0
 end
 @shipment.shipment_products.each do | sp |
-    line_total = sp.qty * sp.wholesale_in_currency
+    # Lazy fix ShipmentProducts that don't have a price (before the price was copied
+    # by a one-off copy and save.
+    if (not sp.price)
+        sp.price = sp.invoice_price
+        sp.save
+    end
+    line_total = sp.qty * sp.price
     total += line_total
     product_retailer = ProductRetailer.where(product_id: sp.product.id, retailer_id: sp.shipment.retailer.id)[0]
     foreign_sku = product_retailer.sku
@@ -239,7 +245,7 @@ end
 <% if (should_show('country_of_origin')) %>       
     <td class="prod_table_td"><%=sp.product.country_of_origin%></td>
 <% end %>
-    <td class="prod_table_td_money"><%=number_to_currency(sp.wholesale_in_currency, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="prod_table_td_money"><%=number_to_currency(sp.price, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
     <td class="prod_table_td_money"><%=number_to_currency(line_total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
 <% end %>

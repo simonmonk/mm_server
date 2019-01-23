@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190103091332) do
+ActiveRecord::Schema.define(version: 20190123164631) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -217,6 +217,7 @@ ActiveRecord::Schema.define(version: 20190103091332) do
     t.string   "delivery_ad_state"
     t.boolean  "active"
     t.boolean  "show_foreign_sku"
+    t.boolean  "is_retail"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -235,8 +236,9 @@ ActiveRecord::Schema.define(version: 20190103091332) do
     t.integer  "shipment_id"
     t.integer  "product_id"
     t.integer  "qty"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.decimal  "price",       precision: 10, scale: 3
     t.index ["product_id"], name: "index_shipment_products_on_product_id"
     t.index ["shipment_id"], name: "index_shipment_products_on_shipment_id"
   end

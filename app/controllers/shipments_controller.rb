@@ -58,6 +58,7 @@ def add_product
     product_id = params[:product_id]
     shipment_id = params[:shipment_id]
     shipment = Shipment.find(shipment_id)
+    product = Product.find(product_id)
     qty = params[:qty].to_i
     # if there is no product_retailer record, beacuse they haven't sold this before, create one
     results = ProductRetailer.where(retailer_id: shipment.retailer_id, product_id: product_id)
@@ -68,12 +69,13 @@ def add_product
     # if there is a shipments_product record overwrite it else create a new one
     results = ShipmentProduct.where(shipment_id: shipment_id, product_id: product_id)
     if (results.length > 0)
-        pp = results[0]
-        pp.qty = qty
-        pp.save
+        sp = results[0]
+        sp.qty = qty
+        sp.save
     else
-        pp = ShipmentProduct.new(:shipment_id => shipment_id, :product_id => product_id, :qty => qty)
-        pp.save
+        sp = ShipmentProduct.new(:shipment_id => shipment_id, :product_id => product_id, :qty => qty)
+        sp.price = sp.invoice_price
+        sp.save
     end
     redirect_to :action => "edit", :id => shipment_id
 end   

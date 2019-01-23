@@ -1,0 +1,40 @@
+MTD
+===
+
+https://developer.service.hmrc.gov.uk/api-documentation/docs/api
+
+https://developer.service.hmrc.gov.uk/api-documentation/docs/tutorials#app-restricted
+
+Developer signup
+---
+simon@monkmakes.com / BC109_bfy51!
+
+Click on username to manage apps.
+
+App: MonkMakesVAT
+
+Only service is VAT (MTD)
+
+ClientID: 6KivXBIMczfk3g5dzTabW9lSj24a
+Client secret: 0b556bef-f9b8-4b3e-8162-979f60bf02c6
+Server Token: 55638e7bdad14aaa32405a58ab49ebb0
+
+
+
+
+--- general changes
+
+-- Fix copying of product price at the time of Shipment line-item creation OVERRIDED by invloce generation - also make the unit price editable for one off deals. Edit price button doesnt change price on the Product.
+
+-- Cost centres Manufacturing / R&D / Office / Staff
+
+-- Expenses - record expenses against Cost Centres
+
+-- Order In - need to add ad hoc 'stuff' but only for a Cost Center of NOT Maufacturing is allowed ad hoc
+
+QQ can ditch dollars
+
+Not entirely (eduporium) Remove dollar prices from product but convert when making the invoice. So invoice can be in dollars but it just converts pound prices using current exchange rate WITH 5% advantage to us justified by conversion.
+
+ 
+  Price list (rough dollar and Euro equivalents of prices and explanation that they are a guide only. 
