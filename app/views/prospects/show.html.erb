@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Organisation name:</strong>
+  <%= @prospect.organisation_name %>
+</p>
+
+<p>
+  <strong>Contact name:</strong>
+  <%= @prospect.contact_name %>
+</p>
+
+<p>
+  <strong>Contact email:</strong>
+  <%= @prospect.contact_email %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @prospect.country %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @prospect.notes %>
+</p>
+
+<p>
+  <strong>Account manager user:</strong>
+  <%= @prospect.account_manager_user_id %>
+</p>
+
+<%= link_to 'Edit', edit_prospect_path(@prospect) %> |
+<%= link_to 'Back', prospects_path %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190123164631) do
+ActiveRecord::Schema.define(version: 20190129210249) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -30,6 +30,17 @@ ActiveRecord::Schema.define(version: 20190123164631) do
     t.datetime "updated_at",  null: false
     t.index ["assembly_id"], name: "index_assembly_parts_on_assembly_id"
     t.index ["part_id"], name: "index_assembly_parts_on_part_id"
+  end
+
+  create_table "communications", force: :cascade do |t|
+    t.integer  "prospect_id"
+    t.date     "communication_date"
+    t.integer  "user_id"
+    t.text     "notes"
+    t.string   "email_url"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.boolean  "incoming"
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -185,6 +196,21 @@ ActiveRecord::Schema.define(version: 20190123164631) do
     t.boolean  "end_of_line_in_catalog"
   end
 
+  create_table "prospects", force: :cascade do |t|
+    t.string   "organisation_name"
+    t.string   "contact_name"
+    t.string   "contact_email"
+    t.string   "country"
+    t.string   "notes"
+    t.integer  "account_manager_user_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "website"
+    t.integer  "quality"
+    t.integer  "retailer"
+    t.string   "lead_source"
+  end
+
   create_table "retailers", force: :cascade do |t|
     t.string   "name"
     t.string   "contact_name"
@@ -293,6 +319,12 @@ ActiveRecord::Schema.define(version: 20190123164631) do
     t.text     "description"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

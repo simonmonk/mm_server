@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Communications</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Prospect</th>
+      <th>Communication date</th>
+      <th>User</th>
+      <th>Notes</th>
+      <th>Email url</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @communications.each do |communication| %>
+      <tr>
+        <td><%= communication.prospect_id %></td>
+        <td><%= communication.communication_date %></td>
+        <td><%= communication.user_id %></td>
+        <td><%= communication.notes %></td>
+        <td><%= communication.email_url %></td>
+        <td><%= link_to 'Show', communication %></td>
+        <td><%= link_to 'Edit', edit_communication_path(communication) %></td>
+        <td><%= link_to 'Destroy', communication, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Communication', new_communication_path %>

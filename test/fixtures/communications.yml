@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  prospect_id: 1
+  communication_date: 2019-01-27
+  user_id: 1
+  notes: MyText
+  email_url: MyString
+
+two:
+  prospect_id: 1
+  communication_date: 2019-01-27
+  user_id: 1
+  notes: MyText
+  email_url: MyString

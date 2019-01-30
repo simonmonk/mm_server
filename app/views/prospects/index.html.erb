@@ -1,0 +1,201 @@
+<h1>Prospects</h1>
+
+
+<div id="app">
+<button v-on:click="new_prospect" class="btn btn-primary">New Prospect</button>
+
+<!-- Prospect Form Modal -->
+<div id="mod" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Prospect</h1>
+        <form>
+          <div class="form-group">
+            <label for="org_name">Prospect Name</label>
+            <input id="org_name" v-model="prospect.organisation_name" type="text" class="form-control" placeholder="Enter Prospect Name">
+          </div>
+          <div class="form-group">
+            <label for="con_name">Contact Name</label>
+            <input id="con_name" v-model="prospect.contact_name" type="text" class="form-control" placeholder="Enter Contact Name">
+          </div>
+          <div class="form-group">
+            <label for="prospect.contact_email">Email</label>
+            <input id="email" v-model="prospect.contact_email" type="email" class="form-control" placeholder="Enter Contact Email">
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country_selector" v-model="prospect.country" class="form-control">
+              <option v-for="country in countries">{{ country }}</option>
+            </select>
+            <input id="country" v-model="prospect.country" type="text" class="form-control" placeholder="Enter Country">
+          </div>
+          <div class="form-group">
+            <label for="prospect.notes">Notes</label>
+            <textarea id="notes" v-model="prospect.notes" class="form-control" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="lead_src">Lead Source</label>
+            <input id="lead_src" v-model="prospect.lead_source" type="text" class="form-control" placeholder="Enter Lead Source">
+          </div>
+          <div class="form-group">
+            <label for="user_selector">Account Manager</label>
+            <select id="user_selector" v-model="prospect.account_manager_user_id" class="form-control">
+              <option v-for="user in users" v-bind:value="user.id">{{ user.name }}</option>
+            </select>
+          </div>
+
+          <h1>Communications</h1>
+          <h2>History</h2>
+          <div v-for="(comm, index) in prospect.communications">
+            {{ comm.communication_date }} : {{ comm.notes }}
+          </div>
+          <h2>New Communication</h2>
+          <div class="form-group">
+            <label for="comm_data_selector">New Communication Date</label>
+            <input id="comm_data_selector" v-model="communication.communication_date" type="date" class="form-control" placeholder="Enter Communication Date">
+          </div>
+          <div class="form-group">
+            <label for="comm_notes">Notes</label>
+            <textarea id="comm_notes" v-model="communication.notes" class="form-control" rows="3"></textarea>
+          </div>
+          <button type="button" v-on:click="save_comm" class="btn btn-primary">Add Communication</button>
+          <button type="button" v-on:click="save_prospect" class="btn btn-primary">Save</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Prospect List Table -->
+<table>
+<tr><th>Country</th><th>Name</th><th>Manager</th><th>Communications</th></tr>
+<tr v-for="(prospect, index) in prospects">
+  <td>{{ prospect.country }}</td>
+  <td><span v-on:click="edit_prospect(index)" class="badge badge-info">Open</span> {{ prospect.organisation_name }}</td>
+  <td>{{ prospect.account_manager_name }}</td>
+  <td><span class="badge badge-info">&nbsp;&nbsp;&nbsp;{{ prospect.communications.length }}&nbsp;&nbsp;&nbsp;  </span></td>
+  <td><span v-on:click="delete_prospect(index)" class="badge badge-danger">Delete</span>
+</tr>
+</table>
+</div>
+
+
+<script>
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          show_form: false,
+          prospects: [],
+          prospect: {
+            organisation_name: "",
+            contact_name: "",
+            contact_email: "",
+            country: "",
+            notes: "",
+            lead_source: "",
+            communications: []
+          },
+          users: [],
+          countries: [],
+          communication: {
+            communication_date: "",
+            notes: "",
+            prospect_id: 0
+          }
+        },
+        mounted: function() {
+          var that;
+          that = this;
+          $.ajax({
+              url: '/prospects.json',
+              success: function(res) {
+                that.prospects = res;
+              }
+          });
+          $.ajax({
+              url: '/users.json',
+              success: function(res) {
+                that.users = res;
+              }
+          });
+          $.ajax({
+              url: '/prospects/countries.json',
+              success: function(res) {
+                that.countries = res;
+              }
+          });
+        },
+        methods: {
+          new_prospect: function() {
+            this.prospect.organisation_name = "";
+            this.prospect.contact_name = "";
+            this.prospect.contact_email = "";
+            this.prospect.country = "";
+            this.prospect.notes = "";
+            this.prospect.lead_source = "";
+            this.prospect.communications = [];
+            $('#mod').modal('show');
+          },
+          edit_prospect: function(index) {
+            this.prospect = this.prospects[index]
+            this.communication.notes = ""
+            $('#mod').modal('show')
+          },
+          delete_prospect: function(index) {
+            var that;
+            that = this;
+            if (confirm('Are you sure?')) {
+              $.ajax({
+                type: 'DELETE',
+                url: '/prospects/' + this.prospects[index].id + '.json',
+                success: function(res) {
+                  that.prospects.pop(index)
+                }
+              });
+            }
+          },
+          save_prospect: function() {
+            var that;
+            that = this;
+            method = 'POST'
+            url = '/prospects.json'
+            if (this.prospect.id) {
+              method = 'PUT'
+              url = '/prospects/' + this.prospect.id + '.json'
+            }
+            $.ajax({
+              type: method,
+              url: url,
+              data: {prospect: this.prospect},
+              success: function(res) {
+                that.prospect = res;
+                if (! that.prospect.communications) {
+                  that.prospect.communications = []
+                }
+                that.prospects.push(that.prospect);
+                $('#mod').modal('hide');
+              }
+            });
+          },
+          save_comm: function() {
+            var that;
+            that = this;
+            this.communication.prospect_id = this.prospect.id;
+            $.ajax({
+              type: 'POST',
+              url: '/communications.json',
+              data: {communication: this.communication},
+              success: function(res) {
+                that.prospect.communications.push(res);
+                $('#mod').modal('hide');
+              }
+            });
+          },
+        }
+    })
+}
+</script>

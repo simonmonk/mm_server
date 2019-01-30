@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :communications
+  resources :users
   resources :product_categories
   resources :part_categories
   resources :transactions
@@ -13,7 +15,8 @@ Rails.application.routes.draw do
   get 'shipments/quote/*other', to: 'shipments#quote'
   get 'products/pricelist', to: 'products#pricelist'
   get 'products/productlist', to: 'products#productlist' # for the MM website so no prices
-    
+  get 'prospects/countries.json', to: 'prospects#countries'
+
   resources :parts do
     collection do
       get :add_supplier
@@ -21,7 +24,11 @@ Rails.application.routes.draw do
       get :export_parts
     end
   end
-  
+  resources :prospects do
+    collection do
+    end
+  end
+
   resources :products do
     collection do
       get :deduct_stock
@@ -85,6 +92,8 @@ Rails.application.routes.draw do
           get :restore_notifications
       end
   end
+
+  
     
   root 'welcome#index'
 end

@@ -13,6 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-//= require Chart
+
 //= require bootstrap-datepicker
-//= require angular
+
+//= require vue
+
+//= require Chart.bundle
+//= require chartkick
+//= require popper
+//= require bootstrap

@@ -61,4 +61,9 @@ gem "paperclip", "~> 6.0.0"
 gem "gmail"
 gem "html_to_plain_text"
 
-gem 'angularjs-rails'
+# gem 'angularjs-rails'
+gem 'vuejs-rails'
+gem "chartkick"
+
+gem 'bootstrap'
+gem 'jquery-rails'
