@@ -1,4 +1,6 @@
 require "csv"
+require 'action_view'
+include ActionView::Helpers::DateHelper
 
 class Prospect < ApplicationRecord
 
@@ -10,6 +12,16 @@ class Prospect < ApplicationRecord
         else
             return "unallocated"
         end
+    end
+
+    def last_contact()
+        # todo - search comms for last communication and format '3 days ago' style
+        if (communications.length == 0)
+            return "never"
+        end
+        last_contact_date = communications.last.communication_date
+        from_time = Time.now
+        return distance_of_time_in_words(from_time, last_contact_date) + " ago"         
     end
 
     def Prospect.import_csv(filename)

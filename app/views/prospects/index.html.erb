@@ -71,11 +71,15 @@
 
 <!-- Prospect List Table -->
 <table>
-<tr><th>Country</th><th>Name</th><th>Manager</th><th>Communications</th></tr>
+<tr><th v-on:click="sort_by_country">Country</th>
+  <th v-on:click="sort_by_name">Name</th>
+  <th>Manager</th><th>Last Contact</th><th>Communications</th>
+</tr>
 <tr v-for="(prospect, index) in prospects">
   <td>{{ prospect.country }}</td>
   <td><span v-on:click="edit_prospect(index)" class="badge badge-info">Open</span> {{ prospect.organisation_name }}</td>
   <td>{{ prospect.account_manager_name }}</td>
+  <td>{{ prospect.last_contact }}</td>
   <td><span class="badge badge-info">&nbsp;&nbsp;&nbsp;{{ prospect.communications.length }}&nbsp;&nbsp;&nbsp;  </span></td>
   <td><span v-on:click="delete_prospect(index)" class="badge badge-danger">Delete</span>
 </tr>
@@ -130,6 +134,25 @@ window.onload = function () {
           });
         },
         methods: {
+          sort_by_name: function() {
+            this.prospects.sort(function(a,b) {
+              if ( a.organisation_name.toUpperCase() < b.organisation_name.toUpperCase() ) {
+                return -1;
+              }
+              return 1;
+            });
+          },
+          sort_by_country: function() {
+            this.prospects.sort(function(a,b) {
+              if ( a.country < b.country ) {
+                return -1;
+              }
+              if ( a.country > b.country ) {
+                return 1;
+              }
+              return 0;
+            });
+          },
           new_prospect: function() {
             this.prospect.organisation_name = "";
             this.prospect.contact_name = "";

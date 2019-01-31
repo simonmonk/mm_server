@@ -6,7 +6,7 @@ class ProspectsController < ApplicationController
   def index
     respond_to do |format|
       format.html { render :index }
-      format.json { render :json => Prospect.all, :methods => [:account_manager_name, :communications] }
+      format.json { render :json => Prospect.all.order(:country), :methods => [:account_manager_name, :last_contact, :communications] }
     end
   end
 
