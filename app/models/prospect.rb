@@ -14,6 +14,14 @@ class Prospect < ApplicationRecord
         end
     end
 
+    def reminder_status()
+        if (! reminder_date)
+            return "set"
+        else
+            return reminder_date
+        end
+    end
+
     def last_contact()
         # todo - search comms for last communication and format '3 days ago' style
         if (communications.length == 0)

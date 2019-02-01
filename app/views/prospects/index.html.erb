@@ -44,8 +44,21 @@
               <option v-for="user in users" v-bind:value="user.id">{{ user.name }}</option>
             </select>
           </div>
+          <button type="button" v-on:click="save_prospect" class="btn btn-primary">Save</button>
+        </form>
 
-          <h1>Communications</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Comms Form Modal -->
+<div id="mod_comms" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Communications with {{prospect.organisation_name}}</h1>
+        <form>
           <h2>History</h2>
           <div v-for="(comm, index) in prospect.communications">
             {{ comm.communication_date }} : {{ comm.notes }}
@@ -53,14 +66,32 @@
           <h2>New Communication</h2>
           <div class="form-group">
             <label for="comm_data_selector">New Communication Date</label>
-            <input id="comm_data_selector" v-model="communication.communication_date" type="date" class="form-control" placeholder="Enter Communication Date">
+            <input id="comm_data_selector" v-model="communication.communication_date" type="date" value="" class="form-control" placeholder="Enter Communication Date">
           </div>
           <div class="form-group">
-            <label for="comm_notes">Notes</label>
             <textarea id="comm_notes" v-model="communication.notes" class="form-control" rows="3"></textarea>
           </div>
-          <button type="button" v-on:click="save_comm" class="btn btn-primary">Add Communication</button>
-          <button type="button" v-on:click="save_prospect" class="btn btn-primary">Save</button>
+
+          <button type="button" v-on:click="save_comm" class="btn btn-primary">Save</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reminder Form Modal -->
+<div id="mod_rem" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Reminders for {{prospect.organisation_name}}</h1>
+        <form>
+          <div class="form-group">
+            <label for="comm_data_selector">Reminder Date</label>
+            <input id="comm_data_selector" v-model="prospect.reminder_date" type="date" class="form-control" placeholder="Enter Reminder Date">
+            <button type="button" v-on:click="add_reminder" class="btn btn-primary">Add Reminder</button>
+          </div>
         </form>
 
       </div>
@@ -73,14 +104,15 @@
 <table>
 <tr><th v-on:click="sort_by_country">Country</th>
   <th v-on:click="sort_by_name">Name</th>
-  <th>Manager</th><th>Last Contact</th><th>Communications</th>
+  <th>Manager</th><th>Last Contact</th><th>Reminders</th><th>Comms</th>
 </tr>
 <tr v-for="(prospect, index) in prospects">
   <td>{{ prospect.country }}</td>
-  <td><span v-on:click="edit_prospect(index)" class="badge badge-info">Open</span> {{ prospect.organisation_name }}</td>
+  <td><span v-on:click="edit_prospect(index)" class="badge badge-info">Edit</span> {{ prospect.organisation_name }}</td>
   <td>{{ prospect.account_manager_name }}</td>
   <td>{{ prospect.last_contact }}</td>
-  <td><span class="badge badge-info">&nbsp;&nbsp;&nbsp;{{ prospect.communications.length }}&nbsp;&nbsp;&nbsp;  </span></td>
+  <td><span v-on:click="edit_reminders(index)" class="badge badge-info">{{ prospect.reminder_status }}</span></td>
+  <td><span v-on:click="edit_comms(index)" class="badge badge-info">&nbsp;&nbsp;&nbsp;{{ prospect.communications.length }}&nbsp;&nbsp;&nbsp;  </span></td>
   <td><span v-on:click="delete_prospect(index)" class="badge badge-danger">Delete</span>
 </tr>
 </table>
@@ -88,6 +120,9 @@
 
 
 <script>
+
+
+
 window.onload = function () {
     var app = new Vue({
         el: '#app',
@@ -101,25 +136,20 @@ window.onload = function () {
             country: "",
             notes: "",
             lead_source: "",
-            communications: []
+            communications: [],
           },
           users: [],
           countries: [],
           communication: {
-            communication_date: "",
+            communication_date: new Date().toISOString().slice(0,10),
             notes: "",
             prospect_id: 0
-          }
+          },
         },
         mounted: function() {
           var that;
           that = this;
-          $.ajax({
-              url: '/prospects.json',
-              success: function(res) {
-                that.prospects = res;
-              }
-          });
+          this.load_prospects();
           $.ajax({
               url: '/users.json',
               success: function(res) {
@@ -134,6 +164,16 @@ window.onload = function () {
           });
         },
         methods: {
+          load_prospects: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/prospects.json',
+              success: function(res) {
+                that.prospects = res;
+              }
+            });
+          },
           sort_by_name: function() {
             this.prospects.sort(function(a,b) {
               if ( a.organisation_name.toUpperCase() < b.organisation_name.toUpperCase() ) {
@@ -161,12 +201,23 @@ window.onload = function () {
             this.prospect.notes = "";
             this.prospect.lead_source = "";
             this.prospect.communications = [];
+            this.prospect.reminders = [];
             $('#mod').modal('show');
           },
           edit_prospect: function(index) {
             this.prospect = this.prospects[index]
             this.communication.notes = ""
             $('#mod').modal('show')
+          },
+          edit_comms: function(index) {
+            this.prospect = this.prospects[index];
+            this.communication.notes = "";
+            $('#mod_comms').modal('show');
+          },
+          edit_reminders: function(index) {
+            this.prospect = this.prospects[index];
+            this.prospect.reminder_date = (new Date().addDays(7)).toISOString().slice(0,10);
+            $('#mod_rem').modal('show');
           },
           delete_prospect: function(index) {
             var that;
@@ -184,6 +235,9 @@ window.onload = function () {
           save_prospect: function() {
             var that;
             that = this;
+            delete this.prospect.reminder_status
+            delete this.prospect.account_manager_name
+            delete this.prospect.last_contact
             method = 'POST'
             url = '/prospects.json'
             if (this.prospect.id) {
@@ -195,11 +249,7 @@ window.onload = function () {
               url: url,
               data: {prospect: this.prospect},
               success: function(res) {
-                that.prospect = res;
-                if (! that.prospect.communications) {
-                  that.prospect.communications = []
-                }
-                that.prospects.push(that.prospect);
+                that.load_prospects();
                 $('#mod').modal('hide');
               }
             });
@@ -213,10 +263,17 @@ window.onload = function () {
               url: '/communications.json',
               data: {communication: this.communication},
               success: function(res) {
+                that.load_prospects();
                 that.prospect.communications.push(res);
-                $('#mod').modal('hide');
+                $('#mod_comms').modal('hide');
               }
             });
+            that.prospect.reminder_date = null;
+            this.save_prospect();
+          },
+          add_reminder: function() {
+            this.save_prospect();
+            $('#mod_rem').modal('hide');
           },
         }
     })

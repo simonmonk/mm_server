@@ -6,7 +6,7 @@ class ProspectsController < ApplicationController
   def index
     respond_to do |format|
       format.html { render :index }
-      format.json { render :json => Prospect.all.order(:country), :methods => [:account_manager_name, :last_contact, :communications] }
+      format.json { render :json => Prospect.all.order(:country), :methods => [:account_manager_name, :last_contact, :reminder_status, :communications] }
     end
   end
 
@@ -80,6 +80,6 @@ class ProspectsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def prospect_params
       params.require(:prospect).permit(:organisation_name, :contact_name, :contact_email, 
-      :country, :notes, :account_manager_user_id, :lead_source, :communications)
+      :country, :notes, :account_manager_user_id, :lead_source, :communications, :reminder_date, :reminder_status)
     end
 end

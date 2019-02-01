@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :reminders
   resources :communications
   resources :users
   resources :product_categories
