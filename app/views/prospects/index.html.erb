@@ -104,7 +104,9 @@
 <table>
 <tr><th v-on:click="sort_by_country">Country</th>
   <th v-on:click="sort_by_name">Name</th>
-  <th>Manager</th><th>Last Contact</th><th>Reminders</th><th>Comms</th>
+  <th>Manager</th>
+  <th>Last Contact</th>
+  <th v-on:click="sort_by_reminder">Reminders</th><th>Comms</th>
 </tr>
 <tr v-for="(prospect, index) in prospects">
   <td>{{ prospect.country }}</td>
@@ -187,10 +189,15 @@ window.onload = function () {
               if ( a.country < b.country ) {
                 return -1;
               }
-              if ( a.country > b.country ) {
-                return 1;
+              return 1;
+            });
+          },
+          sort_by_reminder: function() {
+            this.prospects.sort(function(a,b) {
+              if ( a.reminder_status < b.reminder_status ) {
+                return -1;
               }
-              return 0;
+              return 1;
             });
           },
           new_prospect: function() {
@@ -257,6 +264,7 @@ window.onload = function () {
           save_comm: function() {
             var that;
             that = this;
+            if (this.communication.notes.length == 0) return;
             this.communication.prospect_id = this.prospect.id;
             $.ajax({
               type: 'POST',
