@@ -112,11 +112,12 @@
 
 <!-- Prospect List Table -->
 <table>
-<tr><th v-on:click="sort_by_country">Country</th>
-  <th v-on:click="sort_by_name">Name</th>
+<tr><th>Country</th>
+  <th>Name</th>
   <th>Manager</th>
   <th>Last Contact</th>
-  <th v-on:click="sort_by_reminder">Reminders</th><th>Comms</th>
+  <th>Reminders</th>
+  <th>Comms</th>
 </tr>
 <tr v-for="(prospect, index) in prospects">
   <td>{{ prospect.country }}</td>
