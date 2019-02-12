@@ -32,6 +32,14 @@ class Prospect < ApplicationRecord
         return distance_of_time_in_words(from_time, last_contact_date) + " ago"         
     end
 
+    def last_contact_date()
+        if (communications.length == 0)
+            return Date.new(2013,1,1)
+        end
+        last_contact_date = communications.last.communication_date
+        return last_contact_date        
+    end
+
     def Prospect.import_csv(filename)
         simon = User.find_by_name('Simon')
         linda = User.find_by_name('Linda')

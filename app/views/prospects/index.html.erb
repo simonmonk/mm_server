@@ -9,6 +9,7 @@
 <select id="sort_selector" v-model="sort_by" @change="sort_list()">
   <option>Country</option>
   <option>Name</option>
+  <option>Recent Contacts</option>
   <option>Reminders</option>
 </select>
 </span>
@@ -196,6 +197,9 @@ window.onload = function () {
             else if (this.sort_by == 'Name') {
               this.sort_by_name();
             }
+            else if (this.sort_by == 'Recent Contacts') {
+              this.sort_by_recent_contact();
+            }
             else if (this.sort_by == 'Reminders') {
               this.sort_by_reminder();
             }
@@ -219,6 +223,14 @@ window.onload = function () {
           sort_by_reminder: function() {
             this.prospects.sort(function(a,b) {
               if ( a.reminder_status < b.reminder_status ) {
+                return -1;
+              }
+              return 1;
+            });
+          },
+          sort_by_recent_contact: function() {
+            this.prospects.sort(function(a,b) {
+              if ( a.last_contact_date > b.last_contact_date ) {
                 return -1;
               }
               return 1;
