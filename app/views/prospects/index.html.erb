@@ -4,6 +4,16 @@
 <div id="app">
 <button v-on:click="new_prospect" class="btn btn-primary">New Prospect</button>
 
+<span>
+<label for="sort_selector">Sort By</label>
+<select id="sort_selector" v-model="sort_by" @change="sort_list()">
+  <option>Country</option>
+  <option>Name</option>
+  <option>Reminders</option>
+</select>
+</span>
+
+
 <!-- Prospect Form Modal -->
 <div id="mod" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -130,6 +140,7 @@ window.onload = function () {
         el: '#app',
         data: {
           show_form: false,
+          sort_by: 'Country',
           prospects: [],
           prospect: {
             organisation_name: "",
@@ -173,8 +184,20 @@ window.onload = function () {
               url: '/prospects.json',
               success: function(res) {
                 that.prospects = res;
+                that.sort_list();
               }
             });
+          },
+          sort_list: function() {
+            if (this.sort_by == 'Country') {
+              this.sort_by_country();
+            }
+            else if (this.sort_by == 'Name') {
+              this.sort_by_name();
+            }
+            else if (this.sort_by == 'Reminders') {
+              this.sort_by_reminder();
+            }
           },
           sort_by_name: function() {
             this.prospects.sort(function(a,b) {

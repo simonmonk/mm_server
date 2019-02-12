@@ -60,6 +60,11 @@ DB TRANSACTIONS
 
 Shipments and Reatilers
 ---------
+option to amend quantities of line items. 
+Should not be able to create invice for ST you don't have all the stock for.
+must cope with assemblies that can easily be converted to product to allow the shipment.
+Stock allocated to customer can't be shared.
+
 
 
 OrdersIn

@@ -1,0 +1,25 @@
+Accounting
+===========
+
+
+Mileage - needs recording, this is not a movement of money, just a reduction in corporation tax for accounts.
+- if we tell McDR they will put in CT form.
+
+Modelling of accounts:
+- Current, World-first EUR and USD, PayPal £, Paypal $, Credit Card (pymnts only apart from resetting balance)
+
+Cost categories:
+- Materials	Shipping, PayPal, Credit Card, Packaging Stationery, Software Charges, Fees	Accty, Postage, Insurance, PAYE, 	Translation (Misc)
+
+Cost centres
+- Manufacturing, R&D, {Marketting, ..}
+
+
+Orders In
+- gross, net vat in actual order body, separate from summed list of items.
+
+Shipments
+- Almost there, needs to become 'hard' when invoice number assigned and saved and despatched.
+
+
+
