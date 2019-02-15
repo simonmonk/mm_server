@@ -4,7 +4,28 @@ class Shipment < ApplicationRecord
     
   validates :invoice_number, uniqueness: true, if: 'invoice_number.present?'
     
+  def is_amazon()
+    return (retailer and retailer.name.upcase().starts_with?('AMAZON'))
+  end
 
+  def is_new()
+    return (not date_dispatched or date_dispatched > Date.current)
+  end
+
+  def is_unpaid()
+    return (not is_paid() and not is_amazon())
+  end
+
+  def is_paid()
+    return (date_payment_received and (date_payment_received <= Date.current))
+  end
+
+  def is_overdue()
+    return (is_unpaid() and date_payment_reminder and Date.current > date_payment_reminder and not is_amazon())
+  end
+
+
+  ################### deprecated ###################
   def paid?()
       return (date_payment_received and date_payment_received <= Date.current)
   end
@@ -22,6 +43,8 @@ class Shipment < ApplicationRecord
         return "Overdue"    # Overdue - red
     end
   end
+  ################### deprecated ###################
+
 
   # generated each time a quotation is created - allows saving of PDF quotes with this number in the file name
   def quotation_number()
@@ -42,6 +65,9 @@ class Shipment < ApplicationRecord
     end
     if (shipping_cost)
         sales_total += shipping_cost
+    end
+    if (discount)
+      sales_total -= discount
     end
     if (vat_rate and retailer.vatable == true)
         vat = sales_total * vat_rate / 100

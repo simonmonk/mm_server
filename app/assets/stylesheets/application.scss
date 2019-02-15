@@ -12,7 +12,7 @@
  *
  */
 
-@import 'bootstrap';
+@import "bootstrap";
 
 table {
 color: #333;
@@ -36,7 +36,9 @@ font-weight: bold;
 
 td {
 text-align: left;
+padding-left: 20px;
 }
+
 
 .warning {
 background: #ff8080;
@@ -46,24 +48,24 @@ background: #ff8080;
 
 .menu {
    border-top: 1px solid #96d1f8;
-   background: #e0e0e0;
+   background: #0000e0;
    padding: 5px 10px;
    border-radius: 8px;
    color: white;
    font-size: 12px;
-   font-family: Georgia, serif;
+   
    text-decoration: none;
    vertical-align: middle;
    }
 
 .menu_selected {
    border-top: 1px solid #96d1f8;
-   background: #e0e0ff;
+   background: #000000;
    padding: 5px 10px;
    border-radius: 8px;
    color: white;
    font-size: 12px;
-   font-family: Georgia, serif;
+  
    text-decoration: none;
    vertical-align: middle;
    }

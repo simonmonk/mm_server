@@ -1,68 +1,168 @@
-<style>
+<h1>Orders</h1>
 
-.sortorder:after {
-  content: '\25b2';   // BLACK UP-POINTING TRIANGLE
-}
-.sortorder.reverse:after {
-  content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
-}
+<div id="app">
 
-</style>
-    
-<h1>Angular version</h1>
+<div>
+<span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_new'}" v-on:click="filter_shipments('is_new')">New Orders</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_unpaid'}" v-on:click="filter_shipments('is_unpaid')">Unpaid Orders</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_overdue'}" v-on:click="filter_shipments('is_overdue')">Overdue Payment Orders</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_paid'}" v-on:click="filter_shipments('is_paid')">Paid (Complete)</span>
+</span>
+
+<span>
+Orders for  
+<select v-model="num_days">
+      <option value="7">7</option>
+      <option value="14">14</option>
+      <option value="30">30</option>
+      <option value="90">90</option>
+      <option value="365">365</option>
+      <option value="100000">ALL</option>
+</select>
+days.
+</span>
+<span>
+Sort by:   
+<select v-model="sort_by_field">
+      <option value="updated_at">Most recently changed or added</option>
+      <option value="invoice_number">Invoice number</option>
+      <option value="retailer_name">Customer name</option>
+</select>
+</span>
+
+</div>
 
 
-<p></p>
+<!-- Shipment Form Modal -->
+<div id="mod_shipment" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Shipment {{shipment.invoice_number}} {{ shipment.retailer_name  }}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td><input v-model="shipment.invoice_number" type="text" class="form-control" placeholder="Enter Invoice Number"></td>
+            <td>Order Received Date</td>
+            <td><input v-model="shipment.date_order_received" type="date" value="" class="form-control" placeholder="Date the order was received"></td>
+          </tr>
+          <tr>
+            <td>VAT Rate (percent)</td>
+            <td><input v-model="shipment.vat_rate" type="text" class="form-control" placeholder="none"></td>
+            <td>Invoice Sent Date</td>
+            <td><input v-model="shipment.date_invoice_sent" type="date" value="" class="form-control" placeholder="Date the invoice was sent"></td>
+          </tr>
+          <tr>
+            <td>Customer P.O. Number</td>
+            <td><input v-model="shipment.po_reference" type="text" class="form-control" placeholder="none"></td>
+            <td>Despatched Date</td>
+            <td><input v-model="shipment.date_dispatched" type="date" value="" class="form-control" placeholder="Date the goods were sent"></td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Provider</td>
+            <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="none"></td>
+            <td>Payment Due Date</td>
+            <td><input v-model="shipment.date_payment_reminder" type="date" value="" class="form-control" placeholder="Date payment is due"></td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Ac.</td>
+            <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"></td>
+            <td>Payment Received</td>
+            <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"></td>
+          </tr>
+          <tr><td><button type="button" v-on:click="save_shipment" class="btn btn-primary">Save</button></td></tr>
+        </table>
 
-<i class="priorityInProgress">In progress</i>
-<i class="priorityAwaitingPayment">Awaiting payment</i>
-<i class="priorityPaid">Paid and complete</i>
-<i class="priorityOverdue">Overdue</i>
+      </div>
+    </div>
+  </div>
+</div>
 
-<p></p>
-
-
-<div ng-app="myApp" ng-controller="shipmentsCtrl">
-    
-    <h1 id="spinner" style="display:none;">Loading...</h1>
-    
-<table border="1">
-  <tr>
-    <th ng-click="sortBy('priority')">Status
-      <span class="sortorder" ng-show="propertyName === 'priority'" ng-class="{reverse: reverse}"></span></th>
-    <th ng-click="sortBy('invoice_number')">Invoice Number
-      <span class="sortorder" ng-show="propertyName === 'invoice_number'" ng-class="{reverse: reverse}"></span></th>
-    <th ng-click="sortBy('retailer_name')">Retailer
-      <span class="sortorder" ng-show="propertyName === 'retailer_name'" ng-class="{reverse: reverse}"></span></th>
-    <th ng-click="sortBy('total_invoice_amount')">Invoice Amount
-      <span class="sortorder" ng-show="propertyName === 'total_invoice_amount'" ng-class="{reverse: reverse}"></span></th>
-  </tr>
-  <tr ng-repeat="x in shipments | orderBy:propertyName:reverse" class="priority{{x.priority}}">
-    <td>{{x.priority}}</td>
-    <td>{{x.invoice_number}}</td>
-    <td>{{x.retailer_name}}</td>
-    <td>{{x.total_invoice_amount}}</td>
-    <td><a href="/shipments/{{x.id}}/edit">Edit</a></td>
-    <td><a href="/shipments/invoice/?id={{x.id}}">Invoice</a></td>
-    <td>Destroy</td>
-  </tr>
+<!-- Orders List Table -->
+<table>
+<tr><th>Invoive Number</th>
+  <th>Retailer</th>
+  <th v-if="filter_by_type=='is_overdue'">Due Date</th>
+  <th>Invoice Amount</th>
+</tr>
+<tr v-for="(shipment, index) in filtered_results">
+  <td><span v-on:click="edit_shipment(index)" class="badge badge-info">Edit</span>{{ shipment.invoice_number }} </td>
+  <td>{{ shipment.retailer_name }}</td>
+  <td v-if="filter_by_type=='is_overdue'">{{ shipment.date_payment_reminder }}</td>
+  <td>{{ shipment.total_invoice_amount }}</td>
+  <td><span v-on:click="delete_prospect(index)" class="badge badge-danger">Delete</span>
+</tr>
 </table>
+
 
 </div>
 
 <script>
-$("#spinner").show();
-var app = angular.module('myApp', []);
-app.controller('shipmentsCtrl', function($scope, $http) {
-    $("#spinner").show();
-    $http.get("/shipments/get_shipments").then(
-        function(response) {
-            $scope.shipments = response.data;
-            $("#spinner").hide();
-    });
-    $scope.sortBy = function(propertyName) {
-        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-        $scope.propertyName = propertyName;
-    };
-});
+
+
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          filter_by_type: 'is_new',
+          num_days: 90,
+          sort_by_field: 'retailer_name',
+          shipments: [],
+          shipment: {
+            id: 0,
+            invoice_number: '123',
+            retailer_name: 'ret'
+          }
+        },
+        mounted: function() {
+          var that;
+          that = this;
+          this.load_shipments();
+          this.filter_shipments('is_new')
+        },
+        methods: {
+          load_shipments: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/shipments.json',
+              success: function(res) {
+                that.shipments = res;
+              }
+            });
+          },
+          filter_shipments: function(filter_attribute) {
+            this.filter_by_type = filter_attribute
+          },
+          edit_shipment: function(index) {
+            this.shipment = this.filtered_results[index]
+            $('#mod_shipment').modal('show')
+          },
+          save_shipment: function(index) {
+            $('#mod_shipment').modal('hide')
+          }
+        },
+        computed: {
+          filtered_results: function() {
+            var that;
+            that = this;
+            let filtered = this.shipments.filter(function (shipment) {
+              var today = new Date();
+              var start_date = today.addDays(- parseInt(that.num_days)).toISOString()
+              var in_date_range = (shipment.updated_at >= start_date)
+              return shipment[that.filter_by_type] && in_date_range
+            });
+            let sorted = filtered.sort(function (a, b) {
+              if (a[that.sort_by_field] > b[that.sort_by_field]) {
+                return 1;
+              }
+              return -1;
+            });
+            return sorted;
+          }
+        }
+    })
+}
 </script>

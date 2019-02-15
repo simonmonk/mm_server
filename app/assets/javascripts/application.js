@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
 
 //= require bootstrap-datepicker
 
@@ -20,8 +19,11 @@
 
 //= require Chart.bundle
 //= require chartkick
+
+//= require jquery3
 //= require popper
 //= require bootstrap
+//= require_tree .
 
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());

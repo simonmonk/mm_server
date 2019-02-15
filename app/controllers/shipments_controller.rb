@@ -6,6 +6,10 @@ class ShipmentsController < ApplicationController
   # GET /shipments.json
   def index
     @shipments = Shipment.all
+    respond_to do |format|
+        format.html { render :index }
+        format.json { render :json => Shipment.all.order('updated_at desc'), :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue] }
+    end
   end
 
   # GET /shipments/1
@@ -191,19 +195,12 @@ end
     end
   end
     
-#
-    #
-    # JSON Interface
-    #
-#
+
     
-def list
-    
-end
-    
-def get_shipments
-    render :json => Shipment.all, :methods => [:retailer_name, :total_invoice_amount, :priority]
-end
+    def list
+        
+    end
+
     
 
   private

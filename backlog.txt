@@ -7,6 +7,11 @@ $ bin/rails generate migration AddStateToRetailerAddreses
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
+New rule for shipments list.
+
+Amazon orders (both) should count as invoiced as long as they are shipped.
+
+
 
 Shipment line items for Amazon.com should have extra columns for retail price dollars, extended price in dollars.
 This is done, but the total needs to be in dollars too. Also change the Copy Customs Dec field so that it prepends the name.
