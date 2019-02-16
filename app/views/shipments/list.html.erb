@@ -11,7 +11,7 @@
 </span>
 
 <span>
-Orders for  
+Modified in last   
 <select v-model="num_days">
       <option value="7">7</option>
       <option value="14">14</option>
@@ -43,33 +43,51 @@ Sort by:
         <table>
           <tr>
             <td>Invoice Number</td>
-            <td><input v-model="shipment.invoice_number" type="text" class="form-control" placeholder="Enter Invoice Number"></td>
+            <td><input v-model="shipment.invoice_number" type="text" class="form-control" placeholder="Enter Invoice Number"/></td>
             <td>Order Received Date</td>
-            <td><input v-model="shipment.date_order_received" type="date" value="" class="form-control" placeholder="Date the order was received"></td>
+            <td><input v-model="shipment.date_order_received" type="date" value="" class="form-control" placeholder="Date the order was received"/></td>
           </tr>
           <tr>
             <td>VAT Rate (percent)</td>
-            <td><input v-model="shipment.vat_rate" type="text" class="form-control" placeholder="none"></td>
+            <td><input v-model="shipment.vat_rate" type="text" class="form-control" placeholder="none"/></td>
             <td>Invoice Sent Date</td>
-            <td><input v-model="shipment.date_invoice_sent" type="date" value="" class="form-control" placeholder="Date the invoice was sent"></td>
+            <td><input v-model="shipment.date_invoice_sent" type="date" value="" class="form-control" placeholder="Date the invoice was sent"/></td>
           </tr>
           <tr>
             <td>Customer P.O. Number</td>
-            <td><input v-model="shipment.po_reference" type="text" class="form-control" placeholder="none"></td>
+            <td><input v-model="shipment.po_reference" type="text" class="form-control" placeholder="none"/></td>
             <td>Despatched Date</td>
-            <td><input v-model="shipment.date_dispatched" type="date" value="" class="form-control" placeholder="Date the goods were sent"></td>
+            <td><input v-model="shipment.date_dispatched" type="date" value="" class="form-control" placeholder="Date the goods were sent"/></td>
           </tr>
           <tr>
             <td>Customer Shipping Provider</td>
-            <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="none"></td>
+            <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="none"/></td>
             <td>Payment Due Date</td>
-            <td><input v-model="shipment.date_payment_reminder" type="date" value="" class="form-control" placeholder="Date payment is due"></td>
+            <td><input v-model="shipment.date_payment_reminder" type="date" value="" class="form-control" placeholder="Date payment is due"/></td>
           </tr>
           <tr>
             <td>Customer Shipping Ac.</td>
-            <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"></td>
+            <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"/></td>
             <td>Payment Received</td>
-            <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"></td>
+            <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
+          </tr>
+          <tr>
+            <td>Discount</td>
+            <td><input v-model="shipment.discount" type="text" class="form-control" placeholder="none"/></td>
+            <td>Cancelled</td>
+            <td><input type="checkbox" v-model="shipment.is_cancelled"/></td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
+          </tr>
+          <tr>
+            <td>Actual Amount Collected</td>
+            <td><input v-model="shipment.total_invoice_collected" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Invoice Comment</td>
+            <td colspan="3"><textarea v-model="shipment.invoice_comment" rows="3" class="form-control" placeholder="What you write here will appear on the invoice"></textarea></td>
           </tr>
           <tr><td><button type="button" v-on:click="save_shipment" class="btn btn-primary">Save</button></td></tr>
         </table>
@@ -79,19 +97,104 @@ Sort by:
   </div>
 </div>
 
+
+
+<!-- Reconcile Form Modal -->
+<div id="mod_reconcile" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Reconcile Payment for Shipment to {{shipment.retailer_name}} on {{shipment.date_dispatched}}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{shipment.invoice_number}}</td>
+          </tr>
+          <tr>
+            <td>Payment Received</td>
+            <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
+          </tr>
+          <tr>
+            <td>Invoice Amount</td>
+            <td>{{shipment.total_invoice_amount}}</td>
+          </tr>
+          <tr>
+            <td>Actual Amount Collected</td>
+            <td><input v-model="shipment.total_invoice_collected" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Explain why the theiving bastards haven't paid in full."></textarea></td>
+          </tr>
+          <tr><td><button type="button" v-on:click="save_shipment" class="btn btn-primary">Save</button></td></tr>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mark Shipped Form Modal -->
+<div id="mod_ship" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Mark Shipment Sent to {{shipment.retailer_name}}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{shipment.invoice_number}}</td>
+          </tr>
+          <tr>
+            <td>Date Shipped</td>
+            <td><input v-model="shipment.date_dispatched" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Provider</td>
+            <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Ac.</td>
+            <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Invoice Comment</td>
+            <td colspan="3"><textarea v-model="shipment.invoice_comment" rows="3" class="form-control" placeholder="What you write here will appear on the invoice"></textarea></td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Explain why the theiving bastards haven't paid in full."></textarea></td>
+          </tr>
+          <tr><td><button type="button" v-on:click="save_shipment" class="btn btn-primary">Save</button></td></tr>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Orders List Table -->
 <table>
-<tr><th>Invoive Number</th>
+<tr>
+  <th>Invoive Number</th>
   <th>Retailer</th>
-  <th v-if="filter_by_type=='is_overdue'">Due Date</th>
   <th>Invoice Amount</th>
+  <th v-if="filter_by_type == 'is_paid'">Amount Collected</th>
+  <th v-if="filter_by_type == 'is_unpaid'">Due Date</th>
 </tr>
 <tr v-for="(shipment, index) in filtered_results">
-  <td><span v-on:click="edit_shipment(index)" class="badge badge-info">Edit</span>{{ shipment.invoice_number }} </td>
+  <td>{{ shipment.invoice_number }} </td>
   <td>{{ shipment.retailer_name }}</td>
-  <td v-if="filter_by_type=='is_overdue'">{{ shipment.date_payment_reminder }}</td>
-  <td>{{ shipment.total_invoice_amount }}</td>
-  <td><span v-on:click="delete_prospect(index)" class="badge badge-danger">Delete</span>
+  <td v-bind:class="{ warning: shipment.is_overdue }">{{ shipment.total_invoice_amount }}</td>
+  <td v-if="filter_by_type == 'is_paid'">{{ shipment.total_invoice_collected }}</td>
+  <td v-if="filter_by_type == 'is_unpaid' || filter_by_type == 'is_overdue'">{{ shipment.date_payment_reminder }}</td>
+  
+  <td v-if="filter_by_type == 'is_new'"><span v-on:click="ship_shipment(index)" class="badge badge-success">Mark Shipped</span></td>
+  <td><span v-on:click="edit_shipment(index)" class="badge badge-info">Edit</span></td>
+  <td v-if="filter_by_type == 'is_unpaid' || filter_by_type == 'is_overdue'"><span v-on:click="reconcile_shipment(index)" class="badge badge-success">Reconcile</span></td>
+  <td v-if="filter_by_type == 'is_unpaid' || filter_by_type == 'is_overdue' || filter_by_type == 'is_new'"><span v-on:click="delete_shipment(index)" class="badge badge-warning">Cancel</span></td>
+  <td v-if="filter_by_type == 'is_new'"><span v-on:click="delete_shipment(index)" class="badge badge-danger">Delete</span></td>
 </tr>
 </table>
 
@@ -142,6 +245,14 @@ window.onload = function () {
           },
           save_shipment: function(index) {
             $('#mod_shipment').modal('hide')
+          },
+          reconcile_shipment: function(index) {
+            this.shipment = this.filtered_results[index]
+            $('#mod_reconcile').modal('show')
+          },
+          ship_shipment: function(index) {
+            this.shipment = this.filtered_results[index]
+            $('#mod_ship').modal('show')
           }
         },
         computed: {

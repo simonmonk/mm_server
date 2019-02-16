@@ -21,8 +21,10 @@ Javascriptifying
 ----------------
 
 Working on Shipments
-Tabs for diffent statuses
-New shipment uses old form, but try angularing the form
+x Tabs for diffent statuses
+Add cancelled flag amd amount paid to shipments (useful because of email orders in subsequently cancelled but good toi have a record.)
+Add comparison colum of amount paid vs amount invoiced
+
 
 
 Stock Report

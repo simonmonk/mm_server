@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190201152731) do
+ActiveRecord::Schema.define(version: 20190216082349) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -294,6 +294,8 @@ ActiveRecord::Schema.define(version: 20190201152731) do
     t.string   "invoice_comment"
     t.string   "order_email"
     t.boolean  "apply_vat_to_shipping"
+    t.boolean  "is_cancelled"
+    t.decimal  "total_invoice_collected", precision: 10, scale: 3
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 
