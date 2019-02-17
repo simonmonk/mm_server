@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190216082349) do
+ActiveRecord::Schema.define(version: 20190217130333) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -217,8 +217,8 @@ ActiveRecord::Schema.define(version: 20190216082349) do
     t.string   "contact_name"
     t.string   "contact_email"
     t.text     "notes"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.string   "regex_qty"
     t.string   "regex_oos"
     t.string   "fao_billing"
@@ -245,6 +245,7 @@ ActiveRecord::Schema.define(version: 20190216082349) do
     t.boolean  "active"
     t.boolean  "show_foreign_sku"
     t.boolean  "is_retail"
+    t.string   "pref_shipping_provider_shipping_type"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -274,8 +275,8 @@ ActiveRecord::Schema.define(version: 20190216082349) do
     t.integer  "retailer_id"
     t.date     "dispatched"
     t.text     "notes"
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.boolean  "stock_subtracted"
     t.string   "retailer_shipment_id"
     t.date     "date_order_received"
@@ -285,17 +286,18 @@ ActiveRecord::Schema.define(version: 20190216082349) do
     t.string   "order_email_link"
     t.string   "po_reference"
     t.string   "invoice_number"
-    t.decimal  "shipping_cost",           precision: 10, scale: 3
+    t.decimal  "shipping_cost",                   precision: 10, scale: 3
     t.string   "shipping_provider"
     t.string   "shipping_provider_ac_no"
-    t.decimal  "discount",                precision: 10, scale: 3
+    t.decimal  "discount",                        precision: 10, scale: 3
     t.date     "date_payment_received"
-    t.decimal  "vat_rate",                precision: 10, scale: 3
+    t.decimal  "vat_rate",                        precision: 10, scale: 3
     t.string   "invoice_comment"
     t.string   "order_email"
     t.boolean  "apply_vat_to_shipping"
     t.boolean  "is_cancelled"
-    t.decimal  "total_invoice_collected", precision: 10, scale: 3
+    t.decimal  "total_invoice_collected",         precision: 10, scale: 3
+    t.string   "shipping_provider_shipping_type"
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

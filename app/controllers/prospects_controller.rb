@@ -1,5 +1,6 @@
 class ProspectsController < ApplicationController
   before_action :set_prospect, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token  
 
   # GET /prospects
   # GET /prospects.json

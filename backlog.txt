@@ -22,8 +22,9 @@ Javascriptifying
 
 Working on Shipments
 x Tabs for diffent statuses
-Add cancelled flag amd amount paid to shipments (useful because of email orders in subsequently cancelled but good toi have a record.)
-Add comparison colum of amount paid vs amount invoiced
+x Retailer also needs shipping type field caried accross to shipment like the other 2 fields
+Add billing email and possibly shipping email to customer and tracking number to shipment.
+auto send emails on Despatch (Linda has temnplate)
 
 
 
@@ -49,9 +50,6 @@ Parts no longer show what they are used in.
 
 Invoives: Checkbox for VAT should be applied to shipping - Uncompleted and probably needs backing out.
 
-Just a reminder that it would be good if once invoices were issued the prices wouldn't automatically update!
-Also, I am confused because invoice 2018070101 shows on the shipment page as $945.50 and the invoice shows $1212.50.
-Thanks love :-)
 
 
 

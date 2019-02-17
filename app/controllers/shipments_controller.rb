@@ -20,10 +20,12 @@ class ShipmentsController < ApplicationController
   # GET /shipments/new
   def new
     @shipment = Shipment.new
-    @shipment.retailer = Retailer.find(params['retailer_id'])
+    @shipment.invoice_number = Shipment.find_next_invoice_number
+
     @shipment.date_order_received = Date.current()
     @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
     @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no 
+    @shipment.shipping_provider_type = @shipment.retailer.pref_shipping_provider_type 
     @shipment.vat_rate = 20  
     @shipment.apply_vat_to_shipping = true
   end
@@ -51,10 +53,18 @@ class ShipmentsController < ApplicationController
     
   def create
     @shipment = Shipment.new(shipment_params)
+    @shipment.invoice_number = Shipment.find_next_invoice_number
+    @shipment.date_order_received = Date.current()
+    @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
+    @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no 
+    @shipment.shipping_provider_shipping_type = @shipment.retailer.pref_shipping_provider_shipping_type 
+    @shipment.vat_rate = 20  
+    @shipment.apply_vat_to_shipping = true
     if @shipment.save
-         redirect_to :action => "edit", :id =>@shipment.id
-    else
-        render :new
+        respond_to do |format|
+            format.html { redirect_to :action => "edit", :id => @shipment.id }
+            format.json { render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue]}
+        end
     end
   end
     

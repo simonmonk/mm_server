@@ -5,7 +5,11 @@ class RetailersController < ApplicationController
   # GET /retailers
   # GET /retailers.json
   def index
-    @retailers = Retailer.all
+    @retailers = Retailer.all.order(:name)
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render :json => @retailers}
+  end
   end
 
   # GET /retailers/1
@@ -80,7 +84,7 @@ end
       :billing_ad_postal_code, :billing_ad_country, :billing_ad_tel, 
       :fao_delivery, :delivery_ad_line1, :delivery_ad_line2, :delivery_ad_city, 
       :delivery_ad_postal_code, :delivery_ad_country, :delivery_ad_tel, :vatable, 
-      :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :active, 
-      :show_foreign_sku, :is_retail)
+      :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :pref_shipping_provider_type,
+      :active, :show_foreign_sku, :is_retail)
     end
 end
