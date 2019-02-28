@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get '/sales_us/', to: 'welcome#sales_us'
     
   get 'shipments/invoice/*other', to: 'shipments#invoice'
+  get 'shipments/packing_list/*other', to: 'shipments#packing_list'
   get 'shipments/quote/*other', to: 'shipments#quote'
   get 'products/pricelist', to: 'products#pricelist'
   get 'products/productlist', to: 'products#productlist' # for the MM website so no prices
@@ -58,11 +59,13 @@ Rails.application.routes.draw do
   resources :shipments do
     collection do
       get :add_product
+      post :add_product
       get :import_shipment_uk
       get :import_shipment_com
       get :subtract_products
       get :delete_shipment_line
       get :invoice
+      get :packing_list
       get :list
       get :get_shipments
     end

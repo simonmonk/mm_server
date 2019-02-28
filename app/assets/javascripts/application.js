@@ -31,3 +31,14 @@ Date.prototype.addDays = function(days) {
     date.setDate(date.getDate() + days);
     return date;
 }
+
+Number.prototype.to_gbp = function() {
+    var formatter = new Intl.NumberFormat('en-UK', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2 });
+    return formatter.format(this.valueOf())
+}
+
+String.prototype.to_gbp = function() {
+    var formatter = new Intl.NumberFormat('en-UK', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2 });
+    return formatter.format(parseFloat(this.valueOf()))
+}
+

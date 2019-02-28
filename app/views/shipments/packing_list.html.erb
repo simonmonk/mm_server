@@ -1,0 +1,117 @@
+
+
+<style>
+
+p {
+    text-align: left;
+    margin-top: 1px;  
+    margin-bottom: 1px;  
+    font: 14px arial, sans-serif;
+}
+    
+.smallprint {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 12px arial, sans-serif;
+}
+    
+h1 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 20px;  
+    font: 50px arial, bold, sans-serif;
+}    
+
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+    
+h3 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 30px arial, bold, sans-serif;
+}   
+    
+table {
+    border-collapse: collapse;
+}
+    
+td {
+    vertical-align: top;  
+}
+    
+    
+.prod_table_th {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: bold 28px/1.5 Arial, sans-serif;
+}    
+    
+.prod_table_td {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 3;
+    font: 28px/1.5 Arial, sans-serif;
+}    
+    
+
+    
+.prod_table_td_sig {
+    border: 1px solid black;   
+    text-align: left;
+    padding: 30;
+    font: 14px/1.5 Arial, sans-serif;
+    color: lightgray;
+}  
+
+</style>
+
+<h1>MonkMakes Ltd Packing List</h1>
+
+    
+<h3>Invoice Number: <%=@shipment.invoice_number%></h3>
+<h3>Order Date: <%=@shipment.date_order_received%></h3>
+
+
+<h2>Items to Pack</h2>
+
+<table width="100%" class="prod_table">
+<tr>
+    <th class="prod_table_th">Qty</th>
+    <th class="prod_table_th">SKU</th>
+    <th class="prod_table_th">Product</th>
+    <th class="prod_table_th">Packed</th>
+</tr>
+
+<%
+@shipment.shipment_products.each do | sp |
+    sku = sp.product.sku
+%>
+<tr>
+    <td class="prod_table_td"><%=sp.qty%></td>
+    <td class="prod_table_td"><%=sku%></td>
+    <td class="prod_table_td"><%=sp.product.name%></td>
+    <td class="prod_table_td_sig">&nbsp;</td>
+</tr>
+<% end %>
+</table>
+
+<h3>Ship to:</h3>
+<p><b><%=@shipment.retailer.name%></b></p>
+<p><b><%=@shipment.retailer.delivery_ad_line1%></b></p>
+<p><b><%=@shipment.retailer.delivery_ad_line2%></b></p>
+<p><b><%=@shipment.retailer.delivery_ad_city%></b></p>
+<p><b><%=@shipment.retailer.delivery_ad_state%></b></p>
+<p><b><%=@shipment.retailer.delivery_ad_postal_code%></b></p>
+<p><b><%=@shipment.retailer.delivery_ad_country%></b></p>
+
+<h3>Shipping method</h3>
+<p><b><%=@shipment.shipping_provider%></b></p>
+<p><b><%=@shipment.shipping_provider_ac_no%></b></p>
+<p><b><%=@shipment.shipping_provider_shipping_type%></b></p>

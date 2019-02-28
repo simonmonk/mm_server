@@ -1,6 +1,10 @@
 class ShipmentProduct < ApplicationRecord
   belongs_to :shipment
   belongs_to :product
+
+  def as_json(options={})
+    super(:methods => [:product, :line_total])
+  end
     
     
   def wholesale_in_currency()
@@ -31,6 +35,10 @@ class ShipmentProduct < ApplicationRecord
         end
     end
 
-
+    def line_total
+        if (price && qty)
+            return price * qty
+        end
+    end
     
 end

@@ -1,5 +1,5 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice, :quote]
+  before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice, :quote, :packing_list]
   skip_before_filter :verify_authenticity_token 
 
   # GET /shipments
@@ -8,13 +8,15 @@ class ShipmentsController < ApplicationController
     @shipments = Shipment.all
     respond_to do |format|
         format.html { render :index }
-        format.json { render :json => Shipment.all.order('updated_at desc'), :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue] }
+        format.json { render :json => Shipment.all.order('updated_at desc'), 
+          :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products] }
     end
   end
 
   # GET /shipments/1
   # GET /shipments/1.json
   def show
+    render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products]
   end
 
   # GET /shipments/new
@@ -43,10 +45,15 @@ class ShipmentsController < ApplicationController
   def quote
       render :layout => false
   end
+
+  def packing_list
+    render :layout => false
+  end
     
+  # json
   def update
       if @shipment.update(shipment_params)
-        redirect_to :action => "edit", :id =>@shipment.id
+        render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :total_invoice_collected]
       end   
   end
     
@@ -63,17 +70,18 @@ class ShipmentsController < ApplicationController
     if @shipment.save
         respond_to do |format|
             format.html { redirect_to :action => "edit", :id => @shipment.id }
-            format.json { render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue]}
+            format.json { render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :total_invoice_collected]}
         end
     end
   end
     
+# json - used to work for html too but not any more.  
 def add_product
-    product_id = params[:product_id]
-    shipment_id = params[:shipment_id]
+    product_id = params[:shipment_product][:product_id]
+    shipment_id = params[:shipment_product][:shipment_id]
     shipment = Shipment.find(shipment_id)
     product = Product.find(product_id)
-    qty = params[:qty].to_i
+    qty = params[:shipment_product][:qty].to_i
     # if there is no product_retailer record, beacuse they haven't sold this before, create one
     results = ProductRetailer.where(retailer_id: shipment.retailer_id, product_id: product_id)
     if (results.length == 0)
@@ -91,16 +99,15 @@ def add_product
         sp.price = sp.invoice_price
         sp.save
     end
-    redirect_to :action => "edit", :id => shipment_id
+    render :json => sp, :methods => [:product, :line_total]
 end   
-    
     
 def delete_shipment_line
     sp = ShipmentProduct.find(params[:shipment_product_id])
     if (sp)
         sp.destroy
     end
-    redirect_to :action => "edit", :id => sp.shipment_id
+    render :json => @shipment
 end       
     
 def subtract_products
@@ -221,6 +228,8 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipment_params
-      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, :discount, :vat_rate, :date_payment_received, :invoice_comment, :apply_vat_to_shipping)
+      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, 
+                      :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, 
+                      :discount, :vat_rate, :date_payment_received, :invoice_comment, :apply_vat_to_shipping, :is_cancelled, :total_invoice_collected)
     end
 end

@@ -274,7 +274,7 @@ end
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td colspan="3"><b><%=@shipment.invoice_comment%></b></td><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td colspan="3"><h3><%=@shipment.invoice_comment%></h3></td><td class="prod_table_td" colspan="2">Total</td><td class="prod_table_td_money"><%=number_to_currency(total, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
     
 <% 

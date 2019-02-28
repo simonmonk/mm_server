@@ -67,3 +67,4 @@ gem "chartkick"
 
 gem 'bootstrap'
 gem 'jquery-rails'
+gem 'rb-readline'
