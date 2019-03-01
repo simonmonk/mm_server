@@ -53,7 +53,7 @@ class ShipmentsController < ApplicationController
   # json
   def update
       if @shipment.update(shipment_params)
-        render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :total_invoice_collected]
+        render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products]
       end   
   end
     
@@ -70,7 +70,7 @@ class ShipmentsController < ApplicationController
     if @shipment.save
         respond_to do |format|
             format.html { redirect_to :action => "edit", :id => @shipment.id }
-            format.json { render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :total_invoice_collected]}
+            format.json { render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products,]}
         end
     end
   end
@@ -131,7 +131,7 @@ def subtract_products
     
     t.description = "Removed " + count.to_s + " products from stock for shipment " + shipment.id.to_s + ". " + message
     t.save
-    redirect_to :action => "edit", :id => shipment_id, notice: message
+    render :json => shipment
 end      
     
 def import_shipment_uk

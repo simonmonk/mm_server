@@ -20,15 +20,15 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 Javascriptifying
 ----------------
 
-* Add shipping cost on Ship Shipment modal
+x * Add shipping cost on Ship Shipment modal
 * also fields for totAL SHIPOMENT WEIGHT AMD dimensions
 x * Invoice comment needs to be in bold and bigger
 x * Cancel button on ship shipment rename to Backl
-* Move cancel function to new orders only
+x * Move cancel function to new orders only
 x * Create new order after doing stuff with existing customer does not start with undefined customer
 x * Pull through of shipping method etc for new order has stopped working - ditto the invoice number
 * packing list show foreign sku
-* subtract ordered stuff - on mark shipped shouldn't let you ship if any quantities are not sufficient
+x * subtract ordered stuff - on mark shipped shouldn't let you ship if any quantities are not sufficient
 
 
 Working on Shipments

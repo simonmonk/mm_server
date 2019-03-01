@@ -1,96 +1,716 @@
-<p id="notice"><%= notice %></p>
+<h1>Orders</h1>
+
+<div id="app">
+
+<div>
+
+<div>
+  <button type="button" v-on:click="new_shipment_1" class="btn btn-primary">Create New Order</button>
+</div>
+
+<span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_new'}" v-on:click="filter_shipments('is_new')">New Orders</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_unpaid'}" v-on:click="filter_shipments('is_unpaid')">Unpaid Orders</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_paid'}" v-on:click="filter_shipments('is_paid')">Paid (Complete)</span>
+</span>
+
+<span>
+Modified in last   
+<select v-model="num_days">
+      <option value="7">7</option>
+      <option value="14">14</option>
+      <option value="30">30</option>
+      <option value="90">90</option>
+      <option value="365">365</option>
+      <option value="100000">ALL</option>
+</select>
+days.
+</span>
+<span>
+Sort by:   
+<select v-model="sort_by_field">
+      <option value="updated_at">Most recently changed or added</option>
+      <option value="date_order_received">Date order received</option>
+      <option value="invoice_number">Invoice number</option>
+      <option value="retailer_name">Customer name</option>
+</select>
+</span>
+
+</div>
+
+<!-- Edit Unpaid Shipment Form Modal -->
+<div id="mod_unpaid_shipment" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Shipment {{shipment.invoice_number}} {{ shipment.retailer_name  }}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{shipment.invoice_number}}</td>
+            <td>Order Received Date</td>
+            <td>{{shipment.date_order_received}}</td>
+          </tr>
+          <tr>
+            <td>VAT Rate (percent)</td>
+            <td>{{shipment.vat_rate}}</td>
+            <td>Invoice Sent Date</td>
+            <td>{{shipment.date_invoice_sent}}</td>
+          </tr>
+          <tr>
+            <td>Customer P.O. Number</td>
+            <td>{{shipment.po_reference}}</td>
+            <td>Despatched Date</td>
+            <td>{{shipment.date_dispatched}}</td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Provider</td>
+            <td>{{shipment.shipping_provider}}</td>
+            <td>Payment Due Date</td>
+            <td>{{shipment.date_payment_reminder}}</td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Ac.</td>
+            <td>{{shipment.shipping_provider_ac_no}}</td>
+          </tr>
+          <tr>
+            <td>Discount</td>
+            <td>{{shipment.discount}}</td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
+          </tr>
+          <tr>
+            <td>Invoice Comment</td>
+            <td colspan="3">{{shipment.invoice_comment}}</td>
+          </tr>
+          <tr><td><button type="button" v-on:click="save_shipment('#mod_unpaid_shipment')" class="btn btn-primary">Save</button>
+            <button type="button" v-on:click="cancel('#mod_unpaid_shipment')" class="btn btn-info">Cancel</button></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Paid Shipment Form Modal -->
+<div id="mod_paid_shipment" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Shipment {{shipment.invoice_number}} {{ shipment.retailer_name  }}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{shipment.invoice_number}}</td>
+            <td>Order Received Date</td>
+            <td>{{shipment.date_order_received}}</td>
+          </tr>
+          <tr>
+            <td>VAT Rate (percent)</td>
+            <td>{{shipment.vat_rate}}</td>
+            <td>Invoice Sent Date</td>
+            <td>{{shipment.date_invoice_sent}}</td>
+          </tr>
+          <tr>
+            <td>Customer P.O. Number</td>
+            <td>{{shipment.po_reference}}</td>
+            <td>Despatched Date</td>
+            <td>{{shipment.date_dispatched}}</td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Provider</td>
+            <td>{{shipment.shipping_provider}}</td>
+            <td>Payment Due Date</td>
+            <td>{{shipment.date_payment_reminder}}</td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Ac.</td>
+            <td>{{shipment.shipping_provider_ac_no}}</td>
+            <td>Actual Amount Collected</td>
+            <td><input v-model="shipment.total_invoice_collected" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Discount</td>
+            <td>{{shipment.discount}}</td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
+          </tr>
+          <tr>
+            <td>Invoice Comment</td>
+            <td colspan="3">{{shipment.invoice_comment}}</td>
+          </tr>
+          <tr>
+            <td>Payment Received</td>
+            <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
+          </tr>
+          <tr><td><button type="button" v-on:click="save_shipment('#mod_paid_shipment')" class="btn btn-primary">Save</button>
+            <button type="button" v-on:click="cancel('#mod_paid_shipment')" class="btn btn-info">Cancel</button></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shipment Form Modal Part 1 -->
+<div id="mod_shipment_new_1" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Shipment</h1>
+        <table>
+          <tr>
+            <td>Shipment to</td>
+            <td v-if="shipment.retailer_name">{{ shipment.retailer_name }}</td>
+            <td v-else>
+              <select v-model="shipment.retailer_id" @change="update_retailer_selection()">
+                <option v-for="(retailer, index) in retailers" v-bind:value="retailer.id">{{retailer.name}}</option>
+              </select>
+            </td>
+            <td>Customer Shipping Provider</td>
+            <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="E.g. DHL"/></td>
+          </tr>
+          <tr>
+            <td>Invoice Number</td>
+            <td><input v-model="shipment.invoice_number" type="text" class="form-control" placeholder="Enter Invoice Number"/></td>
+          </tr>
+          <tr>
+            <td>Order Received Date</td>
+            <td><input v-model="shipment.date_order_received" type="date" value="" class="form-control" placeholder="Date the order was received"/></td>
+            <td>Customer Shipping Ac.</td>
+            <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>VAT Rate (percent)</td>
+            <td><input v-model="shipment.vat_rate" type="text" class="form-control" placeholder="none"/></td>
+            <td>Customer Shipping Type</td>
+            <td><input v-model="shipment.pref_shipping_provider_shipping_type" type="text" class="form-control" placeholder="E.g. express"/></td>
+          </tr>
+          <tr>
+            <td>Invoice Sent Date</td>
+            <td><input v-model="shipment.date_invoice_sent" type="date" value="" class="form-control" placeholder="Date the invoice was sent"/></td>
+            <td>Cancelled</td>
+            <td><input type="checkbox" v-model="shipment.is_cancelled"/></td>
+          </tr>
+          <tr>
+            <td>Customer P.O. Number</td>
+            <td><input v-model="shipment.po_reference" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Discount (£)</td>
+            <td><input v-model="shipment.discount" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
+          </tr>
+          <tr>
+            <td>Invoice Comment</td>
+            <td colspan="3"><textarea v-model="shipment.invoice_comment" rows="3" class="form-control" placeholder="What you write here will appear on the invoice"></textarea></td>
+          </tr>
+          <tr><td><button type="button" v-if="shipment.retailer_id" v-on:click="save_shipment_part_1" class="btn btn-primary">Save</button>
+              <button type="button" v-on:click="cancel('#mod_shipment_new_1')" class="btn btn-info">Back</button></td></tr>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shipment Form Modal Part 2 -->
+<div id="mod_shipment_new_2" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Shipment</h1>
+        <table>
+          <tr>
+            <td>Shipment to</td>
+            <td>{{ shipment.retailer_name }}</td>
+          </tr>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{ shipment.invoice_number }}</td>
+          </tr>
+        </table>
+        <h2>Lines</h2>
+        <table>
+        <tr>
+          <th>Qty</th>
+          <th>SKU</th>
+          <th>Product</th>
+          <th>Unit Price</th>
+          <th>Extended Price</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr v-for="(sp, index) in shipment.shipment_products">
+          <td v-bind:class="{ warning: sp.qty > sp.product.qty }">{{sp.qty}}</td>
+          <td v-bind:class="{ warning: sp.qty > sp.product.qty }">{{sp.product.sku}}</td>
+          <td v-bind:class="{ warning: sp.qty > sp.product.qty }">{{sp.product.name}}</td>
+          <td>{{sp.price.to_gbp()}}</td>
+          <td>{{sp.line_total.to_gbp()}}</td>
+          <td><span v-on:click="edit_sp(index)" class="badge badge-info">Edit</span></td>
+          <td><span v-on:click="open_product_tab(sp.product_id)"class="badge badge-info">Open Product (new tab)</span></td>
+        </tr>
+        </table>
+        <table>
+          <tr>
+            <td>
+              <select v-model="shipment_product.product_id">
+                <option v-for="(product, index) in products" v-bind:value="product.id">{{product.name}} ({{product.qty}} ready)</option>
+              </select>
+            </td>
+            <td>Qty</td>
+            <td><input v-model="shipment_product.qty" type="text" class="form-control" placeholder="none"/></td>
+            <td><button type="button" v-on:click="add_sp" class="btn btn-primary">+</button></td>
+          </tr>
+        </table>
+        <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_packing_list" class="btn btn-primary">Packing List</button>
+        <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
+        <button type="button" v-on:click="close_edit_view" class="btn btn-primary">Complete Later</button>
+        <button v-if="shipment.shipment_products.length > 0 && all_shipable()" type="button" v-on:click="ship_shipment(-1)" class="btn btn-success">Ship</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reconcile Form Modal -->
+<div id="mod_reconcile" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Reconcile Payment for Shipment to {{shipment.retailer_name}} on {{shipment.date_dispatched}}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{shipment.invoice_number}}</td>
+          </tr>
+          <tr>
+            <td>Payment Received</td>
+            <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
+          </tr>
+          <tr>
+            <td>Invoice Amount</td>
+            <td>{{shipment.total_invoice_amount ? shipment.total_invoice_amount.to_gbp() : ''}}</td>
+          </tr>
+          <tr>
+            <td>Actual Amount Collected</td>
+            <td><input v-model="shipment.total_invoice_collected" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Explain why the theiving bastards haven't paid in full."></textarea></td>
+          </tr>
+          <tr><td><button type="button" v-on:click="save_shipment('#mod_reconcile')" class="btn btn-primary">Save</button>
+            <button type="button" v-on:click="cancel('#mod_reconcile')" class="btn btn-info">Cancel</button></td>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mark Shipped Form Modal -->
+<div id="mod_ship" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Mark Shipment Sent to {{shipment.retailer_name}}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{shipment.invoice_number}}</td>
+          </tr>
+          <tr>
+            <td>Date Shipped</td>
+            <td><input v-model="shipment.date_dispatched" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Provider</td>
+            <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Ac.</td>
+            <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Shipping Cost</td>
+            <td><input v-model="shipment.shipping_cost" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr><td>coming soon - dimensions</td></tr>
+          <tr>
+            <td>Invoice Comment</td>
+            <td colspan="3"><textarea v-model="shipment.invoice_comment" rows="3" class="form-control" placeholder="What you write here will appear on the invoice"></textarea></td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder=""></textarea></td>
+          </tr>
+          <tr><td><button type="button" v-on:click="ship_items_update" class="btn btn-primary">Mark as Shipped</button>
+            <button type="button" v-on:click="cancel('#mod_ship')" class="btn btn-info">Back</button></td></tr>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Shipment Product Modal -->
+<div id="mod_ship_prod" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Edit Line Item</h1>
+        <table>
+          <tr><td>{{shipment_product.product.name}}</td></tr>
+          <tr>
+            <td>Quantity</td>
+            <td><input v-model="shipment_product.qty" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          
+          <tr><td><button type="button" v-on:click="delete_sp" class="btn btn-warning">Delete Line Item</button></td></tr>
+          <tr><td><button type="button" v-on:click="add_sp" class="btn btn-primary">Save Change</button></td></tr>
+          <tr><td><button type="button" v-on:click="cancel('#mod_ship_prod')" class="btn btn-info">Cancel</button></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Orders List Table -->
+<table>
+<tr>
+  <th>Order Received</th>
+  <th>Invoive Number</th>
+  <th>Retailer</th>
+  <th>Invoice Amount</th>
+  <th v-if="filter_by_type == 'is_paid'">Amount Collected</th>
+  <th v-if="filter_by_type == 'is_unpaid'">Due Date</th>
+</tr>
+<tr v-bind:class="{ inactive: shipment.is_cancelled }" v-for="(shipment, index) in filtered_results">
+  <td>{{ shipment.date_order_received }} </td>
+  <td>{{ shipment.invoice_number }} </td>
+  <td>{{ shipment.retailer_name }}</td>
+  <td v-bind:class="{ warning: shipment.is_overdue }">{{ shipment.total_invoice_amount.to_gbp() }}</td>
+  <td v-if="filter_by_type == 'is_paid'">{{ shipment.total_invoice_collected ? shipment.total_invoice_collected.to_gbp() : '' }}</td>  
+  <td v-if="filter_by_type == 'is_unpaid'">{{ shipment.date_payment_reminder }}</td>
+  
+  <td v-if="filter_by_type == 'is_new'"><span v-on:click="edit_shipment_1(index)" class="badge badge-info">Shipment Info</span></td>
+  <td v-if="filter_by_type == 'is_new'"><span v-on:click="edit_shipment_2(index)" class="badge badge-info">Line Items</span></td>
+  <td v-if="filter_by_type == 'is_unpaid'"><span v-on:click="edit_unpaid_shipment(index)" class="badge badge-info">Edit</span></td>
+  <td v-if="filter_by_type == 'is_paid'"><span v-on:click="edit_paid_shipment(index)" class="badge badge-info">Edit</span></td>
+  <td v-if="filter_by_type == 'is_unpaid'"><span v-on:click="reconcile_shipment(index)" class="badge badge-success">Reconcile</span></td>
+  <td v-if="filter_by_type == 'is_new'"><span v-on:click="delete_shipment(index)" class="badge badge-danger">Delete</span></td>
+</tr>
+</table>
+
+
+</div>
 
 <script>
 
-function new_shipment() {
-    var list = document.getElementById("retailers_list");
-    var retailer_id = list.options[list.selectedIndex].value;
-    document.location = "/shipments/new?retailer_id=" + retailer_id
-}  
 
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          filter_by_type: 'is_new',
+          num_days: 90,
+          sort_by_field: 'updated_at',
+          shipments: [],
+          shipment_index: 0, // set when edit a shipment from the list so that on reload, we can reset shipment
+          shipment: {
+            id: null,
+            invoice_number: '',
+            retailer_id: null,
+            date_order_received: new Date().toISOString().slice(0,10),
+            vat_rate: 0,
+            date_invoice_sent: new Date().toISOString().slice(0,10),
+            po_reference: '',
+            shipping_provider: '',
+            shipping_provider_ac_no: '',
+            shipping_provider_type: '',
+            total_invoice_collected: '',
+            discount: '',
+            notes: '',
+            shipment_products: []
+          },
+          retailers: [],
+          retailer: {},
+          shipment_product: {
+            shipment_id: null,
+            product_id: null,
+            qty: null,
+            price: null,
+            product: {name: ''}
+          },
+          products: []
+        },
+        mounted: function() {
+          var that;
+          that = this;
+          this.load_shipments();
+          this.load_products();
+          this.filter_shipments('is_new')
+          $.ajax({
+              url: '/retailers.json',
+              success: function(res) {
+                that.retailers = res;
+              }
+          });
+        },
+        methods: {
+          load_shipments: function() { 
+            var that;
+            that = this;
+            $.ajax({
+              url: '/shipments.json',
+              success: function(res) {
+                that.shipments = res;
+              }
+            });
+          },
+          load_products: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/products.json',
+              success: function(res) {
+                that.products = res;
+              }
+            });
+          },
+          load_shipment: function(shipment_id) {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/shipments' + '/' + that.shipment.id + '.json',
+              success: function(res) {
+                that.shipment = res;
+              }
+            });
+          },
+          filter_shipments: function(filter_attribute) {
+            this.filter_by_type = filter_attribute
+          },
+          update_retailer_selection: function() {
+            var that;
+            that = this;
+            // find the retailer
+            this.retailer = this.retailers.filter(function (retailer) {
+              return that.shipment.retailer_id == retailer.id;
+            })[0];
+            this.shipment.shipping_provider = this.retailer.pref_shipping_provider;
+            this.shipment.shipping_provider_ac_no = this.retailer.pref_shipping_provider_ac_no;
+            this.shipment.shipping_provider_type = this.retailer.pref_shipping_provider_shipping_type;
+          },
+          new_shipment_1: function() {
+            this.shipment = {
+              id: null,
+              invoice_number: '',
+              retailer_id: null,
+              date_order_received: new Date().toISOString().slice(0,10),
+              vat_rate: 0,
+              date_invoice_sent: new Date().toISOString().slice(0,10),
+              po_reference: '',
+              shipping_provider: '',
+              shipping_provider_ac_no: '',
+              shipping_provider_type: '',
+              discount: '',
+              notes: '',
+              total_invoice_amount: '',
+              total_invoice_collected: '',
+              shipment_products: []
+            };
+            $('#mod_shipment_new_1').modal('show')
+          },
+          edit_shipment_1: function(index) {
+            this.shipment_index = index; // MAY BE REDUNDANT
+            this.shipment = this.filtered_results[index];
+            $('#mod_shipment_new_1').modal('show');
+          },
+          edit_shipment_2: function(index) {
+            this.shipment_index = index;
+            this.shipment = this.filtered_results[index];
+            $('#mod_shipment_new_2').modal('show');
+          },
+          edit_unpaid_shipment: function(index) {
+            this.shipment_index = index;
+            this.shipment = this.filtered_results[index];
+            $('#mod_unpaid_shipment').modal('show');
+          },
+          edit_paid_shipment: function(index) {
+            this.shipment_index = index;
+            this.shipment = this.filtered_results[index];
+            $('#mod_paid_shipment').modal('show');
+          },
+          save_shipment_part_1: function() {
+            this.save_shipment('#mod_shipment_new_1');  
+            $('#mod_shipment_new_2').modal('show')
+          },
+          close_edit_view: function() {
+            $('#mod_shipment_new_2').modal('hide');
+          },
+          cancel: function(modal_to_close) {
+            $(modal_to_close).modal('hide')
+          },
+          delete_shipment: function(index) {
+            var that;
+            that = this;
+            var shipment_to_delete = this.filtered_results[index]
+            if (confirm('Are you sure?')) {
+              $.ajax({
+                type: 'DELETE',
+                url: '/shipments/' + shipment_to_delete.id + '.json',
+                success: function(res) {
+                  that.load_shipments();
+                }
+              });
+            }
+          },
+          add_sp: function() {
+            var that;
+            that = this;
+            this.shipment_product.shipment_id = this.shipment.id;
+            $.ajax({
+              type: 'POST',
+              url: '/shipments/add_product',
+              data: {shipment_product: this.shipment_product},
+              success: function(res) {
+                that.load_shipments();
+                that.load_shipment(that.shipment.id);
+                $('#mod_ship_prod').modal('hide');
+              }
+            });
+          },
+          delete_sp: function() {
+            var that;
+            that = this;
+            if (confirm("Are you sure?")) {
+              $.ajax({
+                type: 'GET',
+                url: '/shipments/delete_shipment_line?shipment_product_id=' + this.shipment_product.id,
+                success: function(res) {
+                  that.load_shipment(that.shipment.id);
+                  $('#mod_ship_prod').modal('hide');
+                }
+              });
+            }
+          },
+          edit_sp: function(index) {
+            this.shipment_product = this.shipment.shipment_products[index];
+            $('#mod_ship_prod').modal('show');
+          },
+          create_invoice: function(pages) {
+            window.open("/shipments/invoice/" + this.shipment.invoice_number + "?id=" + this.shipment.id + "&pages=" + pages, '_blank')
+          },
+          create_packing_list: function() {
+            window.open("/shipments/packing_list/" + this.shipment.invoice_number + "?id=" + this.shipment.id, '_blank')
+          },
+          open_product_tab: function(product_id) {
+            window.open("/products/" + product_id + "/edit", '_blank')
+          },
+          save_shipment: function(modal_to_close) {
+            var that;
+            that = this;
+            var modal = modal_to_close;
+            // delete computed attributes that cant be saved
+            delete this.shipment.retailer_name;
+            delete this.shipment.total_invoice_amount;
+            delete this.shipment.is_amazon;
+            delete this.shipment.is_new;
+            delete this.shipment.is_unpaid;
+            delete this.shipment.is_paid;
+            delete this.shipment.is_overdue;
+            delete this.shipment.shipment_products;
+            // POST for a new, PUT for an update
+            method = 'POST'
+            url = '/shipments.json'
+            
+            if (this.shipment.id) { // update existing
+              method = 'PUT';
+              url = '/shipments/' + this.shipment.id + '.json';
+            }
+            $.ajax({
+              type: method,
+              url: url,
+              data: {shipment: this.shipment},
+              success: function(res) {
+                that.load_shipments();
+                that.shipment = res;
+                that.shipment_product.shipment_id = that.shipment.id;
+                if (modal) {
+                  $(modal).modal('hide');
+                }
+              }
+            });
+          },
+          reconcile_shipment: function(index) {
+            this.shipment = this.filtered_results[index]
+            this.shipment.date_payment_received = new Date().toISOString().slice(0,10),
+            $('#mod_reconcile').modal('show')
+          },
+          ship_shipment: function(index) {
+            // works from list or detail views
+            if (index != -1) {
+              this.shipment = this.filtered_results[index];
+            }
+            this.shipment.date_dispatched = new Date().toISOString().slice(0,10);
+            $('#mod_ship').modal('show');
+            $('#mod_shipment_new_2').modal('hide');
+          },
+          ship_items_update: function() {
+            var that;
+            that = this;
+            this.save_shipment();
+            $.ajax({
+                type: 'GET',
+                url: '/shipments/subtract_products?shipment_id=' + this.shipment.id,
+                success: function(res) {
+                  that.load_shipments();
+                  that.load_products();
+                  $('#mod_ship').modal('hide');
+                }
+            });
+          },
+          all_shipable: function() {
+            var can_ship = true;
+            this.shipment.shipment_products.forEach(function(sp) {
+              if (sp.product.qty <= sp.qty) {
+                can_ship = false;
+              }
+            });
+            return can_ship;
+          },
+        },
+        computed: {
+          filtered_results: function() {
+            var that;
+            that = this;
+            let filtered = this.shipments.filter(function (shipment) {
+              var today = new Date();
+              var start_date = today.addDays(- parseInt(that.num_days)).toISOString()
+              var in_date_range = (shipment.updated_at >= start_date)
+              return shipment[that.filter_by_type] && in_date_range
+            });
+            let sorted = filtered.sort(function (a, b) {
+              let inverted = 1;
+              if (that.sort_by_field == 'updated_at') {
+                inverted = -1;
+              }
+              if (a[that.sort_by_field] > b[that.sort_by_field]) {
+                return 1 * inverted;
+              }
+              return -1 * inverted;
+            });
+            return sorted;
+          }
+        }
+    })
+}
 </script>
-
-<h1>Orders/Shipments</h1>
-
-<select id="retailers_list">
-<% retailers = Retailer.all.order(name: :asc)
-    retailers.each do |retailer| %>
-    <option value='<%= retailer.id %>'><%= retailer.name %></option>option>
-<% end %>
-</select> 
-
-<input type="button" value="New Shipment" onclick="javascript:new_shipment()"/>
-
-<p></p>
-
-<i class="priorityInProgress">In progress</i>
-<i class="priorityAwaitingPayment">Awaiting payment</i>
-<i class="priorityPaid">Paid and complete</i>
-<i class="priorityOverdue">Overdue</i>
-
-<p></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Invoice Number</th>
-      <th>Retailer</th>
-      <th>Invoice Amount</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% 
-      # Sort the shipments - ones with no invoice_number to the top
-      # First make 2 lists - with and without invoice date 
-
-      # Then sort all without invoice date by creation date order descending
-      # Then sort all with invoice_number descenting
-      # Combine the lists again
-      un_invoiced_shipments = []
-      invoiced_shipments = []
-
-      @shipments.each do | ship |
-          if ship.invoice_number.blank?
-              un_invoiced_shipments.push(ship)
-          else
-              invoiced_shipments.push(ship)
-          end
-      end
-
-      un_invoiced_shipments = un_invoiced_shipments.sort do | a, b | 
-          b.created_at <=> a.created_at
-      end
-
-      invoiced_shipments = invoiced_shipments.sort do | a, b | 
-          b.invoice_number <=> a.invoice_number
-      end
-
-      ships = un_invoiced_shipments + invoiced_shipments
-
-      ships.each do |shipment|
-        currency_symbol = '£'
-        if (shipment.retailer.pref_currency == 'USD')
-            currency_symbol = '$'
-        end
-      %>
-      <tr class="priority<%= shipment.priority %>">
-        <td>
-            <% if (not shipment.invoice_number.blank?) %>
-                <%= shipment.invoice_number%>
-            <%else%>
-                Not Invoiced
-            <%end%>
-        </td>
-        <td><%= shipment.retailer.name %></td>
-        <td><%=number_to_currency(shipment.total_invoice_amount, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
-        <td><%= link_to "Edit", edit_shipment_path(shipment) %></td>
-        <td><a href="/shipments/invoice/<%= shipment.invoice_number%>?id=<%= shipment.id %>">Invoice</a></td>
-        <td><%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
