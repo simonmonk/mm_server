@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190217130333) do
+ActiveRecord::Schema.define(version: 20190302144611) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -298,6 +298,11 @@ ActiveRecord::Schema.define(version: 20190217130333) do
     t.boolean  "is_cancelled"
     t.decimal  "total_invoice_collected",         precision: 10, scale: 3
     t.string   "shipping_provider_shipping_type"
+    t.decimal  "invoice_exch_rate",               precision: 10, scale: 3
+    t.decimal  "weight_kg",                       precision: 10, scale: 3
+    t.decimal  "width_cm",                        precision: 10, scale: 3
+    t.decimal  "height_cm",                       precision: 10, scale: 3
+    t.decimal  "depth_cm",                        precision: 10, scale: 3
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

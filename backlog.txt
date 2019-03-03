@@ -30,8 +30,22 @@ x * Pull through of shipping method etc for new order has stopped working - ditt
 * packing list show foreign sku
 x * subtract ordered stuff - on mark shipped shouldn't let you ship if any quantities are not sufficient
 
+Snagging
+--------
+
+* for some reason Unpaid orders is appearing in both the New Orders and Unpaid orders
+* In the Unpaid orders list should show the amount in pounds even for a US order (Eduporium only) 
+* Invoices for US (eduporium) at exchange rate + 5%. Invoice uses GBP prices * daily exch rate + 5%. 
+- needs a new field for exchange rate used for order, otherwise invoice won't be invarient. 
+- Add in new fields for weight and dims while you are at it.
+* Link on Edit Shipment for Unpaid and paid orders to open the invoice and packing list.
+* Refresh button on line items page - if someone fixes product qty
+* Check that after fixing qty Ship button reappears.
+ 
+
 
 Working on Shipments
+--------------------
 Add billing email and possibly shipping email to customer and tracking number to shipment.
 auto send emails on Despatch (Linda has temnplate)
 

@@ -57,7 +57,7 @@ class Product < ApplicationRecord
                 sp_date = sp.shipment.date_order_received
                 if (sp_date and sp_date > start_date and sp_date <= end_date)
                     units_sold += sp.qty
-                    value_sold += sp.wholesale_in_currency * sp.qty
+                    value_sold += sp.price * sp.qty
                     profit_total += sp.qty * sp.product.profit
                 end
             end

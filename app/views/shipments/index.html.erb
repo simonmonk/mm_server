@@ -78,6 +78,14 @@ Sort by:
             <td>{{shipment.discount}}</td>
           </tr>
           <tr>
+            <td>Weight (kg)</td>
+            <td>{{shipment.weight_kg}}</td>
+          </tr>
+          <tr>
+            <td>Dimensions (cm)</td>
+            <td>{{shipment.width_cm}} x  {{shipment.height_cm}} x {{shipment.depth_cm}}</td>
+          </tr>
+          <tr>
             <td>Notes</td>
             <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
           </tr>
@@ -85,6 +93,7 @@ Sort by:
             <td>Invoice Comment</td>
             <td colspan="3">{{shipment.invoice_comment}}</td>
           </tr>
+          <tr><td><span v-if="shipment.shipment_products.length > 0" v-on:click="create_invoice(1)" class="badge badge-info">Invoice</span></td></tr>
           <tr><td><button type="button" v-on:click="save_shipment('#mod_unpaid_shipment')" class="btn btn-primary">Save</button>
             <button type="button" v-on:click="cancel('#mod_unpaid_shipment')" class="btn btn-info">Cancel</button></td></tr>
         </table>
@@ -135,6 +144,14 @@ Sort by:
             <td>{{shipment.discount}}</td>
           </tr>
           <tr>
+            <td>Weight (kg)</td>
+            <td>{{shipment.weight_kg}}</td>
+          </tr>
+          <tr>
+            <td>Dimensions (cm)</td>
+            <td>{{shipment.width_cm}} x  {{shipment.height_cm}} x {{shipment.depth_cm}}</td>
+          </tr>
+          <tr>
             <td>Notes</td>
             <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
           </tr>
@@ -146,6 +163,7 @@ Sort by:
             <td>Payment Received</td>
             <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
           </tr>
+          <tr><td><span v-if="shipment.shipment_products.length > 0" v-on:click="create_invoice(1)" class="badge badge-info">Invoice</span></td></tr>
           <tr><td><button type="button" v-on:click="save_shipment('#mod_paid_shipment')" class="btn btn-primary">Save</button>
             <button type="button" v-on:click="cancel('#mod_paid_shipment')" class="btn btn-info">Cancel</button></td></tr>
         </table>
@@ -202,6 +220,7 @@ Sort by:
             <td>Discount (£)</td>
             <td><input v-model="shipment.discount" type="text" class="form-control" placeholder="none"/></td>
           </tr>
+          // weight width height depth
           <tr>
             <td>Notes</td>
             <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
@@ -253,7 +272,7 @@ Sort by:
           <td>{{sp.price.to_gbp()}}</td>
           <td>{{sp.line_total.to_gbp()}}</td>
           <td><span v-on:click="edit_sp(index)" class="badge badge-info">Edit</span></td>
-          <td><span v-on:click="open_product_tab(sp.product_id)"class="badge badge-info">Open Product (new tab)</span></td>
+          <td><span v-on:click="open_product_tab(sp.product_id)" class="badge badge-info">Open Product (new tab)</span></td>
         </tr>
         </table>
         <table>
@@ -268,6 +287,7 @@ Sort by:
             <td><button type="button" v-on:click="add_sp" class="btn btn-primary">+</button></td>
           </tr>
         </table>
+        <button v-if="shipment.shipment_products.length > 0 && ! all_shipable()" type="button" v-on:click="refresh_product_qty" class="btn btn-success">Refresh</button>
         <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_packing_list" class="btn btn-primary">Packing List</button>
         <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
         <button type="button" v-on:click="close_edit_view" class="btn btn-primary">Complete Later</button>
@@ -294,7 +314,7 @@ Sort by:
           </tr>
           <tr>
             <td>Invoice Amount</td>
-            <td>{{shipment.total_invoice_amount ? shipment.total_invoice_amount.to_gbp() : ''}}</td>
+            <td>{{invoice_amount_formated()}}</td>
           </tr>
           <tr>
             <td>Actual Amount Collected</td>
@@ -341,7 +361,25 @@ Sort by:
             <td>Shipping Cost</td>
             <td><input v-model="shipment.shipping_cost" type="text" class="form-control" placeholder="none"/></td>
           </tr>
-          <tr><td>coming soon - dimensions</td></tr>
+          <tr v-if="shipment.retailer.pref_currency == 'USD'" >
+            <td colspan="2">This customer uses an invoice in USD calculated from product prices in GBP. This will be fixed <b>Mark As Shipped</b> is Pressed.</td>
+          </tr>
+          <tr v-if="shipment.retailer.pref_currency == 'USD'" >
+            <td>Exchange Rate</td>
+            <td><input v-model="shipment.invoice_exch_rate" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Weight (kg)</td>
+            <td><input v-model="shipment.weight_kg" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+          <td>Dimensions (cm)</td>
+            <td>
+              <input v-model="shipment.width_cm" type="text" class="form-control" placeholder="width (cm)"/>
+              <input v-model="shipment.height_cm" type="text" class="form-control" placeholder="height (cm)"/>
+              <input v-model="shipment.depth_cm" type="text" class="form-control" placeholder="depth (cm)"/>
+            </td>
+          </tr>
           <tr>
             <td>Invoice Comment</td>
             <td colspan="3"><textarea v-model="shipment.invoice_comment" rows="3" class="form-control" placeholder="What you write here will appear on the invoice"></textarea></td>
@@ -396,7 +434,7 @@ Sort by:
   <td>{{ shipment.date_order_received }} </td>
   <td>{{ shipment.invoice_number }} </td>
   <td>{{ shipment.retailer_name }}</td>
-  <td v-bind:class="{ warning: shipment.is_overdue }">{{ shipment.total_invoice_amount.to_gbp() }}</td>
+  <td v-bind:class="{ warning: shipment.is_overdue }">{{ invoice_amount_formated(index) }}</td>
   <td v-if="filter_by_type == 'is_paid'">{{ shipment.total_invoice_collected ? shipment.total_invoice_collected.to_gbp() : '' }}</td>  
   <td v-if="filter_by_type == 'is_unpaid'">{{ shipment.date_payment_reminder }}</td>
   
@@ -428,6 +466,7 @@ window.onload = function () {
             id: null,
             invoice_number: '',
             retailer_id: null,
+            retailer: {pref_currency: '', pref_shipping_provider: '', pref_shipping_provider_ac_no: '', pref_shipping_provider_shipping_type: ''},
             date_order_received: new Date().toISOString().slice(0,10),
             vat_rate: 0,
             date_invoice_sent: new Date().toISOString().slice(0,10),
@@ -495,8 +534,31 @@ window.onload = function () {
               }
             });
           },
+          refresh_product_qty: function() {
+            this.load_shipment(this.shipment.id);
+            this.load_products();
+          },
           filter_shipments: function(filter_attribute) {
-            this.filter_by_type = filter_attribute
+            this.filter_by_type = filter_attribute;
+          },
+          invoice_amount_formated: function(index) {
+            // works with or without an index
+            var s;
+            if (index) {
+              s = this.filtered_results[index];
+            }
+            else {
+              s = this.shipment;
+            }
+            if (! s.total_invoice_amount) {
+              return "";
+            }
+            if (s.retailer.pref_currency == 'USD') {
+              return s.total_invoice_amount.to_usd() + " (" + (s.total_invoice_amount / s.invoice_exch_rate).to_gbp() + ")";
+            }
+            else {
+              return s.total_invoice_amount.to_gbp();
+            }
           },
           update_retailer_selection: function() {
             var that;
@@ -505,9 +567,10 @@ window.onload = function () {
             this.retailer = this.retailers.filter(function (retailer) {
               return that.shipment.retailer_id == retailer.id;
             })[0];
-            this.shipment.shipping_provider = this.retailer.pref_shipping_provider;
-            this.shipment.shipping_provider_ac_no = this.retailer.pref_shipping_provider_ac_no;
-            this.shipment.shipping_provider_type = this.retailer.pref_shipping_provider_shipping_type;
+            this.shipment.retailer = this.retailer; // change view to use the retailer on the shipment?? Must do because of loaded retailers rather than new ones
+            this.shipment.shipping_provider = this.shipment.retailer.pref_shipping_provider;
+            this.shipment.shipping_provider_ac_no = this.shipment.retailer.pref_shipping_provider_ac_no;
+            this.shipment.shipping_provider_type = this.shipment.retailer.pref_shipping_provider_shipping_type;
           },
           new_shipment_1: function() {
             this.shipment = {
@@ -525,7 +588,8 @@ window.onload = function () {
               notes: '',
               total_invoice_amount: '',
               total_invoice_collected: '',
-              shipment_products: []
+              shipment_products: [],
+              retailer: {pref_currency: '', pref_shipping_provider: '', pref_shipping_provider_ac_no: '', pref_shipping_provider_shipping_type: ''},
             };
             $('#mod_shipment_new_1').modal('show')
           },

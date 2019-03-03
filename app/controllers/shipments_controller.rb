@@ -9,27 +9,18 @@ class ShipmentsController < ApplicationController
     respond_to do |format|
         format.html { render :index }
         format.json { render :json => Shipment.all.order('updated_at desc'), 
-          :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products] }
+          :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer] }
     end
   end
 
   # GET /shipments/1
   # GET /shipments/1.json
   def show
-    render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products]
+    render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer]
   end
 
   # GET /shipments/new
   def new
-    @shipment = Shipment.new
-    @shipment.invoice_number = Shipment.find_next_invoice_number
-
-    @shipment.date_order_received = Date.current()
-    @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
-    @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no 
-    @shipment.shipping_provider_type = @shipment.retailer.pref_shipping_provider_type 
-    @shipment.vat_rate = 20  
-    @shipment.apply_vat_to_shipping = true
   end
 
   # GET /shipments/1/edit
@@ -53,7 +44,7 @@ class ShipmentsController < ApplicationController
   # json
   def update
       if @shipment.update(shipment_params)
-        render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products]
+        render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer]
       end   
   end
     
@@ -67,10 +58,11 @@ class ShipmentsController < ApplicationController
     @shipment.shipping_provider_shipping_type = @shipment.retailer.pref_shipping_provider_shipping_type 
     @shipment.vat_rate = 20  
     @shipment.apply_vat_to_shipping = true
+    @shipment.invoice_exch_rate = Currency.dollars_per_pound * 1.05 # stupidity tax
     if @shipment.save
         respond_to do |format|
             format.html { redirect_to :action => "edit", :id => @shipment.id }
-            format.json { render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products,]}
+            format.json { render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer]}
         end
     end
   end
@@ -230,6 +222,7 @@ end
     def shipment_params
       params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, 
                       :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, 
-                      :discount, :vat_rate, :date_payment_received, :invoice_comment, :apply_vat_to_shipping, :is_cancelled, :total_invoice_collected)
+                      :discount, :vat_rate, :date_payment_received, :invoice_comment, :apply_vat_to_shipping, :is_cancelled, :total_invoice_collected,
+                      :invoice_exch_rate, :weight_kg, :width_cm, :height_cm, :depth_cm)
     end
 end

@@ -42,3 +42,13 @@ String.prototype.to_gbp = function() {
     return formatter.format(parseFloat(this.valueOf()))
 }
 
+
+Number.prototype.to_usd = function() {
+    var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 });
+    return formatter.format(this.valueOf())
+}
+
+String.prototype.to_usd = function() {
+    var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 });
+    return formatter.format(parseFloat(this.valueOf()))
+}
