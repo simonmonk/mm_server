@@ -287,7 +287,7 @@ Sort by:
             <td><button type="button" v-on:click="add_sp" class="btn btn-primary">+</button></td>
           </tr>
         </table>
-        <button v-if="shipment.shipment_products.length > 0 && ! all_shipable()" type="button" v-on:click="refresh_product_qty" class="btn btn-success">Refresh</button>
+        <button v-if="shipment.shipment_products.length > 0 && ! all_shipable()" type="button" v-on:click="refresh_product_qty()" class="btn btn-success">Refresh</button>
         <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_packing_list" class="btn btn-primary">Packing List</button>
         <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
         <button type="button" v-on:click="close_edit_view" class="btn btn-primary">Complete Later</button>
@@ -462,7 +462,7 @@ window.onload = function () {
           sort_by_field: 'updated_at',
           shipments: [],
           shipment_index: 0, // set when edit a shipment from the list so that on reload, we can reset shipment
-          shipment: {
+          shipment: { // all so that hidden bits of UI dont crash through missing data
             id: null,
             invoice_number: '',
             retailer_id: null,
@@ -481,7 +481,7 @@ window.onload = function () {
           },
           retailers: [],
           retailer: {},
-          shipment_product: {
+          shipment_product: { // So UI doesnt crash
             shipment_id: null,
             product_id: null,
             qty: null,
@@ -535,7 +535,9 @@ window.onload = function () {
             });
           },
           refresh_product_qty: function() {
-            this.load_shipment(this.shipment.id);
+            //this.load_shipment(this.shipment.id);
+            alert("here")
+            this.load_shipments();
             this.load_products();
           },
           filter_shipments: function(filter_attribute) {
@@ -743,12 +745,16 @@ window.onload = function () {
             });
           },
           all_shipable: function() {
+            console.log('In all_shipable')
             var can_ship = true;
             this.shipment.shipment_products.forEach(function(sp) {
+              console.log('sp=' + sp.id + ' qty=' + sp.qty + ' prod_qty=' + sp.product.qty);
               if (sp.product.qty <= sp.qty) {
                 can_ship = false;
+                console.log('CANT SHIP');
               }
             });
+            console.log('all_shipable returns ' + can_ship);
             return can_ship;
           },
         },
