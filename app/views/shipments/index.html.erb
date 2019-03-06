@@ -461,10 +461,10 @@ window.onload = function () {
           num_days: 90,
           sort_by_field: 'updated_at',
           shipments: [],
-          shipment_index: 0, // set when edit a shipment from the list so that on reload, we can reset shipment
           shipment: { // all so that hidden bits of UI dont crash through missing data
             id: null,
             invoice_number: '',
+            invoice_amount: 0,
             retailer_id: null,
             retailer: {pref_currency: '', pref_shipping_provider: '', pref_shipping_provider_ac_no: '', pref_shipping_provider_shipping_type: ''},
             date_order_received: new Date().toISOString().slice(0,10),
@@ -484,7 +484,7 @@ window.onload = function () {
           shipment_product: { // So UI doesnt crash
             shipment_id: null,
             product_id: null,
-            qty: null,
+            qty: 0,
             price: null,
             product: {name: ''}
           },
@@ -535,10 +535,8 @@ window.onload = function () {
             });
           },
           refresh_product_qty: function() {
-            //this.load_shipment(this.shipment.id);
-            alert("here")
-            this.load_shipments();
-            this.load_products();
+            this.load_shipment(this.shipment.id); // reload shipment so should reload sp-s and hence each sp-s product
+            this.load_products(); // so that if we now add other items product qtys are good
           },
           filter_shipments: function(filter_attribute) {
             this.filter_by_type = filter_attribute;
@@ -596,22 +594,18 @@ window.onload = function () {
             $('#mod_shipment_new_1').modal('show')
           },
           edit_shipment_1: function(index) {
-            this.shipment_index = index; // MAY BE REDUNDANT
             this.shipment = this.filtered_results[index];
             $('#mod_shipment_new_1').modal('show');
           },
           edit_shipment_2: function(index) {
-            this.shipment_index = index;
             this.shipment = this.filtered_results[index];
             $('#mod_shipment_new_2').modal('show');
           },
           edit_unpaid_shipment: function(index) {
-            this.shipment_index = index;
             this.shipment = this.filtered_results[index];
             $('#mod_unpaid_shipment').modal('show');
           },
           edit_paid_shipment: function(index) {
-            this.shipment_index = index;
             this.shipment = this.filtered_results[index];
             $('#mod_paid_shipment').modal('show');
           },
@@ -648,7 +642,6 @@ window.onload = function () {
               url: '/shipments/add_product',
               data: {shipment_product: this.shipment_product},
               success: function(res) {
-                that.load_shipments();
                 that.load_shipment(that.shipment.id);
                 $('#mod_ship_prod').modal('hide');
               }
@@ -783,4 +776,16 @@ window.onload = function () {
         }
     })
 }
+
+// the problem looks like the product enbedded in the shipment_product doesn't get updated when the refresh button is pressed, 
+// need to reload the sp s after a Refresh. This should happen if the shipment is reloaded.
+
+
+
+
 </script>
+
+
+
+
+
