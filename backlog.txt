@@ -7,41 +7,51 @@ $ bin/rails generate migration AddStateToRetailerAddreses
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
+
+
 New rule for shipments list.
 
 Amazon orders (both) should count as invoiced as long as they are shipped.
-
-
-
 Shipment line items for Amazon.com should have extra columns for retail price dollars, extended price in dollars.
 This is done, but the total needs to be in dollars too. Also change the Copy Customs Dec field so that it prepends the name.
 ---
 
-Javascriptifying
-----------------
+Shippments
+-----------
 
-x * Add shipping cost on Ship Shipment modal
-* also fields for totAL SHIPOMENT WEIGHT AMD dimensions
-x * Invoice comment needs to be in bold and bigger
-x * Cancel button on ship shipment rename to Backl
-x * Move cancel function to new orders only
-x * Create new order after doing stuff with existing customer does not start with undefined customer
-x * Pull through of shipping method etc for new order has stopped working - ditto the invoice number
-* packing list show foreign sku
-x * subtract ordered stuff - on mark shipped shouldn't let you ship if any quantities are not sufficient
+adding items to list - make default qty 0.
+Packing list - shipping type not appearing in packing list
+Need to refresh to get line items not red if they were ever red.
+Ship button does not appear.
+Invoive number
+Invoice number on new screen of first new shipment should say 'click Save to assign'
 
-Snagging
---------
 
-* for some reason Unpaid orders is appearing in both the New Orders and Unpaid orders
-* In the Unpaid orders list should show the amount in pounds even for a US order (Eduporium only) 
-* Invoices for US (eduporium) at exchange rate + 5%. Invoice uses GBP prices * daily exch rate + 5%. 
-- needs a new field for exchange rate used for order, otherwise invoice won't be invarient. 
-- Add in new fields for weight and dims while you are at it.
-* Link on Edit Shipment for Unpaid and paid orders to open the invoice and packing list.
-* Refresh button on line items page - if someone fixes product qty
-* Check that after fixing qty Ship button reappears.
- 
+
+Catalog and Website
+--------------------
+x Change catalog HTML generation template to put a link in for the product page on the product title.
+Add new HTML genberation for:
+- List of retailers. To do this will need to add to db: url for customer logo (), cust logo for buy link (70x30), region (Region table)
+- Product Pages (Is this time for a new Vue/Bootstrap website)
+-- types of pages we have:
+welcome - appeal to potential retailers
+products list - for retailers
+products groups (micro:bit)
+product page - information for end users
+contact - for potential retailers
+-- what we should also have
+- help forum for end users. Ask here, reply here, not private emails
+- customer portal online P.O.
+- Learn pages like Adafruit?
+
+- this looks good - downloaded the app. https://mobirise.com
+
+
+How to do this.
+- How are images handled?
+- Where does the verbose product details and getting started material go? Still a job for a CMS when you get to the actual body.
+- Is there a nice CMS that uses Node? and maybe produces PDF like AdaFruit
 
 
 Working on Shipments

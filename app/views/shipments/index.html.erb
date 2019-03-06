@@ -192,7 +192,8 @@ Sort by:
           </tr>
           <tr>
             <td>Invoice Number</td>
-            <td><input v-model="shipment.invoice_number" type="text" class="form-control" placeholder="Enter Invoice Number"/></td>
+            <td v-if="shipment.invoice_number">{{ shipment.invoice_number }}</td>
+            <td v-else>Click Next to allocate invoice number</td>
           </tr>
           <tr>
             <td>Order Received Date</td>
@@ -204,7 +205,7 @@ Sort by:
             <td>VAT Rate (percent)</td>
             <td><input v-model="shipment.vat_rate" type="text" class="form-control" placeholder="none"/></td>
             <td>Customer Shipping Type</td>
-            <td><input v-model="shipment.pref_shipping_provider_shipping_type" type="text" class="form-control" placeholder="E.g. express"/></td>
+            <td><input v-model="shipment.shipping_provider_shipping_type" type="text" class="form-control" placeholder="E.g. express"/></td>
           </tr>
           <tr>
             <td>Invoice Sent Date</td>
@@ -220,7 +221,6 @@ Sort by:
             <td>Discount (£)</td>
             <td><input v-model="shipment.discount" type="text" class="form-control" placeholder="none"/></td>
           </tr>
-          // weight width height depth
           <tr>
             <td>Notes</td>
             <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
@@ -424,7 +424,7 @@ Sort by:
 <table>
 <tr>
   <th>Order Received</th>
-  <th>Invoive Number</th>
+  <th>Invoice</th>
   <th>Retailer</th>
   <th>Invoice Amount</th>
   <th v-if="filter_by_type == 'is_paid'">Amount Collected</th>
@@ -469,7 +469,7 @@ window.onload = function () {
             retailer: {pref_currency: '', pref_shipping_provider: '', pref_shipping_provider_ac_no: '', pref_shipping_provider_shipping_type: ''},
             date_order_received: new Date().toISOString().slice(0,10),
             vat_rate: 0,
-            date_invoice_sent: new Date().toISOString().slice(0,10),
+            date_invoice_sent: '',
             po_reference: '',
             shipping_provider: '',
             shipping_provider_ac_no: '',
@@ -570,7 +570,7 @@ window.onload = function () {
             this.shipment.retailer = this.retailer; // change view to use the retailer on the shipment?? Must do because of loaded retailers rather than new ones
             this.shipment.shipping_provider = this.shipment.retailer.pref_shipping_provider;
             this.shipment.shipping_provider_ac_no = this.shipment.retailer.pref_shipping_provider_ac_no;
-            this.shipment.shipping_provider_type = this.shipment.retailer.pref_shipping_provider_shipping_type;
+            this.shipment.shipping_provider_shipping_type = this.shipment.retailer.pref_shipping_provider_shipping_type;
           },
           new_shipment_1: function() {
             this.shipment = {
@@ -579,7 +579,7 @@ window.onload = function () {
               retailer_id: null,
               date_order_received: new Date().toISOString().slice(0,10),
               vat_rate: 0,
-              date_invoice_sent: new Date().toISOString().slice(0,10),
+              date_invoice_sent: '',
               po_reference: '',
               shipping_provider: '',
               shipping_provider_ac_no: '',

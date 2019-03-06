@@ -84,7 +84,7 @@ end
       :billing_ad_postal_code, :billing_ad_country, :billing_ad_tel, 
       :fao_delivery, :delivery_ad_line1, :delivery_ad_line2, :delivery_ad_city, 
       :delivery_ad_postal_code, :delivery_ad_country, :delivery_ad_tel, :vatable, 
-      :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :pref_shipping_provider_type,
+      :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :pref_shipping_provider_shipping_type,
       :active, :show_foreign_sku, :is_retail)
     end
 end

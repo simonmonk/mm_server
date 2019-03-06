@@ -14,7 +14,7 @@ categories.each do | cat |
 <%
 cat.products.where(include_in_catalog: true).order(sku: :asc).each do | product |
 %>
-<strong><%=product.name%></strong>
+<strong><a href='<%=product.product_url%>'><%=product.name%></a></strong>
 <img src="<%=product.product_photo_uri%>" class="wp-image-1739 alignright" width="100"/>
 <%
     if (cat.priority == 1000 && product.release_date) # Coming Soon
