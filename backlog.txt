@@ -22,7 +22,7 @@ Shipments
 Sending samples - need to be able to do without assigning invoice number.
 - 'special customer'
 
-Packing List - only put Shipping method if their ac/no is there
+Add a  Save button to the Mark Shipped
 
 adding items to list - make default qty 0.
 x Packing list - shipping type not appearing in packing list
