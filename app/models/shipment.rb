@@ -4,6 +4,10 @@ class Shipment < ApplicationRecord
     
   validates :invoice_number, uniqueness: true, if: 'invoice_number.present?'
     
+  # width, height, depth should have been:
+  # length, width, height
+  # - so remap them in UI, or its a data nightmare
+
   def is_amazon()
     return (retailer and retailer.name.upcase().starts_with?('AMAZON'))
   end

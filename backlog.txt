@@ -16,15 +16,20 @@ Shipment line items for Amazon.com should have extra columns for retail price do
 This is done, but the total needs to be in dollars too. Also change the Copy Customs Dec field so that it prepends the name.
 ---
 
-Shippments
+Shipments
 -----------
 
+Sending samples - need to be able to do without assigning invoice number.
+- 'special customer'
+
+Packing List - only put Shipping method if their ac/no is there
+
 adding items to list - make default qty 0.
-Packing list - shipping type not appearing in packing list
+x Packing list - shipping type not appearing in packing list
 Need to refresh to get line items not red if they were ever red.
 Ship button does not appear.
-Invoive number
-Invoice number on new screen of first new shipment should say 'click Save to assign'
+x Invoive number
+x Invoice number on new screen of first new shipment should say 'click Save to assign'
 
 
 

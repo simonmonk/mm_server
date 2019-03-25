@@ -50,22 +50,24 @@ td {
     border: 1px solid black;   
     text-align: left;
     padding: 3;
-    font: bold 28px/1.5 Arial, sans-serif;
+    font: bold 18px/1.5 Arial, sans-serif;
 }    
     
 .prod_table_td {
     border: 1px solid black;   
     text-align: left;
     padding: 3;
-    font: 28px/1.5 Arial, sans-serif;
+    font: 18px/1.5 Arial, sans-serif;
 }    
     
-
+p {
+    font: 18px/1.5 Arial, sans-serif;
+}   
     
 .prod_table_td_sig {
     border: 1px solid black;   
     text-align: left;
-    padding: 30;
+    padding: 20;
     font: 14px/1.5 Arial, sans-serif;
     color: lightgray;
 }  
@@ -102,6 +104,8 @@ td {
 <% end %>
 </table>
 
+<br/>
+<br/>
 <h3>Ship to:</h3>
 <p><b><%=@shipment.retailer.name%></b></p>
 <p><b><%=@shipment.retailer.delivery_ad_line1%></b></p>
@@ -111,7 +115,16 @@ td {
 <p><b><%=@shipment.retailer.delivery_ad_postal_code%></b></p>
 <p><b><%=@shipment.retailer.delivery_ad_country%></b></p>
 
+<%
+    if (@shipment.shipping_provider_ac_no && @shipment.shipping_provider_ac_no.length > 0)
+%>
+<br/>
+<br/>
 <h3>Shipping method</h3>
 <p><b><%=@shipment.shipping_provider%></b></p>
 <p><b><%=@shipment.shipping_provider_ac_no%></b></p>
 <p><b><%=@shipment.shipping_provider_shipping_type%></b></p>
+
+<%
+    end
+%>
