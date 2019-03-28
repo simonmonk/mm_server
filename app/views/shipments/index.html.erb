@@ -554,6 +554,9 @@ window.onload = function () {
               return "";
             }
             if (s.retailer.pref_currency == 'USD') {
+              if (! s.invoice_exch_rate) {
+                s.invoice_exch_rate = 1.3
+              }
               return s.total_invoice_amount.to_usd() + " (" + (s.total_invoice_amount / s.invoice_exch_rate).to_gbp() + ")";
             }
             else {
@@ -742,7 +745,7 @@ window.onload = function () {
             var can_ship = true;
             this.shipment.shipment_products.forEach(function(sp) {
               console.log('sp=' + sp.id + ' qty=' + sp.qty + ' prod_qty=' + sp.product.qty);
-              if (sp.product.qty <= sp.qty) {
+              if (sp.product.qty < sp.qty) {
                 can_ship = false;
                 console.log('CANT SHIP');
               }

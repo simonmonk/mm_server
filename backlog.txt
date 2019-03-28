@@ -19,6 +19,17 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 Shipments
 -----------
 
+Checkboix - show cancelkled orders
+
+Invoice numbers not being allocated when Linda does it - to do with parking unfinished shipment?
+
+. Stock allocatin boundary condition for anabling the ship button.
+
+Need to be able to edit shipping cost and other fields in Shipment even after its shipped.
+
+On live data, some things are showing up as awaiting payemnt, but should be in unshipped ONLY, but they are in both
+
+
 Sending samples - need to be able to do without assigning invoice number.
 - 'special customer'
 

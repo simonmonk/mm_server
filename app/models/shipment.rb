@@ -17,7 +17,7 @@ class Shipment < ApplicationRecord
   end
 
   def is_unpaid()
-    return (not is_paid() and not is_amazon())
+    return (not is_paid() and not is_amazon() and not is_new())
   end
 
   def is_paid()
