@@ -444,7 +444,8 @@ Sort by:
   <td v-if="filter_by_type == 'is_paid'"><span v-on:click="edit_paid_shipment(index)" class="badge badge-info">Edit</span></td>
   <td v-if="filter_by_type == 'is_unpaid'"><span v-on:click="reconcile_shipment(index)" class="badge badge-success">Reconcile</span></td>
   <td v-if="filter_by_type == 'is_new'"><span v-on:click="delete_shipment(index)" class="badge badge-danger">Delete</span></td>
-</tr>
+  <td>{{ shipment.notes }}</td>
+  </tr>
 </table>
 
 
