@@ -19,9 +19,21 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 Shipments
 -----------
 
+Nowhere to enter payment due date. Should set it when you ship it.
+
+Invoice date to replace Order received date for Paid and uppaid orders.
+
+If sent back to new order, need to put items back into stock.
+
+Move the Invoice button to the Ship screeen
+
+Add a save button to the ship screen so you can come back to finish off later without loosing stuff
+
 Checkboix - show cancelkled orders
 
-Invoice numbers not being allocated when Linda does it - to do with parking unfinished shipment?
+Implement follow on orders
+
+Invoice numbers not being allocated when Linda does it - to do with parking unfinished shipment - or historic shipments?
 
 . Stock allocatin boundary condition for anabling the ship button.
 
