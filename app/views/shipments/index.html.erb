@@ -31,6 +31,7 @@ Sort by:
 <select v-model="sort_by_field">
       <option value="updated_at">Most recently changed or added</option>
       <option value="date_order_received">Date order received</option>
+      <option value="date_invoice_sent">Date of Invoice</option>
       <option value="invoice_number">Invoice number</option>
       <option value="retailer_name">Customer name</option>
 </select>
@@ -369,7 +370,7 @@ Sort by:
             <td><input v-model="shipment.shipping_cost" type="text" class="form-control" placeholder="none"/></td>
           </tr>
           <tr v-if="shipment.retailer.pref_currency == 'USD'" >
-            <td colspan="2">This customer uses an invoice in USD calculated from product prices in GBP. This will be fixed <b>Mark As Shipped</b> is Pressed.</td>
+            <td>This customer uses an invoice in USD calculated from product prices in GBP. This will be fixed when <b>Mark As Shipped</b> is Pressed.</td>
           </tr>
           <tr v-if="shipment.retailer.pref_currency == 'USD'" >
             <td>Exchange Rate</td>
@@ -395,7 +396,10 @@ Sort by:
             <td>Notes</td>
             <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder=""></textarea></td>
           </tr>
-          <tr><td><button type="button" v-on:click="ship_items_update" class="btn btn-primary">Mark as Shipped</button>
+          <tr><td>
+            <button type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
+            <button type="button" v-on:click="save_but_dont_ship('#mod_ship')" class="btn btn-primary">Save and Close</button>
+            <button type="button" v-on:click="ship_items_update" class="btn btn-primary">Mark as Shipped</button>
             <button type="button" v-on:click="cancel('#mod_ship')" class="btn btn-info">Back</button></td></tr>
         </table>
 
@@ -430,7 +434,8 @@ Sort by:
 <!-- Orders List Table -->
 <table>
 <tr>
-  <th>Order Received</th>
+  <th v-if="filter_by_type == 'is_new'">Order Received</th>
+  <th v-if="filter_by_type != 'is_new'">Invoice Date</th>
   <th>Invoice</th>
   <th>Retailer</th>
   <th>Invoice Amount</th>
@@ -438,7 +443,8 @@ Sort by:
   <th v-if="filter_by_type == 'is_unpaid'">Due Date</th>
 </tr>
 <tr v-bind:class="{ inactive: shipment.is_cancelled }" v-for="(shipment, index) in filtered_results">
-  <td>{{ shipment.date_order_received }} </td>
+  <td v-if="filter_by_type == 'is_new'">{{ shipment.date_order_received }} </td>
+  <td v-if="filter_by_type != 'is_new'">{{ shipment.date_invoice_sent }} </td>
   <td>{{ shipment.invoice_number }} </td>
   <td>{{ shipment.retailer_name }}</td>
   <td v-bind:class="{ warning: shipment.is_overdue }">{{ invoice_amount_formated(index) }}</td>
@@ -689,6 +695,10 @@ window.onload = function () {
           },
           open_product_tab: function(product_id) {
             window.open("/products/" + product_id + "/edit", '_blank')
+          },
+          save_but_dont_ship: function(modal_to_close) {
+            this.shipment.date_dispatched = null;
+            this.save_shipment(modal_to_close)
           },
           save_shipment: function(modal_to_close) {
             var that;

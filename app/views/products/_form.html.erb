@@ -69,7 +69,7 @@ function deduct(qty) {
     <tr><td>Name</td><td> <%= f.text_field :name, :maxlength=>"50"%></td></tr>
         
     <tr><td>Product Category</td>
-    <td>  <!-- Something screwy here v- should be able to use @categories rather than ProductCategotry.all but its noit set by controller. -->
+    <td>  
       <%= f.collection_select(:product_category_id, ProductCategory.all, :id, :name) %>
     </td>
     </tr>

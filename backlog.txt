@@ -4,6 +4,7 @@ MM Server Backlog
 Rails Cheat sheet
 $ rails server
 $ bin/rails generate migration AddStateToRetailerAddreses
+
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
@@ -58,9 +59,9 @@ x Invoice number on new screen of first new shipment should say 'click Save to a
 
 Catalog and Website
 --------------------
-x Change catalog HTML generation template to put a link in for the product page on the product title.
 Add new HTML genberation for:
-- List of retailers. To do this will need to add to db: url for customer logo (), cust logo for buy link (70x30), region (Region table)
+- List of retailers. To do this will need to add to db: url for customer logo (), cust logo for buy link (70x30), 
+          region (Region table)
 - Product Pages (Is this time for a new Vue/Bootstrap website)
 -- types of pages we have:
 welcome - appeal to potential retailers

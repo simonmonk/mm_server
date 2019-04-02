@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :regions
   resources :reminders
   resources :communications
   resources :users
@@ -16,7 +17,8 @@ Rails.application.routes.draw do
   get 'shipments/packing_list/*other', to: 'shipments#packing_list'
   get 'shipments/quote/*other', to: 'shipments#quote'
   get 'products/pricelist', to: 'products#pricelist'
-  get 'products/productlist', to: 'products#productlist' # for the MM website so no prices
+  get 'products/productlist', to: 'products#productlist' # for the MM website 
+  get 'retailers/retailer_list_website', to: 'retailers#retailer_list_website' # for the MM website 
   get 'prospects/countries.json', to: 'prospects#countries'
 
   resources :parts do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190302144611) do
+ActiveRecord::Schema.define(version: 20190402090656) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -212,6 +212,13 @@ ActiveRecord::Schema.define(version: 20190302144611) do
     t.date     "reminder_date"
   end
 
+  create_table "regions", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "code"
+  end
+
   create_table "retailers", force: :cascade do |t|
     t.string   "name"
     t.string   "contact_name"
@@ -246,6 +253,11 @@ ActiveRecord::Schema.define(version: 20190302144611) do
     t.boolean  "show_foreign_sku"
     t.boolean  "is_retail"
     t.string   "pref_shipping_provider_shipping_type"
+    t.string   "logo_url"
+    t.string   "logo_buy_url"
+    t.integer  "region_id"
+    t.string   "mm_products_url"
+    t.string   "base_url"
   end
 
   create_table "sales", force: :cascade do |t|
