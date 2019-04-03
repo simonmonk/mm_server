@@ -629,11 +629,6 @@ window.onload = function () {
             this.save_shipment('#mod_shipment_new_1');  
             $('#mod_shipment_new_2').modal('show')
           },
-          make_unshipped: function(modal_to_close) {
-            this.shipment.date_dispatched = null;
-            this.save_shipment(modal_to_close);  
-            this.load_shipments();
-          },
           close_edit_view: function() {
             $('#mod_shipment_new_2').modal('hide');
           },
@@ -756,6 +751,21 @@ window.onload = function () {
             $.ajax({
                 type: 'GET',
                 url: '/shipments/subtract_products?shipment_id=' + this.shipment.id,
+                success: function(res) {
+                  that.load_shipments();
+                  that.load_products();
+                  $('#mod_ship').modal('hide');
+                }
+            });
+          },
+          make_unshipped: function(modal_to_close) {
+            var that;
+            that = this;
+            this.shipment.date_dispatched = null;
+            this.save_shipment(modal_to_close);
+            $.ajax({
+                type: 'GET',
+                url: '/shipments/un_subtract_products?shipment_id=' + this.shipment.id,
                 success: function(res) {
                   that.load_shipments();
                   that.load_products();

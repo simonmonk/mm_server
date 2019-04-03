@@ -125,6 +125,26 @@ def subtract_products
     t.save
     render :json => shipment
 end      
+
+def un_subtract_products
+  message = ''
+  shipment_id = params[:shipment_id]
+  shipment = Shipment.find(shipment_id)
+  shipment.stock_subtracted = false
+  shipment.save
+  count = 0
+  shipment.shipment_products.each do | sp |
+    sp.product.qty = sp.product.qty + sp.qty
+    sp.product.save
+    count += sp.qty
+  end
+  t = Transaction.new
+  t.transaction_type = 'UNDID Shipment to ' + shipment.retailer.name
+  
+  t.description = "Replaced " + count.to_s + " products into stock for shipment " + shipment.id.to_s + ". " + message
+  t.save
+  render :json => shipment
+end    
     
 def import_shipment_uk
     shipment_code = params[:shipment_code]

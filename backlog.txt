@@ -4,7 +4,7 @@ MM Server Backlog
 Rails Cheat sheet
 $ rails server
 $ bin/rails generate migration AddStateToRetailerAddreses
-
+$ rails generate scaffold Region name:string
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
@@ -20,25 +20,24 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 Shipments
 -----------
 
-Nowhere to enter payment due date. Should set it when you ship it.
+x Nowhere to enter payment due date. Should set it when you ship it.
 
-Invoice date to replace Order received date for Paid and uppaid orders.
+x Invoice date to replace Order received date for Paid and uppaid orders.
 
 If sent back to new order, need to put items back into stock.
 
-Move the Invoice button to the Ship screeen
+x Move the Invoice button to the Ship screeen
 
-Add a save button to the ship screen so you can come back to finish off later without loosing stuff
+Eduporium dollar amounts in adding order lines show pound symbol
+
+x Add a save button to the ship screen so you can come back to finish off later without loosing stuff
 
 Checkboix - show cancelkled orders
 
 Implement follow on orders
 
-Invoice numbers not being allocated when Linda does it - to do with parking unfinished shipment - or historic shipments?
-
-. Stock allocatin boundary condition for anabling the ship button.
-
 Need to be able to edit shipping cost and other fields in Shipment even after its shipped.
+- currently solved by being able to unship it.
 
 On live data, some things are showing up as awaiting payemnt, but should be in unshipped ONLY, but they are in both
 

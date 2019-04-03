@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       get :import_shipment_uk
       get :import_shipment_com
       get :subtract_products
+      get :un_subtract_products
       get :delete_shipment_line
       get :invoice
       get :packing_list
