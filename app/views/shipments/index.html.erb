@@ -73,10 +73,14 @@ Sort by:
           <tr>
             <td>Customer Shipping Ac.</td>
             <td>{{shipment.shipping_provider_ac_no}}</td>
+            <td>Shipping Type</td>
+            <td>{{shipment.shipping_provider_shipping_type}}</td>
           </tr>
           <tr>
             <td>Discount</td>
             <td>{{shipment.discount}}</td>
+            <td>Tracking Info</td>
+            <td><input v-model="shipment.tracking_info" type="text" class="form-control" placeholder="none"/></td>
           </tr>
           <tr>
             <td>Weight (kg)</td>
@@ -88,7 +92,7 @@ Sort by:
           </tr>
           <tr>
             <td>Notes</td>
-            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Notes about this shipment go here"></textarea></td>
           </tr>
           <tr>
             <td>Invoice Comment</td>
@@ -157,7 +161,7 @@ Sort by:
           </tr>
           <tr>
             <td>Notes</td>
-            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Notes about this shipment go here"></textarea></td>
           </tr>
           <tr>
             <td>Invoice Comment</td>
@@ -176,23 +180,24 @@ Sort by:
   </div>
 </div>
 
-<!-- Shipment Form Modal Part 1 -->
+<!-- Shipment Info Form - Modal Part 1 -->
 <div id="mod_shipment_new_1" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body">
-        <h1>Shipment</h1>
+        <h1>Shipment Info</h1>
         <table>
           <tr>
             <td>Shipment to</td>
-            <td v-if="shipment.retailer_name">{{ shipment.retailer_name }}</td>
+            <td v-if="shipment.retailer_name">{{ shipment.retailer_name }} </td>
             <td v-else>
               <select v-model="shipment.retailer_id" @change="update_retailer_selection()">
                 <option v-for="(retailer, index) in retailers" v-bind:value="retailer.id">{{retailer.name}}</option>
               </select>
             </td>
-            <td>Customer Shipping Provider</td>
-            <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="E.g. DHL"/></td>
+          </tr>
+          <tr>
+            <td colspan="4" v-if="shipment.retailer_id && shipment.retailer.owes_money"><b class='warning'>THIS CUSTOMER HAS OVERDUE INVOICES</b></td>
           </tr>
           <tr>
             <td>Invoice Number</td>
@@ -202,18 +207,12 @@ Sort by:
           <tr>
             <td>Order Received Date</td>
             <td><input v-model="shipment.date_order_received" type="date" value="" class="form-control" placeholder="Date the order was received"/></td>
-            <td>Customer Shipping Ac.</td>
-            <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"/></td>
           </tr>
           <tr>
             <td>VAT Rate (percent)</td>
             <td><input v-model="shipment.vat_rate" type="text" class="form-control" placeholder="none"/></td>
-            <td>Customer Shipping Type</td>
-            <td><input v-model="shipment.shipping_provider_shipping_type" type="text" class="form-control" placeholder="E.g. express"/></td>
           </tr>
           <tr>
-            <td>Invoice Sent Date</td>
-            <td><input v-model="shipment.date_invoice_sent" type="date" value="" class="form-control" placeholder="Date the invoice was sent"/></td>
             <td>Cancelled</td>
             <td><input type="checkbox" v-model="shipment.is_cancelled"/></td>
           </tr>
@@ -222,16 +221,14 @@ Sort by:
             <td><input v-model="shipment.po_reference" type="text" class="form-control" placeholder="none"/></td>
           </tr>
           <tr>
-            <td>Discount (£)</td>
-            <td><input v-model="shipment.discount" type="text" class="form-control" placeholder="none"/></td>
+            <td>Retailer Notes</td>
+              <td colspan="3">{{shipment.retailer.notes}} 
+              <span v-if="shipment.retailer_id" v-on:click="open_retailer_tab(shipment.retailer_id)" class="badge badge-info">Edit</span>
+            </td>
           </tr>
           <tr>
-            <td>Notes</td>
-            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="none"></textarea></td>
-          </tr>
-          <tr>
-            <td>Invoice Comment</td>
-            <td colspan="3"><textarea v-model="shipment.invoice_comment" rows="3" class="form-control" placeholder="What you write here will appear on the invoice"></textarea></td>
+            <td>Shipment Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Notes about this shipment go here"></textarea></td>
           </tr>
           <tr><td><button type="button" v-if="shipment.retailer_id" v-on:click="save_shipment_part_1" class="btn btn-primary">Save/Next</button>
               <button type="button" v-on:click="cancel('#mod_shipment_new_1')" class="btn btn-info">Back</button></td></tr>
@@ -242,7 +239,7 @@ Sort by:
   </div>
 </div>
 
-<!-- Shipment Form Modal Part 2 -->
+<!-- Shipment Line Items Form Modal Part 2 -->
 <div id="mod_shipment_new_2" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -256,6 +253,9 @@ Sort by:
           <tr>
             <td>Invoice Number</td>
             <td>{{ shipment.invoice_number }}</td>
+          </tr>
+          <tr>
+            <td colspan="2" v-if="shipment.retailer_id && shipment.retailer.owes_money"><b class='warning'>THIS CUSTOMER HAS OVERDUE INVOICES</b></td>
           </tr>
         </table>
         <h2>Lines</h2>
@@ -293,7 +293,6 @@ Sort by:
         </table>
         <button v-if="shipment.shipment_products.length > 0 && ! all_shipable()" type="button" v-on:click="refresh_product_qty()" class="btn btn-success">Refresh</button>
         <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_packing_list" class="btn btn-primary">Packing List</button>
-        <button v-if="shipment.shipment_products.length > 0" type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
         <button type="button" v-on:click="close_edit_view" class="btn btn-primary">Complete Later</button>
         <button v-if="shipment.shipment_products.length > 0 && all_shipable()" type="button" v-on:click="ship_shipment(-1)" class="btn btn-success">Ship</button>
       </div>
@@ -348,26 +347,34 @@ Sort by:
           <tr>
             <td>Invoice Number</td>
             <td>{{shipment.invoice_number}}</td>
-          </tr>
-          <tr>
             <td>Date Shipped</td>
             <td><input v-model="shipment.date_dispatched" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
           </tr>
           <tr>
+            <td>Invoice Sent Date</td>
+            <td><input v-model="shipment.date_invoice_sent" type="date" value="" class="form-control" placeholder="Date the invoice was sent"/></td>
             <td>Date Payment Due</td>
             <td><input v-model="shipment.date_payment_reminder" type="date" value="" class="form-control" placeholder="Date payment due"/></td>
           </tr>
           <tr>
             <td>Customer Shipping Provider</td>
             <td><input v-model="shipment.shipping_provider" type="text" class="form-control" placeholder="none"/></td>
-          </tr>
-          <tr>
             <td>Customer Shipping Ac.</td>
             <td><input v-model="shipment.shipping_provider_ac_no" type="text" class="form-control" placeholder="none"/></td>
           </tr>
           <tr>
+            <td>Customer Shipping Type</td>
+            <td><input v-model="shipment.shipping_provider_shipping_type" type="text" class="form-control" placeholder="E.g. express"/></td>
             <td>Shipping Cost</td>
             <td><input v-model="shipment.shipping_cost" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Tracking Info</td>
+            <td><input v-model="shipment.tracking_info" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Discount (£)</td>
+            <td><input v-model="shipment.discount" type="text" class="form-control" placeholder="none"/></td>
           </tr>
           <tr v-if="shipment.retailer.pref_currency == 'USD'" >
             <td>This customer uses an invoice in USD calculated from product prices in GBP. This will be fixed when <b>Mark As Shipped</b> is Pressed.</td>
@@ -382,10 +389,10 @@ Sort by:
           </tr>
           <tr>
           <td>Dimensions (cm)</td>
-            <td>
-              <input v-model="shipment.width_cm" type="text" class="form-control" placeholder="length (cm)"/>
-              <input v-model="shipment.height_cm" type="text" class="form-control" placeholder="width (cm)"/>
-              <input v-model="shipment.depth_cm" type="text" class="form-control" placeholder="height (cm)"/>
+            <td colspan="3">
+              <input v-model="shipment.width_cm" type="text"  placeholder="length (cm)"/>
+              <input v-model="shipment.height_cm" type="text" placeholder="width (cm)"/>
+              <input v-model="shipment.depth_cm" type="text" placeholder="height (cm)"/>
             </td>
           </tr>
           <tr>
@@ -393,13 +400,21 @@ Sort by:
             <td colspan="3"><textarea v-model="shipment.invoice_comment" rows="3" class="form-control" placeholder="What you write here will appear on the invoice"></textarea></td>
           </tr>
           <tr>
-            <td>Notes</td>
-            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder=""></textarea></td>
+            <td>Retailer Notes</td>
+              <td colspan="3">{{shipment.retailer.notes}} 
+              <span v-if="shipment.retailer_id" v-on:click="open_retailer_tab(shipment.retailer_id)" class="badge badge-info">Edit</span>
+            </td>
           </tr>
-          <tr><td>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Notes about this shipment go here"></textarea></td>
+          </tr>
+          <tr><td colspan="4">
+            <button type="button" v-on:click="save_but_dont_ship()" class="btn btn-success">Save</button> <!-- dont close window -->
             <button type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
             <button type="button" v-on:click="save_but_dont_ship('#mod_ship')" class="btn btn-primary">Save and Close</button>
             <button type="button" v-on:click="ship_items_update" class="btn btn-primary">Mark as Shipped</button>
+          </td></tr>
         </table>
 
       </div>
@@ -689,6 +704,9 @@ window.onload = function () {
           },
           open_product_tab: function(product_id) {
             window.open("/products/" + product_id + "/edit", '_blank')
+          },
+          open_retailer_tab: function(retailer_id) {
+            window.open("/retailers/" + retailer_id + "/edit", '_blank')
           },
           save_but_dont_ship: function(modal_to_close) {
             this.shipment.date_dispatched = null;

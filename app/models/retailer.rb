@@ -17,5 +17,19 @@ class Retailer < ApplicationRecord
        end
        return nil 
     end
+
+
+    def owes_money()
+        shipments.each do | shipment |
+            if (shipment.is_overdue)
+                return true
+            end
+        end
+        return false
+    end
+
+    def as_json(options={})
+        super(:methods => [:owes_money])
+    end
     
 end

@@ -20,17 +20,8 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 Shipments
 -----------
 
-x Nowhere to enter payment due date. Should set it when you ship it.
-
-x Invoice date to replace Order received date for Paid and uppaid orders.
-
-If sent back to new order, need to put items back into stock.
-
-x Move the Invoice button to the Ship screeen
 
 Eduporium dollar amounts in adding order lines show pound symbol
-
-x Add a save button to the ship screen so you can come back to finish off later without loosing stuff
 
 Checkboix - show cancelkled orders
 

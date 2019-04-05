@@ -243,6 +243,6 @@ end
       params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, 
                       :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, 
                       :discount, :vat_rate, :date_payment_received, :invoice_comment, :apply_vat_to_shipping, :is_cancelled, :total_invoice_collected,
-                      :invoice_exch_rate, :weight_kg, :width_cm, :height_cm, :depth_cm)
+                      :invoice_exch_rate, :weight_kg, :width_cm, :height_cm, :depth_cm, :tracking_info)
     end
 end

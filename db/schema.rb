@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190402090656) do
+ActiveRecord::Schema.define(version: 20190405114408) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -315,6 +315,7 @@ ActiveRecord::Schema.define(version: 20190402090656) do
     t.decimal  "width_cm",                        precision: 10, scale: 3
     t.decimal  "height_cm",                       precision: 10, scale: 3
     t.decimal  "depth_cm",                        precision: 10, scale: 3
+    t.string   "tracking_info"
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 
