@@ -8,15 +8,19 @@ You should find a retailer near you in the following list.
 If you are interested in becoming a retailer, then please email linda@monkmakes.com
 
 
-<%
-regions = Region.all()
 
-regions.each do | region |
-    if (region.wholesale_customers and region.wholesale_customers.length() > 0)
-%>
-    <h1><%=region.name%></h1>
 <%
-    region.wholesale_customers.each do | retailer |
+    country = ''
+    Retailer.order(:billing_ad_country).each do | retailer |
+        if (not retailer.is_retail and retailer.active and retailer.logo_url)
+            if (retailer.billing_ad_country != country)
+                country = retailer.billing_ad_country
+%>
+
+<h1><%=country%></h1>
+
+<%
+            end
 %>
 
 <a href='<%=retailer.mm_products_url%>'><img src="<%=retailer.logo_url%>" class="wp-image-1739 alignright" width="150"/></a>
@@ -26,7 +30,4 @@ regions.each do | region |
         end 
     end 
 %>
-</hr>
-<%
-end
-%>
+
