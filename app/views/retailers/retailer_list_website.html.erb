@@ -12,7 +12,7 @@ If you are interested in becoming a retailer, then please email linda@monkmakes.
 <%
     country = ''
     Retailer.order(:billing_ad_country).each do | retailer |
-        if (not retailer.is_retail and retailer.active and retailer.logo_url)
+        if (not retailer.is_retail and retailer.active and retailer.logo_url and retailer.logo_url.length > 1)
             if (retailer.billing_ad_country != country)
                 country = retailer.billing_ad_country
 %>
