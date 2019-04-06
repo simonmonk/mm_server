@@ -26,6 +26,10 @@ class RetailersController < ApplicationController
   # GET /retailers/1/edit
   def edit
   end
+
+def retailer_list_website
+  render :layout => false
+end  
     
 def add_product
     product_id = params[:product_id]

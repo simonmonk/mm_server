@@ -69,6 +69,7 @@ Rails.application.routes.draw do
       get :delete_shipment_line
       get :invoice
       get :packing_list
+      get :retailer_list_website
       get :list
       get :get_shipments
     end

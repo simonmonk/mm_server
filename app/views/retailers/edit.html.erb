@@ -4,7 +4,7 @@ $(function() {
 });   
 </script>
 
-<h1>Retailer: <%= @retailer.name %></h1>
+<h1>Retailer: <%= @retailer.name %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height='75' src='<%= @retailer.logo_url %>'/></h1>
 
 <%= render 'form', retailer: @retailer %>
 
