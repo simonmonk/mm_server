@@ -31,5 +31,9 @@ class Retailer < ApplicationRecord
     def as_json(options={})
         super(:methods => [:owes_money])
     end
+
+    def num_orders()
+        return shipments.length
+    end
     
 end
