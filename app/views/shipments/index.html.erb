@@ -252,7 +252,7 @@ Sort by:
           </tr>
           <tr>
             <td>Invoice Number</td>
-            <td>{{ shipment.invoice_number }}</td>
+            <td><input v-model="shipment.invoice_number" type="text" class="form-control" placeholder="none"/></td>
           </tr>
           <tr>
             <td colspan="2" v-if="shipment.retailer_id && shipment.retailer.owes_money"><b class='warning'>THIS CUSTOMER HAS OVERDUE INVOICES</b></td>
