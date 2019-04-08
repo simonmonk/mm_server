@@ -112,6 +112,7 @@ class Shipment < ApplicationRecord
     return [sales_total, profit_total]
   end
     
+  
   def Shipment.create_from_forwarded_email(email_body)
     my_addr = Socket.ip_address_list.detect(&:ipv4_private?).try(:ip_address) + ":3000"
     matches = email_body.match(/<(.*)>/)
@@ -123,7 +124,8 @@ class Shipment < ApplicationRecord
             shipment = Shipment.new
             shipment.retailer = retailer
             shipment.date_order_received = Date.current()
-            shipment.shipping_provider = retailer.pref_shipping_provider
+            shipment.invoice_number = Shipment.find_next_invoice_number()
+            shipment.shipping_provider = retailer.pref_shipping_provider()
             shipment.shipping_provider_ac_no = retailer.pref_shipping_provider_ac_no 
             shipment.order_email = email_body
             shipment.save
