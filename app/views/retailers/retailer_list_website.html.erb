@@ -1,9 +1,11 @@
 
-Monk Makes is a UK-based manufacturer of electronic kits and modules to support the Education and Maker communities.
+<img class="size-large wp-image-1755" src="https://www.monkmakes.com/wp-content/uploads/2018/04/photo_thermometer-web-1024x942.jpg" alt="" width="800" height="736" />
+
+Monk Makes is a UK-based manufacturer of electronic kits and modules to support the Education and Maker communities. We specialise in kits and accessories for the <a href="https://www.monkmakes.com/product/microbit/">BBC micro:bit</a> and Raspberry Pi.
 
 Our products are assembled in the UK and shipped throughout the world through our network of resellers.
 
-You should find a retailer near you in the following list. 
+You should find a retailer near you in the following list.
 
 If you are interested in becoming a retailer, then please email linda@monkmakes.com
 
@@ -12,8 +14,7 @@ If you are interested in becoming a retailer, then please email linda@monkmakes.
 <%
     country = ''
     retailers = Retailer.all
-    retailers = retailers.sort_by{|a| -a.shipments.length}
-    retailers = retailers.sort_by{|a| a.billing_ad_country}
+    retailers = retailers.sort_by{|a| [a.billing_ad_country, -a.shipments.length]}
     retailers.each do | retailer |
         if (not retailer.is_retail and retailer.active and retailer.logo_url and retailer.logo_url.length > 1)
             if (retailer.billing_ad_country != country)
