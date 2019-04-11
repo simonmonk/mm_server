@@ -101,7 +101,8 @@ private
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_in_params
-      params.require(:order_in).permit(:supplier_id, :placed_date, :currency, :shipping, :notes, :exch_rate, :date_qr_sent, :order_number, :vat_info_collected, :quotation_received)
+      params.require(:order_in).permit(:supplier_id, :placed_date, :currency, :shipping, :notes, :exch_rate, 
+      :date_qr_sent, :order_number, :vat_info_collected, :quotation_received, :invoice_exact_amount)
     end
     
 end

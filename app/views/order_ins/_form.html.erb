@@ -32,11 +32,10 @@ function set_date(field_name, date) {
     <tr><td colspan="2" class="priority1">Set the Order Placed date to Mark the Order as being PLACED</td></tr>
     <%end%>
     <tr><td>Order placed:</td><td><%= datepicker_input f, :placed_date %></td><td><a href="javascript:set_date('#order_in_placed_date', '<%=Date.current%>')">Today</a></tr> 
-    <tr><td>Quotation Request Sent:</td><td><%= datepicker_input f, :date_qr_sent %></td><td><a href="javascript:set_date('#order_in_date_qr_sent', '<%=Date.current%>')">Today</a></tr> 
-    <tr><td>Quotation Received:</td><td><%= datepicker_input f, :quotation_received %></td><td><a href="javascript:set_date('#order_in_quotation_received', '<%=Date.current%>')">Today</a></tr> 
-     <tr><td>Currency</td><td><%= f.select :currency, 
+    <tr><td>Currency</td><td><%= f.select :currency, 
         options_for_select(['GBP', 'USD', 'EUR'].map{|s|[s, s]}, :selected => order_in.currency) %></td></tr>
-    <tr><td>Shipping Cost</td><td><%= f.text_field :shipping %></td></tr>
+    <tr><td>Actual Invoice Amount</td><td><%= f.text_field :invoice_exact_amount %></td></tr>
+    <tr><td colspan="2">Shipping Cost used to be here. Now just include it in both Actual Invoice Amount and pro-ratad in the unit cost of the items being ordered.</td></tr>
     <tr><td>Exchange rate (E.g. 1.3)</td><td><%= f.text_field :exch_rate %></td></tr>
     <tr><td>VAT Information Collected (N/A, Y, N)</td><td><%= f.text_field :vat_info_collected %></td></tr>
     
