@@ -709,10 +709,13 @@ window.onload = function () {
             window.open("/retailers/" + retailer_id + "/edit", '_blank')
           },
           save_but_dont_ship: function(modal_to_close) {
+            var that;
+            that = this;
+            let ship_date = this.shipment.date_dispatched;
             this.shipment.date_dispatched = null;
-            this.save_shipment(modal_to_close)
+            this.save_shipment(modal_to_close, function() {that.shipment.date_dispatched = ship_date;});
           },
-          save_shipment: function(modal_to_close) {
+          save_shipment: function(modal_to_close, callback) {
             var that;
             that = this;
             var modal = modal_to_close;
@@ -743,6 +746,9 @@ window.onload = function () {
                 that.shipment_product.shipment_id = that.shipment.id;
                 if (modal) {
                   $(modal).modal('hide');
+                }
+                if (callback) {
+                  callback();
                 }
               }
             });
@@ -792,16 +798,12 @@ window.onload = function () {
             });
           },
           all_shipable: function() {
-            console.log('In all_shipable')
             var can_ship = true;
             this.shipment.shipment_products.forEach(function(sp) {
-              console.log('sp=' + sp.id + ' qty=' + sp.qty + ' prod_qty=' + sp.product.qty);
               if (sp.product.qty < sp.qty) {
                 can_ship = false;
-                console.log('CANT SHIP');
               }
             });
-            console.log('all_shipable returns ' + can_ship);
             return can_ship;
           },
         },
