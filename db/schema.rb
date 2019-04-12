@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190411154713) do
+ActiveRecord::Schema.define(version: 20190412095303) do
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -74,18 +74,20 @@ ActiveRecord::Schema.define(version: 20190411154713) do
 
   create_table "order_ins", force: :cascade do |t|
     t.boolean  "open"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.date     "placed_date"
     t.integer  "supplier_id"
     t.text     "notes"
     t.string   "currency"
-    t.decimal  "exch_rate",            precision: 10, scale: 3
-    t.decimal  "shipping",             precision: 10, scale: 3
+    t.decimal  "exch_rate",             precision: 10, scale: 3
+    t.decimal  "shipping",              precision: 10, scale: 3
     t.date     "date_qr_sent"
     t.string   "vat_info_collected"
     t.date     "quotation_received"
-    t.decimal  "invoice_exact_amount", precision: 10, scale: 3
+    t.decimal  "invoice_total_ammount", precision: 10, scale: 3
+    t.decimal  "invoice_vat_ammout",    precision: 10, scale: 3
+    t.decimal  "invoice_goods_ammout",  precision: 10, scale: 3
   end
 
   create_table "part_categories", force: :cascade do |t|
