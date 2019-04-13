@@ -16,7 +16,7 @@
 
 <span>
 Modified in last   
-<select v-model="num_days">
+<select v-model="num_days" v-on:change="num_days_changed">
       <option value="7">7</option>
       <option value="14">14</option>
       <option value="30">30</option>
@@ -520,7 +520,7 @@ window.onload = function () {
         mounted: function() {
           var that;
           that = this;
-          this.load_shipments();
+          this.load_shipments(0);
           this.load_products();
           this.filter_shipments('is_new')
           $.ajax({
@@ -531,11 +531,19 @@ window.onload = function () {
           });
         },
         methods: {
-          load_shipments: function() { 
+          load_shipments: function(days) { 
             var that;
             that = this;
+            if (days == 0) { // load at least 90 days worth
+              if (this.num_days > 90) {
+                days = this.num_days;
+              }
+              else {
+                days = 90;
+              } 
+            }
             $.ajax({
-              url: '/shipments.json',
+              url: '/shipments.json?days=' + days,
               success: function(res) {
                 that.shipments = res;
                 that.shipment = that.shipments[0];
@@ -660,7 +668,7 @@ window.onload = function () {
                 type: 'DELETE',
                 url: '/shipments/' + shipment_to_delete.id + '.json',
                 success: function(res) {
-                  that.load_shipments();
+                  that.load_shipments(0);
                 }
               });
             }
@@ -742,7 +750,7 @@ window.onload = function () {
               url: url,
               data: {shipment: this.shipment},
               success: function(res) {
-                that.load_shipments();
+                that.load_shipments(0);
                 that.shipment = res;
                 that.shipment_product.shipment_id = that.shipment.id;
                 if (modal) {
@@ -777,7 +785,7 @@ window.onload = function () {
                 type: 'GET',
                 url: '/shipments/subtract_products?shipment_id=' + this.shipment.id,
                 success: function(res) {
-                  that.load_shipments();
+                  that.load_shipments(0);
                   that.load_products();
                   $('#mod_ship').modal('hide');
                 }
@@ -792,7 +800,7 @@ window.onload = function () {
                 type: 'GET',
                 url: '/shipments/un_subtract_products?shipment_id=' + this.shipment.id,
                 success: function(res) {
-                  that.load_shipments();
+                  that.load_shipments(0);
                   that.load_products();
                   $('#mod_ship').modal('hide');
                 }
@@ -810,6 +818,11 @@ window.onload = function () {
             });
             return can_ship;
           },
+          num_days_changed: function() {
+            if (this.num_days > 90) {
+              this.load_shipments(this.num_days);
+            }
+          }
         },
         computed: {
           filtered_results: function() {
@@ -837,8 +850,6 @@ window.onload = function () {
     })
 }
 
-// the problem looks like the product enbedded in the shipment_product doesn't get updated when the refresh button is pressed, 
-// need to reload the sp s after a Refresh. This should happen if the shipment is reloaded.
 
 
 

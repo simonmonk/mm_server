@@ -5,10 +5,15 @@ class ShipmentsController < ApplicationController
   # GET /shipments
   # GET /shipments.json
   def index
-    @shipments = Shipment.all
+    days_string = params[:days]
+    days = 90
+    if (days_string)
+      days = days_string.to_i
+    end
+    cutoff_date = Date.current - days.days
     respond_to do |format|
         format.html { render :index }
-        format.json { render :json => Shipment.all.order('updated_at desc'), 
+        format.json { render :json => Shipment.where("updated_at > ?", cutoff_date).order('updated_at desc'), 
           :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer] }
     end
   end
@@ -240,7 +245,7 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipment_params
-      params.require(:shipment).permit(:retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, 
+      params.require(:shipment).permit(:days, :retailer_id, :dispatched, :notes, :date_order_received, :date_dispatched,:date_invoice_sent, :date_payment_reminder, 
                       :order_email_link, :po_reference, :invoice_number, :shipping_cost, :shipping_provider, :shipping_provider_ac_no, 
                       :discount, :vat_rate, :date_payment_received, :invoice_comment, :apply_vat_to_shipping, :is_cancelled, :total_invoice_collected,
                       :invoice_exch_rate, :weight_kg, :width_cm, :height_cm, :depth_cm, :tracking_info)

@@ -27,6 +27,8 @@ Checkboix - show cancelkled orders
 
 Implement follow on orders
 
+Getting slow - load only shipments needed in date range + a bit
+
 Need to be able to edit shipping cost and other fields in Shipment even after its shipped.
 - currently solved by being able to unship it.
 
