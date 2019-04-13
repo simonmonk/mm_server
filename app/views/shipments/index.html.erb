@@ -520,7 +520,7 @@ window.onload = function () {
         mounted: function() {
           var that;
           that = this;
-          this.load_shipments(0);
+          this.load_shipments(0, function() { that.shipment = that.shipments[0];});
           this.load_products();
           this.filter_shipments('is_new')
           $.ajax({
@@ -531,7 +531,7 @@ window.onload = function () {
           });
         },
         methods: {
-          load_shipments: function(days) { 
+          load_shipments: function(days, callback) { 
             var that;
             that = this;
             if (days == 0) { // load at least 90 days worth
@@ -546,7 +546,9 @@ window.onload = function () {
               url: '/shipments.json?days=' + days,
               success: function(res) {
                 that.shipments = res;
-                that.shipment = that.shipments[0];
+                if (callback) {
+                  callback()
+                }
               }
             });
           },

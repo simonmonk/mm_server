@@ -5,6 +5,9 @@ class Retailer < ApplicationRecord
     belongs_to :region
     validates :name, presence: true
     
+    def is_sample()
+        return (name == 'Sending Samples')
+    end
     
     def Retailer.with_domain(retailer_domain)
        Retailer.all.each do | retailer |
