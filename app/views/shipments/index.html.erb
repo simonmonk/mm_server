@@ -12,6 +12,7 @@
   <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_new'}" v-on:click="filter_shipments('is_new')">New Orders (Un-shipped)</span>
   <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_unpaid'}" v-on:click="filter_shipments('is_unpaid')">Unpaid Orders</span>
   <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_paid'}" v-on:click="filter_shipments('is_paid')">Paid (Complete)</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_cancelled'}" v-on:click="filter_shipments('is_cancelled')">Cancelled</span>
 </span>
 
 <span>
@@ -201,8 +202,9 @@ Sort by:
           </tr>
           <tr>
             <td>Invoice Number</td>
-            <td v-if="shipment.invoice_number">{{ shipment.invoice_number }}</td>
-            <td v-else>An invoice number will be allocated when you click <b>Save</b></td>
+            <td v-if="shipment.retailer.is_sample">sample</td>
+            <td v-if="shipment.invoice_number && !shipment.retailer.is_sample">{{ shipment.invoice_number }}</td>
+            <td v-if="!shipment.invoice_number || shipment.retailer.is_sample">An invoice number will be allocated when you click <b>Save</b></td>
           </tr>
           <tr>
             <td>Order Received Date</td>
@@ -409,7 +411,8 @@ Sort by:
           </tr>
           <tr><td colspan="4">
             <button type="button" v-on:click="save_but_dont_ship()" class="btn btn-success">Save</button> <!-- dont close window -->
-            <button type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
+            <button v-if="! shipment.shipping_cost" type="button" v-on:click="create_order_details" class="btn btn-primary">Order Detail</button>
+            <button v-if="shipment.shipping_cost" type="button" v-on:click="create_invoice(1)" class="btn btn-primary">Invoice</button>
             <button type="button" v-on:click="save_but_dont_ship('#mod_ship')" class="btn btn-primary">Save and Close</button>
             <button type="button" v-on:click="ship_items_update" class="btn btn-primary">Mark as Shipped</button>
           </td></tr>
@@ -454,7 +457,7 @@ Sort by:
   <th v-if="filter_by_type == 'is_paid'">Amount Collected</th>
   <th v-if="filter_by_type == 'is_unpaid'">Due Date</th>
 </tr>
-<tr v-bind:class="{ inactive: shipment.is_cancelled }" v-for="(shipment, index) in filtered_results">
+<tr v-for="(shipment, index) in filtered_results">
   <td v-if="filter_by_type == 'is_new'">{{ shipment.date_order_received }} </td>
   <td v-if="filter_by_type != 'is_new'">{{ shipment.date_invoice_sent }} </td>
   <td>{{ shipment.invoice_number }} </td>
@@ -712,6 +715,9 @@ window.onload = function () {
           },
           create_packing_list: function() {
             window.open("/shipments/packing_list/" + this.shipment.invoice_number + "?id=" + this.shipment.id, '_blank')
+          },
+          create_order_details: function() {
+            window.open("/shipments/order_details/" + this.shipment.invoice_number + "?id=" + this.shipment.id, '_blank')
           },
           open_product_tab: function(product_id) {
             window.open("/products/" + product_id + "/edit", '_blank')

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/sales_us/', to: 'welcome#sales_us'
     
   get 'shipments/invoice/*other', to: 'shipments#invoice'
+  get 'shipments/order_details/*other', to: 'shipments#order_details'
   get 'shipments/packing_list/*other', to: 'shipments#packing_list'
   get 'shipments/quote/*other', to: 'shipments#quote'
   get 'products/pricelist', to: 'products#pricelist'
@@ -68,6 +69,7 @@ Rails.application.routes.draw do
       get :un_subtract_products
       get :delete_shipment_line
       get :invoice
+      get :order_details
       get :packing_list
       get :retailer_list_website
       get :list

@@ -13,7 +13,7 @@ class Shipment < ApplicationRecord
   end
 
   def is_new()
-    return (not date_dispatched or date_dispatched > Date.current)
+    return (not date_dispatched or date_dispatched > Date.current and not is_cancelled)
   end
 
   def is_unpaid()
@@ -159,6 +159,10 @@ class Shipment < ApplicationRecord
 
 def retailer_name
   return self.retailer.name
+end
+
+def as_json(options={})
+  super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer])
 end
     
 end

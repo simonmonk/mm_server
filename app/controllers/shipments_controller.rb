@@ -1,5 +1,5 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice, :quote, :packing_list]
+  before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice, :quote, :packing_list, :order_details]
   skip_before_filter :verify_authenticity_token 
 
   # GET /shipments
@@ -13,15 +13,14 @@ class ShipmentsController < ApplicationController
     cutoff_date = Date.current - days.days
     respond_to do |format|
         format.html { render :index }
-        format.json { render :json => Shipment.where("updated_at > ?", cutoff_date).order('updated_at desc'), 
-          :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer] }
+        format.json { render :json => Shipment.where("updated_at > ?", cutoff_date).order('updated_at desc') }
     end
   end
 
   # GET /shipments/1
   # GET /shipments/1.json
   def show
-    render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer]
+    render :json => @shipment
   end
 
   # GET /shipments/new
@@ -37,6 +36,10 @@ class ShipmentsController < ApplicationController
       @shipment.save
       render :layout => false
   end
+
+  def order_details
+    render :layout => false
+  end
     
   def quote
       render :layout => false
@@ -49,7 +52,7 @@ class ShipmentsController < ApplicationController
   # json
   def update
       if @shipment.update(shipment_params)
-        render :json => @shipment, :methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer]
+        render :json => @shipment
       end   
   end
     
