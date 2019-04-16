@@ -72,7 +72,6 @@ Rails.application.routes.draw do
       get :order_details
       get :packing_list
       get :retailer_list_website
-      get :list
       get :get_shipments
     end
   end
@@ -84,6 +83,8 @@ Rails.application.routes.draw do
       get :save_part
       get :po
       get :qr
+      get :list
+      get :get_orders_json
     end
   end
   resources :apis do
@@ -102,8 +103,6 @@ Rails.application.routes.draw do
           get :restore_notifications
       end
   end
-
-  
     
   root 'welcome#index'
 end

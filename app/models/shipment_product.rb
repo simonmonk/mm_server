@@ -6,25 +6,25 @@ class ShipmentProduct < ApplicationRecord
     super(:methods => [:product, :line_total])
   end
     
-#   # This is only used in quotes and can probably be deleted
-#   def wholesale_in_currency()
-#      if (shipment.retailer.name == 'amazon.com')
-#         # Amazon special case - Reinstate USD prices but label clearly as
-#          if (product.retail_price_usd)
-#              return product.retail_price_usd
-#          else
-#              return 0
-#          end
-#      end
-#      if (shipment.retailer.pref_currency == 'USD')
-#         if (product.retail_price_usd)
-#             return product.retail_price_usd
-#         else
-#             return 0
-#         end
-#      end
-#      return product.wholesale_price
-#   end
+  # This is only used in quotes and can probably be deleted
+  def wholesale_in_currency()
+     if (shipment.retailer.name == 'amazon.com')
+        # Amazon special case - Reinstate USD prices but label clearly as
+         if (product.retail_price_usd)
+             return product.retail_price_usd
+         else
+             return 0
+         end
+     end
+     if (shipment.retailer.pref_currency == 'USD')
+        if (product.retail_price_usd)
+            return product.retail_price_usd
+        else
+            return 0
+        end
+     end
+     return product.wholesale_price
+  end
 
     # Use the wholesale or retail price depending on is_retail on the retailer
     # is_retail indicates that customer pays retail price not wholesale price

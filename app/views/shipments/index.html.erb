@@ -294,6 +294,7 @@ Sort by:
           </tr>
         </table>
         <button v-if="has_shipment_products() && ! all_shipable()" type="button" v-on:click="refresh_product_qty()" class="btn btn-success">Refresh</button>
+        <button type="button" v-on:click="create_quote" class="btn btn-primary">Quote</button>
         <button v-if="has_shipment_products()" type="button" v-on:click="create_packing_list" class="btn btn-primary">Packing List</button>
         <button type="button" v-on:click="close_edit_view" class="btn btn-primary">Complete Later</button>
         <button v-if="has_shipment_products() && all_shipable()" type="button" v-on:click="ship_shipment(-1)" class="btn btn-success">Ship</button>
@@ -716,6 +717,9 @@ window.onload = function () {
           create_packing_list: function() {
             window.open("/shipments/packing_list/" + this.shipment.invoice_number + "?id=" + this.shipment.id, '_blank')
           },
+          create_quote: function() {
+            window.open("/shipments/quote/" + this.shipment.quotation_number + "?id=" + this.shipment.id, '_blank')
+          },
           create_order_details: function() {
             window.open("/shipments/order_details/" + this.shipment.invoice_number + "?id=" + this.shipment.id, '_blank')
           },
@@ -857,10 +861,6 @@ window.onload = function () {
         }
     })
 }
-
-
-
-
 
 </script>
 

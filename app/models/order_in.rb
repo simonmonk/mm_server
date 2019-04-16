@@ -1,7 +1,7 @@
 class OrderIn < ApplicationRecord
   belongs_to :supplier
   has_many :order_in_lines
-    
+     
     
   # generate unique invoice number in format YYYYMMDDnn
   def order_number
@@ -105,5 +105,8 @@ class OrderIn < ApplicationRecord
     end
   end
     
-    
+  def as_json(options={})
+    super(:methods => [:supplier, :summary, :complete?, :priced? ])
+  end  
+
 end

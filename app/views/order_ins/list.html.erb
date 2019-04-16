@@ -1,0 +1,99 @@
+<h1>Goods In</h1>
+
+<div id="app">
+
+<!-- Order In List Table -->
+<table>
+<tr>
+  <th>Order Date</th>
+  <th>Supplier</th>
+  <th>Summary</th>
+</tr>
+<tr v-for="(order_in, index) in filtered_results">
+    <td>{{order_in.placed_date}}</td>
+    <td>{{order_in.supplier.name}}</td>
+    <td>{{order_in.summary}}</td>
+    
+</tr>
+</table>
+
+
+</div>
+
+<script>
+
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          filter_by_type: 'priced?',
+          num_days: 90,
+          sort_by_field: 'updated_at',
+          order_ins: [],
+          order_in: { // all so that hidden bits of UI dont crash through missing data
+          },
+          suppliers: [],
+          supplier: {},
+        },
+        mounted: function() {
+          var that;
+          that = this;
+          this.load_order_ins(0, function() { that.order_in = that.order_ins[0];});
+        },
+        methods: {
+          load_order_ins: function(days, callback) { 
+            var that;
+            that = this;
+            if (days == 0) { // load at least 90 days worth
+              if (this.num_days > 90) {
+                days = this.num_days;
+              }
+              else {
+                days = 90;
+              } 
+            }
+            $.ajax({
+              url: '/order_ins/get_orders_json?days=' + days,
+              success: function(res) {
+                that.shipments = res;
+                if (callback) {
+                  callback()
+                }
+              }
+            });
+          },
+        },
+        computed: {
+          filtered_results: function() {
+            var that;
+            that = this;
+            let filtered = this.order_ins.filter(function (order_in) {
+              var today = new Date();
+              var start_date = today.addDays(- parseInt(that.num_days)).toISOString()
+              var in_date_range = (shipment.updated_at >= start_date)
+              return order_in[that.filter_by_type] && in_date_range
+            });
+            let sorted = filtered.sort(function (a, b) {
+              let inverted = 1;
+              if (that.sort_by_field == 'updated_at') {
+                inverted = -1;
+              }
+              if (a[that.sort_by_field] > b[that.sort_by_field]) {
+                return 1 * inverted;
+              }
+              return -1 * inverted;
+            });
+            return sorted;
+          }
+        }
+    })
+}
+
+
+
+
+
+</script>
+
+

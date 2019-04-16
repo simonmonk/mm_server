@@ -87,7 +87,22 @@ class OrderInsController < ApplicationController
   def index
       @order_ins = OrderIn.all.order(created_at: :desc)
   end
+
+  # Vue page rendered from orders_in/list
+  def list
+  end
     
+  # JSON for orders in
+  def get_orders_json
+    days_string = params[:days]
+    days = 90
+    if (days_string)
+      days = days_string.to_i
+    end
+    cutoff_date = Date.current - days.days
+    render :json => OrderIn.where("updated_at > ?", cutoff_date).order('updated_at desc')
+  end
+
   def destroy
     @order_in.destroy
     redirect_to :action => "index"
