@@ -20,6 +20,7 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 Shipments
 -----------
 
+Packing List should show foreign skus
 
 Eduporium dollar amounts in adding order lines show pound symbol
 
