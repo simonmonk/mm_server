@@ -52,5 +52,15 @@ class ShipmentProduct < ApplicationRecord
             return price * qty
         end
     end
+
+    def ShipmentProduct.fix_missing_prices
+        ShipmentProduct.all.each do | sp |
+            if (not sp.price and sp.shipment)
+                sp.price = sp.invoice_price
+                sp.save
+            end
+        end
+    end
+
     
 end
