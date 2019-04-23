@@ -1,5 +1,5 @@
 class OrderInsController < ApplicationController
-  before_action :set_order_in, only: [:show, :edit, :update, :destroy, :po, :qr]
+  before_action :set_order_in, only: [:show, :edit, :update, :destroy, :po, :qr, :update_order_in, :delete_json]
   skip_before_filter :verify_authenticity_token 
     
   def new
@@ -92,7 +92,7 @@ class OrderInsController < ApplicationController
   def list
   end
     
-  # JSON for orders in
+  # JSON for new UI
   def get_orders_json
     days_string = params[:days]
     days = 90
@@ -102,6 +102,40 @@ class OrderInsController < ApplicationController
     cutoff_date = Date.current - days.days
     render :json => OrderIn.where("updated_at > ?", cutoff_date).order('updated_at desc')
   end
+
+  # add a part order line to the order_in
+  def add_part_json
+    part_id = params[:part_id]
+    order_in_id = params[:order_in_id]
+    qty = params[:qty].to_i
+    price = params[:price].to_f
+    order_in = OrderIn.find(order_in_id)
+    order_in.add_order_line(part_id, qty, price)
+    render :json => order_in
+  end   
+
+  def delete_json
+    @order_in.destroy
+  end
+
+  ###############################
+
+  def update_order_in()
+    if @order_in.update(order_in_params)
+      render :json => @order_in
+    end   
+  end
+
+  def create_order_in()
+    @order_in = OrderIn.new(order_in_params)
+    if @order_in.save
+      render :json => @order_in
+    end
+  end
+
+
+
+
 
   def destroy
     @order_in.destroy

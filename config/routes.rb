@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   resources :product_categories
   resources :part_categories
   resources :transactions
-  resources :suppliers
   resources :product_retailers
   
   get '/sales_uk/', to: 'welcome#sales_uk'
@@ -21,6 +20,8 @@ Rails.application.routes.draw do
   get 'products/productlist', to: 'products#productlist' # for the MM website 
   get 'retailers/retailer_list_website', to: 'retailers#retailer_list_website' # for the MM website 
   get 'prospects/countries.json', to: 'prospects#countries'
+  get 'suppliers/suppliers_list.json', to: 'suppliers#suppliers_list'
+  
 
   resources :parts do
     collection do
@@ -85,8 +86,17 @@ Rails.application.routes.draw do
       get :qr
       get :list
       get :get_orders_json
+      post :create_order_in
+      post :update_order_in
+      get :delete_json
     end
   end
+  resources :suppliers do
+    collection do
+      get :suppliers_list
+    end
+  end
+
   resources :apis do
     collection do
       get :import_orders_amazon_uk

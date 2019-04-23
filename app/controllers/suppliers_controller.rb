@@ -3,9 +3,14 @@ class SuppliersController < ApplicationController
   skip_before_filter :verify_authenticity_token 
 
   # GET /suppliers
-  # GET /suppliers.json
   def index
     @suppliers = Supplier.all
+  end
+
+  # GET /suppliers/suppliers_list
+  def suppliers_list
+    @suppliers = Supplier.all
+    render :json => @suppliers
   end
 
   # GET /suppliers/1

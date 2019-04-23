@@ -52,3 +52,15 @@ String.prototype.to_usd = function() {
     var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 });
     return formatter.format(parseFloat(this.valueOf()))
 }
+
+
+Number.prototype.to_currency = function(currency) {
+    var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency, minimumFractionDigits: 2 });
+    return formatter.format(this.valueOf())
+}
+
+
+String.prototype.to_currency = function(currency) {
+    var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency, minimumFractionDigits: 2 });
+    return formatter.format(parseFloat(this.valueOf()))
+}

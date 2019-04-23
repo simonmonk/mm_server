@@ -8,9 +8,20 @@ $ rails generate scaffold Region name:string
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
+BUGS
+=====
+
+Part prices - do they have a currency? Should always deal with part prices in GBP when pricing stuff.
+As a policy currecy symbol need to be used everywhere a price is displayed.
+
+
+
+Parts probably shouldn't have an exchange rate. Product estimated pricing should prob go off current exchange rate for next order.
+
 
 
 New rule for shipments list.
+---
 
 Amazon orders (both) should count as invoiced as long as they are shipped.
 Shipment line items for Amazon.com should have extra columns for retail price dollars, extended price in dollars.

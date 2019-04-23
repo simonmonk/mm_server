@@ -4,6 +4,9 @@ class Supplier < ApplicationRecord
     
     validates :name, presence: true
     
+    def parts()
+        return part_suppliers.collect { | ps | ps.part }
+    end
     
     def fastest_delivery()
         min_days = 999
@@ -26,5 +29,8 @@ class Supplier < ApplicationRecord
         end
     end
     
+    def as_json(options={})
+        super(:methods => [:parts])
+    end  
     
 end

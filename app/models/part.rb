@@ -5,9 +5,9 @@ class Part < ApplicationRecord
     belongs_to :part_category
     
     validates :name, presence: true
-    validates :qty, numericality: { greater_than_or_equal_to: 0 }
-    validates :stock_warning_level, numericality: { greater_than_or_equal_to: 0 }
-    validates :cost, presence: true
+    # validates :qty, numericality: { greater_than_or_equal_to: 0 }
+    # validates :stock_warning_level, numericality: { greater_than_or_equal_to: 0 }
+    # validates :cost, presence: true
     
     
     # return all the Active parts
@@ -90,5 +90,10 @@ class Part < ApplicationRecord
       end
       return first_item.name + " and " + (num_items - 1).to_s + " other products."
   end
+
+      
+  def as_json(options={})
+    super(:methods => [])
+  end  
     
 end

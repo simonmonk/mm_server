@@ -1,6 +1,33 @@
 class OrderIn < ApplicationRecord
-  belongs_to :supplier
+  belongs_to :supplier, optional: true
   has_many :order_in_lines
+
+  # for filtering of order ins
+
+  def is_not_ordered()
+    if (placed_date)
+        return false
+    else
+        return true
+    end
+  end 
+
+  def is_ordered_not_received()
+    return (not is_not_ordered() and not complete?())
+  end
+
+  def is_received()
+    return complete?()
+  end
+
+  def supplier_name()
+    if (supplier)
+        return supplier.name
+    else
+        return nil
+    end
+  end
+
      
     
   # generate unique invoice number in format YYYYMMDDnn
@@ -106,7 +133,7 @@ class OrderIn < ApplicationRecord
   end
     
   def as_json(options={})
-    super(:methods => [:supplier, :summary, :complete?, :priced? ])
+    super(:methods => [:supplier, :order_in_lines, :supplier_name, :order_number, :summary, :is_not_ordered, :is_ordered_not_received, :is_received ])
   end  
 
 end

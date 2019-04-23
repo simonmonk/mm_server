@@ -524,7 +524,7 @@ window.onload = function () {
         mounted: function() {
           var that;
           that = this;
-          this.load_shipments(0, function() { that.shipment = that.shipments[0];});
+          this.load_shipments(0, function() { that.shipment = that.filtered_results[0];});
           this.load_products();
           this.filter_shipments('is_new')
           $.ajax({
@@ -592,10 +592,6 @@ window.onload = function () {
             else {
               s = this.shipment;
             }
-//            if (! s.total_invoice_amount) {
-//              console.log('INDEX=' + index + ' total_invoice_amount ' + s.total_invoice_amount)
-//              return "XXXXXXXX";
-//            }
             if (s.retailer.pref_currency == 'USD') {
               if (! s.invoice_exch_rate) {
                 s.invoice_exch_rate = 1.3

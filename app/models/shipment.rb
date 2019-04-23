@@ -63,8 +63,6 @@ class Shipment < ApplicationRecord
       if (line.price)
         sale = line.qty * line.price
         sales_total += sale
-      else
-        line.delete # delete orphaned lines
       end
     end
     if (shipping_cost)

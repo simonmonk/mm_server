@@ -2,6 +2,152 @@
 
 <div id="app">
 
+<div>
+  <button type="button" v-on:click="open_unordered_form" class="btn btn-primary">New Goods In</button>
+</div>
+
+<span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_not_ordered'}" v-on:click="filter_order_ins('is_not_ordered')">New (Order not sent)</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_ordered_not_received'}" v-on:click="filter_order_ins('is_ordered_not_received')">Ordered (not complete)</span>
+  <span class="menu" v-bind:class="{ menu_selected: filter_by_type == 'is_received'}" v-on:click="filter_order_ins('is_received')">Received</span>
+</span>
+
+<span>
+Modified in last   
+<select v-model="num_days" v-on:change="num_days_changed">
+      <option value="7">7</option>
+      <option value="14">14</option>
+      <option value="30">30</option>
+      <option value="90">90</option>
+      <option value="365">365</option>
+      <option value="100000">ALL</option>
+</select>
+days.
+</span>
+<span>
+Sort by:   
+<select v-model="sort_by_field">
+      <option value="updated_at">Most recently changed or added</option>
+</select>
+</span>
+
+
+<!-- Edit Unordered Order In Form -->
+<div id="unordered_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Goods In Order Details</h1>
+        <table>
+            <tr>
+            <td>Order from</td>
+            <td v-if="order_in.supplier_name">{{ order_in.supplier_name}} </td>
+            <td v-else>
+                <select v-model="order_in.supplier_id">
+                    <option v-for="(supplier, index) in suppliers" v-bind:value="supplier.id">{{supplier.name}}</option>
+                </select>
+            </td>
+            </tr>
+            <tr>
+                <td>Order Number</td>
+                <td>{{order_in.order_number}}</td>
+                <td>Order Date</td>
+                <td><input v-model="order_in.placed_date" type="date" value="" class="form-control" placeholder="Date the order was placed"/></td>
+            </tr>
+            <tr>
+                <td>Currency</td>
+                <td>
+                    <select v-model="order_in.currency">
+                        <option>GBP</option>
+                        <option>USD</option>
+                        <option>EUR</option>
+                    </select>
+                </td>
+                <td>Invoice Goods Amount</td>
+                <td><input v-model="order_in.invoice_goods_ammout" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>Invoice VAT Amount</td>
+                <td><input v-model="order_in.invoice_vat_ammout" type="text" value="" class="form-control" placeholder=""/></td>
+                <td>Shipping Amount</td>
+                <td><input v-model="order_in.shipping" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>Invoice Total Amount</td>
+                <td><input v-model="order_in.invoice_total_ammount" type="text" value="" class="form-control" placeholder=""/></td>
+                <td>Exchange rate (E.g. 1.3)</td>
+                <td><input v-model="order_in.exch_rate" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>VAT Information Collected (N/A, Y, N)</td>
+                <td><input v-model="order_in.vat_info_collected" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>Notes</td>
+                <td colspan="3"><textarea v-model="order_in.notes" rows="3" class="form-control" placeholder="Notes about this order go here"></textarea></td>
+            </tr>
+            <tr><td><button type="button" v-on:click="save_order_in('#unordered_form')" class="btn btn-primary">Save</button>
+            <button type="button" v-on:click="cancel('#unordered_form')" class="btn btn-info">Cancel</button></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Line Items Form -->
+<div id="line_items_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Goods In Line Items</h1>
+        <table>
+            <tr>
+                <td>Order from</td>
+                <td>{{ order_in.supplier_name}} </td>
+            </tr>
+            <tr>
+                <td>Order Number</td>
+                <td>{{order_in.order_number}}</td>
+                <td>Order Date</td>
+                <td><input v-model="order_in.placed_date" type="date" value="" class="form-control" placeholder="Date the order was placed"/></td>
+            </tr>
+            <tr>
+        </table>
+        <h1>Line Items</h1>
+        <table>
+            <tr><td>Part</td><td>Ordered</td><td>Received</td><td>Unit price ({{order_in.currency}})</td><td>Total ({{order_in.currency}})</td></tr>
+            <tr v-for="(li, index) in order_in.order_in_lines">
+                <td>{{li.part.name}}</td>
+                <td>{{li.qty}}</td>
+                <td>{{li.qty_in}}</td>
+                <td>{{li.price.to_currency(order_in.currency)}}</td>
+                <td>{{(li.price * li.qty).to_currency(order_in.currency)}}</td>
+                <td><span v-on:click="edit_line_in(index)" class="badge badge-success">Edit</span></td>
+                <td><span v-on:click="update_part_price(index)" class="badge badge-success">Update Part Price</span></td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <select v-model="order_in_line.part_id">
+                        <option v-for="(p, index) in parts" v-bind:value="p.id">{{p.name}}</option>
+                    </select>
+                </td>
+                <td><input v-model="order_in_line.qty" type="text" value="" class="form-control" placeholder="Qty"/></td>
+                <td><input v-model="order_in_line.price" type="text" value="" class="form-control" placeholder="Price"/></td>
+                <td><span v-on:click="add_line_item" class="badge badge-success">Add</span></td>
+            </tr>
+        </table>
+        <table>
+            <tr><td><button type="button" v-on:click="save_order_in('#line_items_form')" class="btn btn-primary">Save</button>
+            <button type="button" v-on:click="cancel('#line_items_form')" class="btn btn-info">Cancel</button></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Order In List Table -->
 <table>
 <tr>
@@ -9,11 +155,13 @@
   <th>Supplier</th>
   <th>Summary</th>
 </tr>
-<tr v-for="(order_in, index) in filtered_results">
-    <td>{{order_in.placed_date}}</td>
-    <td>{{order_in.supplier.name}}</td>
-    <td>{{order_in.summary}}</td>
-    
+<tr v-for="(oi, index) in filtered_results">
+    <td>{{oi.placed_date}}</td>
+    <td>{{oi.supplier_name}}</td>
+    <td>{{oi.summary}}</td>
+    <td><span v-on:click="edit_new_order_in(index)" class="badge badge-success">Order Details</span></td>
+    <td><span v-on:click="edit_line_items(index)" class="badge badge-success">Line Items</span></td>
+    <td><span v-on:click="delete_order_in(index)" class="badge badge-danger">Delete</span></td>
 </tr>
 </table>
 
@@ -27,19 +175,20 @@ window.onload = function () {
     var app = new Vue({
         el: '#app',
         data: {
-          filter_by_type: 'priced?',
+          filter_by_type: 'is_not_ordered',
           num_days: 90,
           sort_by_field: 'updated_at',
           order_ins: [],
-          order_in: { // all so that hidden bits of UI dont crash through missing data
-          },
+          order_in: { id: null, supplier_id: null, supplier: {parts: []}, order_in_lines: [], supplier_name: null, order_number: null, placed_date: null },
           suppliers: [],
-          supplier: {},
+          order_in_line: {id: null, part_id: null, name: '', price: null, qty: null, qty_in: null},
+          parts: []
         },
         mounted: function() {
           var that;
           that = this;
-          this.load_order_ins(0, function() { that.order_in = that.order_ins[0];});
+          this.load_order_ins(0);
+          this.load_suppliers();
         },
         methods: {
           load_order_ins: function(days, callback) { 
@@ -56,12 +205,106 @@ window.onload = function () {
             $.ajax({
               url: '/order_ins/get_orders_json?days=' + days,
               success: function(res) {
-                that.shipments = res;
+                that.order_ins = res;
                 if (callback) {
                   callback()
                 }
               }
             });
+          },
+          filter_order_ins: function(filter_attribute) {
+            this.filter_by_type = filter_attribute;
+          },
+          num_days_changed: function() {
+            if (this.num_days > 90) {
+              this.load_order_ins(this.num_days);
+            }
+          },
+          load_suppliers: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/suppliers/suppliers_list',
+              success: function(res) {
+                that.suppliers = res;
+              }
+            });
+          },
+          delete_order_in: function(index) {
+            var that;
+            that = this;
+            let id = this.filtered_results[index].id;
+            $.ajax({
+              url: '/order_ins/delete_json?id=' + id,
+              success: function(res) {
+                that.load_order_ins(this.num_days);
+              }
+            });
+          },
+          save_order_in: function(modal_to_close, callback) {
+            var that;
+            that = this;
+            var modal = modal_to_close;
+            // delete computed attributes that cant be saved
+            delete this.order_in.supplier;
+            delete this.order_in.order_number;
+            delete this.order_in.summary;
+            delete this.order_in.is_not_ordered;
+            delete this.order_in.is_ordered_not_received;
+            delete this.order_in.is_received;
+            delete this.order_in.total_invoice_amount;
+            delete this.order_in.order_in_lines;
+            delete this.order_in.parts;
+
+            url = '/order_ins/create_order_in.json'
+            if (this.order_in.id) { // update existing
+              url = '/order_ins/update_order_in.json?id=' + this.order_in.id;
+            }
+            $.ajax({
+              type: 'POST',
+              url: url,
+              data: {order_in: this.order_in},
+              success: function(res) {
+                that.load_order_ins(0);
+                that.order_in = res;
+                if (modal) {
+                  $(modal).modal('hide');
+                }
+                if (callback) {
+                  callback();
+                }
+              }
+            });
+          },
+          open_unordered_form: function() {
+            this.order_in = {
+                id: null, open: null, created_at: null, updated_at: null,
+                order_in_lines: [],
+                currency: "GBP", date_qr_sent: null,
+                exch_rate: null, invoice_goods_ammout: null,
+                invoice_total_ammount: null, invoice_vat_ammout: 0,
+                notes: "", placed_date: null, quotation_received: null,
+                shipping: null, summary: "",
+                supplier: {id: null, name: ""},
+                supplier_id: null, supplier_name: null,
+                vat_info_collected: "N/A", order_number: '' 
+            };
+            $('#unordered_form').modal('show')
+          },
+          cancel: function(modal_to_close) {
+            $(modal_to_close).modal('hide')
+          },
+          edit_new_order_in: function(index) {
+            this.order_in = this.filtered_results[index];
+            $('#unordered_form').modal('show');
+          },
+          edit_line_items: function(index) {
+            this.order_in = this.filtered_results[index];
+            this.parts = this.order_in.supplier.parts;
+            $('#line_items_form').modal('show');
+          },
+          add_line_item: function() {
+            alert("here");
           },
         },
         computed: {
@@ -71,7 +314,7 @@ window.onload = function () {
             let filtered = this.order_ins.filter(function (order_in) {
               var today = new Date();
               var start_date = today.addDays(- parseInt(that.num_days)).toISOString()
-              var in_date_range = (shipment.updated_at >= start_date)
+              var in_date_range = (order_in.updated_at >= start_date)
               return order_in[that.filter_by_type] && in_date_range
             });
             let sorted = filtered.sort(function (a, b) {
@@ -89,10 +332,6 @@ window.onload = function () {
         }
     })
 }
-
-
-
-
 
 </script>
 
