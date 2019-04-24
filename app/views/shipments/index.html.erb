@@ -139,8 +139,8 @@ Sort by:
           <tr>
             <td>Customer Shipping Provider</td>
             <td>{{shipment.shipping_provider}}</td>
-            <td>Payment Due Date</td>
-            <td>{{shipment.date_payment_reminder}}</td>
+            <td>Date Payed</td>
+            <td>{{shipment.date_payment_received}}</td>
           </tr>
           <tr>
             <td>Customer Shipping Ac.</td>
@@ -209,6 +209,10 @@ Sort by:
           <tr>
             <td>Order Received Date</td>
             <td><input v-model="shipment.date_order_received" type="date" value="" class="form-control" placeholder="Date the order was received"/></td>
+          </tr>
+          <tr class='warning'>
+            <td>[Order Shipped]</td>
+            <td><input v-model="shipment.date_dispatched" type="date" value="" class="form-control" placeholder="EMERGENCY USE ONLY"/></td>
           </tr>
           <tr>
             <td>VAT Rate (percent)</td>

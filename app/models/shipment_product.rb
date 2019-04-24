@@ -1,3 +1,5 @@
+require "csv"
+
 class ShipmentProduct < ApplicationRecord
   belongs_to :shipment
   belongs_to :product
@@ -54,10 +56,22 @@ class ShipmentProduct < ApplicationRecord
     end
 
     def ShipmentProduct.fix_missing_prices
-        ShipmentProduct.all.each do | sp |
-            if (not sp.price and sp.shipment)
-                sp.price = sp.invoice_price
-                sp.save
+        # id,shipment_id,product_id,qty
+        CSV.foreach('data.csv') do |row|  
+            id = row[0].to_i
+            sp = ShipmentProduct.find_by_id(id)
+            if (not sp)
+                shipment_id = row[1].to_i
+                shipment = Shipment.find_by_id(shipment_id)
+                product_id = row[2].to_i
+                product = Product.find_by_id(product_id)
+                qty = row[3].to_i
+                if (shipment and product)
+                    sp = ShipmentProduct.new(shipment_id: shipment_id, product_id: product_id, qty: qty)
+                    sp.price = sp.invoice_price
+                    puts("missing sp id=" + id.to_s + " price set to:" + sp.price.to_s)
+                    sp.save
+                end
             end
         end
     end
