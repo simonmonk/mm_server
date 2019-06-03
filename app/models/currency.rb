@@ -16,6 +16,14 @@ class Currency < ApplicationRecord
     return Currency.find_by_name('EUR')
   end
 
+  def Currency.currency_symbol(currency_name)
+    currency = Currency.find_by_name(currency_name)
+    if (currency)
+      return currency.symbol
+    end
+    return ""
+  end
+
   def Currency.set_usd_rate
       key = Rails.application.secrets.CURRENCY_LAYER_KEY
       url = "http://apilayer.net/api/live?access_key=" + key + "&currencies=GBP"

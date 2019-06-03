@@ -8,15 +8,80 @@ $ rails generate scaffold Region name:string
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
+General
+--------
+New retailer - it would be nice to have new retailer info as a form to send as PDF to prospective customers. ?????
+
+
+
+Accounting stuff
+=================
+Cash basis NOT accrual.
+
+Anything that's a Part should set cost centre to MANU automatically
+All retailers should have flag for EU.
+
+Buy stuff exch rate at purchase date.
+Sell stuff ech rate (only Eduporium) should be at pyment date. So add exch rate on reconcile.
+
+- auto go to list items after details form
+For VAT report need:
+input - goods coming in money going out
+output -
+
+1. VAT collected from sales
+2. VAT that we would have paid if it wasn't zero rated based on 20% only applies to amazon
+3. Calculated
+4. VAT we have paid and can reclaim + field 2 to balance
+5. Calculated
+6. Total of things we've sold withithout VAT
+7. Things we have bought without vat but some things excluded: [wages, bank charges, PAYE flag on Accounting category - only include things that could attract VAT]
+8. Sales to europe without VAT (zero rating only if we have their VAT number)
+9. Things bought from EU
+
+EC sales list
+country in EU     VAT no      Sales per supplier
+
+
+
+
 BUGS
 =====
 
-Part prices - do they have a currency? Should always deal with part prices in GBP when pricing stuff.
-As a policy currecy symbol need to be used everywhere a price is displayed.
+Check date sorting for shipments
+
+Changes to OrderIn
+==================
+
+OrderIn changes.
+- account_id - used to pay the invoice
+- invoice_uri - of a scan of the invoice, or saved invoice
+
+
+OrderInLine changes.
+- Add a flag - stock_added - so that button Add Stock can be greyed out on an order line.
+- category_id - what type of purchase, Materials (Part), stationary, postage, insurance, PAYE etc - get from spreadsheet
+This triggers lots of conditional UI.
+- cost_centre_id - a single invoice CAN be split accross cost centres
+
+- OrderInLine becomes poymorphic - parts and non-parts, so, it needs extra non-part fields of:
+-- name, order code, note
+
+
+New Scaffold: CostCentre - name, code - Manufacturing MAN, Research and Development RND, Marketing MAR
+New Scaffold: Account - name, code - Current Ac CUR, PayPal PPL, World First WOR, Amazon AM 
+New Scaffold: Category - name, code - from spreadsheet 
+
+Generating payments CSV
+-----------------------
+each row is 1 invoice (payment from bank - 1 tab per account) invoice amount may get split if invoice items belong in different columns - also VAT split out.
+tabs for bank payments, bank receipts, paypal payments, etc.
 
 
 
-Parts probably shouldn't have an exchange rate. Product estimated pricing should prob go off current exchange rate for next order.
+
+
+????? Parts probably shouldn't have an exchange rate. Product estimated pricing should prob go off current exchange rate for next order.
 
 
 

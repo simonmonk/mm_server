@@ -1,0 +1,2 @@
+class CostCentre < ApplicationRecord
+end

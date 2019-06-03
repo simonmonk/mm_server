@@ -1,0 +1,138 @@
+<h1>VAT Obligations</h1>
+
+<div id="app">
+
+<table>
+<tr>
+  <th>Period Start</th>
+  <th>Period End</th>
+  <th>Due Date</th>
+  <th>Status</th>
+  <th>Received Date</th>
+</tr>
+<tr v-for="(ob, index) in obligations" v-bind:class="{ selected_row: index == selected_index }">
+    <td>{{ob.start_date}}</td>
+    <td>{{ob.end_date}}</td>
+    <td>{{ob.due_date}}</td>
+    <td>{{ob.status_string}}</td>
+    <td>{{ob.received_date}}</td>
+  
+    <td v-if="ob.status=='O'"><span v-on:click="select_obligation(index)" class="badge badge-info">Select</span></td>
+    </td>
+</tr>
+</table>
+
+<!-- form for selected VAT obligation. Only show if something's been selected -->
+<div v-if="selected_index">
+
+<h1>VAT Figures for Period {{obligation.start_date}} to {{obligation.end_date}}</h1>
+
+<table>
+<tr><th>[1] VAT due on sales and other outputs.</th><td class="money">{{vat_return.vatDueSales.to_gbp()}}</td></tr>
+<tr><th>[2] VAT due on acquisitions from other EC Member States.</th><td class="money">{{vat_return.vatDueAcquisitions.to_gbp()}}</td></tr>
+<tr><th>[3] Total VAT due (the sum of [1] and [2]).</th><td class="money">{{vat_return.totalVatDue.to_gbp()}}</td></tr>
+<tr><th>[4] VAT reclaimed on purchases and other inputs (including acquisitions from the EC).</th><td class="money">{{vat_return.vatReclaimedCurrPeriod.to_gbp()}}</td></tr>
+<tr><th>[5] The difference between [3] and [4].</th><td class="money">{{vat_return.netVatDue.to_gbp()}}</td></tr>
+<tr><th>[6] Total value of sales and all other outputs excluding any VAT. </th><td class="money">{{vat_return.totalValueSalesExVAT.to_gbp()}}</td></tr>
+<tr><th>[7] Total value of purchases and all other inputs excluding any VAT (including exempt purchases). </th><td class="money">{{vat_return.totalValuePurchasesExVAT.to_gbp()}}</td></tr>
+<tr><th>[8] Total value of all supplies of goods and related costs, excluding any VAT, to other EC member states.</th><td class="money">{{vat_return.totalValueGoodsSuppliedExVAT.to_gbp()}}</td></tr>
+<tr><th>[9] Total value of acquisitions of goods and related costs excluding any VAT, from other EC member states.</th><td class="money">{{vat_return.totalAcquisitionsExVAT.to_gbp()}}</td></tr>
+
+</table>
+
+</div>
+
+<button type="button" v-on:click="post_vat_return" class="btn btn-primary">Post Return</button>
+
+
+</div>
+
+
+<style>
+.selected_row {
+    color: black;
+    font-weight: bold;
+}
+</style>
+
+
+<script>
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+            obligations: [],
+            obligation: {
+                due_date: "2017-05-07",
+                end_date: "2017-03-31",
+                period_key: "18A1",
+                received_date: "2017-05-06",
+                start_date: "2017-01-01",
+                status: "F",
+                status_string: "Fulfilled"
+            },
+            selected_index: null,
+            vat_return: {                                        
+                periodKey: "18A2", // from the obligations request
+                vatDueSales: 105.50,
+                vatDueAcquisitions: -100.45,
+                totalVatDue: 5.05,
+                vatReclaimedCurrPeriod: 105.15,
+                netVatDue: 100.10,
+                totalValueSalesExVAT: 300,
+                totalValuePurchasesExVAT: 300,
+                totalValueGoodsSuppliedExVAT: 3000,
+                totalAcquisitionsExVAT: 3000,
+                finalised: true
+            },
+        },
+        mounted: function() {
+            this.load_vat_obligations()
+        },
+        methods: {
+            load_vat_obligations: function() {
+                var that;
+                that = this;
+                $.ajax({
+                  url: '/accounts/vat_obligations',
+                  success: function(res) {
+                    that.obligations = res;
+                  }
+                });
+            },
+            post_vat_return: function() {
+                var that;
+                that = this;
+                $.ajax({
+                  type: 'POST',
+                  url: 'http://localhost:8080/submitVATCall',
+                  data: this.vat_return,
+                  success: function(res) {
+                      that.message = res;
+                  }
+                });
+            },
+            select_obligation: function(index) {
+                this.selected_index = index;
+                this.obligation = this.obligations[index];
+                var that;
+                that = this;
+                $.ajax({
+                  url: '/accounts/vatSummary?obligation_id=' + this.obligation.id,
+                  success: function(res) {
+                    that.vat_return = res;
+                  }
+                });
+                // do the calcs for this obligations date range
+                // display form with arts and a button to show working in separate
+
+
+            }
+        },
+        computed: {
+        }
+    });
+}
+
+</script>

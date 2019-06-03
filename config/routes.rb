@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :book_keeping_categories
+  resources :cost_centres
   resources :regions
   resources :reminders
   resources :communications
@@ -21,7 +23,18 @@ Rails.application.routes.draw do
   get 'retailers/retailer_list_website', to: 'retailers#retailer_list_website' # for the MM website 
   get 'prospects/countries.json', to: 'prospects#countries'
   get 'suppliers/suppliers_list.json', to: 'suppliers#suppliers_list'
+
   
+  resources :accounts do
+    collection do
+      get :cashflow
+      post :vatObligations
+      get :vat
+      get :vat_obligations
+      get :vat_report
+      get :vatSummary
+    end
+  end
 
   resources :parts do
     collection do
@@ -30,6 +43,7 @@ Rails.application.routes.draw do
       get :export_parts
     end
   end
+
   resources :prospects do
     collection do
     end
@@ -88,6 +102,11 @@ Rails.application.routes.draw do
       get :get_orders_json
       post :create_order_in
       post :update_order_in
+      get :add_part_json
+      post :rx_part_json
+      post :rx_non_part_json
+      get :delete_line_item
+      post :set_new_part_price_json
       get :delete_json
     end
   end
@@ -111,6 +130,7 @@ Rails.application.routes.draw do
       collection do
           get :dismiss_notification
           get :restore_notifications
+          get :financial
       end
   end
     

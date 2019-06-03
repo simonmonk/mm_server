@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @book_keeping_category.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @book_keeping_category.code %>
+</p>
+
+<%= link_to 'Edit', edit_book_keeping_category_path(@book_keeping_category) %> |
+<%= link_to 'Back', book_keeping_categories_path %>

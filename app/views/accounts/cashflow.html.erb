@@ -1,0 +1,132 @@
+<style>
+
+@page {
+    margin-top: 2.5cm;
+ }
+    
+    
+h1 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-left: 20px;
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}   
+    
+    
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+        
+table {
+    border-collapse: collapse;
+}
+    
+td, th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.money {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: right;
+}
+    
+tr {
+    page-break-inside: avoid;
+}
+    
+
+</style>
+
+
+
+<%
+
+from_date = Date.parse(params[:from])
+to_date = Date.parse(params[:to])
+
+receipts = []
+Shipment.all.each do | shipment |
+    if (shipment.date_invoice_sent and
+            (shipment.date_invoice_sent >= from_date) and
+            (shipment.date_invoice_sent <= to_date))
+        receipts.append(shipment)
+    end
+end
+
+payments = []
+OrderIn.all.each do | payment |
+    if (payment.placed_date and
+            (payment.placed_date >= from_date) and
+            (payment.placed_date <= to_date))
+        payments.append(payment)
+    end
+end
+
+transactions = receipts + payments
+transactions = transactions.sort do | a, b |
+    a.accrual_date <=> b.accrual_date
+end
+
+%>
+
+<h1>Income and Expenditure from <%=from_date%> to <%=to_date%> (<%= (to_date-from_date).to_i %> days)</h1>
+
+<p>Income includes all invoices sent to customers during the specified period, even if they have not been paid</p>
+<p>Expenditure includes all payments for goods and services ordered during the specified period, even if we haven't actually marked them as paid</p>
+
+<table>
+<tr>
+    <th/>
+    <th/>
+    <th/>
+    <th colspan="3">Income</th>
+    <th colspan="3">Expenditure</th>
+</tr>
+<tr>
+    <th>Date</th>
+    <th>Organisation</th>
+    <th>Description</th>
+    <th>Without VAT</th>
+    <th>VAT</th>
+    <th>Total</th>
+    <th>Without VAT</th>
+    <th>VAT</th>
+    <th>Total</th>
+</tr>
+
+<% transactions.each do | transaction | 
+    currency_symbol = Currency.currency_symbol(transaction.currency)
+%>
+
+<tr>
+    <td><%=transaction.accrual_date%></td>
+    <td><%=transaction.organisation%></td>
+    <td><%=transaction.description%></td>
+<% if (transaction.is_income) %>
+    <td class="money"><%=number_to_currency(transaction.without_vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(transaction.vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(transaction.with_vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td/>
+    <td/>
+    <td/>
+<% else %>
+    <td/>
+    <td/>
+    <td/>
+    <td class="money"><%=number_to_currency(transaction.without_vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(transaction.vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(transaction.with_vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+<% end %>
+</tr>
+
+<% end %>    
+
+
+</table>

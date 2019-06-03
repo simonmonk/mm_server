@@ -29,6 +29,106 @@ class Shipment < ApplicationRecord
   end
 
 
+  # This set of methods are mirrored in OrderIn and provide a polymorphic view of account transactions
+  #
+  #
+
+  # accounting date on accrual basis (invoice sent not necessarily paid) for polymorphism
+  def accrual_date()
+    return date_invoice_sent
+  end
+
+  def cash_date()
+    return date_payment_received
+  end
+
+  def organisation()
+    if (retailer)
+      return retailer.name
+    else
+      return "error id=" + id.to_s
+    end
+  end
+
+  def description()
+    num_items = self.shipment_products.length
+    if (num_items == 0) 
+        return "nothing"
+    end
+    first_item = self.shipment_products[0]
+    first_name = ""
+    if (first_item.product)
+        first_name = first_item.product.name
+    end
+    if (num_items == 1)
+       return first_item.qty.to_s + " x " + first_name  
+    end
+    if (num_items == 2)
+        return first_name + " and one other item."
+    end
+    return first_name + " and " + (num_items - 1).to_s + " other items."
+  end
+
+  def category()
+    return "Sale"
+  end
+
+  def is_income()
+    return true
+  end
+
+  def without_vat() # currency ignored
+    sales_total = 0
+    lines = self.shipment_products
+    lines.each do | line |
+      if (line.price)
+        sale = line.qty * line.price
+        sales_total += sale
+      end
+    end
+    if (shipping_cost)
+        sales_total += shipping_cost
+    end
+    if (discount)
+      sales_total -= discount
+    end
+    return sales_total
+  end
+
+  def vat()
+    vat = 0
+    if (vat_rate and retailer.vatable == true)
+      vat = without_vat() * vat_rate / 100
+    end
+    return vat
+  end
+
+  def with_vat()
+    return without_vat() + vat()
+  end
+
+  # shipments are always invoiced in pounds (apart from Eduporium)
+
+  def without_vat_original_currency()
+    return without_vat
+  end
+
+  def vat_original_currency()
+    return vat
+  end
+
+  def with_vat_original_currency()
+    return with_vat
+  end
+
+  def currency()
+    if (retailer.pref_currency)
+      return retailer.pref_currency
+    else
+      return 'GBP'
+    end
+  end
+
   ################### deprecated ###################
   def paid?()
       return (date_payment_received and date_payment_received <= Date.current)

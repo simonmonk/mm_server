@@ -1,0 +1,53 @@
+<h1>Reports</h1>
+
+<div id="app">
+
+<h2>Financial Reports</h2>
+
+<table>
+<tr>
+    <td>From Date</td>
+    <td><input v-model="financial_from_date" type="date" value="" class="form-control" placeholder="First day of report"/></td>
+    <td>To Date</td>
+    <td><input v-model="financial_to_date" type="date" value="" class="form-control" placeholder="Last day of report"/></td>
+</tr>
+<tr>
+    <td><button :disabled="! financial_from_date || ! financial_to_date" type="button" v-on:click="cashflow_report()" class="btn btn-primary">Cashflow</button>
+    </td>
+</tr>
+</table>
+
+<h2>Amazon</h2>
+<a class="menu" href="/sales_uk">SALES UK</a> 
+<a class="menu" href="/sales_us">SALES USA</a>
+
+</div>
+
+<script>
+
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+            financial_from_date: null,
+            financial_to_date: new Date().toISOString().slice(0,10),
+        },
+        mounted: function() {
+          var that;
+          that = this;
+        },
+        methods: {
+            cashflow_report: function() {
+                window.open("/accounts/cashflow?from=" + this.financial_from_date + "&to=" + this.financial_to_date, '_blank')
+            }
+        },
+        computed: {
+        }
+    })
+}
+
+</script>
+
+
+

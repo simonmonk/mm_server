@@ -1,0 +1,2 @@
+class BookKeepingCategory < ApplicationRecord
+end

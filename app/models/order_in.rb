@@ -1,6 +1,6 @@
 class OrderIn < ApplicationRecord
   belongs_to :supplier, optional: true
-  has_many :order_in_lines
+  has_many :order_in_lines, :dependent => :destroy
 
   # for filtering of order ins
 
@@ -28,6 +28,96 @@ class OrderIn < ApplicationRecord
     end
   end
 
+
+
+  # This set of methods are mirrored in Shipment and provide a polymorphic view of account transactions
+  #
+  #
+
+  # accounting date on accrual basis (order placed not necessarily paid) for polymorphism
+  def accrual_date()
+    return placed_date
+  end
+
+  def cash_date()
+    return date_payment_made
+  end
+
+  def organisation()
+    if (supplier)
+      return supplier.name
+    else
+      return "error id=" + id.to_s
+    end
+  end
+
+  def description()
+    return summary
+  end
+
+
+# OrderIns need to be expanded by orderInLines of a particular accounting category
+# Actually for VAT they don't but for accounts spreadsheet generation, they will.
+# But, there are some accounting categories that affect the VAT applicability
+# so, if an Order_in only has one Line, use that line's category.
+  def category()
+    if (order_in_lines.length == 1)
+      cat = order_in_lines[0].book_keeping_category
+      if (cat)
+        return cat.name
+      else
+        return "?"
+      end
+    else
+      return "?"
+    end
+  end
+
+  def is_income()
+    return false
+  end
+
+  def without_vat()
+    if (currency != 'GBP' and exch_rate)
+      return without_vat_original_currency() / exch_rate
+    else
+      return without_vat_original_currency()
+    end
+  end
+
+  def vat()
+    if (currency != 'GBP' and exch_rate)
+      return vat_original_currency() / exch_rate
+    else
+      return vat_original_currency()
+    end
+  end
+
+  def with_vat()
+    if (currency != 'GBP' and exch_rate)
+      return with_vat_original_currency() / exch_rate
+    else
+      return with_vat_original_currency()
+    end
+  end
+
+  # orders in may be in any currency
+
+  def without_vat_original_currency()
+    return invoice_goods_ammout.to_f + shipping.to_f
+  end
+
+  def vat_original_currency()
+    return invoice_vat_ammout.to_f
+  end
+
+  def with_vat_original_currency()
+    return invoice_total_ammount.to_f
+  end
+
+  #
+  #
+  #
      
     
   # generate unique invoice number in format YYYYMMDDnn
@@ -39,9 +129,7 @@ class OrderIn < ApplicationRecord
     return base + "_" + self.id.to_s
   end
 
-  # todo, if the part is not supplied by this supplier yet, then add part_supplier and record    
-  # add a part order line to the order_in
-  def add_order_line(part_id, qty, price)
+  def add_order_line(part_id, qty, price, description)
     part = Part.find(part_id)
     old_price = part.cost
     part.cost = price
@@ -73,7 +161,9 @@ class OrderIn < ApplicationRecord
           " as a result of order (goods in) from " + order_line.order_in.supplier.name 
         t.save
     end
-  end       
+  end    
+
+  
     
   def summary()
       num_items = self.order_in_lines.length
@@ -84,14 +174,16 @@ class OrderIn < ApplicationRecord
       first_name = "deleted part"
       if (first_item.part)
           first_name = first_item.part.name
+      else
+        first_name = first_item.description
       end
       if (num_items == 1)
          return first_item.qty.to_s + " x " + first_name  
       end
       if (num_items == 2)
-          return first_item.part.name + " and one other item."
+          return first_name + " and one other item."
       end
-      return first_item.part.name + " and " + (num_items - 1).to_s + " other items."
+      return first_name + " and " + (num_items - 1).to_s + " other items."
   end
     
         

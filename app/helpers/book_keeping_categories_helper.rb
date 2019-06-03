@@ -1,0 +1,2 @@
+module BookKeepingCategoriesHelper
+end

@@ -15,6 +15,12 @@
 <table>
     <tr><td>Name</td><td><%= f.text_field :name, size: "20" %></td></tr>    
     <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
+    <tr><td>Tax Region</td>
+        <td>
+        <%= f.select :tax_region, 
+        options_for_select(Supplier.tax_regions.map{|s|[s, s]}, :selected => supplier.tax_region) %>
+        </td>
+    </tr>
     <tr><td>Contact name</td><td><%= f.text_field :contact_name, size: "20" %></td></tr>    
     <tr><td>Contact email</td><td><%= f.text_field :contact_email, size:"20" %></td></tr>  
     <tr><td><a href="<%=@supplier.website%>">Website</a></td><td><%= f.text_field :website, size:"30" %></td></tr>   

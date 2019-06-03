@@ -4,7 +4,10 @@ class WelcomeController < ApplicationController
 
   def sales
   end
-    
+
+  def financial
+  end
+
   def dismiss_notification()
     id = params[:id]
     n = Notification.find(id)

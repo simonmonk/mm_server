@@ -15,30 +15,45 @@ App: MonkMakesVAT
 
 Only service is VAT (MTD)
 
-ClientID: 6KivXBIMczfk3g5dzTabW9lSj24a
-Client secret: 0b556bef-f9b8-4b3e-8162-979f60bf02c6
-Server Token: 55638e7bdad14aaa32405a58ab49ebb0
+    # curl -X GET  https://test-api.service.hmrc.gov.uk/organisations/vat/MY_HMRC_VRN/obligations?from=2018-06-25&to=2019-01-01 \
+-H  # 'Authorization: Bearer HMRC_ACCESS_TOKEN' \
+-H  # 'Accept: application/vnd.hmrc.1.0+json'
 
 
 
+Generated individual
+Use these credentials in the OAuth Authorize flow to generate an OAuth access token for this individual.
 
---- general changes
+User ID
+633099225999
 
-x -- Fix copying of product price at the time of Shipment line-item creation OVERRIDED by invloce generation 
-x - also Retailer now has a new flag that indicates their invoices and Shipments should use retail prices to which a discount can be applied
+Password
+RfgnjbhA8vf9
 
--- Cost centres Manufacturing / R&D / Office / Staff
+Full Name
+Dale Quinn
 
--- Expenses - record expenses against Cost Centres
+Economic Operator Registration and Identification (EORI) number
+GB5808797028
 
--- Order In - need to add ad hoc 'stuff' but only for a Cost Center of NOT Maufacturing is allowed ad hoc
+National Insurance Number (NINO)
+YM372076D
 
-QQ can ditch dollars
+Making Tax Digital Income Tax ID
+XKIT00054142378
 
-Not entirely (eduporium) Remove dollar prices from product but convert when making the invoice. So invoice can be in dollars but it just converts pound prices using current exchange rate WITH 5% advantage to us justified by conversion.
+Email Address
+dale.quinn@example.com
 
- 
-  Price list (rough dollar and Euro equivalents of prices and explanation that they are a guide only. 
+VAT Registration Date
+2016-05-21
 
-  -- adding prospecting subsystem using Vue
-  yarn add axios-on-rails
+Self Assessment UTR
+9081505210
+
+Individual Details
+{"firstName":"Dale","lastName":"Quinn","dateOfBirth":"1967-02-10","address":{"line1":"8 High Holborn","line2":"Dover","postcode":"TS6 1PA"}}
+
+VAT Registration Number
+157068943
+

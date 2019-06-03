@@ -92,7 +92,8 @@ class OrderInsController < ApplicationController
   def list
   end
     
-  # JSON for new UI
+  # JSON for new UI ###################################################
+
   def get_orders_json
     days_string = params[:days]
     days = 90
@@ -103,19 +104,87 @@ class OrderInsController < ApplicationController
     render :json => OrderIn.where("updated_at > ?", cutoff_date).order('updated_at desc')
   end
 
-  # add a part order line to the order_in
+  # add an order line to the order_in
   def add_part_json
-    part_id = params[:part_id]
-    order_in_id = params[:order_in_id]
-    qty = params[:qty].to_i
-    price = params[:price].to_f
-    order_in = OrderIn.find(order_in_id)
-    order_in.add_order_line(part_id, qty, price)
+    oil = OrderInLine.new()
+    oil.part_id = params[:part_id].to_i
+    oil.order_in_id = params[:order_in_id].to_i
+    oil.qty = params[:qty].to_i
+    oil.qty_in = params[:qty_in].to_i
+    oil.price = params[:price].to_f
+    oil.description = params[:description]
+    oil.order_code = params[:order_code]
+    oil.cost_centre_id = params[:cost_centre_id].to_i
+    oil.book_keeping_category_id = params[:book_keeping_category_id]
+    
+    order_in = OrderIn.find(oil.order_in_id)
+
+    puts "***************"
+    puts oil.to_json
+    oil.save!
+
+    puts "----------- order_in"
+    puts order_in.order_in_lines.length.to_s
+    puts order_in.order_in_lines.to_json
+    puts "***************"
+    
     render :json => order_in
-  end   
+  end  
+  
+  def delete_line_item
+    line_item_id = params[:line_item_id]
+    OrderInLine.find(line_item_id).delete
+    order_in = OrderIn.find(params[:order_in_id])
+    # return the order_in without the deleted line
+    render :json => order_in
+  end
+
+  def set_new_part_price_json
+    part_id = params[:part_id]
+    part_price = params[:part_price]
+    part_currency = params[:part_currency]
+    order_id = params[:order_id]
+    part = Part.find(part_id)
+    order = OrderIn.find(order_id)
+    part.cost = part_price
+    part.currency = part_currency
+    part.save!
+    render :json => order
+  end
 
   def delete_json
     @order_in.destroy
+  end
+
+  def rx_part_json
+    order_in_line_id = params[:order_in_line_id]
+    order_in_id = params[:order_in_id]
+    order = OrderIn.find(order_in_id)
+    order_in_line = OrderInLine.find(order_in_line_id)
+    qty_in = params[:qty_in].to_i
+    order_in_line.qty_in += qty_in
+    order_in_line.date_line_received = params[:date_line_received]
+    order_in_line.save
+    old_qty = order_in_line.part.qty
+    order_in_line.part.qty += qty_in
+    order_in_line.part.save
+    t = Transaction.new
+    t.transaction_type = 'Stock In'
+    t.description = "Part " + order_in_line.part.name + " increased in quantity from " + old_qty.to_s + " to " + order_in_line.part.qty.to_s + " as a result of a delivery for order " + order_in_id + " from " + order_in_line.order_in.supplier.name 
+    t.save  
+    render :json => order
+  end
+
+  def rx_non_part_json
+    order_in_line_id = params[:order_in_line_id]
+    order_in_id = params[:order_in_id]
+    order = OrderIn.find(order_in_id)
+    order_in_line = OrderInLine.find(order_in_line_id)
+    order_in_line.qty_in = order_in_line.qty
+    order_in_line.date_line_received = Date.today()
+    order_in_line.save
+
+    render :json => order
   end
 
   ###############################
@@ -152,7 +221,8 @@ private
     def order_in_params
       params.require(:order_in).permit(:supplier_id, :placed_date, :currency, :shipping, :notes, :exch_rate, 
       :date_qr_sent, :order_number, :vat_info_collected, :quotation_received, :invoice_total_ammount, 
-      :invoice_goods_ammout, :invoice_vat_ammout)
+      :invoice_goods_ammout, :invoice_vat_ammout, :account_id, :book_keeping_category_id, :cost_centre_id,
+      :description, :order_code, :part_id, :qty, :qty_in, :order_in_id, :price, :date_payment_made)
     end
     
 end

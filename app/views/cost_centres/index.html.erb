@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Cost Centres</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cost_centres.each do |cost_centre| %>
+      <tr>
+        <td><%= cost_centre.name %></td>
+        <td><%= cost_centre.code %></td>
+        <td><%= link_to 'Show', cost_centre %></td>
+        <td><%= link_to 'Edit', edit_cost_centre_path(cost_centre) %></td>
+        <td><%= link_to 'Destroy', cost_centre, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cost Centre', new_cost_centre_path %>

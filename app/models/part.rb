@@ -29,11 +29,24 @@ class Part < ApplicationRecord
     end
     
     def purchase_cost
+        # exhange rate at time of purchase
         if (self.active && self.cost)
             if (self.currency == "GBP")
                 return self.cost
             elsif (self.exch_rate)
                 return self.cost / self.exch_rate
+            end
+        end
+        return 0
+    end
+
+    def purchase_cost_today
+        # exchange rate now
+        if (self.active && self.cost)
+            if (self.currency == "GBP")
+                return self.cost
+            elsif (self.exch_rate)
+                return self.cost / Currency.dollars_per_pound
             end
         end
         return 0
@@ -89,6 +102,27 @@ class Part < ApplicationRecord
           return first_item.name + " and one other product."
       end
       return first_item.name + " and " + (num_items - 1).to_s + " other products."
+  end
+
+  def purchase_history()
+    # Here we are adding arbitrary json to the json returned for the model
+    # A useful trick
+    purchases = OrderInLine.where(part_id: id)
+    result = []
+    purchases.each do | order_in_line |
+        order = order_in_line.order_in
+        if (order) 
+            purchase = {
+                date: order.placed_date,
+                supplier: order.supplier_name,
+                qty: order_in_line.qty,
+                price: order_in_line.price,
+                currency: order.currency
+            }
+            result.append(purchase)
+        end
+    end
+    return result
   end
 
       

@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190412095303) do
+ActiveRecord::Schema.define(version: 20190526064404) do
+
+  create_table "accounts", force: :cascade do |t|
+    t.string   "name"
+    t.string   "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
@@ -32,6 +39,14 @@ ActiveRecord::Schema.define(version: 20190412095303) do
     t.index ["part_id"], name: "index_assembly_parts_on_part_id"
   end
 
+  create_table "book_keeping_categories", force: :cascade do |t|
+    t.string   "name"
+    t.string   "code"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "communications", force: :cascade do |t|
     t.integer  "prospect_id"
     t.date     "communication_date"
@@ -41,6 +56,14 @@ ActiveRecord::Schema.define(version: 20190412095303) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.boolean  "incoming"
+  end
+
+  create_table "cost_centres", force: :cascade do |t|
+    t.string   "name"
+    t.string   "code"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -63,11 +86,15 @@ ActiveRecord::Schema.define(version: 20190412095303) do
     t.integer  "qty"
     t.integer  "order_in_id"
     t.integer  "part_id"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.decimal  "price",              precision: 10, scale: 3
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.decimal  "price",                    precision: 10, scale: 3
     t.integer  "qty_in"
     t.date     "date_line_received"
+    t.integer  "cost_centre_id"
+    t.integer  "book_keeping_category_id"
+    t.string   "description"
+    t.string   "order_code"
     t.index ["order_in_id"], name: "index_order_in_lines_on_order_in_id"
     t.index ["part_id"], name: "index_order_in_lines_on_part_id"
   end
@@ -88,6 +115,8 @@ ActiveRecord::Schema.define(version: 20190412095303) do
     t.decimal  "invoice_total_ammount", precision: 10, scale: 3
     t.decimal  "invoice_vat_ammout",    precision: 10, scale: 3
     t.decimal  "invoice_goods_ammout",  precision: 10, scale: 3
+    t.integer  "account_id"
+    t.date     "date_payment_made"
   end
 
   create_table "part_categories", force: :cascade do |t|
@@ -337,6 +366,7 @@ ActiveRecord::Schema.define(version: 20190412095303) do
     t.string   "payment_details"
     t.boolean  "active"
     t.string   "product_url_base"
+    t.string   "tax_region"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -351,6 +381,17 @@ ActiveRecord::Schema.define(version: 20190412095303) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "vat_liabilities", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.date     "due_date"
+    t.string   "status"
+    t.string   "period_key"
+    t.date     "received_date"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
 end

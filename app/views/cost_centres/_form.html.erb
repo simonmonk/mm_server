@@ -1,0 +1,27 @@
+<%= form_for(cost_centre) do |f| %>
+  <% if cost_centre.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(cost_centre.errors.count, "error") %> prohibited this cost_centre from being saved:</h2>
+
+      <ul>
+      <% cost_centre.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :code %>
+    <%= f.text_field :code %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -4,8 +4,22 @@ class Supplier < ApplicationRecord
     
     validates :name, presence: true
     
+    def Supplier.tax_regions()
+        return ['UK', 'EU', 'Rest of the World']
+    end
+
     def parts()
-        return part_suppliers.collect { | ps | ps.part }
+        parts = []
+        part_suppliers.each do | ps | 
+            if (ps.part)
+                parts.push(ps.part)
+            else
+                # part_supplier has no part (presumably deleted)
+                # so delete the part_supplier too
+                ps.delete
+            end
+        end
+        return parts
     end
     
     def fastest_delivery()
@@ -28,6 +42,8 @@ class Supplier < ApplicationRecord
             return 0
         end
     end
+
+
     
     def as_json(options={})
         super(:methods => [:parts])
