@@ -13,10 +13,9 @@ General
 New retailer - it would be nice to have new retailer info as a form to send as PDF to prospective customers. ?????
 
 
-
 Accounting stuff
 =================
-Cash basis NOT accrual.
+Extra filed needed for amount paid from bank in GBP in payment.
 
 Anything that's a Part should set cost centre to MANU automatically
 All retailers should have flag for EU.

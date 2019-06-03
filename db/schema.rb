@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190526064404) do
+ActiveRecord::Schema.define(version: 20190603100915) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 20190526064404) do
     t.decimal  "invoice_goods_ammout",  precision: 10, scale: 3
     t.integer  "account_id"
     t.date     "date_payment_made"
+    t.decimal  "actually_paid_gbp",     precision: 10, scale: 3
   end
 
   create_table "part_categories", force: :cascade do |t|

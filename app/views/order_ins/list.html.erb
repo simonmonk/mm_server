@@ -98,6 +98,10 @@ Sort by:
                 <td>Invoice Total Amount</td>
                 <td><input v-model="order_in.invoice_total_ammount" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
+            <tr v-if="this.order_in.currency != 'GBP'">
+                <td>Amount actually paid in £</td>
+                <td><input v-model="order_in.actually_paid_gbp" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
             <tr>
                 <td>VAT Information Collected (N/A, Y, N)</td>
                 <td><input v-model="order_in.vat_info_collected" type="text" value="" class="form-control" placeholder=""/></td>
