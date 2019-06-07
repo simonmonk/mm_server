@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get :vat_obligations
       get :vat_report
       get :vatSummary
+      post :submit_vat_return
     end
   end
 

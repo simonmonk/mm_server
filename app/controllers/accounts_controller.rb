@@ -87,6 +87,29 @@ class AccountsController < ApplicationController
     render :json => ob.calc_vat_return()
   end
 
+  # send VAT return data to the Node server, from where it can be submitted.
+  def submit_vat_return
+    vat_return = params[:vat_return]
+    vat_return[:vatDueSales] = vat_return[:vatDueSales].to_f
+    puts "**********"
+    puts vat_return
+    puts "***"
+    puts vat_return.to_json
+    
+    # forward to the node api on localhost
+    url = "http://0.0.0.0:8080/saveVATReturn"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.set_form_data(vat_return)
+    # Tweak headers, removing this will default to application/x-www-form-urlencoded
+    #request["Content-Type"] = "application/json"
+    response = http.request(request)
+
+    puts response.code
+    puts response.body
+  end
+
   # end of JSON interface to Vue UI
 
   # POST /accounts

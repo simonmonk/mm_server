@@ -42,8 +42,9 @@
 
 </div>
 
-<button type="button" v-on:click="post_vat_return" class="btn btn-primary">Post Return</button>
-
+<button type="button" v-on:click="open_vat_calc" class="btn btn-primary">View Calculation</button>
+<button type="button" v-on:click="post_vat_return" class="btn btn-primary">Send VAT Return to MonkMakes MTD</button>
+<button type="button" v-on:click="open_mtd" class="btn btn-primary">Open MonkMakes MTD</button>
 
 </div>
 
@@ -101,13 +102,24 @@ window.onload = function () {
                   }
                 });
             },
+            open_vat_calc: function() {
+              window.open("/accounts/vat_report?from=" + 
+                this.obligation.start_date + "&to=" +
+                this.obligation.end_date, '_blank')
+            },
+            open_mtd: function() {
+              window.open("http://localhost:8080/", '_blank');
+            },
             post_vat_return: function() {
                 var that;
                 that = this;
+                this.vat_return.periodKey = this.obligation.period_key;
+                this.vat_return.start_date = this.obligation.start_date
+                this.vat_return.end_date = this.obligation.end_date
                 $.ajax({
                   type: 'POST',
-                  url: 'http://localhost:8080/submitVATCall',
-                  data: this.vat_return,
+                  url: '/accounts/submit_vat_return',
+                  data: {vat_return: this.vat_return},
                   success: function(res) {
                       that.message = res;
                   }

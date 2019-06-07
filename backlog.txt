@@ -13,6 +13,12 @@ General
 New retailer - it would be nice to have new retailer info as a form to send as PDF to prospective customers. ?????
 
 
+Purchases - order suppliers in drop-down. VAT information collected - make a drop-down list.
+
+Shipments - wont sqave shipping type on ship it now page.
+
+
+
 Accounting stuff
 =================
 Extra filed needed for amount paid from bank in GBP in payment.
