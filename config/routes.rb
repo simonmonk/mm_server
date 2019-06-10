@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :adjustments
   resources :book_keeping_categories
   resources :cost_centres
   resources :regions

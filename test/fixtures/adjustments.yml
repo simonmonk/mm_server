@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  adjustment_date: 2019-06-10
+  value: 9.99
+  adjustment_type: MyString
+  notes: MyString
+
+two:
+  adjustment_date: 2019-06-10
+  value: 9.99
+  adjustment_type: MyString
+  notes: MyString

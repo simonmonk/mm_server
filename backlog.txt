@@ -10,17 +10,29 @@ $ rails g scaffold Post title:string body:string
 
 General
 --------
-New retailer - it would be nice to have new retailer info as a form to send as PDF to prospective customers. ?????
-
-
 Purchases - order suppliers in drop-down. VAT information collected - make a drop-down list.
 
-Shipments - wont sqave shipping type on ship it now page.
+Add social meadia fields to customer table:
+* instagram account
+* following on instagram
+* twitter account
+* following on twitter
+
+Extra field on Part for duty (VAT in and out doesn't really matter because its neurtal, 
+but some things attract import duty and this affects the price of the part.)
 
 
 
 Accounting stuff
 =================
+
+Income adjustments 
+- New separate tab
+- an ammount (+ money in, - money out)
+- notes field
+- automatic income category of accounts of Adjustment
+
+
 Extra filed needed for amount paid from bank in GBP in payment.
 
 Anything that's a Part should set cost centre to MANU automatically

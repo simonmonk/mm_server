@@ -19,6 +19,7 @@ class Account < ApplicationRecord
                 payments.append(payment)
             end
         end
+        # will need adjustments here too
         transactions = receipts + payments
         transactions = transactions.sort do | a, b |
             a.cash_date <=> b.cash_date
@@ -30,16 +31,26 @@ class Account < ApplicationRecord
         transactions.each do | transaction | 
             # adding and taking away
             if (transaction.is_income)
+                # Sales (Outputs)
                 totalValueSalesExVAT += transaction.without_vat
                 vatDueSales += transaction.vat
             else
+                # Purchases (Inputs)
+
                 # not all payments contribute to purchase VAT
-                # Must have VAT invoice
+                # Must have VAT invoice (VAT Info Collected field != N/A)
                 # Imports from outside the EU - E.g. PCBWay. from the courier (field on OrderIn??)
-                totalValuePurchasesExVAT += transaction.without_vat
+
+                # for all purchases irrespective of country
+                totalValuePurchasesExVAT += transaction.without_vat   # but only if VAT Info Collected field != N/A e.g. tax bill
 
                 if (transaction.supplier.tax_region == 'EU')
-                    vatDueAcquisitions += transaction.vat
+                    # 20% of value for EU purchases added to vatReclaimedCurrPeriod
+                # for UK purchases - 
+                #   add vat amount to box 4 vatReclaimedCurrPeriod
+                #   
+                # for rest of world
+                #   there is no VAT
                 end
             end
         end
