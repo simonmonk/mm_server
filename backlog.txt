@@ -21,6 +21,8 @@ Add social meadia fields to customer table:
 Extra field on Part for duty (VAT in and out doesn't really matter because its neurtal, 
 but some things attract import duty and this affects the price of the part.)
 
+Foreign skus on packing list
+
 
 
 Accounting stuff

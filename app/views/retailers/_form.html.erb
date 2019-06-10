@@ -112,6 +112,7 @@ function copy_address() {
     <tr>
       <th>Product</th>
       <th>Stock*</th>
+      <th>Supplier's SKU</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -122,6 +123,7 @@ function copy_address() {
       <tr>
         <td><%= product_retailer.product.name %></td>
         <td><%= product_retailer.lookup_stock %></td>  
+        <td><%= product_retailer.sku %></td>  
         <td><%= link_to "Setup", edit_product_retailer_path(product_retailer) %></td>
         <td><%= button_to 'Remove', product_retailer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
