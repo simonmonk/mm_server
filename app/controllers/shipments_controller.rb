@@ -64,7 +64,7 @@ class ShipmentsController < ApplicationController
     @shipment.shipping_provider = @shipment.retailer.pref_shipping_provider
     @shipment.shipping_provider_ac_no = @shipment.retailer.pref_shipping_provider_ac_no 
     @shipment.shipping_provider_shipping_type = @shipment.retailer.pref_shipping_provider_shipping_type 
-    @shipment.vat_rate = 20  
+    @shipment.vat_rate = Account.current_vat_rate()  
     @shipment.apply_vat_to_shipping = true
     @shipment.invoice_exch_rate = Currency.dollars_per_pound * 1.05 # stupidity tax
     if @shipment.save

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190610132217) do
+ActiveRecord::Schema.define(version: 20190613154448) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -23,9 +23,12 @@ ActiveRecord::Schema.define(version: 20190610132217) do
     t.date     "adjustment_date"
     t.decimal  "value"
     t.string   "adjustment_type"
-    t.string   "notes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.string   "organisation"
+    t.string   "description"
+    t.decimal  "vat_value",       precision: 10, scale: 3
+    t.string   "vat_action"
   end
 
   create_table "assemblies", force: :cascade do |t|
@@ -127,6 +130,7 @@ ActiveRecord::Schema.define(version: 20190610132217) do
     t.integer  "account_id"
     t.date     "date_payment_made"
     t.decimal  "actually_paid_gbp",     precision: 10, scale: 3
+    t.string   "vat_action"
   end
 
   create_table "part_categories", force: :cascade do |t|
@@ -358,6 +362,7 @@ ActiveRecord::Schema.define(version: 20190610132217) do
     t.decimal  "height_cm",                       precision: 10, scale: 3
     t.decimal  "depth_cm",                        precision: 10, scale: 3
     t.string   "tracking_info"
+    t.string   "vat_action"
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

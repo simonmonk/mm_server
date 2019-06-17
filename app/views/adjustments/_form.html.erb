@@ -13,11 +13,13 @@
 
 <table>
   <tr><td>Date</td><td><%= datepicker_input f, :adjustment_date %></td></tr>
-  <tr><td>Amount (+ for income) £</td><td><%= f.text_field :value %></td></tr>
+  <tr><td>Organisation</td><td><%= f.text_field :organisation, size: '50'%></td></tr>
+  <tr><td>Amount (+ for income) £</td><td><%= f.text_field :value, size: '20' %></td></tr>
+  <tr><td>VAT £</td><td><%= f.text_field :vat_value, size: '20' %></td></tr>
   <tr><td>Adjustment Type</td>
     <td><%= f.select :adjustment_type, options_for_select(Adjustment.types.map{|s|[s, s]}, :selected => adjustment.adjustment_type) %></td>
   </tr>
-  <tr><td>Notes</td><td><%= f.text_area :notes, size: '50x10' %></td></tr>
+  <tr><td>Description</td><td><%= f.text_field :description, size: '50'%></td></tr>
 </table>
 
   <div class="actions">

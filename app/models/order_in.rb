@@ -34,6 +34,10 @@ class OrderIn < ApplicationRecord
   #
   #
 
+  def transaction_type()
+    return 'ORDER_IN'
+  end
+
   # accounting date on accrual basis (order placed not necessarily paid) for polymorphism
   def accrual_date()
     return placed_date
@@ -98,6 +102,18 @@ class OrderIn < ApplicationRecord
       return with_vat_original_currency() / exch_rate
     else
       return with_vat_original_currency()
+    end
+  end
+
+  def tax_region()
+    return supplier.tax_region
+  end
+
+  def is_vatable()
+    if (order_in_lines.length == 1)
+      return order_in_lines[0].book_keeping_category
+    else
+      return true
     end
   end
 

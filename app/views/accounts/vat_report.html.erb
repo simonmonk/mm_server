@@ -80,6 +80,7 @@ summary = result[1]
     <th>Without VAT</th>
     <th>VAT</th>
     <th>Total</th>
+    <hh>VAT Action></th>
 </tr>
 
 <% transactions.each do | transaction | 
@@ -106,6 +107,7 @@ summary = result[1]
     <td class="money"><%=number_to_currency(transaction.vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
     <td class="money"><%=number_to_currency(transaction.with_vat, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 <% end %>
+    <td><%=transaction.vat_action%></td>
 </tr>
 
 <% end %>    

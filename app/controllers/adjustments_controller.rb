@@ -4,7 +4,7 @@ class AdjustmentsController < ApplicationController
   # GET /adjustments
   # GET /adjustments.json
   def index
-    @adjustments = Adjustment.all
+    @adjustments = Adjustment.all.order(:adjustment_date)
   end
 
   # GET /adjustments/1
@@ -28,7 +28,8 @@ class AdjustmentsController < ApplicationController
 
     respond_to do |format|
       if @adjustment.save
-        format.html { redirect_to @adjustment, notice: 'Adjustment was successfully created.' }
+        @adjustments = Adjustment.all
+        format.html { render :index}
         format.json { render :show, status: :created, location: @adjustment }
       else
         format.html { render :new }
@@ -42,7 +43,8 @@ class AdjustmentsController < ApplicationController
   def update
     respond_to do |format|
       if @adjustment.update(adjustment_params)
-        format.html { redirect_to @adjustment, notice: 'Adjustment was successfully updated.' }
+        @adjustments = Adjustment.all
+        format.html { render :index}
         format.json { render :show, status: :ok, location: @adjustment }
       else
         format.html { render :edit }
@@ -69,6 +71,6 @@ class AdjustmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def adjustment_params
-      params.require(:adjustment).permit(:adjustment_date, :value, :adjustment_type, :notes)
+      params.require(:adjustment).permit(:adjustment_date, :value, :adjustment_type, :description, :organisation, :vat_value)
     end
 end

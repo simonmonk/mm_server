@@ -34,6 +34,11 @@ class Shipment < ApplicationRecord
   #
 
   # accounting date on accrual basis (invoice sent not necessarily paid) for polymorphism
+  
+  def transaction_type()
+    return 'SHIPMENT'
+  end
+  
   def accrual_date()
     return date_invoice_sent
   end
@@ -77,7 +82,8 @@ class Shipment < ApplicationRecord
     return true
   end
 
-  def without_vat() # currency ignored
+  # not part of the polymorphism but a utility fn.
+  def sales_from_invoice()
     sales_total = 0
     lines = self.shipment_products
     lines.each do | line |
@@ -95,6 +101,10 @@ class Shipment < ApplicationRecord
     return sales_total
   end
 
+  def without_vat() # currency ignored
+    return sales_from_invoice
+  end
+
   def vat()
     vat = 0
     if (vat_rate and retailer.vatable == true)
@@ -104,7 +114,16 @@ class Shipment < ApplicationRecord
   end
 
   def with_vat()
-    return without_vat() + vat()
+    #return without_vat() + vat()
+    return total_invoice_collected
+  end
+
+  def tax_region()
+    return 'UK'
+  end
+
+  def is_vatable()
+    return true
   end
 
   # shipments are always invoiced in pounds (apart from Eduporium)

@@ -21,19 +21,11 @@ Add social meadia fields to customer table:
 Extra field on Part for duty (VAT in and out doesn't really matter because its neurtal, 
 but some things attract import duty and this affects the price of the part.)
 
-Foreign skus on packing list
 
 
 
 Accounting stuff
 =================
-
-Income adjustments 
-- New separate tab
-- an ammount (+ money in, - money out)
-- notes field
-- automatic income category of accounts of Adjustment
-
 
 Extra filed needed for amount paid from bank in GBP in payment.
 
