@@ -29,7 +29,7 @@ class Account < ApplicationRecord
         Adjustment.all.each do | adjustment |
             if (adjustment.adjustment_date and
                     (adjustment.adjustment_date >= from_date) and
-                    (adjustment.adjustment_date <= to_date)) and
+                    (adjustment.adjustment_date <= to_date) and
                     (adjustment.adjustment_type != 'Actual Income from Amazon'))
                 adjustments.append(adjustment)
             end
