@@ -31,11 +31,19 @@ class Adjustment < ApplicationRecord
   end
 
   def without_vat() # currency ignored
-    return value
+    if (value)
+      return value
+    else
+      return 0
+    end
   end
 
   def vat()
-    return vat_value
+    if (vat_value)
+      return vat_value
+    else
+      return 0
+    end
   end
 
   def with_vat()
