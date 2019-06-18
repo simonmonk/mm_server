@@ -111,7 +111,7 @@ class OrderIn < ApplicationRecord
 
   def is_vatable()
     if (order_in_lines.length == 1)
-      return order_in_lines[0].book_keeping_category
+      return order_in_lines[0].book_keeping_category.is_vat_input_category() 
     else
       return true
     end

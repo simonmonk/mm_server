@@ -57,12 +57,12 @@ class Account < ApplicationRecord
                 if (transaction.tax_region == 'EU')
                     # EU sales also need to be added to box 8
                     b8_totalValueGoodsSuppliedExVAT += transaction.without_vat
-                    transaction.vat_action += " + box 8."
+                    transaction.vat_action += " + box 8 and 6"
                 end
                 # Whatever the region the VAT needs adding to b1
                 if (transaction.vat)
                     b1_vatDueSales += transaction.vat
-                    transaction.vat_action += " + box 1."
+                    transaction.vat_action += " + box 1 and 6"
                 end
             else
                 # Purchases (Inputs)

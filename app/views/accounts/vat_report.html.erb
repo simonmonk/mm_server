@@ -84,7 +84,8 @@ summary = result[1]
 </tr>
 
 <% transactions.each do | transaction | 
-    currency_symbol = Currency.currency_symbol(transaction.currency)
+    # currency_symbol = Currency.currency_symbol(transaction.currency)
+    currency_symbol = '£' # all transactions in £
 %>
 
 <tr>

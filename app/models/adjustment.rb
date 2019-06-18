@@ -58,7 +58,8 @@ class Adjustment < ApplicationRecord
   end
 
   def is_vatable()
-    return false
+    vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees'] 
+    return vatable_codes.include?(adjustment_type)
   end
 
   def currency()
