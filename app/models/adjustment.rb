@@ -1,7 +1,7 @@
 class Adjustment < ApplicationRecord
 
     def Adjustment.types()
-        return ['Overpayment', 'Underpayment', 'Transfer', 'Income from Amazon', 'Amazon Fees'] # Add but dont edit!
+        return ['Overpayment', 'Underpayment', 'Transfer', 'Income from Amazon', 'Amazon Fees', 'HMRC Adjustment'] # Add but dont edit!
     end
 
   # for polymorphism using orders_in and shipments
