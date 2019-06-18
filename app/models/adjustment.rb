@@ -47,7 +47,7 @@ class Adjustment < ApplicationRecord
   end
 
   def with_vat()
-    return value + vat_value
+    return value + vat
   end
 
   def tax_region()
