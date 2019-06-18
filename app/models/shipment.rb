@@ -119,7 +119,7 @@ class Shipment < ApplicationRecord
   end
 
   def tax_region()
-    return 'UK'
+    return retailer.tax_region
   end
 
   def is_vatable()

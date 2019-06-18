@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190613154448) do
+ActiveRecord::Schema.define(version: 20190618151324) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -304,6 +304,7 @@ ActiveRecord::Schema.define(version: 20190613154448) do
     t.integer  "region_id"
     t.string   "mm_products_url"
     t.string   "base_url"
+    t.string   "tax_region"
   end
 
   create_table "sales", force: :cascade do |t|
