@@ -59,8 +59,10 @@ class Account < ApplicationRecord
                     transaction.vat_action += " + box 8."
                 end
                 # Whatever the region the VAT needs adding to b1
-                b1_vatDueSales += transaction.vat
-                transaction.vat_action += " + box 1."
+                if (transaction.vat)
+                    b1_vatDueSales += transaction.vat
+                    transaction.vat_action += " + box 1."
+                end
             else
                 # Purchases (Inputs)
                 # for all purchases irrespective of country
