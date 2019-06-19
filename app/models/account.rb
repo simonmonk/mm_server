@@ -72,7 +72,7 @@ class Account < ApplicationRecord
                     b4_vatReclaimedCurrPeriod += transaction.vat
                     transaction.vat_action += " + boxes 4 and 7."
                 end
-                if (transaction.tax_region == 'EU')
+                if (transaction.tax_region == 'EU' and transaction.transaction_type == 'ORDER_IN')
                     b9_totalAcquisitionsExVAT += transaction.without_vat
                     b2_vatDueAcquisitions += transaction.vat
                     # 20% of value for EU purchases added to vatReclaimedCurrPeriod
