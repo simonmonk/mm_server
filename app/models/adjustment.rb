@@ -7,7 +7,11 @@ class Adjustment < ApplicationRecord
   # for polymorphism using orders_in and shipments
 
   def transaction_type()
-    return 'ADJUSTMENT'
+    if (adjustment_type)
+      return adjustment_type
+    else
+      return 'Adjustment'
+    end
   end
 
   def accrual_date()

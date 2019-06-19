@@ -51,7 +51,7 @@ class Account < ApplicationRecord
         transactions.each do | transaction | 
             transaction.vat_action = ""
             # adding and taking away
-            if (transaction.is_income)
+            if (transaction.is_income and transaction.transaction_type != 'Transfer')
                 # Sales (Outputs)
                 b6_totalValueSalesExVAT += transaction.without_vat
                 if (transaction.tax_region == 'EU')
