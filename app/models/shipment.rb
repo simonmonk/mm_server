@@ -102,7 +102,7 @@ class Shipment < ApplicationRecord
   end
 
   def without_vat() # currency ignored
-    return total_invoice_collected - vat 
+    return total_invoice_amount # calculated
   end
 
   def vat()
@@ -115,7 +115,7 @@ class Shipment < ApplicationRecord
 
   def with_vat()
     #return without_vat() + vat()
-    return total_invoice_collected
+    return total_invoice_collected # stored
   end
 
   def tax_region()
