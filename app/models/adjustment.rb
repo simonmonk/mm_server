@@ -79,4 +79,8 @@ class Adjustment < ApplicationRecord
     return "GBP"
   end
 
+  def notes()
+    return description
+  end
+
 end
