@@ -83,7 +83,13 @@ class OrderIn < ApplicationRecord
 
   def without_vat()
     if (currency != 'GBP' and exch_rate)
-      return without_vat_original_currency() / exch_rate
+      if (actually_paid_gbp)
+        return actually_paid_gbp
+      else
+        puts("*************")
+        puts(as_json())
+        return 0
+      end
     else
       return without_vat_original_currency()
     end
@@ -99,7 +105,14 @@ class OrderIn < ApplicationRecord
 
   def with_vat()
     if (currency != 'GBP' and exch_rate)
-      return with_vat_original_currency() / exch_rate
+      # return with_vat_original_currency() / exch_rate
+      if (actually_paid_gbp)
+        return actually_paid_gbp
+      else
+        puts("*************")
+        puts(as_json())
+        return 0
+      end
     else
       return with_vat_original_currency()
     end
