@@ -102,20 +102,19 @@ class Shipment < ApplicationRecord
   end
 
   def without_vat() # currency ignored
-    return total_invoice_amount # calculated
+    return sales_from_invoice()
   end
 
   def vat()
     vat = 0
     if (vat_rate and retailer.vatable == true)
-      vat = without_vat() * vat_rate / 100
+      vat = sales_from_invoice() * vat_rate / 100
     end
     return vat
   end
 
   def with_vat()
-    #return without_vat() + vat()
-    return total_invoice_collected # stored
+    return total_invoice_collected 
   end
 
   def tax_region()
