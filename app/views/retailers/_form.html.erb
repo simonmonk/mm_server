@@ -60,7 +60,8 @@ function copy_address() {
       options_for_select(Supplier.tax_regions.map{|s|[s, s]}, :selected => retailer.tax_region) %>
       </td>
     </tr>
-    <tr><td>Region</td>
+    <tr>
+      <td>Region</td>
     <td>  
       <%= f.collection_select(:region_id, Region.all, :id, :name) %>
     </td>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190618151324) do
+ActiveRecord::Schema.define(version: 20190620112827) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20190618151324) do
     t.string   "description"
     t.decimal  "vat_value",       precision: 10, scale: 3
     t.string   "vat_action"
+    t.string   "tax_region"
   end
 
   create_table "assemblies", force: :cascade do |t|

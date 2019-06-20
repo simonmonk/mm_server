@@ -71,6 +71,6 @@ class AdjustmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def adjustment_params
-      params.require(:adjustment).permit(:adjustment_date, :value, :adjustment_type, :description, :organisation, :vat_value)
+      params.require(:adjustment).permit(:adjustment_date, :value, :adjustment_type, :description, :organisation, :vat_value, :tax_region)
     end
 end

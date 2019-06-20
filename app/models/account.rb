@@ -56,8 +56,8 @@ class Account < ApplicationRecord
                 b6_totalValueSalesExVAT += transaction.without_vat
                 if (transaction.tax_region == 'EU')
                     # EU sales also need to be added to box 8
-                    b8_totalValueGoodsSuppliedExVAT += transaction.without_vat
-                    transaction.vat_action += " + box 8 and 6"
+                    b8_totalValueGoodsSuppliedExVAT += transaction.without_vat      # Podconsult overpayment Adjustment went in boxes 1 and 6 but should go into box 8 as well but it didn't
+                    transaction.vat_action += " + box 8 and 6"                      # This is because Adjustment doesn't know its tax region - add to db and UI
                 end
                 # Whatever the region the VAT needs adding to b1
                 if (transaction.vat)
