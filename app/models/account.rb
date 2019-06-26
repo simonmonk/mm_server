@@ -84,7 +84,7 @@ class Account < ApplicationRecord
             transaction.save()
         end
         b3_totalVatDue = b1_vatDueSales + b2_vatDueAcquisitions # [3]Total VAT due (the sum of vatDueSales and vatDueAcquisitions). 
-        b5_netVatDue = b3_totalVatDue - b4_vatReclaimedCurrPeriod # [5]The difference between totalVatDue and vatReclaimedCurrPeriod. 
+        b5_netVatDue = b4_vatReclaimedCurrPeriod - b3_totalVatDue # [5]The difference between totalVatDue and vatReclaimedCurrPeriod. 
          
         summary_data = {
             periodKey: nil, 
@@ -93,10 +93,10 @@ class Account < ApplicationRecord
             totalVatDue: b3_totalVatDue, 
             vatReclaimedCurrPeriod: b4_vatReclaimedCurrPeriod,
             netVatDue: b5_netVatDue,
-            totalValueSalesExVAT: b6_totalValueSalesExVAT,
-            totalValuePurchasesExVAT: b7_totalValuePurchasesExVAT,
-            totalValueGoodsSuppliedExVAT: b8_totalValueGoodsSuppliedExVAT,
-            totalAcquisitionsExVAT: b9_totalAcquisitionsExVAT,
+            totalValueSalesExVAT: b6_totalValueSalesExVAT.to_i,
+            totalValuePurchasesExVAT: b7_totalValuePurchasesExVAT.to_i,
+            totalValueGoodsSuppliedExVAT: b8_totalValueGoodsSuppliedExVAT.to_i,
+            totalAcquisitionsExVAT: b9_totalAcquisitionsExVAT.to_i,
             finalised: true
         }
         return [transactions, summary_data]

@@ -109,7 +109,7 @@ class OrderIn < ApplicationRecord
       if (actually_paid_gbp)
         return actually_paid_gbp
       else
-        puts("*************")
+        puts("****** Missing *******")
         puts(as_json())
         return 0
       end
