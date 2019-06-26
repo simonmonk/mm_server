@@ -23,7 +23,7 @@ class BookKeepingCategory < ApplicationRecord
     # HMRC	                    HMRC	N
 
     def is_vat_input_category()
-        cat_codes = ['PAR', 'MAT', 'EQU', 'PACK', 'STAT', 'SOFT', 'ACC', 'PS', 'SHIP', 'POST', 'INS', 'PROP', 'SUBS'] 
+        cat_codes = ['PAR', 'MAT', 'EQU', 'PACK', 'STAT', 'SOFT', 'ACC', 'PS', 'SHIP',  'INS', 'PROP', 'SUBS'] 
         return cat_codes.include?(code)
     end
 
