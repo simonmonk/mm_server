@@ -9,7 +9,7 @@ class SuppliersController < ApplicationController
 
   # GET /suppliers/suppliers_list
   def suppliers_list
-    @suppliers = Supplier.all
+    @suppliers = Supplier.all.order(:name)
     render :json => @suppliers
   end
 
