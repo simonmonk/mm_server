@@ -78,7 +78,7 @@ function remove_part_supplier(part_supplier_id) {
   <tbody>
     <% @part.part_suppliers.each do |part_supplier| %>
       <tr>
-        <td><%= part_supplier.supplier.name %></td>
+        <td><a href="/suppliers/<%= part_supplier.supplier.id%>/edit"><%= part_supplier.supplier.name %></a></td>
         <td><%= part_supplier.code %></td>
         <td><input type="button" value="Remove" onClick="javascript:remove_part_supplier(<%= part_supplier.id %>)"/></td>
       </tr>

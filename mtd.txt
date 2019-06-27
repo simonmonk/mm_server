@@ -11,49 +11,12 @@ simon@monkmakes.com / BC109_bfy51!
 
 Click on username to manage apps.
 
-App: MonkMakesVAT
-
-Only service is VAT (MTD)
-
-    # curl -X GET  https://test-api.service.hmrc.gov.uk/organisations/vat/MY_HMRC_VRN/obligations?from=2018-06-25&to=2019-01-01 \
--H  # 'Authorization: Bearer HMRC_ACCESS_TOKEN' \
--H  # 'Accept: application/vnd.hmrc.1.0+json'
+Must add redirect API to an app of: http://localhost:8080/ on HMRC website
+LIVE site Gov ID 946529317737 password D3c3mb3r13
 
 
-
-Generated individual
+Generated individual for test server
 Use these credentials in the OAuth Authorize flow to generate an OAuth access token for this individual.
 
-User ID
-633099225999
 
-Password
-RfgnjbhA8vf9
-
-Full Name
-Dale Quinn
-
-Economic Operator Registration and Identification (EORI) number
-GB5808797028
-
-National Insurance Number (NINO)
-YM372076D
-
-Making Tax Digital Income Tax ID
-XKIT00054142378
-
-Email Address
-dale.quinn@example.com
-
-VAT Registration Date
-2016-05-21
-
-Self Assessment UTR
-9081505210
-
-Individual Details
-{"firstName":"Dale","lastName":"Quinn","dateOfBirth":"1967-02-10","address":{"line1":"8 High Holborn","line2":"Dover","postcode":"TS6 1PA"}}
-
-VAT Registration Number
-157068943
 
