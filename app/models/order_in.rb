@@ -13,11 +13,19 @@ class OrderIn < ApplicationRecord
   end 
 
   def is_ordered_not_received()
-    return (not is_not_ordered() and not complete?())
+    return (not is_not_ordered() and not is_received())
   end
 
   def is_received()
-    return complete?()
+    if (self.order_in_lines.length == 0)
+        return false
+    end
+    self.order_in_lines.each do | line |
+        if (line.qty > line.qty_in)
+            return false
+        end
+    end
+    return true
   end
 
   def supplier_name()
@@ -215,12 +223,12 @@ class OrderIn < ApplicationRecord
       return first_name + " and " + (num_items - 1).to_s + " other items."
   end
     
-        
+   # todo delete probably redundant
   def complete?()
      if (self.order_in_lines.length == 0)
          return false
      end
-     self.order_in_lines.each do |line|
+     self.order_in_lines.each do | line |
           if (line.qty < line.qty_in)
               return false
           end
@@ -228,6 +236,7 @@ class OrderIn < ApplicationRecord
     return true
   end
 
+   # todo delete probably redundant
   def priced?()
      priced = true
      if (self.order_in_lines.length == 0)
@@ -241,6 +250,7 @@ class OrderIn < ApplicationRecord
     return priced
   end
        
+  # todo delete probably redundant
   def priority()
     if (self.placed_date)
         if (self.complete?)
