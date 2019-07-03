@@ -6,6 +6,10 @@ class Sale < ApplicationRecord
         return (Time.now().to_i / 604800).to_i
     end
 
+    def Sale.week_of_epoch(date)
+        return (date.to_i / 604800).to_i
+    end
+
     def Sale.date_for_week_of_epoch(woe)
         return Time.at(woe * 604800)
     end

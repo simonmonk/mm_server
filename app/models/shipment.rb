@@ -220,9 +220,41 @@ class Shipment < ApplicationRecord
     return [sales_total.to_i, profit_total.to_i]
   end
 
+  def Shipment.monthly_sales()
+    year = Date.today().year
+    this_year_sales = []
+    last_year_sales = []
+    1.upto 12 do | month |
+      month_start_this_year = Date.new(year, month, 1)
+      month_end_this_year = month_start_this_year.end_of_month
+      month_start_last_year = Date.new(year-1, month, 1)
+      month_end_last_year = month_start_last_year.end_of_month
+      this_year_sales.append(Shipment.invoiced_sales_profit(month_start_this_year, month_end_this_year)[0])
+      last_year_sales.append(Shipment.invoiced_sales_profit(month_start_last_year, month_end_last_year)[0])
+    end
+    return [this_year_sales, last_year_sales]
+  end
+
+  # not used - monthly proved more useful
+  def Shipment.weekly_sales(from_date, to_date)
+    week_starting = []
+    value_total = []
+    start_week = Sale.week_of_epoch(Time.parse(from_date.to_s))
+    end_week = Sale.week_of_epoch(Time.parse(to_date.to_s))
+    start_week.upto end_week do | week |
+      start_of_week = Sale.date_for_week_of_epoch_formatted(week)
+      week_starting.append(start_of_week)
+      week_start_date = Sale.date_for_week_of_epoch(week)
+      week_end_date = Sale.date_for_week_of_epoch(week + 1)
+      # Is there overlap of shipmants here?
+      value = Shipment.invoiced_sales_profit(week_start_date, week_end_date)[0]
+      value_total.append(value)
+    end
+    return [week_starting, value_total]
+  end
 
   def Shipment.invoiced_sales_profit(start_date, end_date)
-    shipments = Shipment.where("date_order_received >= :start_date AND date_order_received < :end_date", {start_date: start_date, end_date: end_date})
+    shipments = Shipment.where("date_order_received >= :start_date AND date_order_received <= :end_date", {start_date: start_date, end_date: end_date})
     sales_total = 0
     profit_total = 0
     shipments.each do | shipment |
@@ -231,6 +263,10 @@ class Shipment < ApplicationRecord
       profit_total += sales_and_profits[1]
     end
     return [sales_total, profit_total]
+  end
+
+  def Shipment.week_labels(week_starting)
+    # todo
   end
     
   

@@ -1,0 +1,111 @@
+<style>
+
+@page {
+    margin-top: 2.5cm;
+ }
+    
+    
+h1 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-left: 20px;
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}   
+    
+    
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+
+table {
+    border-collapse: collapse;
+}
+    
+td {
+    vertical-align: top;  
+}
+        
+</style>
+
+<h1>Monthy Sales Trend</h1>
+<canvas id="sales_by_month" ></canvas>
+
+<%
+year = Date.today().year
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+result = Shipment.monthly_sales()
+sales_totals = result[0]
+last_year_sales = result[1]
+%>
+
+<script>
+
+var ctx = document.getElementById("sales_by_month");
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: <%=months.to_json.html_safe%>,
+        datasets: [
+            {
+                label: 'This Year £', 
+                data:  <%=sales_totals.to_json.html_safe%>,
+                borderColor: '#D2B48C',
+                borderWidth: 4,
+                fill: false
+            },
+            {
+                label: 'Last Year £', 
+                data:  <%=last_year_sales.to_json.html_safe%>,
+                borderColor: '#00FFFF',
+                borderWidth: 4,
+                fill: false
+            }
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+
+<table>
+    <tr><th>Month</th><th>Sales <%=year-1%></th><th>Sales <%=year%></th></tr>
+    
+<%
+0.upto 11 do | i |
+%>
+
+    <tr><td><%=months[i]%></td><td><%=last_year_sales[i]%></td><td><%=sales_totals[i]%></td></tr>
+
+<%
+end
+%>
+</table>
+
+<hr/>
+
+<br/>
+<br/>
+<br/>
+<h1>Sales by Product</h1>
+<p>in last 365 days</p>
+
+
+<hr/>
+
+<br/>
+<br/>
+<br/>
+<h1>Sales by Customer</h1>
+<p>in last 365 days</p>

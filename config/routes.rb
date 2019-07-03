@@ -90,6 +90,8 @@ Rails.application.routes.draw do
       get :packing_list
       get :retailer_list_website
       get :get_shipments
+      get :weekly_sales
+      get :monthly_sales
     end
   end
   resources :order_ins do

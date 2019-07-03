@@ -21,16 +21,13 @@ Add social meadia fields to customer table:
 Extra field on Part for duty (VAT in and out doesn't really matter because its neurtal, 
 but some things attract import duty and this affects the price of the part.)
 
-
+Rename text saying 'Retailers' to use 'Customers'
 
 
 Accounting stuff
 =================
 
-Extra filed needed for amount paid from bank in GBP in payment.
-
 Anything that's a Part should set cost centre to MANU automatically
-All retailers should have flag for EU.
 
 Buy stuff exch rate at purchase date.
 Sell stuff ech rate (only Eduporium) should be at pyment date. So add exch rate on reconcile.
@@ -79,17 +76,9 @@ This triggers lots of conditional UI.
 -- name, order code, note
 
 
-New Scaffold: CostCentre - name, code - Manufacturing MAN, Research and Development RND, Marketing MAR
-New Scaffold: Account - name, code - Current Ac CUR, PayPal PPL, World First WOR, Amazon AM 
-New Scaffold: Category - name, code - from spreadsheet 
 
 Generating payments CSV
 -----------------------
-each row is 1 invoice (payment from bank - 1 tab per account) invoice amount may get split if invoice items belong in different columns - also VAT split out.
-tabs for bank payments, bank receipts, paypal payments, etc.
-
-
-
 
 
 ????? Parts probably shouldn't have an exchange rate. Product estimated pricing should prob go off current exchange rate for next order.
@@ -107,11 +96,10 @@ This is done, but the total needs to be in dollars too. Also change the Copy Cus
 Shipments
 -----------
 
-Packing List should show foreign skus
+Add billing email and possibly shipping email to customer and tracking number to shipment.
+auto send emails on Despatch (Linda has temnplate)
 
-Eduporium dollar amounts in adding order lines show pound symbol
-
-Checkboix - show cancelkled orders
+Checkbox - show cancelkled orders
 
 Implement follow on orders
 
@@ -124,9 +112,6 @@ Sending samples - need to be able to do without assigning invoice number.
 adding items to list - make default qty 0.
 x Packing list - shipping type not appearing in packing list
 Need to refresh to get line items not red if they were ever red.
-Ship button does not appear.
-x Invoive number
-x Invoice number on new screen of first new shipment should say 'click Save to assign'
 
 
 
@@ -156,11 +141,6 @@ How to do this.
 - Is there a nice CMS that uses Node? and maybe produces PDF like AdaFruit
 
 
-Working on Shipments
---------------------
-Add billing email and possibly shipping email to customer and tracking number to shipment.
-auto send emails on Despatch (Linda has temnplate)
-
 
 
 Stock Report
@@ -187,24 +167,9 @@ Invoives: Checkbox for VAT should be applied to shipping - Uncompleted and proba
 
 
 
-
-OrderIns, setting price on an order line does not seem to update the price for the part, either when added to the list, or when marked as received.
-- Logic should be: set the price and currency when order line added, as long as the price is > 0
-
-
 Global
 ======
 DB TRANSACTIONS
-
-
-
-Shipments and Reatilers
----------
-option to amend quantities of line items. 
-Should not be able to create invice for ST you don't have all the stock for.
-must cope with assemblies that can easily be converted to product to allow the shipment.
-Stock allocated to customer can't be shared.
-
 
 
 OrdersIn
