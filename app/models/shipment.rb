@@ -332,7 +332,7 @@ class Shipment < ApplicationRecord
               shipment.shipping_provider_ac_no = retailer.pref_shipping_provider_ac_no 
               shipment.order_email = email_body
               shipment.save
-              return "ORDER CREATED for " + retailer.name + ". View Order " + "<a href='http://" + my_addr + "/shipments/">here</a>"
+              return "ORDER CREATED for " + retailer.name + ". View Order " + "<a href='http://" + my_addr + "/shipments/>here</a>"
           else
               return "NO ORDER CREATED: can't find a retailer with the domain: " + retailer_domain + "."
           end
