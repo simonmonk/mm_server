@@ -319,20 +319,23 @@ class Shipment < ApplicationRecord
     matches = email_body.match(/<(.*)>/)
     if (matches and matches.length > 0)
         retailer_email = matches[1]
-        retailer_domain = retailer_email.match(/@(\S*)/)[1]
-        retailer = Retailer.with_domain(retailer_domain)
-        if (retailer)
-            shipment = Shipment.new
-            shipment.retailer = retailer
-            shipment.date_order_received = Date.current()
-            shipment.invoice_number = Shipment.find_next_invoice_number()
-            shipment.shipping_provider = retailer.pref_shipping_provider()
-            shipment.shipping_provider_ac_no = retailer.pref_shipping_provider_ac_no 
-            shipment.order_email = email_body
-            shipment.save
-            return "ORDER CREATED for " + retailer.name + ". View Order " + "<a href='http://" + my_addr + "/shipments/" + shipment.id.to_s + "/edit'>here</a>"
-        else
-            return "NO ORDER CREATED: can't find a retailer with the domain: " + retailer_domain + "."
+        retailer_domain_search = retailer_email.match(/@(\S*)/)
+        if (retailer_domain_search and retailer_domain_search.length > 1)
+          retailer_domain = retailer_domain_search[1]
+          retailer = Retailer.with_domain(retailer_domain)
+          if (retailer)
+              shipment = Shipment.new
+              shipment.retailer = retailer
+              shipment.date_order_received = Date.current()
+              shipment.invoice_number = Shipment.find_next_invoice_number()
+              shipment.shipping_provider = retailer.pref_shipping_provider()
+              shipment.shipping_provider_ac_no = retailer.pref_shipping_provider_ac_no 
+              shipment.order_email = email_body
+              shipment.save
+              return "ORDER CREATED for " + retailer.name + ". View Order " + "<a href='http://" + my_addr + "/shipments/">here</a>"
+          else
+              return "NO ORDER CREATED: can't find a retailer with the domain: " + retailer_domain + "."
+          end
         end
     else
         return "NO ORDER CREATED: email does not appear to be forwarded from a customer."
