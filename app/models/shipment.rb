@@ -258,6 +258,31 @@ class Shipment < ApplicationRecord
     return sales_list
   end
 
+  def Shipment.sales_by_customer_top_n(days, n)
+    customer_names = []
+    sales = []
+    custs = Shipment.sales_by_customer(days)[0..n-1]
+    custs.each do | cust |
+      customer_names.append(cust['name'])
+      sales.append(cust['sales'])
+    end
+    return [customer_names, sales]
+  end
+
+  def Shipment.sales_by_customer(days)
+    start_date = Date.today-days
+    end_date = Date.today
+    sales_list = [] # list of {product_name => sales}
+    Retailer.all.each do | r |
+      if (r.active)
+        sales = r.units_and_value_shipped(start_date, end_date).to_i
+        sales_list.append({'name' => r.name, 'sales' => sales})
+      end
+    end
+    sales_list = sales_list.sort_by { | customer | customer['sales'] }.reverse
+    return sales_list
+  end
+
   # not used - monthly proved more useful
   # def Shipment.weekly_sales(from_date, to_date)
   #   week_starting = []

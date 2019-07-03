@@ -31,6 +31,20 @@ class Retailer < ApplicationRecord
         return false
     end
 
+    def units_and_value_shipped(start_date, end_date)
+        #shipments = Shipment.where("date_order_received >= :start_date AND date_order_received < :end_date", {start_date: start_date, end_date: end_date})
+        value_sold = 0
+        self.shipments.each do | shipment |
+            ship_date = shipment.date_order_received
+            if (ship_date and ship_date >= start_date and ship_date <= end_date)
+                value_sold += shipment.without_vat
+            end
+        end
+        return value_sold
+    end
+
+
+
     def as_json(options={})
         super(:methods => [:owes_money, :is_sample])
     end

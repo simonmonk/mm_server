@@ -15,10 +15,10 @@ h1 {
     
     
 h2 {
-    text-align: center;
+    text-align: left;
     margin-top: 2px;  
     margin-bottom: 2px;  
-    font: 36px arial, bold, sans-serif;
+    font: 18px arial, bold, sans-serif;
 }    
 
 table {
@@ -185,4 +185,33 @@ new Chart(ctx, {
 <br/>
 <br/>
 <h1>Sales by Customer</h1>
-<p>in last 365 days</p>
+<h2>in last 365 days</h2>
+
+<canvas id="sales_by_customer" ></canvas>
+
+<%
+result = Shipment.sales_by_customer_top_n(365, 10)
+customers = result[0]
+sales_cust = result[1]
+%>
+
+<script>
+var ctx = document.getElementById("sales_by_customer");
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: <%=customers.to_json.html_safe%>,
+        datasets: [
+            {
+                label: 'Sales £', 
+                data:  <%=sales_cust.to_json.html_safe%>,
+                backgroundColor: colors,
+                fill: true
+            },
+        ]
+    },
+    options: {
+    }
+});
+</script>
