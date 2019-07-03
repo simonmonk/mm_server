@@ -44,6 +44,15 @@ last_year_sales = result[1]
 
 <script>
 
+
+var colors = ['#000000', '#00FFFF', '#8A2BE2', '#A52A2A', '#DEB887',
+                 '#5F9EA0', '#FF7F50', '#6495ED', '#DC143C', '#00008B',
+                 '#008B8B', '#B8860B', '#A9A9A9', '#006400', '#8B008B',
+                 '#FF8C00', '#9932CC', '#8B0000', '#8FBC8F', '#483D8B',
+                 '#00FF7F', '#4682B4', '#D2B48C', '#008080', '#D8BFD8',
+                 '#FF6347', '#40E0D0', '#EE82EE', '#F5DEB3', '#FFFF00']
+
+
 var ctx = document.getElementById("sales_by_month");
 new Chart(ctx, {
     type: 'line',
@@ -53,14 +62,14 @@ new Chart(ctx, {
             {
                 label: 'This Year £', 
                 data:  <%=sales_totals.to_json.html_safe%>,
-                borderColor: '#D2B48C',
+                borderColor: '#00FFFF',
                 borderWidth: 4,
                 fill: false
             },
             {
                 label: 'Last Year £', 
                 data:  <%=last_year_sales.to_json.html_safe%>,
-                borderColor: '#00FFFF',
+                borderColor: '#D2B48C',
                 borderWidth: 4,
                 fill: false
             }
@@ -98,8 +107,76 @@ end
 <br/>
 <br/>
 <br/>
-<h1>Sales by Product</h1>
-<p>in last 365 days</p>
+<h1>Sales by Product £</h1>
+<h2>Top Ten in last 365 days</h2>
+
+<canvas id="sales_by_product" ></canvas>
+
+<%
+result = Shipment.sales_by_product_top_n(365, 10)
+products = result[0]
+sales = result[1]
+%>
+
+<script>
+var ctx = document.getElementById("sales_by_product");
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: <%=products.to_json.html_safe%>,
+        datasets: [
+            {
+                label: 'Sales £', 
+                data:  <%=sales.to_json.html_safe%>,
+                backgroundColor: colors,
+                fill: true
+            },
+        ]
+    },
+    options: {
+    }
+});
+</script>
+
+<br/>
+<br/>
+<br/>
+
+<h2>Top Ten in last 90 days</h2>
+
+<canvas id="sales_by_product90" ></canvas>
+
+<%
+result = Shipment.sales_by_product_top_n(90, 10)
+products90 = result[0]
+sales90 = result[1]
+%>
+
+<script>
+var ctx = document.getElementById("sales_by_product90");
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: <%=products90.to_json.html_safe%>,
+        datasets: [
+            {
+                label: 'Sales £', 
+                data:  <%=sales90.to_json.html_safe%>,
+                backgroundColor: colors,
+                fill: true
+            },
+        ]
+    },
+    options: {
+    }
+});
+</script>
+
+
+
+
 
 
 <hr/>

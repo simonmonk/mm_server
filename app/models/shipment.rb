@@ -200,8 +200,6 @@ class Shipment < ApplicationRecord
     end
     return sales_total
   end
-
-    
     
   def total_value_profit_gbp()
     sales_total = 0
@@ -235,23 +233,48 @@ class Shipment < ApplicationRecord
     return [this_year_sales, last_year_sales]
   end
 
-  # not used - monthly proved more useful
-  def Shipment.weekly_sales(from_date, to_date)
-    week_starting = []
-    value_total = []
-    start_week = Sale.week_of_epoch(Time.parse(from_date.to_s))
-    end_week = Sale.week_of_epoch(Time.parse(to_date.to_s))
-    start_week.upto end_week do | week |
-      start_of_week = Sale.date_for_week_of_epoch_formatted(week)
-      week_starting.append(start_of_week)
-      week_start_date = Sale.date_for_week_of_epoch(week)
-      week_end_date = Sale.date_for_week_of_epoch(week + 1)
-      # Is there overlap of shipmants here?
-      value = Shipment.invoiced_sales_profit(week_start_date, week_end_date)[0]
-      value_total.append(value)
+  def Shipment.sales_by_product_top_n(days, n)
+    product_names = []
+    sales = []
+    prods = Shipment.sales_by_product(days)[0..n-1]
+    prods.each do | prod |
+      product_names.append(prod['name'])
+      sales.append(prod['sales'])
     end
-    return [week_starting, value_total]
+    return [product_names, sales]
   end
+
+  def Shipment.sales_by_product(days)
+    start_date = Date.today-days
+    end_date = Date.today
+    sales_list = [] # list of {product_name => sales}
+    Product.all.each do | p |
+      if (p.active)
+        sales = p.units_and_value_shipped(start_date, end_date)[2].to_i
+        sales_list.append({'name' => p.name, 'sales' => sales})
+      end
+    end
+    sales_list = sales_list.sort_by { | product | product['sales'] }.reverse
+    return sales_list
+  end
+
+  # not used - monthly proved more useful
+  # def Shipment.weekly_sales(from_date, to_date)
+  #   week_starting = []
+  #   value_total = []
+  #   start_week = Sale.week_of_epoch(Time.parse(from_date.to_s))
+  #   end_week = Sale.week_of_epoch(Time.parse(to_date.to_s))
+  #   start_week.upto end_week do | week |
+  #     start_of_week = Sale.date_for_week_of_epoch_formatted(week)
+  #     week_starting.append(start_of_week)
+  #     week_start_date = Sale.date_for_week_of_epoch(week)
+  #     week_end_date = Sale.date_for_week_of_epoch(week + 1)
+  #     # Is there overlap of shipmants here?
+  #     value = Shipment.invoiced_sales_profit(week_start_date, week_end_date)[0]
+  #     value_total.append(value)
+  #   end
+  #   return [week_starting, value_total]
+  # end
 
   def Shipment.invoiced_sales_profit(start_date, end_date)
     shipments = Shipment.where("date_order_received >= :start_date AND date_order_received <= :end_date", {start_date: start_date, end_date: end_date})
@@ -263,10 +286,6 @@ class Shipment < ApplicationRecord
       profit_total += sales_and_profits[1]
     end
     return [sales_total, profit_total]
-  end
-
-  def Shipment.week_labels(week_starting)
-    # todo
   end
     
   
@@ -314,12 +333,12 @@ class Shipment < ApplicationRecord
 
 # for json interface
 
-def retailer_name
-  return self.retailer.name
-end
+  def retailer_name
+    return self.retailer.name
+  end
 
-def as_json(options={})
-  super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer])
-end
+  def as_json(options={})
+    super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer])
+  end
     
 end
