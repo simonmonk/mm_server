@@ -17,7 +17,7 @@ class Shipment < ApplicationRecord
   end
 
   def is_unpaid()
-    return (not is_paid() and not is_amazon() and not is_new())
+    return (not is_paid() and not is_new())
   end
 
   def is_paid()
@@ -331,6 +331,7 @@ class Shipment < ApplicationRecord
               shipment.shipping_provider = retailer.pref_shipping_provider()
               shipment.shipping_provider_ac_no = retailer.pref_shipping_provider_ac_no 
               shipment.order_email = email_body
+              shipment.vat_rate = 20
               shipment.save
               return "ORDER CREATED for " + retailer.name + ". View Order " + "<a href='http://" + my_addr + "/shipments/>here</a>"
           else

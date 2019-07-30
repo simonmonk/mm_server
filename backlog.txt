@@ -8,9 +8,14 @@ $ rails generate scaffold Region name:string
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
+
+
 General
 --------
-Purchases - order suppliers in drop-down. VAT information collected - make a drop-down list.
+Put P.O.s back in.
+
+New Shipment crashes if don't set VAT RATE. SHould set to 20 but only if customer is_vatable. Reproduce first because code looks like it defaults to 0 anyway.
+
 
 Add social meadia fields to customer table:
 * instagram account

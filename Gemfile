@@ -70,3 +70,5 @@ gem 'jquery-rails'
 gem 'rb-readline'
 
 gem 'oauth2'
+
+gem 'rails_db', '2.0.4'
