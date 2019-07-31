@@ -215,3 +215,79 @@ new Chart(ctx, {
     }
 });
 </script>
+
+
+
+<hr/>
+
+<br/>
+<br/>
+<br/>
+<h1>Sales by Region</h1>
+<h2>in last 365 days</h2>
+
+<canvas id="sales_by_region" ></canvas>
+
+<%
+result = Shipment.sales_by_region(365)
+regions = result[0]
+sales_region = result[1]
+%>
+
+<script>
+var ctx = document.getElementById("sales_by_region");
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: <%=regions.to_json.html_safe%>,
+        datasets: [
+            {
+                label: 'Sales £', 
+                data:  <%=sales_region.to_json.html_safe%>,
+                backgroundColor: colors,
+                fill: true
+            },
+        ]
+    },
+    options: {
+    }
+});
+</script>
+
+<hr/>
+
+<br/>
+<br/>
+<br/>
+<h1>Sales by Country</h1>
+<h2>in last 365 days</h2>
+
+<canvas id="sales_by_country" ></canvas>
+
+<%
+result = Shipment.sales_by_country(365)
+countries = result[0]
+sales_country = result[1]
+%>
+
+<script>
+var ctx = document.getElementById("sales_by_country");
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: <%=countries.to_json.html_safe%>,
+        datasets: [
+            {
+                label: 'Sales £', 
+                data:  <%=sales_country.to_json.html_safe%>,
+                backgroundColor: colors,
+                fill: true
+            },
+        ]
+    },
+    options: {
+    }
+});
+</script>

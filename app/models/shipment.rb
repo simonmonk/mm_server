@@ -269,6 +269,38 @@ class Shipment < ApplicationRecord
     return [customer_names, sales]
   end
 
+  def Shipment.sales_by_region(days)
+    start_date = Date.today-days
+    end_date = Date.today
+    totals = {}
+    shipments = Shipment.where("date_order_received >= :start_date AND date_order_received <= :end_date", {start_date: start_date, end_date: end_date})
+    shipments.each do | shipment |
+      region = shipment.retailer.region.name
+      if (not totals[region])
+        totals[region] = shipment.without_vat()
+      else
+        totals[region] += shipment.without_vat()
+      end
+    end
+    return [totals.keys, totals.values]
+  end
+
+  def Shipment.sales_by_country(days)
+    start_date = Date.today-days
+    end_date = Date.today
+    totals = {}
+    shipments = Shipment.where("date_order_received >= :start_date AND date_order_received <= :end_date", {start_date: start_date, end_date: end_date})
+    shipments.each do | shipment |
+      country = shipment.retailer.billing_ad_country
+      if (not totals[country])
+        totals[country] = shipment.without_vat()
+      else
+        totals[country] += shipment.without_vat()
+      end
+    end
+    return [totals.keys, totals.values]
+  end
+
   def Shipment.sales_by_customer(days)
     start_date = Date.today-days
     end_date = Date.today
