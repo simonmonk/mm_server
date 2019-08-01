@@ -13,11 +13,12 @@
     <td><button :disabled="! financial_from_date || ! financial_to_date" type="button" v-on:click="cashflow_report()" class="btn btn-primary">Cashflow</button>
     </td>
 </tr>
-<tr>
-    <td><button type="button" v-on:click="monthly_sales_report()" class="btn btn-primary">Sales Report</button>
-    </td>
-</tr>
+
 </table>
+
+<h2>Full Sales Report</h2>
+<button type="button" v-on:click="monthly_sales_report()" class="btn btn-primary">Sales Report</button>
+
 
 <h2>Amazon</h2>
 <a class="menu" href="/sales_uk">SALES UK</a> 

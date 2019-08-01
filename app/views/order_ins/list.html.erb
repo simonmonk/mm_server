@@ -103,6 +103,10 @@ Sort by:
                 <td><input v-model="order_in.actually_paid_gbp" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
             <tr>
+              <td>Is a Service (and so NOY in box 9)</td>
+              <td><input v-model="order_in.is_service" type="checkbox" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
                 <td>VAT Information Collected (N/A, Y, N)</td>
                 <td><input v-model="order_in.vat_info_collected" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
@@ -321,7 +325,7 @@ window.onload = function () {
           num_days: 90,
           sort_by_field: 'updated_at',
           order_ins: [],
-          order_in: { id: null, supplier_id: null, supplier: {parts: []}, order_in_lines: [], supplier_name: null, order_number: null, placed_date: null },
+          order_in: { id: null, supplier_id: null, supplier: {parts: []}, order_in_lines: [], supplier_name: null, order_number: null, placed_date: null, is_service: false },
           suppliers: [],
           order_in_line: {id: null, part_id: null, book_keeping_category_id: 1, cost_centre_id: 1, part: {name: null, cost: 0, purchase_cost_today: 0}, name: '', price: null, qty: null, qty_in: null, part: {name: null, qty: null, price: null}},
           parts: [],

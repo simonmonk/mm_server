@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Incurred date:</strong>
+  <%= @expense.incurred_date %>
+</p>
+
+<p>
+  <strong>Reimbursed date:</strong>
+  <%= @expense.reimbursed_date %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @expense.user_id %>
+</p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @expense.account_id %>
+</p>
+
+<p>
+  <strong>Supplier:</strong>
+  <%= @expense.supplier %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @expense.description %>
+</p>
+
+<p>
+  <strong>Without vat:</strong>
+  <%= @expense.without_vat %>
+</p>
+
+<p>
+  <strong>Vat:</strong>
+  <%= @expense.vat %>
+</p>
+
+<p>
+  <strong>With vat:</strong>
+  <%= @expense.with_vat %>
+</p>
+
+<p>
+  <strong>Is mileage:</strong>
+  <%= @expense.is_mileage %>
+</p>
+
+<p>
+  <strong>Miles:</strong>
+  <%= @expense.miles %>
+</p>
+
+<p>
+  <strong>Mileage rate:</strong>
+  <%= @expense.mileage_rate %>
+</p>
+
+<%= link_to 'Edit', edit_expense_path(@expense) %> |
+<%= link_to 'Back', expenses_path %>

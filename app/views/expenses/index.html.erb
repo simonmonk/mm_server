@@ -1,0 +1,238 @@
+<h1>Expenses</h1>
+
+<div id="app">
+
+<div>
+  <button type="button" v-on:click="open_expense_form" class="btn btn-primary">New Expense</button>
+</div>
+
+
+
+<!-- Edit Expense Form -->
+<div id="expense_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Expense Details</h1>
+        <table>
+            <tr>
+              <td>Person incuring expense</td>
+              <td>
+                  <select v-model="expense.user_id">
+                      <option v-for="(user, index) in users" v-bind:value="user.id">{{user.name}}</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Mileage</td>
+              <td><input type="checkbox" v-model="expense.is_mileage"></td>
+            </tr>
+            <tr>
+              <td>Incurred Date</td>
+              <td><input v-model="expense.incurred_date" type="date" value="" class="form-control" placeholder="Date expense incurred"/></td>
+            </tr>
+            <tr>
+              <td>Reimbursed Date</td>
+              <td><input v-model="expense.incurred_date" type="date" value="" class="form-control" placeholder="Date expense incurred"/></td>
+            </tr>
+              <td>Account</td>
+              <td>
+                  <select v-model="expense.account_id">
+                      <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Supplier</td>
+              <td><input v-model="expense.supplier" type="text" value="" class="form-control" placeholder=""/></td>
+            <tr>
+            <tr>
+              <td>Description</td>
+              <td><input v-model="expense.description" type="text" value="" class="form-control" placeholder=""/></td>
+            <tr>
+            <tr>
+              <td>Amount before VAT (£)</td>
+              <td><input v-model="expense.without_vat" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+              <td>VAT Amount</td>
+              <td><input v-model="expense.vat" type="text" value="" class="form-control" placeholder=""/></td>
+            <tr>
+              <td>Total Amount</td>
+              <td><input v-model="expense.with_vat" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+              <td>Miles</td>
+              <td><input v-model="expense.miles" type="text" value="" class="form-control" placeholder=""/></td>
+            <tr>
+              <td>Mileage Rate</td>
+              <td><input v-model="expense.mileage_rate" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+
+            <tr>
+              <td><button type="button" v-on:click="save_expense('#unordered_form')" class="btn btn-primary">Save</button></td>
+            </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Expenses List Table -->
+<table>
+<tr>
+  <th>Incurred Date</th>
+  <th>Supplier</th>
+  <th>Total</th>
+</tr>
+<tr v-for="(expense, index) in expenses">
+    <td>{{expense.incurred_date}}</td>
+    <td>{{expense.supplier}}</td>
+    <td>{{expense.with_vat}}</td>
+    <td><span v-on:click="edit_expense(index)" class="badge badge-success">Edit</span></td>
+    <td><span v-on:click="delete_expense(index)" class="badge badge-danger">Delete</span></td>
+</tr>
+</table>
+
+
+</div>
+
+<script>
+
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          expense: {},
+          accounts: [],
+          categories: [],
+          cost_centres: [],
+        },
+        mounted: function() {
+          var that;
+          that = this;
+          this.load_expenses();
+          this.load_accounts();
+          this.load_users();
+          this.load_cost_centres();
+          this.load_categories();
+        },
+        methods: {
+          load_expenses: function(callback) { 
+            var that;
+            that = this;
+            $.ajax({
+              url: '/expenses/get_expenses_json',
+              success: function(res) {
+                that.expenses = res;
+                if (callback) {
+                  callback()
+                }
+              }
+            });
+          },
+          load_accounts: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/accounts.json',
+              success: function(res) {
+                that.accounts = res;
+              }
+            });
+          },
+          load_users: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: 'users/list.json',
+              success: function(res) {
+                that.accounts = res;
+              }
+            });
+          },
+          load_categories: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/book_keeping_categories.json',
+              success: function(res) {
+                that.categories = res;
+              }
+            });
+          },
+          load_cost_centres: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/cost_centres.json',
+              success: function(res) {
+                that.cost_centres = res;
+              }
+            });
+          },
+          delete_expense: function(index) {
+            if (confirm("Are you sure?")) {
+              var that;
+              that = this;
+              let id = this.expenses[index].id;
+              $.ajax({
+                url: '/expenses/delete_json?id=' + id,
+                success: function(res) {
+                  that.load_expenses();
+                }
+              });
+            }
+          },
+          
+          save_expense: function(modal_to_close, callback) {
+            var that;
+            that = this;
+            var modal = modal_to_close;
+            // delete computed attributes that cant be saved
+            //delete this.order_in.supplier;
+            
+
+            url = '/expenses/create_expense.json'
+            if (this.order_in.id) { // update existing
+              url = '/order_ins/update_expense.json?id=' + this.expense.id;
+            }
+            $.ajax({
+              type: 'POST',
+              url: url,
+              data: {expense: this.expense},
+              success: function(res) {
+                that.load_expenses();
+                that.expense = res;
+                if (modal) {
+                  $(modal).modal('hide');
+                }
+                if (callback) {
+                  callback();
+                }
+              }
+            });
+          },
+          open_expense_form: function() {
+            this.expense = {
+              
+            };
+            $('#expense_form').modal('show');
+          },
+          edit_expense_form: function(index) {
+            this.expense = this.expenses[index];
+            $('#expense_form').modal('show');
+          },
+          cancel: function(modal_to_close) {
+            $(modal_to_close).modal('hide');
+          },
+          
+        },
+    })
+}
+
+</script>
+
+

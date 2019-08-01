@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190620112827) do
+ActiveRecord::Schema.define(version: 20190801140946) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -87,6 +87,23 @@ ActiveRecord::Schema.define(version: 20190620112827) do
     t.datetime "updated_at",                          null: false
   end
 
+  create_table "expenses", force: :cascade do |t|
+    t.date     "incurred_date"
+    t.date     "reimbursed_date"
+    t.integer  "user_id"
+    t.integer  "account_id"
+    t.string   "supplier"
+    t.string   "description"
+    t.float    "without_vat"
+    t.float    "vat"
+    t.float    "with_vat"
+    t.boolean  "is_mileage"
+    t.integer  "miles"
+    t.float    "mileage_rate"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.boolean  "dismissed"
     t.text     "message"
@@ -132,6 +149,7 @@ ActiveRecord::Schema.define(version: 20190620112827) do
     t.date     "date_payment_made"
     t.decimal  "actually_paid_gbp",     precision: 10, scale: 3
     t.string   "vat_action"
+    t.boolean  "is_service"
   end
 
   create_table "part_categories", force: :cascade do |t|

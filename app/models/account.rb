@@ -76,7 +76,7 @@ class Account < ApplicationRecord
                     b2_vatDueAcquisitions += transaction.vat
                     transaction.vat_action += " + box 2."
                 end
-                if (transaction.tax_region == 'EU' and transaction.transaction_type == 'ORDER_IN')     
+                if (transaction.tax_region == 'EU' and transaction.transaction_type == 'ORDER_IN' and not transaction.is_service)     
                     b9_totalAcquisitionsExVAT += transaction.without_vat
                     transaction.vat_action += " + box 9."
                 end

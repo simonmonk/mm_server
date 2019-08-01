@@ -223,7 +223,7 @@ private
       :date_qr_sent, :order_number, :vat_info_collected, :quotation_received, :invoice_total_ammount, 
       :invoice_goods_ammout, :invoice_vat_ammout, :account_id, :book_keeping_category_id, :cost_centre_id,
       :description, :order_code, :part_id, :qty, :qty_in, :order_in_id, :price, :date_payment_made,
-      :actually_paid_gbp)
+      :actually_paid_gbp, :is_service)
     end
     
 end

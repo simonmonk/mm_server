@@ -10,12 +10,14 @@ $ rails g scaffold Post title:string body:string
 
 
 
+Expenses
+--------
+* add fields notes, cost_centre, accounting category
+
+
 General
 --------
 Put P.O.s back in.
-
-New Shipment crashes if don't set VAT RATE. SHould set to 20 but only if customer is_vatable. Reproduce first because code looks like it defaults to 0 anyway.
-
 
 Add social meadia fields to customer table:
 * instagram account
@@ -42,26 +44,12 @@ For VAT report need:
 input - goods coming in money going out
 output -
 
-1. VAT collected from sales
-2. VAT that we would have paid if it wasn't zero rated based on 20% only applies to amazon
-3. Calculated
-4. VAT we have paid and can reclaim + field 2 to balance
-5. Calculated
-6. Total of things we've sold withithout VAT
-7. Things we have bought without vat but some things excluded: [wages, bank charges, PAYE flag on Accounting category - only include things that could attract VAT]
-8. Sales to europe without VAT (zero rating only if we have their VAT number)
-9. Things bought from EU
-
-EC sales list
-country in EU     VAT no      Sales per supplier
-
 
 
 
 BUGS
 =====
 
-Check date sorting for shipments
 
 Changes to OrderIn
 ==================
