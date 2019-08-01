@@ -1,5 +1,6 @@
 class OrderIn < ApplicationRecord
   belongs_to :supplier, optional: true
+  belongs_to :account, optional: true
   has_many :order_in_lines, :dependent => :destroy
 
   # for filtering of order ins
@@ -44,6 +45,14 @@ class OrderIn < ApplicationRecord
 
   def transaction_type()
     return 'ORDER_IN'
+  end
+
+  def is_adjustment()
+    return false
+  end
+
+  def is_order_in()
+    return true
   end
 
   # accounting date on accrual basis (order placed not necessarily paid) for polymorphism

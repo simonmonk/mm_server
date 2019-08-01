@@ -134,6 +134,15 @@ class Shipment < ApplicationRecord
     return false
   end
 
+  def is_adjustment()
+    return false
+  end
+
+  def is_order_in()
+    return false
+  end
+
+
   # shipments are always invoiced in pounds (apart from Eduporium)
 
   def without_vat_original_currency()

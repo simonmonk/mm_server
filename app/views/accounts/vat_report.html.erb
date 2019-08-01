@@ -83,9 +83,47 @@ summary = result[1]
     <hh>VAT Action></th>
 </tr>
 
-<% transactions.each do | transaction | 
-    # currency_symbol = Currency.currency_symbol(transaction.currency)
+<% 
     currency_symbol = '£' # all transactions in £
+
+    adjustment_summary = [0, 0, 0] # without, vat, with
+    purchases_from_current = [0, 0, 0]
+    purchases_from_cc = [0, 0, 0]
+    purchases_from_paypal = [0, 0, 0]
+    purchases_from_world_first = [0, 0, 0]
+    
+
+    transactions.each do | transaction | 
+    # currency_symbol = Currency.currency_symbol(transaction.currency)
+        if (transaction.is_adjustment)
+            adjustment_summary[0] += transaction.without_vat
+            adjustment_summary[1] += transaction.vat
+            adjustment_summary[2] += transaction.with_vat
+        end
+        if (transaction.is_order_in) # purchases
+            if (transaction.account.code == 'CUR')
+                purchases_from_current[0] += transaction.without_vat
+                purchases_from_current[1] += transaction.vat
+                purchases_from_current[2] += transaction.with_vat
+            end
+            if (transaction.account.code == 'CC')
+                purchases_from_cc[0] += transaction.without_vat
+                purchases_from_cc[1] += transaction.vat
+                purchases_from_cc[2] += transaction.with_vat
+            end
+            if (transaction.account.code == 'PPL')
+                purchases_from_paypal[0] += transaction.without_vat
+                purchases_from_paypal[1] += transaction.vat
+                purchases_from_paypal[2] += transaction.with_vat
+            end
+            if (transaction.account.code == 'WF')
+                purchases_from_world_first[0] += transaction.without_vat
+                purchases_from_world_first[1] += transaction.vat
+                purchases_from_world_first[2] += transaction.with_vat
+            end
+            
+        end
+            
 %>
 
 <tr>
@@ -116,7 +154,7 @@ summary = result[1]
 
 </table>
 
-<h2>Summary</h2>
+<h2>VAT Summary</h2>
 
 <table>
 <tr><th>[1] VAT due on sales and other outputs.</th><td class="money"><%=number_to_currency(summary[:vatDueSales], unit: '£', separator: ".", delimiter: ",")%></td></tr>
@@ -128,6 +166,48 @@ summary = result[1]
 <tr><th>[7] Total value of purchases and all other inputs excluding any VAT (including exempt purchases). </th><td class="money"><%=number_to_currency(summary[:totalValuePurchasesExVAT], unit: '£', separator: ".", delimiter: ",")%></td></tr>
 <tr><th>[8] Total value of all supplies of goods and related costs, excluding any VAT, to other EC member states.</th><td class="money"><%=number_to_currency(summary[:totalValueGoodsSuppliedExVAT], unit: '£', separator: ".", delimiter: ",")%></td></tr>
 <tr><th>[9] Total value of acquisitions of goods and related costs excluding any VAT, from other EC member states.</th><td class="money"><%=number_to_currency(summary[:totalAcquisitionsExVAT], unit: '£', separator: ".", delimiter: ",")%></td></tr>
+
+</table>
+
+<h2>Account Summary</h2>
+
+<table>
+<tr>
+    <th></th>
+    <th>Without VAT</th>
+    <th>VAT</th>
+    <th>Total</th>
+</tr>
+<tr>
+    <td>Adjustments</td>
+    <td class="money"><%=number_to_currency(adjustment_summary[0], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(adjustment_summary[1], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(adjustment_summary[2], unit: '£', separator: ".", delimiter: ",")%></td>
+</tr>    
+<tr>
+    <td>Current Ac</td>
+    <td class="money"><%=number_to_currency(purchases_from_current[0], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_current[1], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_current[2], unit: '£', separator: ".", delimiter: ",")%></td>
+</tr>    
+<tr>
+    <td>Credit Card</td>
+    <td class="money"><%=number_to_currency(purchases_from_cc[0], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_cc[1], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_cc[2], unit: '£', separator: ".", delimiter: ",")%></td>
+</tr>    
+<tr>
+    <td>Paypal</td>
+    <td class="money"><%=number_to_currency(purchases_from_paypal[0], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_paypal[1], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_paypal[2], unit: '£', separator: ".", delimiter: ",")%></td>
+</tr>    
+<tr>
+    <td>World First</td>
+    <td class="money"><%=number_to_currency(purchases_from_world_first[0], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_world_first[1], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(purchases_from_world_first[2], unit: '£', separator: ".", delimiter: ",")%></td>
+</tr>    
 
 </table>
 

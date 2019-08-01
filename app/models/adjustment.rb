@@ -66,6 +66,14 @@ class Adjustment < ApplicationRecord
     return false
   end
 
+  def is_adjustment()
+    return true
+  end
+
+  def is_order_in()
+    return false
+  end
+
   # def tax_region()
   #   if (adjustment_type == 'Amazon Fees')
   #       return 'EU' # From Belgium in fact
