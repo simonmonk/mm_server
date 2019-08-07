@@ -2,6 +2,10 @@
 
 <h1>Cost Centres</h1>
 
+<h1>Warning</h1>
+
+<p>You can change the name but NOT the codes<p>
+
 <table>
   <thead>
     <tr>
@@ -16,9 +20,7 @@
       <tr>
         <td><%= cost_centre.name %></td>
         <td><%= cost_centre.code %></td>
-        <td><%= link_to 'Show', cost_centre %></td>
         <td><%= link_to 'Edit', edit_cost_centre_path(cost_centre) %></td>
-        <td><%= link_to 'Destroy', cost_centre, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

@@ -2,6 +2,10 @@
 
 <h1>Book Keeping Categories</h1>
 
+<h1>Warning</h1>
+
+<p>You can change the name but NOT the codes<p>
+
 <table>
   <thead>
     <tr>
@@ -16,9 +20,7 @@
       <tr>
         <td><%= book_keeping_category.name %></td>
         <td><%= book_keeping_category.code %></td>
-        <td><%= link_to 'Show', book_keeping_category %></td>
         <td><%= link_to 'Edit', edit_book_keeping_category_path(book_keeping_category) %></td>
-        <td><%= link_to 'Destroy', book_keeping_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
