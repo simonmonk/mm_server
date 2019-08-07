@@ -1,6 +1,7 @@
 class Assembly < ApplicationRecord
     has_many :assembly_parts
     has_many :product_assemblies
+    belongs_to :assembly_category
     
     validates :name, presence: true
     validates :qty, numericality: { greater_than_or_equal_to: 0 } 
@@ -34,6 +35,13 @@ class Assembly < ApplicationRecord
             total += (ass.production_cost * ass.qty)
         end
         return total
+    end
+
+    def Assembly.assign_default_cat
+        Assembly.all.each do |ass|
+            ass.assembly_category_id = 1
+            ass.save()
+        end
     end
     
 end

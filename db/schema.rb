@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190801140946) do
+ActiveRecord::Schema.define(version: 20190807091612) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -35,11 +35,19 @@ ActiveRecord::Schema.define(version: 20190801140946) do
   create_table "assemblies", force: :cascade do |t|
     t.string   "name"
     t.integer  "qty"
-    t.decimal  "labour",              precision: 10, scale: 3
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.decimal  "labour",               precision: 10, scale: 3
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.integer  "stock_warning_level"
     t.boolean  "active"
+    t.integer  "assembly_category_id"
+  end
+
+  create_table "assembly_categories", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "assembly_parts", force: :cascade do |t|

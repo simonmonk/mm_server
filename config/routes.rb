@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :assembly_categories
   resources :expenses
   resources :adjustments
   resources :book_keeping_categories

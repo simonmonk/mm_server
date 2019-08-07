@@ -100,7 +100,11 @@ class Product < ApplicationRecord
                 n = stock_to_needed
             end
         end
-       return n
+        if (n == 100000000000000)
+            return 0
+        else
+            return n
+        end
     end
 
     # find a prpduct by SKU with some fancy processing rules for

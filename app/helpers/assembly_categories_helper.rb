@@ -1,0 +1,2 @@
+module AssemblyCategoriesHelper
+end

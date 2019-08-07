@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Assembly Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Priority</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @assembly_categories.each do |assembly_category| %>
+      <tr>
+        <td><%= assembly_category.name %></td>
+        <td><%= assembly_category.priority %></td>
+        <td><%= link_to 'Show', assembly_category %></td>
+        <td><%= link_to 'Edit', edit_assembly_category_path(assembly_category) %></td>
+        <td><%= link_to 'Destroy', assembly_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Assembly Category', new_assembly_category_path %>

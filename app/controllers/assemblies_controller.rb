@@ -105,6 +105,6 @@ class AssembliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def assembly_params
-      params.require(:assembly).permit(:name, :qty, :labour, :stock_warning_level, :active)
+      params.require(:assembly).permit(:name, :qty, :labour, :stock_warning_level, :active, :assembly_category_id)
     end
 end

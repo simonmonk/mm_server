@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @assembly_category.name %>
+</p>
+
+<p>
+  <strong>Priority:</strong>
+  <%= @assembly_category.priority %>
+</p>
+
+<%= link_to 'Edit', edit_assembly_category_path(@assembly_category) %> |
+<%= link_to 'Back', assembly_categories_path %>

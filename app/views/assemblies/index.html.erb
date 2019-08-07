@@ -30,19 +30,21 @@
 <a id="show_button" href="javascript:showInactive()">Show Inactive Assemblies</a>
 <a id="hide_button" href="javascript:hideInactive()">Hide Inactive Assemblies</a>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Qty</th>
-      <th>Production Cost £</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% assemblies = Assembly.all.order(name: :asc)
-    assemblies.each do |assembly| 
+<%
+  categories = AssemblyCategory.all.order(priority: :asc)
+  categories.each do | cat |
+%>
+    <table>
+      <tr><td colspan="2"><h2><%= cat.name %></h2></td></tr>
+      <tr>
+          <th>Name</th>  
+          <th>Qty in stock</th>
+          <th>Production Cost</th>
+          <th></th>
+      </tr>
+<%
+    cat.assemblies.all.each do | assembly |
         style_class = ""
         if (assembly.qty <= assembly.stock_warning_level)
             style_class = "warning"
@@ -50,7 +52,8 @@
         if (not assembly.active)
             style_class = "inactive"
         end
-    %>
+%>
+
       <tr class="<%=style_class%>">
         <td><%= link_to assembly.name, edit_assembly_path(assembly) %></td>
         <td><%= assembly.qty %></td>
@@ -60,5 +63,7 @@
     <% end %>
   </tbody>
 </table>
+
+<% end %>
 
 <script>hideInactive()</script>

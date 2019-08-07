@@ -1,0 +1,27 @@
+<%= form_for(assembly_category) do |f| %>
+  <% if assembly_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(assembly_category.errors.count, "error") %> prohibited this assembly_category from being saved:</h2>
+
+      <ul>
+      <% assembly_category.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :priority %>
+    <%= f.number_field :priority %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
