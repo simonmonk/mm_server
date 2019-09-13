@@ -54,7 +54,7 @@ class ProductsController < ApplicationController
 
   def product_id_from_barcode
     barcode = params['barcode']
-    product = Product.find_by(barcode_value: barcode)
+    product = Product.find_by(barcode_value: '0' + barcode)
     render json: product.id
   end
 

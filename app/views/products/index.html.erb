@@ -19,7 +19,7 @@ function create_image_list() {
 }
 
 
-const barcode_length = 13;
+const barcode_length = 12;
 var field;
 
 function lookup_barcode(barcode) {
@@ -33,9 +33,9 @@ function lookup_barcode(barcode) {
 
 function barcode_changed(event) {
     barcode = event.target.value
-    if (barcode.length == barcode_length) {
+    if (barcode.length >= barcode_length) {
+        alert(barcode.length);
         lookup_barcode(barcode);
-        field.value = '';
     }
 }
 
