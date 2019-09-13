@@ -34,7 +34,6 @@ function lookup_barcode(barcode) {
 function barcode_changed(event) {
     barcode = event.target.value
     if (barcode.length >= barcode_length) {
-        alert(barcode.length);
         lookup_barcode(barcode);
     }
 }
