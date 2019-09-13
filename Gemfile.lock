@@ -41,6 +41,7 @@ GEM
     arel (7.1.4)
     autoprefixer-rails (9.3.1)
       execjs
+    barby (0.6.8)
     bindex (0.5.0)
     bootstrap (4.1.3)
       autoprefixer-rails (>= 6.0.3)
@@ -244,6 +245,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  barby
   bootstrap
   bootstrap-datepicker-rails
   byebug

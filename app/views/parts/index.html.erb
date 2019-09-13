@@ -11,6 +11,33 @@
         $('#show_button').hide();
     }
     
+
+const barcode_length = 10;
+var field;
+
+function lookup_barcode(barcode) {
+    if (barcode.startsWith('PART')) {
+        var part_id = barcode.substring(4);
+        document.location="/parts/" + part_id + "/edit";
+    }
+    else {
+        alert("No PART found with this barcode. Are you sure the code isn't for a PRODUCT?");
+    }
+}
+
+function barcode_changed(event) {
+    barcode = event.target.value
+    if (barcode.length == barcode_length) {
+        lookup_barcode(barcode);
+        field.value = '';
+    }
+}
+
+window.onload = function() {
+  field = document.getElementById("barcode_input")
+  field.focus();
+};
+
 </script>
 
 <p id="notice"><%= notice %></p>
@@ -23,8 +50,11 @@
 
 <a id="show_button" href="javascript:showInactive()">Show Inactive Parts</a>
 <a id="hide_button" href="javascript:hideInactive()">Hide Inactive Parts</a>
-
 <p></p>
+
+SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(event)"></input>
+
+
 
 
   <% PartCategory.all.each do |cat| %>

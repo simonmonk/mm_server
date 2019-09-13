@@ -21,5 +21,24 @@ $(function() {
 <% end %>
 </p>
 
+<p>This part is used in the following assemblies: 
+<% 
+	@part.assembly_parts.each do |assembly_part| %>
+      <% 
+    	begin
+      %>
+    <a href="/assemblies/<%=assembly_part.assembly_id %>/edit"><%= assembly_part.assembly.name %></a>
+      <%
+    	rescue Exception
+    		""
+    	end
+      %>;
+<% end %>
+</p>
+
+<p>
+<a href="#" target="popup" onclick="window.open('/parts/stock_label?id=<%=@part.id%>','name','width=600,height=400')">Print Part Label</a>
+</p>
+
 <%= render 'form', part: @part %>
 

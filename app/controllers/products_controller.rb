@@ -52,6 +52,12 @@ class ProductsController < ApplicationController
   def sales_report
   end
 
+  def product_id_from_barcode
+    barcode = params['barcode']
+    product = Product.find_by(barcode_value: barcode)
+    render json: product.id
+  end
+
 
   # deduct quatities of all the parts and assemblies used for qty of this product.
   def deduct_stock

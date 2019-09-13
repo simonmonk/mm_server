@@ -1,5 +1,5 @@
 class PartsController < ApplicationController
-  before_action :set_part, only: [:show, :edit, :update, :destroy]
+  before_action :set_part, only: [:show, :edit, :update, :destroy, :stock_label]
   skip_before_filter :verify_authenticity_token 
 
   # GET /parts
@@ -11,6 +11,15 @@ class PartsController < ApplicationController
   def export_parts
     @parts = Part.all.order(name: :asc)
   end
+
+  def stock_label
+    render :layout => false
+  end
+
+  def barcode
+    
+  end
+
 
   # GET /parts/1
   # GET /parts/1.json

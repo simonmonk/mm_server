@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   
   get '/sales_uk/', to: 'welcome#sales_uk'
   get '/sales_us/', to: 'welcome#sales_us'
-    
   get 'shipments/invoice/*other', to: 'shipments#invoice'
   get 'shipments/order_details/*other', to: 'shipments#order_details'
   get 'shipments/packing_list/*other', to: 'shipments#packing_list'
@@ -45,6 +44,7 @@ Rails.application.routes.draw do
       get :add_supplier
       get :remove_part_supplier
       get :export_parts
+      get :stock_label
     end
   end
 
@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       get :sales_by_product
       get :sales_report
       get :image_links
+      get :product_id_from_barcode
     end
   end
   resources :assemblies do

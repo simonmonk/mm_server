@@ -18,6 +18,32 @@ function create_image_list() {
     window.open("/products/image_links", '_blank')
 }
 
+
+const barcode_length = 13;
+var field;
+
+function lookup_barcode(barcode) {
+    var product_id;
+    $.ajax({url: "/products/product_id_from_barcode?barcode=" + barcode, 
+        success: function(result){
+            product_id = result;
+            document.location="/products/" + product_id + "/edit";
+    }});
+}
+
+function barcode_changed(event) {
+    barcode = event.target.value
+    if (barcode.length == barcode_length) {
+        lookup_barcode(barcode);
+        field.value = '';
+    }
+}
+
+window.onload = function() {
+  field = document.getElementById("barcode_input")
+  field.focus();
+};
+
 </script>
 
 <h1>Products</h1>
@@ -39,6 +65,10 @@ Currency <select id="currency_select"><option value="GBP">GBP</option><option va
 Previous <input type="text" value="90" id="days_field"/> days
 <input type="button" value="Export Sales Report Spreadsheet" onClick="javascript:create_sales_data()"/>
 <input type="button" value="View Sales Report" onClick="javascript:create_sales_report()"/>
+
+<p></p>
+
+SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(event)"></input>
 
 <p></p>
 
