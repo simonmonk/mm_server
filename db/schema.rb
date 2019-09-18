@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190815102955) do
+ActiveRecord::Schema.define(version: 20190918081534) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -205,8 +205,9 @@ ActiveRecord::Schema.define(version: 20190815102955) do
   create_table "product_categories", force: :cascade do |t|
     t.string   "name"
     t.float    "priority"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "catalog_description"
   end
 
   create_table "product_parts", force: :cascade do |t|

@@ -150,6 +150,8 @@ categories.each do | cat |
         <div class="cat_heading"><%=cat.name%></div>
     <% end %>
 
+    <%= cat.catalog_description.html_safe %>
+
 <table>
 <%
 cat.products.where(include_in_catalog: true).order(new_in_catalog: :desc).each do | product |
@@ -164,6 +166,11 @@ cat.products.where(include_in_catalog: true).order(new_in_catalog: :desc).each d
             if (product.new_in_catalog == true)
             %>
                 <img class="new_product" src="/images/new_product_icon.jpg"/>
+            <% end %>
+            <%
+            if (product.new_price_in_catalog == true)
+            %>
+                <img class="new_product" src="/images/price_change.png"/>
             <% end %>
             <%
             if (cat.priority != 1000)
