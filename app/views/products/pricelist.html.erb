@@ -168,11 +168,6 @@ cat.products.where(include_in_catalog: true).order(new_in_catalog: :desc).each d
                 <img class="new_product" src="/images/new_product_icon.jpg"/>
             <% end %>
             <%
-            if (product.new_price_in_catalog == true)
-            %>
-                <img class="new_product" src="/images/price_change.png"/>
-            <% end %>
-            <%
             if (cat.priority != 1000)
             %>
                 <%=product.sku%>. 
@@ -186,10 +181,12 @@ cat.products.where(include_in_catalog: true).order(new_in_catalog: :desc).each d
                 wholesale_price_string = number_to_currency(product.wholesale_price, unit: currency_symbol, separator: ".", delimiter: ",")
                 retail_price_string = number_to_currency(product.retail_price, unit: currency_symbol, separator: ".", delimiter: ",")
         %>
-            Wholesale price <%=wholesale_price_string%>. SRP <%=retail_price_string%>
-            <% if (product.new_price_in_catalog == true) %>
-                [PRICE CHANGE]
+        <%
+            if (product.new_price_in_catalog == true)
+            %>
+                <img class="new_product" width="50" src="/images/price_change.png"/>
             <% end %>
+            Wholesale price <%=wholesale_price_string%>. SRP <%=retail_price_string%>
         <% end %>
         </td>
         </tr>
