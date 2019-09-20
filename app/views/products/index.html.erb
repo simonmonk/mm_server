@@ -91,7 +91,7 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
             <th colspan="3"></th>
         </tr>
     <%
-    cat.products.all.order(sku: :asc).each do | product |
+    cat.products.all.order(catalog_priority: :asc).each do | product |
         profit = 0
         if (product.wholesale_price and product.wholesale_price > 0)
             profit = (product.profit * 100 / product.wholesale_price).to_i
