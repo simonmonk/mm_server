@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190918081534) do
+ActiveRecord::Schema.define(version: 20190920103750) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -269,6 +269,7 @@ ActiveRecord::Schema.define(version: 20190918081534) do
     t.boolean  "new_price_in_catalog"
     t.boolean  "end_of_line_in_catalog"
     t.boolean  "rohs_compliant"
+    t.float    "catalog_priority"
   end
 
   create_table "prospects", force: :cascade do |t|

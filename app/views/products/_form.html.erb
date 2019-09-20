@@ -111,12 +111,23 @@ function deduct(qty) {
     <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
     
     <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
-    
+    <tr><td>Catalog Priority</td><td> <%= f.text_field :catalog_priority, size: '10' %> </td></tr>  
+    <tr><td colspan="2">(smaller number means nearer the top. Aim for 0.0 to 100.0)</td>
+    <% 
+        @product.product_category.products.where(include_in_catalog: true).order(catalog_priority: :asc).each do | p |
+    %>
+    <tr>
+        <td/><td><%=p.catalog_priority%> : <%=p.name%></td>
+    </tr>
+    <% end %>
+
+
     <tr><th colspan="2">Pricing</th></tr>
         <tr><td colspan="2">The manufacturing cost of this product is £<%= product.production_cost.round(2) %></td><td>
     <tr><td>Wholesale price GBP</td><td> <%= f.text_field :wholesale_price %> (suggested £<%= @product.suggested_wholesale.round(2) %>)</td></tr>
     <tr><td>Profit on GBP sale</td><td>£<%= (@product.profit).round(2) %></td></tr>
-    <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td></tr>    
+    <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td>
+    </tr>    
         
         
     <tr><th colspan="2">Shipping</th></tr>    

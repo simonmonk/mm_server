@@ -104,6 +104,14 @@ tr {
     padding: 0;
 }    
 
+.emphasised_box {
+    text-align: left;
+    margin-top: 6px;  
+    margin-bottom: 6px;  
+    font: 30px arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
 </style>
 
 
@@ -134,8 +142,8 @@ valid_from_date = params['from_date']
 </table>
 
 
-<p style="font-size:30px; font-family:arial;">These prices applicable for all orders received on or after <%=valid_from_date%> and are valid until <%= valid_until_date %>.</p>
-<p style="font-size: 30px; font-family:arial;">All prices in <%=currency_name%> (<%=currency_symbol%>).</p>
+<p class="emphasised_box">These prices applicable for all orders received on or after <%=valid_from_date%> and are valid until <%= valid_until_date %>. 
+<br/>All prices in <%=currency_name%> (<%=currency_symbol%>).</p>
 <p></p>
 
 <%
@@ -156,7 +164,7 @@ categories.each do | cat |
 
 <table>
 <%
-cat.products.where(include_in_catalog: true).order(new_in_catalog: :desc).each do | product |
+cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each do | product |
 %>
 <tr>
 <td class="prod_table_td"><img src="<%=product.product_photo_uri%>" width="100"/></td>
