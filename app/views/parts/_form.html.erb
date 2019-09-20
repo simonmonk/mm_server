@@ -80,6 +80,7 @@ function remove_part_supplier(part_supplier_id) {
       <tr>
         <td><a href="/suppliers/<%= part_supplier.supplier.id%>/edit"><%= part_supplier.supplier.name %></a></td>
         <td><%= part_supplier.code %></td>
+        <td><a href="<%=part_supplier.supplier.website%>" target="_blank">Supplier Website (new tab)</a></td>
         <td><input type="button" value="Remove" onClick="javascript:remove_part_supplier(<%= part_supplier.id %>)"/></td>
       </tr>
     <% end %>

@@ -1,0 +1,8 @@
+"organisation_name", "contact_name", "contact_email", "country", "manager", "last_contact_date", "contact_summary", "notes"
+<%
+prospects = Prospect.all
+prospects.each do | prospect |
+%>
+"<%= prospect.organisation_name %>", "<%= prospect.contact_name %>","<%= prospect.contact_email %>","<%= prospect.country %>","<%= prospect.account_manager_name %>","<%= prospect.last_contact_date %>","<%= prospect.contact_summary %>","<%= prospect.notes_line %>"
+<% end %>
+</table>

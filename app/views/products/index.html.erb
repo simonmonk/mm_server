@@ -3,7 +3,7 @@
 <script>
 
 function create_pricelist() {
-    window.open("/products/pricelist?date=" + $('#valid_until_field').val() + "&currency=" + $('#currency_select').val(), '_blank')
+    window.open("/products/pricelist?date=" + $('#valid_until_field').val() + "&currency=" + $('#currency_select').val() + "&from_date=" + $('#valid_from_field').val(), '_blank')
 }
     
 function create_sales_data() {
@@ -52,7 +52,7 @@ window.onload = function() {
 <input type="button" value="Export Hi Res Image Link List" onClick="javascript:create_image_list()"/>
 
 <p></p>
-
+Valid From <input type="text" value="<%=Date.current.next_month.beginning_of_month.strftime("%-d %B %Y")%>" id="valid_from_field"/>
 Valid Until <input type="text" value="<%=Date.current.next_month.next_month.next_month.end_of_month.strftime("%-d %B %Y")%>" id="valid_until_field"/>
 Currency <select id="currency_select"><option value="GBP">GBP</option><option value="USD">USD</option></select>
 <input type="button" value="Create Price List" onClick="javascript:create_pricelist()"/>

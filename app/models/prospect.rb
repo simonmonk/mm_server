@@ -40,6 +40,22 @@ class Prospect < ApplicationRecord
         return last_contact_date        
     end
 
+    def contact_summary()
+        summary = ""
+        communications.each do | comm |
+            summary += comm.communication_date.to_s + ":" + comm.notes + ".."
+        end
+        return summary
+    end
+
+    def notes_line()
+        if (notes) 
+            return notes.gsub('\n', '')
+        else
+            return ""
+        end
+    end
+
     def Prospect.import_csv(filename)
         simon = User.find_by_name('Simon')
         linda = User.find_by_name('Linda')

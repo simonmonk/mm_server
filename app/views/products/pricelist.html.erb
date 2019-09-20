@@ -116,6 +116,7 @@ if (currency_name == 'USD')
 end
 
 valid_until_date = params['date']
+valid_from_date = params['from_date']
 
 %>
 
@@ -128,12 +129,13 @@ valid_until_date = params['date']
     <p>&nbsp;</p>
 </td>    
     
-<td><h1>Catalogue and Price List</h1><h1>Valid until <%= valid_until_date %></h1></td>
+<td><h1 style="font-size: 55px;">Catalogue and Price List</h1>
 </tr>
 </table>
 
 
-<p align="right"><b>All prices in <%=currency_name%> (<%=currency_symbol%>).</b></p>
+<p style="font-size:30px; font-family:arial;">These prices applicable for all orders received on or after <%=valid_from_date%> and are valid until <%= valid_until_date %>.</p>
+<p style="font-size: 30px; font-family:arial;">All prices in <%=currency_name%> (<%=currency_symbol%>).</p>
 <p></p>
 
 <%

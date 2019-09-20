@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 
   resources :prospects do
     collection do
+      get :export_csv
     end
   end
 

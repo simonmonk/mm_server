@@ -27,6 +27,10 @@ class ProspectsController < ApplicationController
   def edit
   end
 
+  def export_csv
+    render :layout => false
+  end
+
   # POST /prospects
   # POST /prospects.json
   def create
