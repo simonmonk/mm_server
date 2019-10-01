@@ -10,7 +10,7 @@ class Assembly < ApplicationRecord
     def production_cost
         total = 0
         self.assembly_parts.each do |pp|
-            total += pp.part.purchase_cost_with_shipping * pp.qty
+            total += pp.part.purchase_cost * pp.qty
         end
         if (self.labour)
             total += self.labour

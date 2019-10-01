@@ -32,7 +32,7 @@ class Product < ApplicationRecord
         total = 0
         self.product_parts.each do |pp|
           if (pp.part)
-            total += pp.part.purchase_cost_with_shipping * pp.qty
+            total += pp.part.purchase_cost * pp.qty
           else
             # No part on a pp means the pp should be garbage collected
             pp.delete()

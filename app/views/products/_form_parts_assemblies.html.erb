@@ -18,7 +18,7 @@
       <tr>
         <td><a href="/parts/<%= product_part.part.id %>/edit"><%= product_part.part.name %></a></td>
         <td><%= product_part.qty %></td>
-        <td><%= (product_part.part.purchase_cost_with_shipping * product_part.qty).round(3) %></td>
+        <td><%= (product_part.part.purchase_cost * product_part.qty).round(3) %></td>
         <td><%= product_part.part.qty%></td>
         <td><input type="button" value="Delete" onClick="javascript:delete_part(<%= product_part.id%>)"/></td>
       </tr>

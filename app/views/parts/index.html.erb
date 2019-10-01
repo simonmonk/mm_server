@@ -90,7 +90,7 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
         <td><%= part.qty %></td>
         <td><%= part.purchase_cost.round(3) %></td>
         <td><%= part.usage_summary() %></td>
-        <td><%= (part.purchase_cost_with_shipping * part.qty).round() %></td>
+        <td><%= (part.purchase_cost * part.qty).round() %></td>
         <td><%= link_to 'Delete', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <%
         if (part.part_suppliers and part.part_suppliers.length > 0)

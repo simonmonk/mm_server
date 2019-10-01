@@ -2,5 +2,5 @@ Part Name, Cost GBP, Qty, Value of Stock
 <% parts = Part.all.order(name: :asc)
     parts.each do |part| 
 %>
-"<%=part.name%>",<%=part.purchase_cost.round(3)%>,<%=part.qty%>, <%=(part.purchase_cost_with_shipping * part.qty).round(2)%>
+"<%=part.name%>",<%=part.purchase_cost.round(3)%>,<%=part.qty%>, <%=(part.purchase_cost * part.qty).round(2)%>
 <% end %>

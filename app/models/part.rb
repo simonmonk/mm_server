@@ -18,7 +18,7 @@ class Part < ApplicationRecord
     
     def purchase_cost_all_stock
         if (self.qty)
-            return self.purchase_cost_with_shipping * self.qty
+            return self.purchase_cost * self.qty
         end
         return 0
     end
@@ -52,14 +52,6 @@ class Part < ApplicationRecord
         return 0
     end
     
-    def purchase_cost_with_shipping
-        base_cost = self.purchase_cost
-        if (self.shipping_cost)
-            return base_cost + self.shipping_cost
-        else
-            return base_cost
-        end
-    end
     
     def Part.total_value
         total = 0
