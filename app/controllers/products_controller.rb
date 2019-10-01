@@ -25,6 +25,7 @@ class ProductsController < ApplicationController
     @product.retail_price = 0  
     @product.weight_g = 0
     @product.labour = 0
+    @product.product_category_id = 1
   end
 
   # GET /products/1/edit

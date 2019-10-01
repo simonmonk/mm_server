@@ -8,6 +8,14 @@ class Retailer < ApplicationRecord
     def is_sample()
         return (name == 'Sending Samples')
     end
+
+    def notes_line()
+        if (notes) 
+            return notes.gsub("\n", '').gsub("\r", '')
+        else
+            return ""
+        end
+    end
     
     def Retailer.with_domain(retailer_domain)
        Retailer.all.each do | retailer |

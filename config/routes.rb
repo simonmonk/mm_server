@@ -78,6 +78,7 @@ Rails.application.routes.draw do
   resources :retailers do
     collection do
       get :add_product
+      get :export_csv
     end
   end
   resources :shipments do

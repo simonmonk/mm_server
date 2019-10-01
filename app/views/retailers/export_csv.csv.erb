@@ -1,0 +1,8 @@
+"organisation_name", "contact_name", "contact_email", "country", "sales_last_360_days", "website", "notes"
+<%
+retailers = Retailer.all
+retailers.each do | retailer |
+        sales = retailer.units_and_value_shipped(Date.today - 365.days, Date.today)
+%>
+"<%= retailer.name %>", "<%= retailer.contact_name %>","<%= retailer.contact_email %>","<%= retailer.billing_ad_country %>","<%= sales %>", "<%= retailer.base_url %>", <%= retailer.notes_line %>"
+<% end %>
