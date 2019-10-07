@@ -102,8 +102,8 @@ class Part < ApplicationRecord
     if (order_lines.length > 0)
         last_order_line = order_lines.last
         last_order = last_order_line.order_in
-        if (last_order.placed_date and last_order.placed_date > (Date.today - 90.days) and last_order_line.qty_in >= order_lines.last.qty)
-            details = " (" + order_lines.last.qty.to_s + " on order)"
+        if (last_order.placed_date and last_order.placed_date > (Date.today - 90.days) and last_order_line.qty_in < last_order_line.qty)
+            details = " (" + last_order_line.qty.to_s + " on order " + last_order.placed_date.to_s + ")"
         end
     end
     return details
