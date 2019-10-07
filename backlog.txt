@@ -9,7 +9,7 @@ Can't replicate.
 Some parts currency (E.g. PCBWay) have changed from $ to £ but the amount is correct for $. Is this a problem with the code when the option
 to update the price of a part based on an order is used? Replicate this in the test system and fix.
 
-Price calculation is wrong for the classroom pack of leaves.
+Shipping to Amazon - put the code back in to pull over an order. (may justr be a button)
 
 
 MM Server Backlog

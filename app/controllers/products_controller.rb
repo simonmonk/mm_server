@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :catalog]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :catalog, :print_labels]
     skip_before_filter :verify_authenticity_token 
 
   # GET /products
@@ -57,6 +57,10 @@ class ProductsController < ApplicationController
     barcode = params['barcode']
     product = Product.find_by(barcode_value: '0' + barcode)
     render json: product.id
+  end
+
+  def print_labels
+    render :layout => false
   end
 
 

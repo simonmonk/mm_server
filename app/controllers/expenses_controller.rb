@@ -1,5 +1,6 @@
 class ExpensesController < ApplicationController
   before_action :set_expense, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token 
 
   # GET /expenses
   # GET /expenses.json
@@ -24,6 +25,9 @@ class ExpensesController < ApplicationController
   # POST /expenses
   # POST /expenses.json
   def create
+    puts "**************"
+    puts params
+    puts "**************"
     @expense = Expense.new(expense_params)
 
     respond_to do |format|
@@ -69,6 +73,8 @@ class ExpensesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def expense_params
-      params.require(:expense).permit(:incurred_date, :reimbursed_date, :user_id, :account_id, :supplier, :description, :without_vat, :vat, :with_vat, :is_mileage, :miles, :mileage_rate)
+      params.require(:expense).permit(:incurred_date, :reimbursed_date, 
+          :user_id, :account_id, :supplier, :description, :without_vat, 
+          :vat, :with_vat, :is_mileage, :miles, :mileage_rate, :expense)
     end
 end

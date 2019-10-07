@@ -96,6 +96,21 @@ class Part < ApplicationRecord
       return first_item.name + " and " + (num_items - 1).to_s + " other products."
   end
 
+  def on_order_details()
+    details = ""
+    order_lines = OrderInLine.where(part_id: self.id)
+    if (order_lines.length > 0)
+        last_order_line = order_lines.last
+        last_order = last_order_line.order_in
+        if (last_order.placed_date and last_order.placed_date > (Date.today - 90.days) and last_order_line.qty_in >= order_lines.last.qty)
+            details = " (" + order_lines.last.qty.to_s + " on order)"
+        end
+    end
+    return details
+  end
+
+
+
   def purchase_history()
     # Here we are adding arbitrary json to the json returned for the model
     # A useful trick

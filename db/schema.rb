@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190920103750) do
+ActiveRecord::Schema.define(version: 20191004104126) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 20190920103750) do
     t.float    "mileage_rate"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "cost_centre_id"
   end
 
   create_table "notifications", force: :cascade do |t|

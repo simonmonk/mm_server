@@ -84,10 +84,11 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
         if (not part.active)
             style_class = "inactive"
         end
+        
     %>
       <tr class="<%=style_class%>">
         <td><%= link_to part.name, edit_part_path(part) %></td>
-        <td><%= part.qty %></td>
+        <td><%= part.qty.to_s + part.on_order_details%></td>
         <td><%= part.purchase_cost.round(3) %></td>
         <td><%= part.usage_summary() %></td>
         <td><%= (part.purchase_cost * part.qty).round() %></td>

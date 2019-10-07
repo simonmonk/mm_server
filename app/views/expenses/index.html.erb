@@ -3,7 +3,7 @@
 <div id="app">
 
 <div>
-  <button type="button" v-on:click="open_expense_form" class="btn btn-primary">New Expense</button>
+  <button type="button" v-on:click="new_expense_form" class="btn btn-primary">New Expense</button>
 </div>
 
 
@@ -24,18 +24,15 @@
               </td>
             </tr>
             <tr>
-              <td>Mileage</td>
-              <td><input type="checkbox" v-model="expense.is_mileage"></td>
-            </tr>
-            <tr>
               <td>Incurred Date</td>
               <td><input v-model="expense.incurred_date" type="date" value="" class="form-control" placeholder="Date expense incurred"/></td>
             </tr>
             <tr>
-              <td>Reimbursed Date</td>
+              <td>Reimbursed/Paid Date</td>
               <td><input v-model="expense.incurred_date" type="date" value="" class="form-control" placeholder="Date expense incurred"/></td>
             </tr>
-              <td>Account</td>
+            <tr>
+              <td>Account (to reimburse or used for payment)</td>
               <td>
                   <select v-model="expense.account_id">
                       <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
@@ -43,34 +40,48 @@
               </td>
             </tr>
             <tr>
-              <td>Supplier</td>
-              <td><input v-model="expense.supplier" type="text" value="" class="form-control" placeholder=""/></td>
-            <tr>
+              <td>Cost Centre</td>
+              <td>
+                <select v-model="expense.cost_centre_id">
+                    <option v-for="(cost_centre, index) in cost_centres" v-bind:value="cost_centre.id">{{cost_centre.name}}</option>
+                </select>
+              </td>
+            </tr>
             <tr>
               <td>Description</td>
               <td><input v-model="expense.description" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
             <tr>
-            <tr>
+              <td>Mileage</td>
+              <td><input type="checkbox" v-model="expense.is_mileage"></td>
+            </tr>
+            <tr v-if="expense.is_mileage">
+              <td>Miles</td>
+              <td><input v-model="expense.miles" v-on:keyup="calc_miles()" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr v-if="expense.is_mileage">
+              <td>Mileage Rate (p/mile)</td>
+              <td><input v-model="expense.mileage_rate" v-on:keyup="calc_miles()" type="text" value="45" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr v-if="!expense.is_mileage">
+              <td>Supplier</td>
+              <td><input v-model="expense.supplier" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr v-if="!expense.is_mileage">
               <td>Amount before VAT (£)</td>
               <td><input v-model="expense.without_vat" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
-            <tr>
-              <td>VAT Amount</td>
+            <tr v-if="!expense.is_mileage">
+              <td>VAT Amount (£)</td>
               <td><input v-model="expense.vat" type="text" value="" class="form-control" placeholder=""/></td>
-            <tr>
-              <td>Total Amount</td>
-              <td><input v-model="expense.with_vat" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
             <tr>
-              <td>Miles</td>
-              <td><input v-model="expense.miles" type="text" value="" class="form-control" placeholder=""/></td>
-            <tr>
-              <td>Mileage Rate</td>
-              <td><input v-model="expense.mileage_rate" type="text" value="" class="form-control" placeholder=""/></td>
+              <td>Total Amount (£)</td>
+              <td><input v-model="expense.with_vat" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
 
             <tr>
-              <td><button type="button" v-on:click="save_expense('#unordered_form')" class="btn btn-primary">Save</button></td>
+              <td><button type="button" v-on:click="save_expense('#expense_form')" class="btn btn-primary">Save</button></td>
             </tr>
         </table>
       </div>
@@ -82,13 +93,17 @@
 <!-- Expenses List Table -->
 <table>
 <tr>
-  <th>Incurred Date</th>
+  <th>Date</th>
   <th>Supplier</th>
+  <th>Description</th>
+  <th>Miles</th>
   <th>Total</th>
 </tr>
 <tr v-for="(expense, index) in expenses">
     <td>{{expense.incurred_date}}</td>
     <td>{{expense.supplier}}</td>
+    <td>{{expense.description}}</td>
+    <td>{{expense.miles}}</td>
     <td>{{expense.with_vat}}</td>
     <td><span v-on:click="edit_expense(index)" class="badge badge-success">Edit</span></td>
     <td><span v-on:click="delete_expense(index)" class="badge badge-danger">Delete</span></td>
@@ -109,6 +124,8 @@ window.onload = function () {
           accounts: [],
           categories: [],
           cost_centres: [],
+          users: [],
+          expenses: []
         },
         mounted: function() {
           var that;
@@ -124,7 +141,7 @@ window.onload = function () {
             var that;
             that = this;
             $.ajax({
-              url: '/expenses/get_expenses_json',
+              url: '/expenses.json',
               success: function(res) {
                 that.expenses = res;
                 if (callback) {
@@ -147,9 +164,9 @@ window.onload = function () {
             var that;
             that = this;
             $.ajax({
-              url: 'users/list.json',
+              url: 'users.json',
               success: function(res) {
-                that.accounts = res;
+                that.users = res;
               }
             });
           },
@@ -179,28 +196,26 @@ window.onload = function () {
               that = this;
               let id = this.expenses[index].id;
               $.ajax({
-                url: '/expenses/delete_json?id=' + id,
+                type: 'DELETE',
+                url: '/expenses/' + id,
                 success: function(res) {
                   that.load_expenses();
                 }
               });
             }
           },
-          
           save_expense: function(modal_to_close, callback) {
             var that;
             that = this;
             var modal = modal_to_close;
-            // delete computed attributes that cant be saved
-            //delete this.order_in.supplier;
-            
-
-            url = '/expenses/create_expense.json'
-            if (this.order_in.id) { // update existing
-              url = '/order_ins/update_expense.json?id=' + this.expense.id;
+            url = '/expenses.json'
+            meth = 'POST'
+            if (this.expense.id) { // update existing
+              url = '/expenses/' + this.expense.id + '.json';
+              meth = 'PUT'
             }
             $.ajax({
-              type: 'POST',
+              type: meth,
               url: url,
               data: {expense: this.expense},
               success: function(res) {
@@ -215,20 +230,24 @@ window.onload = function () {
               }
             });
           },
-          open_expense_form: function() {
+          new_expense_form: function() {
             this.expense = {
-              
             };
             $('#expense_form').modal('show');
           },
-          edit_expense_form: function(index) {
+          edit_expense: function(index) {
             this.expense = this.expenses[index];
             $('#expense_form').modal('show');
           },
           cancel: function(modal_to_close) {
             $(modal_to_close).modal('hide');
           },
-          
+          calc_miles: function() {
+            if (this.expense.miles > 0 && this.expense.mileage_rate >0) {
+              this.expense.with_vat = this.expense.miles * this.expense.mileage_rate / 100;
+            }
+          },
+
         },
     })
 }

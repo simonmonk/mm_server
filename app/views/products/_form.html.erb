@@ -42,6 +42,12 @@ function deduct(qty) {
     }
         
 }
+
+function print_labels() {
+    alert("here")
+    window.open("/products/<%=@product.id%>/print_labels", '_blank')
+}
+
 </script>
 
 <%= form_for product, html: {multipart: true} do |f| %>
@@ -96,6 +102,8 @@ function deduct(qty) {
         
     <% end %>
     </td></tr>
+    <tr><td></td><td><button onClick="print_labels()">Print Sealing Labels (21)</button></td></tr>
+
     <tr><td>Quantity (for emergency manual ajustments)</td><td> <%= f.number_field :qty %></td></tr>
     <tr><td>Stock level warning</td><td> <%= f.number_field :stock_warning_level %></td></tr>  
     <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
