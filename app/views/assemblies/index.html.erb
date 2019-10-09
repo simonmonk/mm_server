@@ -38,6 +38,7 @@
     <table>
       <tr><td colspan="2"><h2><%= cat.name %></h2></td></tr>
       <tr>
+          <th>Code</th>
           <th>Name</th>  
           <th>Qty in stock</th>
           <th>Production Cost</th>
@@ -55,6 +56,7 @@
 %>
 
       <tr class="<%=style_class%>">
+        <td>ASS-<%=assembly.id%></td>
         <td><%= link_to assembly.name, edit_assembly_path(assembly) %></td>
         <td><%= assembly.qty %></td>
         <td><%= assembly.production_cost.round(2) %></td>
