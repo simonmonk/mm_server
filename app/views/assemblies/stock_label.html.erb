@@ -1,0 +1,23 @@
+<style>
+table.barby-barcode { border-spacing: 0; width: 50}
+tr.barby-row {}
+td.barby-cell { width: 3px; height: 150px; }
+td.barby-cell.on { background: #000; }
+</style>
+
+<%
+require 'barby'
+require 'barby/barcode/code_128'
+require 'barby/outputter/html_outputter'
+
+barcode_txt = 'ASS-' + @assembly.id.to_s.rjust(6, "0")
+
+barcode = Barby::Code128B.new(barcode_txt)
+outputter = Barby::HtmlOutputter.new(barcode)
+%>
+
+<h1><%=@assembly.name%></h1>
+
+<%= barcode.to_html.html_safe %>
+
+<h1><%=barcode_txt%></h1>

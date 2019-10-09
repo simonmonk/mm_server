@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       get :add_part
       get :delete_part
       get :stock_report
+      get :stock_label
     end
   end
   resources :retailers do

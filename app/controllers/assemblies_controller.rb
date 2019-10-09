@@ -1,5 +1,5 @@
 class AssembliesController < ApplicationController
-  before_action :set_assembly, only: [:show, :edit, :update, :destroy]
+  before_action :set_assembly, only: [:show, :edit, :update, :destroy, :stock_label]
     skip_before_filter :verify_authenticity_token 
 
   # GET /assemblies
@@ -44,6 +44,10 @@ class AssembliesController < ApplicationController
       
     
   def stock_report
+  end
+
+  def stock_label
+    render :layout => false
   end
     
   def add_part

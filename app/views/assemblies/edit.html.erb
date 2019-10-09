@@ -6,6 +6,8 @@ $(function() {
 
 <h1>Editing Assembly: <%= @assembly.name%></h1>
 
+<a href="#" target="popup" onclick="window.open('/assemblies/stock_label?id=<%=@assembly.id%>','name','width=600,height=400')">Print Assembly Label</a>
+
 <%= render 'form', assembly: @assembly %>
 <%= render 'form_parts_list', assembly: @assembly %>
 
