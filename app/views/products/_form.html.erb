@@ -44,8 +44,7 @@ function deduct(qty) {
 }
 
 function print_labels() {
-    alert("here")
-    window.open("/products/<%=@product.id%>/print_labels", '_blank')
+    window.open("/products/<%=@product.id%>/print_labels",'name','width=600,height=400')
 }
 
 </script>

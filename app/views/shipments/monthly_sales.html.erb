@@ -40,6 +40,7 @@ months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 result = Shipment.monthly_sales()
 sales_totals = result[0]
 last_year_sales = result[1]
+year_before_last_sales = result[2]
 %>
 
 <script>
@@ -67,9 +68,16 @@ new Chart(ctx, {
                 fill: false
             },
             {
-                label: 'Last Year £', 
+                label: '<%=year-1%> £', 
                 data:  <%=last_year_sales.to_json.html_safe%>,
                 borderColor: '#D2B48C',
+                borderWidth: 4,
+                fill: false
+            },
+            {
+                label: '<%=year-2%> £', 
+                data:  <%=year_before_last_sales.to_json.html_safe%>,
+                borderColor: '#4682B4',
                 borderWidth: 4,
                 fill: false
             }
@@ -89,14 +97,11 @@ new Chart(ctx, {
 
 
 <table>
-    <tr><th>Month</th><th>Sales <%=year-1%></th><th>Sales <%=year%></th></tr>
-    
+    <tr><th>Month</th><th>Sales <%=year-2%></th><th>Sales <%=year-1%></th></th><th>Sales <%=year%></th></tr>
 <%
 0.upto 11 do | i |
 %>
-
-    <tr><td><%=months[i]%></td><td><%=last_year_sales[i]%></td><td><%=sales_totals[i]%></td></tr>
-
+    <tr><td><%=months[i]%></td><td><%=year_before_last_sales[i]%><td><%=last_year_sales[i]%></td><td><%=sales_totals[i]%></td></tr>
 <%
 end
 %>
@@ -108,14 +113,19 @@ end
 <br/>
 <br/>
 <h1>Sales by Product £</h1>
-<h2>Top Ten in last 365 days</h2>
 
-<canvas id="sales_by_product" ></canvas>
+<table width="100%"><tr>
+
+<td>
+<h2>Top 20 in last 365 days</h2>
+
+<canvas id="sales_by_product" style="width:400px;"></canvas>
 
 <%
-result = Shipment.sales_by_product_top_n(365, 10)
+result = Shipment.sales_by_product_top_n(365, 20)
 products = result[0]
 sales = result[1]
+units = result[2]
 %>
 
 <script>
@@ -135,20 +145,39 @@ new Chart(ctx, {
         ]
     },
     options: {
+        responsive: true
     }
 });
 </script>
+</td>
+<td>
+
+<table>
+<tr><th>Product</th><th>Units sold</th><th>Units/month</th><th>Sales Value £</th></tr>
+
+<%
+0.upto products.length-1 do | i |
+%>
+    <tr><td><%=products[i]%></td><td><%=units[i]%></td><td><%=units[i]/12%></td><td><%=sales[i]%></td></tr>
+<%
+end
+%>
+
+</table>
+
+</td>
+</tr></table>
 
 <br/>
 <br/>
 <br/>
 
-<h2>Top Ten in last 90 days</h2>
+<h2>Top 20 in last 90 days</h2>
 
 <canvas id="sales_by_product90" ></canvas>
 
 <%
-result = Shipment.sales_by_product_top_n(90, 10)
+result = Shipment.sales_by_product_top_n(90, 20)
 products90 = result[0]
 sales90 = result[1]
 %>

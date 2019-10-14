@@ -235,26 +235,33 @@ class Shipment < ApplicationRecord
     year = Date.today().year
     this_year_sales = []
     last_year_sales = []
+    year_before_last_sales = []
+    
     1.upto 12 do | month |
       month_start_this_year = Date.new(year, month, 1)
       month_end_this_year = month_start_this_year.end_of_month
       month_start_last_year = Date.new(year-1, month, 1)
       month_end_last_year = month_start_last_year.end_of_month
+      month_start_year_before_last = Date.new(year-2, month, 1)
+      month_end_year_before_last = month_start_year_before_last.end_of_month
       this_year_sales.append(Shipment.invoiced_sales_profit(month_start_this_year, month_end_this_year)[0])
       last_year_sales.append(Shipment.invoiced_sales_profit(month_start_last_year, month_end_last_year)[0])
+      year_before_last_sales.append(Shipment.invoiced_sales_profit(month_start_year_before_last, month_end_year_before_last)[0])
     end
-    return [this_year_sales, last_year_sales]
+    return [this_year_sales, last_year_sales, year_before_last_sales]
   end
 
   def Shipment.sales_by_product_top_n(days, n)
     product_names = []
     sales = []
+    units = []
     prods = Shipment.sales_by_product(days)[0..n-1]
     prods.each do | prod |
       product_names.append(prod['name'])
       sales.append(prod['sales'])
+      units.append(prod['units'])
     end
-    return [product_names, sales]
+    return [product_names, sales, units]
   end
 
   def Shipment.sales_by_product(days)
@@ -263,8 +270,10 @@ class Shipment < ApplicationRecord
     sales_list = [] # list of {product_name => sales}
     Product.all.each do | p |
       if (p.active)
-        sales = p.units_and_value_shipped(start_date, end_date)[2].to_i
-        sales_list.append({'name' => p.name, 'sales' => sales})
+        units_and_value = p.units_and_value_shipped(start_date, end_date)
+        units = units_and_value[0].to_i
+        sales = units_and_value[1].to_i
+        sales_list.append({'name' => p.name, 'sales' => sales, 'units' => units})
       end
     end
     sales_list = sales_list.sort_by { | product | product['sales'] }.reverse

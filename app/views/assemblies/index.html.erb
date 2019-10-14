@@ -61,6 +61,7 @@
         <td><%= assembly.qty %></td>
         <td><%= assembly.production_cost.round(2) %></td>
         <td><%= link_to 'Delete', assembly, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><a href="#" target="popup" onclick="window.open('/assemblies/stock_label?id=<%=assembly.id%>','name','width=600,height=400')">Label</a></td>
       </tr>
     <% end %>
   </tbody>

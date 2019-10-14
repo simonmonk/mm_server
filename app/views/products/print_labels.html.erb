@@ -1,6 +1,15 @@
+<style>
 
 
+h1 {
+    font-size: 50px;
+}
 
-<%= @product.name %>
+</style>
 
-<%= image_tag @product.barcode.url(:medium) %>
+<h2><%= @product.name %></h2>
+
+<%= image_tag @product.barcode.url(:medium), width: '300'%>
+
+<h2><%= @product.sku%></h2>
+<h1 class="big">Qty: <%= params[:qty]%></h1>

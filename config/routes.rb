@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get 'retailers/retailer_list_website', to: 'retailers#retailer_list_website' # for the MM website 
   get 'prospects/countries.json', to: 'prospects#countries'
   get 'suppliers/suppliers_list.json', to: 'suppliers#suppliers_list'
-  get 'products/:id/print_labels', to: 'products#print_labels'
+  get 'products/:id/print_labels/:qty', to: 'products#print_labels#qty'
 
   
   resources :accounts do
