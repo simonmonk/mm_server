@@ -57,6 +57,7 @@
               <a href="javascript:open_website_tab('<%=supplier.website%>')">Website</a>
               <% end %>
           </td>
+          <td><%=supplier.notes%></td>
         <td><%= link_to 'Delete', supplier, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

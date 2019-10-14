@@ -94,8 +94,8 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
         <td><%= part.purchase_cost.round(3) %></td>
         <td><%= part.usage_summary() %></td>
         <td><%= (part.purchase_cost * part.qty).round() %></td>
-        <td><%= link_to 'Delete', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <td><a href="#" target="popup" onclick="window.open('/parts/stock_label?id=<%=part.id%>','name','width=600,height=400')">Label</a></td>
+        <td><%= link_to 'Delete', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <%
         if (part.part_suppliers and part.part_suppliers.length > 0)
           part.part_suppliers.each do | ps |
