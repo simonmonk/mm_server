@@ -78,12 +78,13 @@ class OrderInsController < ApplicationController
     order_number = params['order_number']
     # go and check INVOICES share iff there's a file there move and rename it into /public/invoices
     share = Setting.get_setting('INVOICE_SHARE')
+    root_dir = Setting.get_setting('ROOT_DIR')
     files = Dir.glob(share + "/*.pdf")
     if (files.length == 0)
       render :json => 'no file to import'
     elsif (files.length == 1)
       file = files[0]
-      dest = Dir.pwd + '/public/invoices/' + order_number + '.pdf'
+      dest = root_dir + '/public/invoices/' + order_number + '.pdf'
       begin
         FileUtils.mv(file, dest)
       rescue Exception => boom
