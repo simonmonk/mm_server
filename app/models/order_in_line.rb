@@ -28,6 +28,15 @@ class OrderInLine < ApplicationRecord
         end
     end
 
+
+    def part_weight_g()
+        if (part and part.weight_g and part.weight_g > 0)
+            return part.weight_g
+        else
+            return nil
+        end
+    end
+
     def purchase_history()
         if (part)
             return part.purchase_history
@@ -54,7 +63,7 @@ class OrderInLine < ApplicationRecord
 
     
     def as_json(options={})
-        super(:methods => [:part, :part_name, :purchase_history, :purchase_cost_today, :part_qty])
+        super(:methods => [:part, :part_name, :part_weight_g, :purchase_history, :purchase_cost_today, :part_qty])
     end  
 
 end

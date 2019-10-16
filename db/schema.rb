@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191004104126) do
+ActiveRecord::Schema.define(version: 20191016085918) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -191,6 +191,7 @@ ActiveRecord::Schema.define(version: 20191004104126) do
     t.decimal  "shipping_cost",       precision: 10, scale: 3
     t.text     "notes"
     t.integer  "part_category_id"
+    t.float    "weight_g"
   end
 
   create_table "product_assemblies", force: :cascade do |t|
@@ -348,6 +349,13 @@ ActiveRecord::Schema.define(version: 20191004104126) do
     t.datetime "updated_at",                           null: false
     t.index ["product_id"], name: "index_sales_on_product_id"
     t.index ["retailer_id"], name: "index_sales_on_retailer_id"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string   "name"
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "shipment_products", force: :cascade do |t|

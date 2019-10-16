@@ -80,7 +80,7 @@ Sort by:
                 <td>Paid Date</td>
                 <td><input v-model="order_in.date_payment_made" type="date" value="" class="form-control" placeholder="Date the order was placed"/></td>
             </tr>
-            <tr>
+            <tr v-if="this.order_in.currency != 'GBP'">
                 <td>Exchange rate (E.g. 1.3)</td>
                 <td><input v-model="order_in.exch_rate" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
@@ -98,6 +98,9 @@ Sort by:
             <tr>
                 <td>Invoice Total Amount</td>
                 <td><input v-model="order_in.invoice_total_ammount" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td><span v-on:click="open_capture_invoice()" class="badge badge-success">Capture Invoice</span></td>
             </tr>
             <tr v-if="this.order_in.currency != 'GBP'">
                 <td>Amount actually paid in £</td>
@@ -145,6 +148,7 @@ Sort by:
               <th>Item</th>
               <th>Ordered</th>
               <th>Received</th>
+              <th>Kg</th>
               <th>Unit</th>
               <th>Total</th>
             </tr>
@@ -153,6 +157,9 @@ Sort by:
                 <td v-if="! is_part()">{{li.description}}</td>
                 <td>{{li.qty}}</td>
                 <td>{{li.qty_in}}</td>
+                <td v-if="is_part() && li.part_weight_g">{{li.part_weight_g * li.qty / 1000.0}}</td>
+                <td v-if="is_part() && li.part_id > 0 && !li.part_weight_g"><span v-on:click="open_in_new_tab('/parts/' + li.part_id + '/edit')">Set</span></td>
+                <td v-else>unknown</td>
                 <td>{{li.price.to_currency(order_in.currency)}}</td>
                 <td>{{(li.price * li.qty).to_currency(order_in.currency)}}</td>
                 <td><span v-on:click="edit_line_in(index)" class="badge badge-success">Edit</span></td>
@@ -254,6 +261,30 @@ Sort by:
   </div>
 </div>
 
+<!-- Capture Invoice Form -->
+<div id="capture_invoice_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2>Capture Invoice for order: {{order_in.order_number}} from: {{order_in.supplier_name}}</h2>
+        <table>
+          <tr>
+            <td>Print as PDF the invoice into the INVOICES shared folder on the MM Server then Click <b>Import</b></td>
+            <td><span v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
+          </tr>
+          <tr><td colspan="2">
+            <embed width="600" height="300" type="application/pdf" v-bind:src="'/invoices/' + order_in.order_number + '.pdf'"></embed>
+          </td></tr>
+          <tr><td>Take Photograph</td></tr>
+          <tr><td>
+            <button type="button" v-on:click="cancel('#capture_invoice_form')" class="btn btn-info">Cancel</button>
+          </td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Add to Stock Form -->
 <div id="add_to_stock_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -335,7 +366,8 @@ window.onload = function () {
           cost_centres: [],
           new_part_currency: 'GBP',
           new_part_price: null,
-          qty_to_add_to_stock: null
+          qty_to_add_to_stock: null,
+          invoice_url: null
         },
         mounted: function() {
           var that;
@@ -558,6 +590,23 @@ window.onload = function () {
             this.parts = [];
             $('#unordered_form').modal('show');
           },
+          open_capture_invoice: function() {
+            $('#capture_invoice_form').modal('show');
+          },
+          request_import_invoice: function() {
+            var that;
+            that = this;
+            $.ajax({
+              type: 'POST',
+              url: '/order_ins/import_invoice',
+              data: {
+                order_number: this.order_in.order_number
+              },
+              success: function(res) {
+                alert("success")
+              }
+            });
+          },
           cancel: function(modal_to_close) {
             $(modal_to_close).modal('hide');
           },
@@ -657,6 +706,10 @@ window.onload = function () {
           },
           is_part: function() {
             return (this.order_in_line.book_keeping_category_id == 1); // better to use code == PAR
+          },
+          open_in_new_tab: function(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
           }
         },
         computed: {

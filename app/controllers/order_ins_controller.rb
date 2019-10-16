@@ -72,6 +72,23 @@ class OrderInsController < ApplicationController
     redirect_to :action => "edit", :id => order_in_id
   end      
 
+  def import_invoice
+    id = params['order_number']
+    # go and check INVOICES share iff there's a file there move and rename it into /public/invoices
+    share = Setting.get_setting('INVOICE_SHARE')
+    files = Dir.glob(share + "/*.pdf")
+    puts "*********"
+    puts files
+    puts "*********"
+    if (files.length == 1)
+      puts "*********"
+      puts files[0]
+      puts "*********"
+      # 2 docs? - paypal invoice and order details (e.g. eBay)? ask Linda.
+      # also send files to googledrive using gdrive
+    end
+  end
+
   def update
       if @order_in.update(order_in_params)
         redirect_to :action => "edit", :id =>@order_in.id

@@ -102,6 +102,8 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def part_params
-      params.require(:part).permit(:name, :part_category_id, :active, :qty, :cost, :currency, :exch_rate, :stock_warning_level, :shipping_cost, :notes)
+      params.require(:part).permit(:name, :part_category_id, :active, :qty, :cost, 
+                :currency, :exch_rate, :stock_warning_level, :shipping_cost, :notes,
+                :weight_g)
     end
 end
