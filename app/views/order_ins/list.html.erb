@@ -277,7 +277,7 @@ Sort by:
           <tr><td colspan="2">
             <iframe id="invoice_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/invoices/' + order_in.order_number + '.pdf?random=' + Date.now"></iframe>
           </td></tr>
-          <tr><td>Take Photograph</td></tr>
+          <tr><td>{{import_invoice_message}}</td></tr>
           <tr><td>
             <button type="button" v-on:click="cancel('#capture_invoice_form')" class="btn btn-info">Cancel</button>
           </td></tr>
@@ -369,7 +369,8 @@ window.onload = function () {
           new_part_currency: 'GBP',
           new_part_price: null,
           qty_to_add_to_stock: null,
-          invoice_url: null
+          invoice_url: null,
+          import_invoice_message: '-'
         },
         mounted: function() {
           var that;
@@ -529,7 +530,7 @@ window.onload = function () {
                 },
                 success: function(res) {
                   that.order_in = res;
-                }
+                },
               });
             }
           },
@@ -604,9 +605,10 @@ window.onload = function () {
               data: {
                 order_number: this.order_in.order_number
               },
-              success: function(res) {
-                document.getElementById('invoice_iframe').contentDocument.location.reload()
-              }
+              complete: function(res) {
+                that.import_invoice_message = res.responseText;
+                document.getElementById('invoice_iframe').contentDocument.location.reload();
+              },
             });
           },
           cancel: function(modal_to_close) {
