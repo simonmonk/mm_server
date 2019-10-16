@@ -87,7 +87,7 @@ class OrderInsController < ApplicationController
       begin
         FileUtils.mv(file, dest)
       rescue Exception => boom
-        return render :json => 'couldnt move file' + boom
+        return render :json => 'couldnt move file' + boom.to_s
       end
       render :json => 'ok'
       # also send files to googledrive using gdrive
