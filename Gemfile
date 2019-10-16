@@ -74,4 +74,3 @@ gem 'oauth2'
 gem 'rails_db', '2.0.4'
 
 gem 'barby'
-gem 'pdfkit'

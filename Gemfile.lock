@@ -140,7 +140,6 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
-    pdfkit (0.8.4.1)
     peddler (2.0.4)
       excon (>= 0.50.0)
       jeff (~> 2.0)
@@ -260,7 +259,6 @@ DEPENDENCIES
   listen (~> 3.0.5)
   oauth2
   paperclip (~> 6.0.0)
-  pdfkit
   peddler
   puma (~> 3.0)
   rails (~> 5.0.2)
