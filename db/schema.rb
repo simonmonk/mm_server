@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191016085918) do
+ActiveRecord::Schema.define(version: 20191018104108) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -23,13 +23,14 @@ ActiveRecord::Schema.define(version: 20191016085918) do
     t.date     "adjustment_date"
     t.decimal  "value"
     t.string   "adjustment_type"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.string   "organisation"
     t.string   "description"
     t.decimal  "vat_value",       precision: 10, scale: 3
     t.string   "vat_action"
     t.string   "tax_region"
+    t.boolean  "is_checked",                               default: false
   end
 
   create_table "assemblies", force: :cascade do |t|
@@ -108,9 +109,10 @@ ActiveRecord::Schema.define(version: 20191016085918) do
     t.boolean  "is_mileage"
     t.integer  "miles"
     t.float    "mileage_rate"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "cost_centre_id"
+    t.boolean  "is_checked",      default: false
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -140,8 +142,8 @@ ActiveRecord::Schema.define(version: 20191016085918) do
 
   create_table "order_ins", force: :cascade do |t|
     t.boolean  "open"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
     t.date     "placed_date"
     t.integer  "supplier_id"
     t.text     "notes"
@@ -159,6 +161,7 @@ ActiveRecord::Schema.define(version: 20191016085918) do
     t.decimal  "actually_paid_gbp",     precision: 10, scale: 3
     t.string   "vat_action"
     t.boolean  "is_service"
+    t.boolean  "is_checked",                                     default: false
   end
 
   create_table "part_categories", force: :cascade do |t|
@@ -373,8 +376,8 @@ ActiveRecord::Schema.define(version: 20191016085918) do
     t.integer  "retailer_id"
     t.date     "dispatched"
     t.text     "notes"
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.datetime "created_at",                                                               null: false
+    t.datetime "updated_at",                                                               null: false
     t.boolean  "stock_subtracted"
     t.string   "retailer_shipment_id"
     t.date     "date_order_received"
@@ -403,6 +406,7 @@ ActiveRecord::Schema.define(version: 20191016085918) do
     t.decimal  "depth_cm",                        precision: 10, scale: 3
     t.string   "tracking_info"
     t.string   "vat_action"
+    t.boolean  "is_checked",                                               default: false
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

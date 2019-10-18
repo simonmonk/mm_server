@@ -76,6 +76,12 @@ class OrderIn < ApplicationRecord
     return summary
   end
 
+  def has_proof_uploaded()
+    root_dir = Setting.get_setting('ROOT_DIR')
+    file = Dir.glob(root_dir + '/public/invoices/' + order_number + '.pdf')
+    return (file.length == 1)
+  end
+
 
 # OrderIns need to be expanded by orderInLines of a particular accounting category
 # Actually for VAT they don't but for accounts spreadsheet generation, they will.
@@ -273,7 +279,7 @@ class OrderIn < ApplicationRecord
   end
     
   def as_json(options={})
-    super(:methods => [:supplier, :order_in_lines, :supplier_name, :order_number, :summary, :is_not_ordered, :is_ordered_not_received, :is_received ])
+    super(:methods => [:supplier, :order_in_lines, :supplier_name, :order_number, :summary, :is_not_ordered, :is_ordered_not_received, :is_received, :has_proof_uploaded ])
   end  
 
 end

@@ -1,15 +1,12 @@
 Critical BUGS
 ==============
 
+x Only enable Invoice uploading once order is saved else no order_number
+
 Deducting stock at shipment seems to be deducting stock twice and then giving error message saying not enough stock in 
 the Transaction log.
 Can't replicate.
 
-
-Some parts currency (E.g. PCBWay) have changed from $ to £ but the amount is correct for $. Is this a problem with the code when the option
-to update the price of a part based on an order is used? Replicate this in the test system and fix.
-
-Shipping to Amazon - put the code back in to pull over an order. (may justr be a button)
 
 
 MM Server Backlog
@@ -21,6 +18,42 @@ $ bin/rails generate migration AddStateToRetailerAddreses
 $ rails generate scaffold Region name:string
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
+
+
+Massive Refactoring
+--------------------
+* Rename out of the way all the Non-view redundant stuff
+* Remove all the stuff on:
+-- the alerts on the front page.
+-- stock level warnings - maybe should just be on products not on parts and assemblies (discuss with Linda)
+
+
+
+
+Bookkeeping view
+-----------------
+
+Base on VAT page and show icon for uploaded supporting file - allow file association here
+
+DONE - Add a flag to all kinds of bookeeping transaction 'is_checked' - means its finalized and good to go.
+DONE - Generate a controller for 'bookkeeping'
+DONE - Add a has_proof_uploaded method to order_ins that searches 'public/invoices' dir
+Add a has_proof_uploaded to expenses
+Add a has_proof_uploaded to adjustments
+
+
+
+I don't think we need specialised components - because the view from the BookKeeping view will be different - simpler and only concerned with auditability.
+
+
+
+General
+--------
+
+Shipping to Amazon - put the code back in to pull over an order. (may just be a button)
+
+There needs to be a way to record failures - E.g. you make 100 RGB LEDs but 10 didn't work. Put on the deduct stock page for assemblies - shouldn't need for parts.
+
 
 
 
