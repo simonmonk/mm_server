@@ -29,16 +29,57 @@ Massive Refactoring
 
 
 
-
-Bookkeeping view
+Bookkeeping 
 -----------------
+
+Where do wages payments get recorded? Or aren't they because its mostly about VAT ATM. - purchase to indidual
+
+Supporting Docs
+--
+/public/purchasing_invoices
+/public/sales_invoices
+/public/expense_receipts
+/public/adjustment_paperwork
+
+and get gdrived into folders of same name on shared drive
+
+Adjustment
+--
+ is a bit crap because it models:
+* transfers - from one account to another 
+(change to drop-downs and provide migration script to be called from console ]
+to find all and link from acc and to acc). Also type (transfer etc) should be from drop-down with switched UI.
+* Overpayment / Underpayment - by our customers to use
+Statement comes from Amazon and gets split into 3 adjustments:
+* Actual Income from Amazon - uk income into current account, US into world first as dollars, EU into world first as euros
+ and is sales for period - fees. But some may be held back.
+* Reported Income from Amazon - income amount from actual income from Amazon.
+* Amazon fees - the fees part from the statement
+
+* HMRC Adjustment - money in or out of current E.g. VAT repayment (because can't do it as a purchase, as you would with a Tax bill)
+* Ebay sale - selling off crap (one off etc - prob better just to give away)
+
+
+Shipment
+--
+Needs a account money received into, add to reconcile form.
+
+
+Expenses
+--
+View needs usual sorting and filtering options
+
+
+
+Bookkepeping view
+--
 
 Base on VAT page and show icon for uploaded supporting file - allow file association here
 
 DONE - Add a flag to all kinds of bookeeping transaction 'is_checked' - means its finalized and good to go.
 DONE - Generate a controller for 'bookkeeping'
 DONE - Add a has_proof_uploaded method to order_ins that searches 'public/invoices' dir
-Add a has_proof_uploaded to expenses
+Add a has_proof_uploaded to expenses (Camera option)
 Add a has_proof_uploaded to adjustments
 
 

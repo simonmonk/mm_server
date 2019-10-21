@@ -86,43 +86,84 @@ summary = result[1]
 <% 
     currency_symbol = '£' # all transactions in £
 
-    adjustment_summary = [0, 0, 0] # without, vat, with
-    purchases_from_current = [0, 0, 0]
-    purchases_from_cc = [0, 0, 0]
-    purchases_from_paypal = [0, 0, 0]
-    purchases_from_world_first = [0, 0, 0]
-    
+    # - this set redundant
+    # adjustment_summary = [0, 0, 0] # without, vat, with
+    # purchases_from_current = [0, 0, 0]
+    # purchases_from_cc = [0, 0, 0]
+    # purchases_from_paypal = [0, 0, 0]
+    # purchases_from_world_first = [0, 0, 0]
+
+    cur_money_in_total = 0
+    cur_money_out_total = 0
+    cc_money_in_total = 0
+    cc_money_out_total = 0
+    ppl_money_in_total = 0
+    ppl_money_out_total = 0    
+    wf_money_in_total = 0
+    wf_money_out_total = 0   
+
 
     transactions.each do | transaction | 
     # currency_symbol = Currency.currency_symbol(transaction.currency)
-        if (transaction.is_adjustment)
-            adjustment_summary[0] += transaction.without_vat
-            adjustment_summary[1] += transaction.vat
-            adjustment_summary[2] += transaction.with_vat
-        end
-        if (transaction.is_order_in) # purchases
-            if (transaction.account.code == 'CUR')
-                purchases_from_current[0] += transaction.without_vat
-                purchases_from_current[1] += transaction.vat
-                purchases_from_current[2] += transaction.with_vat
-            end
-            if (transaction.account.code == 'CC')
-                purchases_from_cc[0] += transaction.without_vat
-                purchases_from_cc[1] += transaction.vat
-                purchases_from_cc[2] += transaction.with_vat
-            end
-            if (transaction.account.code == 'PPL')
-                purchases_from_paypal[0] += transaction.without_vat
-                purchases_from_paypal[1] += transaction.vat
-                purchases_from_paypal[2] += transaction.with_vat
-            end
-            if (transaction.account.code == 'WF')
-                purchases_from_world_first[0] += transaction.without_vat
-                purchases_from_world_first[1] += transaction.vat
-                purchases_from_world_first[2] += transaction.with_vat
-            end
-            
-        end
+        # if (transaction.is_adjustment)
+        #     if (transaction.account.code == 'CUR')
+        #         if (transaction.with_vat > 0)
+        #             cur_money_in_total += transaction.with_vat
+        #         else
+        #             cur_money_out_total += transaction.with_vat
+        #         end
+        #     end
+        #     if (transaction.account.code == 'CC')
+        #         if (transaction.with_vat > 0)
+        #             cc_money_in_total += transaction.with_vat
+        #         else
+        #             cc_money_out_total += transaction.with_vat
+        #         end
+        #     end
+        #     if (transaction.account.code == 'PPL')
+        #         if (transaction.with_vat > 0)
+        #             ppl_money_in_total += transaction.with_vat
+        #         else
+        #             ppl_money_out_total += transaction.with_vat
+        #         end
+        #     end
+        #     if (transaction.account.code == 'WF')
+        #         if (transaction.with_vat > 0)
+        #             wf_money_in_total += transaction.with_vat
+        #         else
+        #             wf_money_out_total += transaction.with_vat
+        #         end
+        #     end
+        # end
+        # if (transaction.is_order_in) # purchases
+        #     if (transaction.account.code == 'CUR')
+        #         cur_money_out_total += transaction.with_vat
+        #     end
+        #     if (transaction.account.code == 'CC')
+        #         cc_money_out_total += transaction.with_vat
+        #     end
+        #     if (transaction.account.code == 'PPL')
+        #         ppl_money_out_total += transaction.with_vat
+        #     end
+        #     if (transaction.account.code == 'WF')
+        #         wf_money_out_total += transaction.with_vat
+        #     end
+        # end
+        # if (transaction.is_shipment) # sales
+        #     # THIS IS WRONG - WE NEED TO RECORD ACCOUNT WHEN WE RECONCILE A SHIPMENT
+        #     if (transaction.account.code == 'CUR')
+        #         cur_money_in_total += transaction.with_vat
+        #     end
+        #     if (transaction.account.code == 'CC')
+        #         cc_money_in_total += transaction.with_vat
+        #     end
+        #     if (transaction.account.code == 'PPL')
+        #         ppl_money_in_total += transaction.with_vat
+        #     end
+        #     if (transaction.account.code == 'WF')
+        #         wf_money_in_total += transaction.with_vat
+        #     end
+        # end
             
 %>
 
@@ -174,39 +215,33 @@ summary = result[1]
 <table>
 <tr>
     <th></th>
-    <th>Without VAT</th>
-    <th>VAT</th>
-    <th>Total</th>
-</tr>
-<tr>
-    <td>Adjustments</td>
-    <td class="money"><%=number_to_currency(adjustment_summary[0], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(adjustment_summary[1], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(adjustment_summary[2], unit: '£', separator: ".", delimiter: ",")%></td>
-</tr>    
+    <th>Money In</th>
+    <th>Money Out</th>
+    <th>Net</th>
+</tr> 
 <tr>
     <td>Current Ac</td>
-    <td class="money"><%=number_to_currency(purchases_from_current[0], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_current[1], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_current[2], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(cur_money_in_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(cur_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(cur_money_in_total - cur_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
 </tr>    
 <tr>
     <td>Credit Card</td>
-    <td class="money"><%=number_to_currency(purchases_from_cc[0], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_cc[1], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_cc[2], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(cc_money_in_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(cc_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(cc_money_in_total - cc_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
 </tr>    
 <tr>
     <td>Paypal</td>
-    <td class="money"><%=number_to_currency(purchases_from_paypal[0], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_paypal[1], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_paypal[2], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(ppl_money_in_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(ppl_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(ppl_money_in_total - ppl_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
 </tr>    
 <tr>
     <td>World First</td>
-    <td class="money"><%=number_to_currency(purchases_from_world_first[0], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_world_first[1], unit: '£', separator: ".", delimiter: ",")%></td>
-    <td class="money"><%=number_to_currency(purchases_from_world_first[2], unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(wf_money_in_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(wf_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td class="money"><%=number_to_currency(wf_money_in_total - wf_money_out_total, unit: '£', separator: ".", delimiter: ",")%></td>
 </tr>    
 
 </table>

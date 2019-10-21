@@ -84,14 +84,24 @@ class OrderInsController < ApplicationController
       render :json => 'no file to import'
     elsif (files.length == 1)
       file = files[0]
-      dest = root_dir + '/public/invoices/' + order_number + '.pdf'
+      dest_file_name = order_number.to_s + '.pdf'
+      dest = root_dir + '/public/purchasing_invoices/' + dest_file_name
       begin
         FileUtils.mv(file, dest)
       rescue Exception => boom
         return render :json => 'couldnt move file' + boom.to_s
       end
-      render :json => 'ok'
       # also send files to googledrive using gdrive
+      puts "********** HERE"
+      guid = Rails.application.secrets.PURCHASING_INVOICE_SHARE_GUID
+      begin
+        command = '/home/si/gdrive upload --parent ' + guid + ' ' + dest
+        puts "******* command=" + command
+        puts system(command)
+      rescue Exception => boom
+        return render :json => 'couldnt upload to Google Drive: ' + boom.to_s
+      end
+      render :json => 'ok'
     else
       render :json => 'no file or multiple files'
     end

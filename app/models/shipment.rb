@@ -142,6 +142,10 @@ class Shipment < ApplicationRecord
     return false
   end
 
+  def is_shipment()
+    return true
+  end
+
 
   # shipments are always invoiced in pounds (apart from Eduporium)
 

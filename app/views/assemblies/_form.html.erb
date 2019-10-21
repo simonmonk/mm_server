@@ -18,14 +18,14 @@ function delete_part(assembly_part_id) {
     }
 }    
     
-function deduct(qty) {
+function deduct(qty, qty_fails) {
     n_max = <%= assembly.possible_makes %>
     if (qty > n_max) {
         alert("You only have parts for a maximum of " + n_max)
     }
     else {
-        if (confirm("Are you sure?")) {
-            document.location = "/assemblies/deduct_stock?assembly_id=<%= assembly.id %>&amp;qty="+qty
+        if (confirm("This will add " + (qty - qty_fails) + " assemblies to stock, and deduct parts for " + qty + " makings. Are you sure?")) {
+            document.location = "/assemblies/deduct_stock?assembly_id=<%= assembly.id %>&amp;qty="+qty+"&amp;qty_fails="+qty_fails
         }
     }
         
@@ -75,8 +75,8 @@ function deduct(qty) {
         <p>The manufacturing cost of this assembly is £ <%= assembly.production_cost.round(2) %></p>
         <p>You have enough parts to make: <%= assembly.possible_makes %> of this assembly.</p>
             <p>Deduct <input id="n" type="number"/> sets of the parts used in this assembly from stock.</p>
-            <p>Failures in this batch NOT IMPLEMENTED YET !!!!!! <input id="n_fails" type="number"/>.</p>
-            <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value, document.getElementById('n').value)"/></p>
+            <p>Failures in this batch <input id="n_fails" type="number"/>.</p>
+            <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value, document.getElementById('n_fails').value)"/></p>
     </td>
 </tr></table>
 <hr/>

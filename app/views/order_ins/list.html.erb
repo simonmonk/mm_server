@@ -276,7 +276,7 @@ Sort by:
             <td><span v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
           </tr>
           <tr><td colspan="2">
-            <iframe id="invoice_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/invoices/' + order_in.order_number + '.pdf?random=' + Date.now"></iframe>
+            <iframe id="invoice_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/purchasing_invoices/' + order_in.order_number + '.pdf?random=' + Date.now"></iframe>
           </td></tr>
           <tr><td>{{import_invoice_message}}</td></tr>
           <tr><td>

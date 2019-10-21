@@ -55,6 +55,10 @@ class OrderIn < ApplicationRecord
     return true
   end
 
+  def is_shipment()
+    return false
+  end
+
   # accounting date on accrual basis (order placed not necessarily paid) for polymorphism
   def accrual_date()
     return placed_date
@@ -109,8 +113,6 @@ class OrderIn < ApplicationRecord
       if (actually_paid_gbp)
         return actually_paid_gbp
       else
-        puts("*************")
-        puts(as_json())
         return 0
       end
     else
