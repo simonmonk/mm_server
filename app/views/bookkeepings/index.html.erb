@@ -1,0 +1,96 @@
+<h1>Bookkeeping</h1>
+
+<div id="app">
+
+<div>
+
+
+<span>
+
+From Date: <input v-model="from_date" type="date" value="" class="form-control" placeholder="First day of period"/>
+To Date: <input v-model="to_date" type="date" value="" class="form-control" placeholder="Last day of period"/>
+
+</span>
+
+(XXXX entries)
+<span>
+
+</span>
+
+</div>
+
+
+
+<!-- Transactions Table -->
+<table>
+<tr>
+    <th/>
+    <th/>
+    <th/>
+    <th colspan="3">Income</th>
+    <th colspan="3">Expenditure</th>
+</tr>
+<tr>
+    <th>Date</th>
+    <th>Organisation</th>
+    <th>Category</th>
+    <th>Description</th>
+    <th>Without VAT</th>
+    <th>VAT</th>
+    <th>Total</th>
+    <th>Without VAT</th>
+    <th>VAT</th>
+    <th>Total</th>
+    <hh>VAT Action></th>
+</tr>
+<tr v-for="(transaction, index) in filtered_results">
+
+</tr>
+</table>
+
+
+</div>
+
+<script>
+
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+            from_date: null,
+            to_date: null,
+            transactions: []
+        },
+        mounted: function() {
+          var that;
+          that = this;
+          this.load_transactions();
+        },
+        methods: {
+          load_transactions: function() { 
+            var that;
+            that = this;
+            $.ajax({
+              url: '/bookkeepings/transactions.json?from_date=' + this.from_date + '&to_date=' + this.to_date,
+              success: function(res) {
+                that.transcations = res;
+                if (callback) {
+                  callback()
+                }
+              }
+            });
+          },
+          
+        },
+        computed: {
+        }
+    })
+}
+
+</script>
+
+
+
+
+

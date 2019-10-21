@@ -30,10 +30,10 @@ class Part < ApplicationRecord
     
     def purchase_cost
         # exhange rate at time of purchase
-        if (self.active && self.cost)
+        if (self.active and self.cost)
             if (self.currency == "GBP")
                 return self.cost
-            elsif (self.exch_rate)
+            elsif (self.exch_rate and self exch_rate > 0)
                 return self.cost / self.exch_rate
             end
         end

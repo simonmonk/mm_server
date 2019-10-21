@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :part_categories
   resources :transactions
   resources :product_retailers
-  resources :bookkeeping
+  resources :bookkeepings
   
   get '/sales_uk/', to: 'welcome#sales_uk'
   get '/sales_us/', to: 'welcome#sales_us'
@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   get 'prospects/countries.json', to: 'prospects#countries'
   get 'suppliers/suppliers_list.json', to: 'suppliers#suppliers_list'
   get 'products/:id/print_labels/:qty', to: 'products#print_labels#qty'
-
+  get 'bookkeepings/transactions', to: 'bookkeepings#transactions'
   
   resources :accounts do
     collection do
@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       post :submit_vat_return
     end
   end
+  
 
   resources :parts do
     collection do

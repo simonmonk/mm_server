@@ -110,6 +110,8 @@ class AccountsController < ApplicationController
     puts response.body
   end
 
+
+
   # end of JSON interface to Vue UI
 
   # POST /accounts

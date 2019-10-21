@@ -1,2 +1,0 @@
-class BookkeepingController < ApplicationController
-end
