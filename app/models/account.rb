@@ -94,7 +94,7 @@ class Account < ApplicationRecord
             vatReclaimedCurrPeriod: b4_vatReclaimedCurrPeriod,
             netVatDue: b5_netVatDue,
             totalValueSalesExVAT: b6_totalValueSalesExVAT.to_i,
-            totalValuePurchasesExVAT: b7_totalValuePurchasesExVAT.to_i,
+            totalValuePurchasesExVAT: b7_totalValuePurchasesExVAT,
             totalValueGoodsSuppliedExVAT: b8_totalValueGoodsSuppliedExVAT.to_i,
             totalAcquisitionsExVAT: b9_totalAcquisitionsExVAT.to_i,
             finalised: true

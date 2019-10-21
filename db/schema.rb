@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191018104108) do
+ActiveRecord::Schema.define(version: 20191021114732) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -407,6 +407,7 @@ ActiveRecord::Schema.define(version: 20191018104108) do
     t.string   "tracking_info"
     t.string   "vat_action"
     t.boolean  "is_checked",                                               default: false
+    t.integer  "account_id",                                               default: 1
     t.index ["retailer_id"], name: "index_shipments_on_retailer_id"
   end
 

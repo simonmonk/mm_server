@@ -3,6 +3,7 @@ Critical BUGS
 
 x Only enable Invoice uploading once order is saved else no order_number
 
+
 Deducting stock at shipment seems to be deducting stock twice and then giving error message saying not enough stock in 
 the Transaction log.
 Can't replicate.
@@ -36,9 +37,9 @@ Where do wages payments get recorded? Or aren't they because its mostly about VA
 
 Supporting Docs
 --
-/public/purchasing_invoices
-/public/sales_invoices
-/public/expense_receipts
+DONE /public/purchasing_invoices
+DONT REALLY NEED SINCE THESE ARE GENERATED FROM DATQA /public/sales_invoices
+/public/expense_receipts - MOST USE FROM CAMERA
 /public/adjustment_paperwork
 
 and get gdrived into folders of same name on shared drive
@@ -62,12 +63,14 @@ Statement comes from Amazon and gets split into 3 adjustments:
 
 Shipment
 --
-Needs a account money received into, add to reconcile form.
+DONE: Needs a account money received into, add to reconcile form.
 
 
 Expenses
 --
 View needs usual sorting and filtering options
+Add photo capture of expense_receipts
+
 
 
 

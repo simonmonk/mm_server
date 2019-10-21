@@ -151,6 +151,12 @@ Sort by:
           <tr>
             <td>Discount</td>
             <td>{{shipment.discount}}</td>
+            <td>Account</td>
+            <td>
+              <select v-model="shipment.account_id">
+                <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+              </select>
+            </td>
           </tr>
           <tr>
             <td>Weight (kg)</td>
@@ -347,6 +353,14 @@ Sort by:
             <td>{{shipment.invoice_number}}</td>
           </tr>
           <tr>
+          <td>Account</td>
+          <td>
+              <select v-model="shipment.account_id">
+                <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+              </select>
+          </td>
+      </tr>
+          <tr>
             <td>Payment Received</td>
             <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
           </tr>
@@ -540,8 +554,9 @@ window.onload = function () {
             total_invoice_collected: '',
             discount: '',
             notes: '',
-            shipment_products: []
+            shipment_products: [],
           },
+          accounts: [],
           retailers: [],
           retailer: {},
           shipment_product: { // So UI doesnt crash
@@ -559,6 +574,7 @@ window.onload = function () {
           that = this;
           this.load_shipments(0, function() { that.shipment = that.filtered_results[0];});
           this.load_products();
+          this.load_accounts();
           this.filter_shipments('is_new')
           $.ajax({
               url: '/retailers.json',
@@ -596,6 +612,16 @@ window.onload = function () {
               url: '/products.json',
               success: function(res) {
                 that.products = res;
+              }
+            });
+          },
+          load_accounts: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/accounts.json',
+              success: function(res) {
+                that.accounts = res;
               }
             });
           },
@@ -812,9 +838,10 @@ window.onload = function () {
             });
           },
           reconcile_shipment: function(index) {
-            this.shipment = this.filtered_results[index]
-            this.shipment.date_payment_received = new Date().toISOString().slice(0,10),
-            $('#mod_reconcile').modal('show')
+            this.shipment = this.filtered_results[index];
+            this.shipment.date_payment_received = new Date().toISOString().slice(0,10);
+            this.shipment.total_invoice_collected = this.shipment.total_invoice_amount;
+            $('#mod_reconcile').modal('show');
           },
           ship_shipment: function(index) {
             // works from list or detail views

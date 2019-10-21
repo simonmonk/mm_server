@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :part_categories
   resources :transactions
   resources :product_retailers
+  resources :bookkeeping
   
   get '/sales_uk/', to: 'welcome#sales_uk'
   get '/sales_us/', to: 'welcome#sales_us'
