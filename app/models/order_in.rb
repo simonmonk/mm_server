@@ -82,7 +82,7 @@ class OrderIn < ApplicationRecord
 
   def has_proof_uploaded()
     root_dir = Setting.get_setting('ROOT_DIR')
-    file = Dir.glob(root_dir + '/public/invoices/' + order_number + '.pdf')
+    file = Dir.glob(root_dir + '/public/purchasing_invoices/' + order_number + '.pdf')
     return (file.length == 1)
   end
 
