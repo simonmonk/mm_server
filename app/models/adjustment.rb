@@ -2,7 +2,7 @@ class Adjustment < ApplicationRecord
 
     def Adjustment.types()
         return ['Overpayment', 'Underpayment', 'Transfer', 'Actual Income from Amazon', 'Reported Income from Amazon', 
-                  'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale'] # Add but dont edit!
+                  'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale', 'Reimbursement'] # Add but dont edit!
     end
 
   # for polymorphism using orders_in and shipments
@@ -119,7 +119,7 @@ class Adjustment < ApplicationRecord
   # end
 
   def is_vatable()
-    vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees', 'Ebay Sale', 'Reimbursement'] 
+    vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees', 'Ebay Sale'] 
     return vatable_codes.include?(adjustment_type)
   end
 
