@@ -1,6 +1,10 @@
 Critical BUGS
 ==============
 
+When doing update part price from a received order in dollars, the currency seems to get lost. See last order of RGB LEDs for this.
+
+The sort order for purchases seems to be mad after LInda's added a whole load of new transactions in.
+
 x Only enable Invoice uploading once order is saved else no order_number
 
 

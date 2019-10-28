@@ -1,5 +1,6 @@
 class Shipment < ApplicationRecord
   belongs_to :retailer
+  belongs_to :account
   has_many :shipment_products, :dependent => :destroy
     
   validates :invoice_number, uniqueness: true, if: 'invoice_number.present?'
@@ -39,12 +40,36 @@ class Shipment < ApplicationRecord
     return 'SHIPMENT'
   end
   
+  def accounting_date()
+    return cash_date()
+  end
+
   def accrual_date()
     return date_invoice_sent
   end
 
   def cash_date()
     return date_payment_received
+  end
+
+  def accounts()
+    if (account_id)
+      return account.name
+    else
+      return '?'
+    end
+  end
+
+  def transaction_summary()
+    'Sale to ' + retailer.name
+  end
+
+  def direction()
+    return 'MONEY_IN'
+  end
+
+  def account_ids()
+    return [account.id]
   end
 
   def organisation()
@@ -145,6 +170,8 @@ class Shipment < ApplicationRecord
   def is_shipment()
     return true
   end
+
+
 
 
   # shipments are always invoiced in pounds (apart from Eduporium)
@@ -425,7 +452,9 @@ class Shipment < ApplicationRecord
   end
 
   def as_json(options={})
-    super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer])
+    super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer,
+                        :without_vat, :vat, :with_vat, :accounting_date, :transaction_type, :accounts, :transaction_summary, :direction,
+                        :account_ids])
   end
     
 end

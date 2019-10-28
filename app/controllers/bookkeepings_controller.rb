@@ -5,12 +5,20 @@ class BookkeepingsController < ApplicationController
   # Return json for all the transactions between a certain period
   # where a transaction is a Shipment, OrderIn, Adjustment or Expense
   def transactions
-    from_date = params('from_date')
-    to_date = params('to_date')
+    puts "************ params ***********" + params.to_s
+    from_date = Time.parse(params['from_date'])
+    puts "************ transactions 2***********"
+    to_date = Time.parse(params['to_date'])
     data_summary = Account.generateVATReportData(from_date, to_date)
     data = data_summary[0]
     summary = data_summary[1]
+    puts "************ transactions 3***********"
     render :json => data
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def bookkeeping_params
+    params.require(:bookkeeping).permit(:from_date, :to_date)
   end
 
 end

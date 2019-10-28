@@ -60,12 +60,33 @@ class OrderIn < ApplicationRecord
   end
 
   # accounting date on accrual basis (order placed not necessarily paid) for polymorphism
+  
+  def accounting_date()
+    return cash_date()
+  end
+  
   def accrual_date()
     return placed_date
   end
 
   def cash_date()
     return date_payment_made
+  end
+
+  def accounts()
+    return account.name
+  end
+
+  def transaction_summary()
+    return 'Purchase from ' + supplier.name
+  end
+
+  def direction()
+    return 'MONEY_OUT'
+  end
+
+  def account_ids()
+    return [account.id]
   end
 
   def organisation()
@@ -135,7 +156,6 @@ class OrderIn < ApplicationRecord
         return actually_paid_gbp
       else
         puts("****** Missing *******")
-        puts(as_json())
         return 0
       end
     else
@@ -281,7 +301,9 @@ class OrderIn < ApplicationRecord
   end
     
   def as_json(options={})
-    super(:methods => [:supplier, :order_in_lines, :supplier_name, :order_number, :summary, :is_not_ordered, :is_ordered_not_received, :is_received, :has_proof_uploaded ])
+    super(:methods => [:supplier, :order_in_lines, :supplier_name, :order_number, :summary, :is_not_ordered, :is_ordered_not_received, 
+                        :is_received, :has_proof_uploaded, :without_vat, :vat, :with_vat, :accounting_date, :transaction_type,
+                        :accounts, :transaction_summary, :direction, :account_ids ])
   end  
 
 end

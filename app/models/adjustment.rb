@@ -1,10 +1,30 @@
 class Adjustment < ApplicationRecord
 
     def Adjustment.types()
-        return ['Overpayment', 'Underpayment', 'Transfer', 'Actual Income from Amazon', 'Reported Income from Amazon', 'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale'] # Add but dont edit!
+        return ['Overpayment', 'Underpayment', 'Transfer', 'Actual Income from Amazon', 'Reported Income from Amazon', 
+                  'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale'] # Add but dont edit!
     end
 
   # for polymorphism using orders_in and shipments
+
+  def transaction_summary()
+    'Adjustment ' + adjustment_type
+  end
+
+  def direction()
+    if (adjustment_type == 'Transfer')
+      return 'NEUTRAL'
+    elsif (value > 0)
+      return 'MONEY_IN'
+    else
+      return 'MONEY_OUT'
+    end
+  end
+
+  # TODO - make this use both accounts for transfer etc
+  def account_ids()
+    return [1, 2]
+  end
 
   def transaction_type()
     if (adjustment_type)
@@ -14,12 +34,24 @@ class Adjustment < ApplicationRecord
     end
   end
 
+  def accounting_date()
+    return cash_date()
+  end
+
   def accrual_date()
     return adjustment_date
   end
 
   def cash_date()
     return adjustment_date
+  end
+
+  def accounts()
+    if (adjustment_type == 'Transfer')
+      return 'acc1->acc2'
+    else
+      return 'acc1'
+    end
   end
 
   def category()
@@ -87,7 +119,7 @@ class Adjustment < ApplicationRecord
   # end
 
   def is_vatable()
-    vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees', 'Ebay Sale'] 
+    vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees', 'Ebay Sale', 'Reimbursement'] 
     return vatable_codes.include?(adjustment_type)
   end
 
@@ -97,6 +129,11 @@ class Adjustment < ApplicationRecord
 
   def notes()
     return description
+  end
+
+  def as_json(options={})
+    super(:methods => [ :without_vat, :vat, :with_vat, :accounting_date, :transaction_type, :accounts, :transaction_summary, :direction,
+                      :account_ids])
   end
 
 end

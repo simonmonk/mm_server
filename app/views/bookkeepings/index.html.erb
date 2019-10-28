@@ -1,22 +1,49 @@
+<style>
+
+.NEUTRAL {
+  color: black;
+}
+
+.MONEY_IN {
+  color: green;
+}
+
+.MONEY_OUT {
+  color: red;
+}
+
+</style>
+
+
+
 <h1>Bookkeeping</h1>
 
 <div id="app">
 
 <div>
-
-
 <span>
-
-From Date: <input v-model="from_date" type="date" value="" class="form-control" placeholder="First day of period"/>
-To Date: <input v-model="to_date" type="date" value="" class="form-control" placeholder="Last day of period"/>
-
+<form class="form-inline my-2 my-lg-0">
+<span>From Date: </span><input v-model="from_date" type="date" value="" class="form-control" placeholder="First day of period"/>
+<span>To Date: </span><input v-model="to_date" type="date" value="" class="form-control" placeholder="Last day of period"/>
+<button :disabled="! dates_valid()" type="button" v-on:click="load_transactions()" class="btn btn-info">Load</button>
+</form>
 </span>
+</div>
 
-(XXXX entries)
-<span>
+<div>{{status}}</div>
 
-</span>
+<div>
+<form class="form-inline my-2 my-lg-0">
+<span>Show Transactions for Account: </span>
+<select v-model="filter_by_account">
+  <option v-for="(account, index) in accounts" v-bind:value="account">{{account.name}}</option>
+</select>
+</form>
+</div>
 
+<div v-if="filter_by_account.id != 0">
+<span>Opening Balance</span>
+<input v-model="filter_by_account.balance" type="text" class="form-control" placeholder="Opening balance"/>
 </div>
 
 
@@ -24,66 +51,90 @@ To Date: <input v-model="to_date" type="date" value="" class="form-control" plac
 <!-- Transactions Table -->
 <table>
 <tr>
-    <th/>
-    <th/>
-    <th/>
-    <th colspan="3">Income</th>
-    <th colspan="3">Expenditure</th>
-</tr>
-<tr>
     <th>Date</th>
-    <th>Organisation</th>
-    <th>Category</th>
     <th>Description</th>
+    <th>Accounts</th>
     <th>Without VAT</th>
     <th>VAT</th>
     <th>Total</th>
-    <th>Without VAT</th>
-    <th>VAT</th>
-    <th>Total</th>
-    <hh>VAT Action></th>
+    <th>VAT Action</th>
 </tr>
 <tr v-for="(transaction, index) in filtered_results">
-
+  <td>{{transaction.accounting_date}}</td>
+  <td>{{transaction.transaction_summary}}</td>
+  <td>{{transaction.accounts}}</td>
+  <td v-bind:class="transaction.direction" >{{transaction.without_vat}}</td>
+  <td v-bind:class="transaction.direction" >{{transaction.vat}}</td>
+  <td v-bind:class="transaction.direction" >{{transaction.with_vat}}</td>
+  <td>{{transaction.vat_action}}</td>
 </tr>
 </table>
 
 
 </div>
 
+
+
 <script>
-
-
 window.onload = function () {
     var app = new Vue({
         el: '#app',
         data: {
             from_date: null,
             to_date: null,
-            transactions: []
+            transactions: [],
+            accounts: [],
+            status: '',
+            filter_by_account: null
         },
         mounted: function() {
           var that;
           that = this;
-          this.load_transactions();
+          this.load_accounts();
+          this.from_date = new Date().addDays(-90).toISOString().slice(0,10)
+          this.to_date = new Date().toISOString().slice(0,10)
         },
         methods: {
           load_transactions: function() { 
+            this.status = 'Loading...'
             var that;
             that = this;
             $.ajax({
-              url: '/bookkeepings/transactions.json?from_date=' + this.from_date + '&to_date=' + this.to_date,
+              url: '/bookkeepings/transactions?from_date=' + this.from_date + '&to_date=' + this.to_date,
               success: function(res) {
-                that.transcations = res;
-                if (callback) {
-                  callback()
-                }
+                that.status = "Loaded " + res.length + " transactions";
+                that.transactions = res;
               }
             });
           },
-          
+          load_accounts: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/accounts.json',
+              success: function(res) {
+                that.accounts = res;
+                that.accounts.unshift({id: 0, name: 'ALL'});
+                that.filter_by_account = that.accounts[0];
+              }
+            });
+          },
+          dates_valid: function() {
+            return (this.from_date && this.to_date && this.from_date < this.to_date);
+          }
         },
         computed: {
+          filtered_results: function() {
+            var that;
+            that = this;
+            let filtered = this.transactions.filter(function (transaction) {
+              if (that.filter_by_account.id == 0) {
+                return true; // ALL accounts
+              }
+              return (transaction.account_ids.includes(that.filter_by_account.id));
+            });
+            return filtered;
+          }
         }
     })
 }
