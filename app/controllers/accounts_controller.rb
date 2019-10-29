@@ -90,7 +90,17 @@ class AccountsController < ApplicationController
   # send VAT return data to the Node server, from where it can be submitted.
   def submit_vat_return
     vat_return = params[:vat_return]
-    vat_return[:vatDueSales] = vat_return[:vatDueSales].to_f
+    # MTD API very fussy must be a string with 2dps for boxes 1 to 5
+    # for the other boxes pence field must be 00
+    vat_return[:vatDueSales] = '%.2f' % vat_return[:vatDueSales].to_f
+    vat_return[:vatDueAcquisitions] = '%.2f' % vat_return[:vatDueAcquisitions].to_f
+    vat_return[:totalVatDue] = '%.2f' % vat_return[:totalVatDue].to_f
+    vat_return[:vatReclaimedCurrPeriod] = '%.2f' % vat_return[:vatReclaimedCurrPeriod].to_f
+    vat_return[:netVatDue] = '%.2f' % vat_return[:netVatDue].to_f
+    vat_return[:totalValueSalesExVAT] = '%.2f' % vat_return[:totalValueSalesExVAT].to_f
+    vat_return[:totalValuePurchasesExVAT] = '%.2f' % vat_return[:totalValuePurchasesExVAT].to_f
+    vat_return[:totalValueGoodsSuppliedExVAT] = '%.2f' % vat_return[:totalValueGoodsSuppliedExVAT].to_f
+    vat_return[:totalAcquisitionsExVAT] = '%.2f' % vat_return[:totalAcquisitionsExVAT].to_f
     puts "**********"
     puts vat_return
     puts "***"
