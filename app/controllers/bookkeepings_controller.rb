@@ -5,14 +5,11 @@ class BookkeepingsController < ApplicationController
   # Return json for all the transactions between a certain period
   # where a transaction is a Shipment, OrderIn, Adjustment or Expense
   def transactions
-    puts "************ params ***********" + params.to_s
     from_date = Time.parse(params['from_date'])
-    puts "************ transactions 2***********"
     to_date = Time.parse(params['to_date'])
     data_summary = Account.generateVATReportData(from_date, to_date)
     data = data_summary[0]
     summary = data_summary[1]
-    puts "************ transactions 3***********"
     render :json => data
   end
 

@@ -1,0 +1,32 @@
+<%= form_for(adjustment_type) do |f| %>
+  <% if adjustment_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(adjustment_type.errors.count, "error") %> prohibited this adjustment_type from being saved:</h2>
+
+      <ul>
+      <% adjustment_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :code %>
+    <%= f.text_field :code %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

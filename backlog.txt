@@ -44,7 +44,7 @@ Supporting Docs
 DONE /public/purchasing_invoices
 DONT REALLY NEED SINCE THESE ARE GENERATED FROM DATQA /public/sales_invoices
 /public/expense_receipts - MOST USE FROM CAMERA
-/public/adjustment_paperwork
+/public/adjustment_paperwork 
 
 and get gdrived into folders of same name on shared drive
 

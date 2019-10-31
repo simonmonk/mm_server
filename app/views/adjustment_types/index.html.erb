@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Adjustment Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @adjustment_types.each do |adjustment_type| %>
+      <tr>
+        <td><%= adjustment_type.code %></td>
+        <td><%= adjustment_type.name %></td>
+        <td><%= adjustment_type.description %></td>
+        <td><%= link_to 'Show', adjustment_type %></td>
+        <td><%= link_to 'Edit', edit_adjustment_type_path(adjustment_type) %></td>
+        <td><%= link_to 'Destroy', adjustment_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Adjustment Type', new_adjustment_type_path %>

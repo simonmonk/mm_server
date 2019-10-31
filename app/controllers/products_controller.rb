@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :catalog, :print_labels]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :catalog, :print_labels, :stock_label]
     skip_before_filter :verify_authenticity_token 
 
   # GET /products
@@ -51,6 +51,10 @@ class ProductsController < ApplicationController
   end
 
   def sales_report
+  end
+
+  def stock_label
+    render :layout => false
   end
 
   def product_id_from_barcode

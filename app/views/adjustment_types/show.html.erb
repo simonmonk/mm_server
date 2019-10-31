@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @adjustment_type.code %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @adjustment_type.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @adjustment_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_adjustment_type_path(@adjustment_type) %> |
+<%= link_to 'Back', adjustment_types_path %>

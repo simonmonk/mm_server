@@ -38,7 +38,7 @@ class Account < ApplicationRecord
         # will need adjustments here too
         transactions = receipts + payments + adjustments
         transactions = transactions.sort do | a, b |
-            a.cash_date <=> b.cash_date
+            a.accounting_date <=> b.accounting_date
         end
         b1_vatDueSales = 0 # [1]VAT due on sales and other outputs.
         b2_vatDueAcquisitions = 0 # [2]NEGATIVE. VAT due on acquisitions from other EC Member States. 

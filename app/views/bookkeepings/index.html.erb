@@ -20,30 +20,104 @@
 
 <div id="app">
 
+<!-- Time selection and loading form -->
 <div>
 <span>
 <form class="form-inline my-2 my-lg-0">
 <span>From Date: </span><input v-model="from_date" type="date" value="" class="form-control" placeholder="First day of period"/>
 <span>To Date: </span><input v-model="to_date" type="date" value="" class="form-control" placeholder="Last day of period"/>
-<button :disabled="! dates_valid()" type="button" v-on:click="load_transactions()" class="btn btn-info">Load</button>
+<button :disabled="! dates_valid()" type="button" v-on:click="load_transactions()" class="btn btn-info">Load</button> <span>{{status}}</span>
 </form>
 </span>
 </div>
 
-<div>{{status}}</div>
 
 <div>
 <form class="form-inline my-2 my-lg-0">
-<span>Show Transactions for Account: </span>
-<select v-model="filter_by_account">
-  <option v-for="(account, index) in accounts" v-bind:value="account">{{account.name}}</option>
-</select>
+  <span>Show Transactions for Account: </span>
+  <select v-model="filter_by_account">
+    <option v-for="(account, index) in accounts" v-bind:value="account">{{account.name}}</option>
+  </select>
+  <span>Show: </span>
+  <input type="checkbox" v-model="show_purchases">Purchases</input>
+  <input type="checkbox" v-model="show_sales">Sales</input>
+  <input type="checkbox" v-model="show_adjustments">Ajustments</input>
+  <input type="checkbox" v-model="show_expenses">Expenses</input>
 </form>
+</div>
+
+<div>
+<button :disabled="transactions.length == 0" type="button" v-on:click="open_adjustment_form_new()" class="badge badge-info">Create Adjustment</button>
 </div>
 
 <div v-if="filter_by_account.id != 0">
 <span>Opening Balance</span>
 <input v-model="filter_by_account.balance" type="text" class="form-control" placeholder="Opening balance"/>
+</div>
+
+
+<!-- Edit Adjustment Form  -->
+<div id="edit_adjustment_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Adjustment {{adjustment.name}}</h1>
+        <table>
+          <tr>
+            <td>Date</td>
+            <td><input v-model="adjustment.adjustment_date" type="date" value="" class="form-control" placeholder="Date of adjustment"/></td>
+          </tr>
+          <tr>
+            <td>Adjustment Type</td>
+            <td>
+              <select v-model="adjustment.adjustment_type_id">
+                <option v-for="(adjustment_type, index) in adjustment_types" v-bind:value="adjustment_type.id">{{adjustment_type.name}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr v-if="adjustment.adjustment_type_id != 3">
+            <td>Account</td>
+            <td>
+              <select v-model="adjustment.from_account_id">
+                <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr v-if="adjustment.adjustment_type_id == 3">
+            <td>From Account</td>
+            <td>
+              <select v-model="adjustment.from_account_id">
+                <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr v-if="adjustment.adjustment_type_id == 3">
+            <td>To Account</td>
+            <td>
+              <select v-model="adjustment.to_account_id">
+                <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Amount (+ for money in)</td>
+            <td><input v-model="adjustment.value" type="text" value="" class="form-control" placeholder=""/></td>
+          </tr>
+          <tr v-if="[1, 2, 4, 5, 6, 8, 9].contains(adjustment.adjustment_type_id)">
+            <td>VAT Amount</td>
+            <td><input v-model="adjustment.vat_value" type="text" value="" class="form-control" placeholder=""/></td>
+          </tr>
+          <tr v-if="adjustment.adjustment_type_id == 3 && adjustment.from_account_id == adjustment.to_account_id">
+            <td colspan="2"><span class="warning">From and to accounts must be different</td>
+          </tr>
+          <tr><td>
+            <button type="button" v-on:click="cancel('#edit_adjustment_form')" class="btn btn-info">Cancel</button>
+            <button type="button" v-on:click="save_adjustment()" class="btn btn-success">Save</button>
+          </td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -85,13 +159,23 @@ window.onload = function () {
             transactions: [],
             accounts: [],
             status: '',
-            filter_by_account: null
+            filter_by_account: null,
+            show_purchases: true,
+            show_sales: true,
+            show_adjustments: true,
+            show_expenses: true,
+            adjustment_types: [],
+            adjustment: { 
+              id: null, name: '', adjustment_type_id: null, organisation: null, description: '', 
+              value: 0, vat_value: 0, vat_action: '', tax_region: null, is_checked: false,
+              from_account_id: null, to_account_id: null}
         },
         mounted: function() {
           var that;
           that = this;
           this.load_accounts();
-          this.from_date = new Date().addDays(-90).toISOString().slice(0,10)
+          this.load_adjustment_types();
+          this.from_date = new Date().addDays(-30).toISOString().slice(0,10)
           this.to_date = new Date().toISOString().slice(0,10)
         },
         methods: {
@@ -119,8 +203,29 @@ window.onload = function () {
               }
             });
           },
+          load_adjustment_types: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/adjustment_types.json',
+              success: function(res) {
+                that.adjustment_types = res;
+              }
+            });
+          },
           dates_valid: function() {
             return (this.from_date && this.to_date && this.from_date < this.to_date);
+          },
+          cancel: function(modal_to_close) {
+            $(modal_to_close).modal('hide')
+          },
+          open_adjustment_form_new: function() {
+            this.adjustment = { id: null, name: '', adjustment_date: today_as_string(),
+              adjustment_type: null, organisation: null, description: '', 
+              value: 0, vat_value: 0, vat_action: '', tax_region: null, is_checked: false,
+              from_account_id: null, to_account_id: null}
+
+            $('#edit_adjustment_form').modal('show')
           }
         },
         computed: {
@@ -128,10 +233,13 @@ window.onload = function () {
             var that;
             that = this;
             let filtered = this.transactions.filter(function (transaction) {
-              if (that.filter_by_account.id == 0) {
-                return true; // ALL accounts
+              if (transaction.account_ids.includes(that.filter_by_account.id) || that.filter_by_account.id == 0) {
+                if (that.show_purchases && transaction.transaction_type == 'ORDER_IN') {return true;}
+                if (that.show_sales && transaction.transaction_type == 'SHIPMENT') {return true;}
+                if (that.show_adjustments && transaction.transaction_type == 'ADJUSTMENT') {return true;}
+                if (that.show_expenses && transaction.transaction_type == 'EXPENSE') {return true;}
+              return false;
               }
-              return (transaction.account_ids.includes(that.filter_by_account.id));
             });
             return filtered;
           }

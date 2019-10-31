@@ -353,13 +353,13 @@ Sort by:
             <td>{{shipment.invoice_number}}</td>
           </tr>
           <tr>
-          <td>Account</td>
-          <td>
-              <select v-model="shipment.account_id">
-                <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
-              </select>
-          </td>
-      </tr>
+            <td>Account</td>
+            <td>
+                <select v-model="shipment.account_id">
+                  <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+                </select>
+            </td>
+          </tr>
           <tr>
             <td>Payment Received</td>
             <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
@@ -839,7 +839,7 @@ window.onload = function () {
           },
           reconcile_shipment: function(index) {
             this.shipment = this.filtered_results[index];
-            this.shipment.date_payment_received = new Date().toISOString().slice(0,10);
+            this.shipment.date_payment_received = today_as_string();
             this.shipment.total_invoice_collected = this.shipment.total_invoice_amount;
             $('#mod_reconcile').modal('show');
           },

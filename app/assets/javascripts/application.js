@@ -64,3 +64,7 @@ String.prototype.to_currency = function(currency) {
     var formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency, minimumFractionDigits: 2 });
     return formatter.format(parseFloat(this.valueOf()))
 }
+
+today_as_string = function() {
+    return new Date().toISOString().slice(0,10);
+}

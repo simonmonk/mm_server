@@ -107,6 +107,7 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
         <td><%= product.qty %></td>
         <td><%= product.possible_makes %></td>  
         <td><%= product.barcode_value%></td>
+        <td><a href="#" target="popup" onclick="window.open('/products/stock_label?id=<%=product.id%>','name','width=600,height=400')">Label</a></td>
         <td><%= link_to 'Delete', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end end %>

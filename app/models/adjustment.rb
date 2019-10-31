@@ -1,5 +1,7 @@
 class Adjustment < ApplicationRecord
 
+  # belongs_to :adjustment_type // nope cant do this beacuse of migration of string adjustment type to an object.
+
     def Adjustment.types()
         return ['Overpayment', 'Underpayment', 'Transfer', 'Actual Income from Amazon', 'Reported Income from Amazon', 
                   'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale', 'Reimbursement'] # Add but dont edit!
@@ -9,6 +11,10 @@ class Adjustment < ApplicationRecord
 
   def transaction_summary()
     'Adjustment ' + adjustment_type
+  end
+
+  def name()
+    'ADJ-' + id.to_s
   end
 
   def direction()
@@ -27,11 +33,7 @@ class Adjustment < ApplicationRecord
   end
 
   def transaction_type()
-    if (adjustment_type)
-      return adjustment_type
-    else
-      return 'Adjustment'
-    end
+    return 'ADJUSTMENT'
   end
 
   def accounting_date()

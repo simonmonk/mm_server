@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :adjustment_types
   resources :settings
   resources :assembly_categories
   resources :expenses
@@ -71,6 +72,7 @@ Rails.application.routes.draw do
       get :image_links
       get :product_id_from_barcode
       get :print_labels
+      get :stock_label
     end
   end
   resources :assemblies do
