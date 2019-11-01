@@ -151,20 +151,30 @@ class OrderInsController < ApplicationController
     oil.order_code = params[:order_code]
     oil.cost_centre_id = params[:cost_centre_id].to_i
     oil.book_keeping_category_id = params[:book_keeping_category_id]
-    
-    order_in = OrderIn.find(oil.order_in_id)
-
-    puts "***************"
-    puts oil.to_json
     oil.save!
 
-    puts "----------- order_in"
-    puts order_in.order_in_lines.length.to_s
-    puts order_in.order_in_lines.to_json
-    puts "***************"
-    
+    order_in = OrderIn.find(oil.order_in_id)
     render :json => order_in
   end  
+
+
+    # edit an order line to the order_in prob because qty has changed
+    def edit_part_json
+      oil = OrderInLine.find(params[:id].to_i)
+      oil.part_id = params[:part_id].to_i
+      oil.order_in_id = params[:order_in_id].to_i
+      oil.qty = params[:qty].to_i
+      oil.qty_in = params[:qty_in].to_i
+      oil.price = params[:price].to_f
+      oil.description = params[:description]
+      oil.order_code = params[:order_code]
+      oil.cost_centre_id = params[:cost_centre_id].to_i
+      oil.book_keeping_category_id = params[:book_keeping_category_id]
+      oil.save!
+
+      order_in = OrderIn.find(oil.order_in_id)
+      render :json => order_in
+    end  
   
   def delete_line_item
     line_item_id = params[:line_item_id]
@@ -183,6 +193,7 @@ class OrderInsController < ApplicationController
     order = OrderIn.find(order_id)
     part.cost = part_price
     part.currency = part_currency
+    part.exch_rate = order.exch_rate
     part.save!
     render :json => order
   end

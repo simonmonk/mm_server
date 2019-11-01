@@ -103,7 +103,7 @@
             <td>Amount (+ for money in)</td>
             <td><input v-model="adjustment.value" type="text" value="" class="form-control" placeholder=""/></td>
           </tr>
-          <tr v-if="[1, 2, 4, 5, 6, 8, 9].contains(adjustment.adjustment_type_id)">
+          <tr v-if="[1, 2, 4, 5, 6, 8, 9].includes(adjustment.adjustment_type_id)">
             <td>VAT Amount</td>
             <td><input v-model="adjustment.vat_value" type="text" value="" class="form-control" placeholder=""/></td>
           </tr>
@@ -213,6 +213,7 @@ window.onload = function () {
               }
             });
           },
+          // ******** next up add in tax regions **********
           dates_valid: function() {
             return (this.from_date && this.to_date && this.from_date < this.to_date);
           },

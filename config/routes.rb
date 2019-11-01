@@ -121,6 +121,7 @@ Rails.application.routes.draw do
       post :create_order_in
       post :update_order_in
       get :add_part_json
+      get :edit_part_json
       post :rx_part_json
       post :rx_non_part_json
       get :delete_line_item

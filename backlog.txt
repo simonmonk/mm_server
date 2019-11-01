@@ -1,7 +1,7 @@
 Critical BUGS
 ==============
 
-When doing update part price from a received order in dollars, the currency seems to get lost. See last order of RGB LEDs for this.
+FIXED - NOT TESTED. When doing update part price from a received order in dollars, the exchange rate doesnt get set seems to get lost. See last order of RGB LEDs for this.
 
 The sort order for purchases seems to be mad after LInda's added a whole load of new transactions in.
 
@@ -12,6 +12,26 @@ Deducting stock at shipment seems to be deducting stock twice and then giving er
 the Transaction log.
 Can't replicate.
 
+***** Purchase from Mouser, including 1000 100u caps has not added them to stock 
+***** despite being marked as received and the Name column in the line items shows as blank.
+***** Show the purchases for a part on the parts page as something useful; and to help debugging.
+- the order in line has the wrong part_id (245) which is 1 more than the highest part_id. Item 12 in orginal request.
+- whats different about this order?
+-- its mixed, parts and non-parts? Test - nope, doesn't seem to be a problem.
+-- could it be to do with confused action around editing a line item, which creates a new one? - Yes
+when I edited another line item on the list, it did not damage that line item or its duplicate, but did destroy the part_id of a duplicate 
+of the original line_item problem. But after a reload, only the originasl item was damaged.
+
+Try to reproduce from scratch:
+Note - when we create a new order_in the whole list is reloaded - this seems excessive. 
+Could it be to do with an update request hapenning before a load has finished?
+
+seems to be when add one item to stock.
+
+
+
+-- could I just have deleted the part because there were dups? NO - have rep[roduced the problem without doiung this.]
+***** fix live db by re adding line item, marking as rx and then deducting prev addition of 1000 to stock. DONE.
 
 
 MM Server Backlog

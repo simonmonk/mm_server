@@ -335,6 +335,7 @@ Sort by:
   <th>Supplier</th>
   <th>Summary</th>
 </tr>
+<tr v-if="status.length > 0"><td>{{status}}</td></tr>
 <tr v-for="(oi, index) in filtered_results">
     <td v-if="oi.placed_date">{{oi.placed_date}}</td>
     <td v-else>Not ordered yet</td>
@@ -372,7 +373,8 @@ window.onload = function () {
           new_part_price: null,
           qty_to_add_to_stock: null,
           invoice_url: null,
-          import_invoice_message: '-'
+          import_invoice_message: '-',
+          status: ''
         },
         mounted: function() {
           var that;
@@ -388,17 +390,19 @@ window.onload = function () {
           load_order_ins: function(days, callback) { 
             var that;
             that = this;
-            if (days == 0) { // load at least 90 days worth
-              if (this.num_days > 90) {
+            this.status = 'LOADING ....';
+            if (days == 0) { // load at least 30 days worth
+              if (this.num_days > 30) {
                 days = this.num_days;
               }
               else {
-                days = 90;
+                days = 30;
               } 
             }
             $.ajax({
               url: '/order_ins/get_orders_json?days=' + days,
               success: function(res) {
+                that.status = '';
                 that.order_ins = res;
                 if (callback) {
                   callback()
@@ -589,7 +593,8 @@ window.onload = function () {
                 shipping: null, summary: "",
                 supplier: {id: null, name: ""},
                 supplier_id: null, supplier_name: null,
-                vat_info_collected: "N/A", order_number: '' 
+                vat_info_collected: "N/A", order_number: '',
+                placed_date: today_as_string()
             };
             this.order_in_line = {id: null, part_id: null, part: {name: null, cost: 0, purchase_cost_today: 0}, name: '', price: null, qty: null, qty_in: null};
             this.parts = [];
@@ -649,16 +654,18 @@ window.onload = function () {
             $('#add_to_stock_form').modal('show');
           },
           save_line_item: function(modal_to_close) {
+            // works for new and an edit
             var that;
             that = this;
             var modal = modal_to_close;
             this.order_in_line.order_in_id = this.order_in.id;
-            //if (! this.order_in_line.part) {
-            //  this.order_in_line.part_id = null;
-            //}
+            var url = '/order_ins/add_part_json';
+            if (this.order_in_line.id) {
+              url = '/order_ins/edit_part_json';
+            }
             $.ajax({
               type: 'GET',
-              url: '/order_ins/add_part_json',
+              url: url,
               data: this.order_in_line,
               success: function(res) {
                 that.order_in = res;
