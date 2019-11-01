@@ -2,6 +2,7 @@ class Adjustment < ApplicationRecord
 
   # belongs_to :adjustment_type // nope cant do this beacuse of migration of string adjustment type to an object.
 
+    # This needs refactoring to use AdjustmentType - the method could 
     def Adjustment.types()
         return ['Overpayment', 'Underpayment', 'Transfer', 'Actual Income from Amazon', 'Reported Income from Amazon', 
                   'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale', 'Reimbursement'] # Add but dont edit!

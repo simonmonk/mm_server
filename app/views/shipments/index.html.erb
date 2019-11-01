@@ -641,6 +641,7 @@ window.onload = function () {
           },
           filter_shipments: function(filter_attribute) {
             this.filter_by_type = filter_attribute;
+            this.shipment = this.filtered_results[0];
           },
           invoice_amount_formated: function(index) {
             // works with or without an index
