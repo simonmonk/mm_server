@@ -7,9 +7,13 @@ class Assembly < ApplicationRecord
     validates :qty, numericality: { greater_than_or_equal_to: 0 } 
     validates :stock_warning_level, numericality: { greater_than_or_equal_to: 0 } 
     
+    def stock_name
+        return 'ASS-' + id.to_s.rjust(6, "0")
+    end
+
     def production_cost
         total = 0
-        self.assembly_parts.each do |pp|
+        self.assembly_parts.each do | pp |
             total += pp.part.purchase_cost * pp.qty
         end
         if (self.labour)

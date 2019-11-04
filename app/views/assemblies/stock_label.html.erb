@@ -15,7 +15,7 @@ require 'barby'
 require 'barby/barcode/code_128'
 require 'barby/outputter/html_outputter'
 
-barcode_txt = 'ASS-' + @assembly.id.to_s.rjust(6, "0")
+barcode_txt = @assembly.stock_name
 
 barcode = Barby::Code128B.new(barcode_txt)
 outputter = Barby::HtmlOutputter.new(barcode)

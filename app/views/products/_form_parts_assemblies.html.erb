@@ -6,6 +6,7 @@
 <table>
   <thead>
     <tr>
+      <th>Part ID</th>
       <th>Part</th>
       <th>Qty used</th>
       <th>Cost £</th>
@@ -16,6 +17,7 @@
   <tbody>
     <% @product.product_parts.each do |product_part| %>
       <tr>
+        <td><a href="/parts/<%= product_part.part.id %>/edit"><%= product_part.part.stock_name %></a></td>
         <td><a href="/parts/<%= product_part.part.id %>/edit"><%= product_part.part.name %></a></td>
         <td><%= product_part.qty %></td>
         <td><%= (product_part.part.purchase_cost * product_part.qty).round(3) %></td>
@@ -49,6 +51,7 @@ qty <input type="number" id="part_qty_field" value="1"/>
 <table>
   <thead>
     <tr>
+      <th>Assemby ID</th>
       <th>Assembly</th>
       <th>Qty used</th>
       <th>Cost £</th>
@@ -59,6 +62,7 @@ qty <input type="number" id="part_qty_field" value="1"/>
   <tbody>
     <% @product.product_assemblies.each do |product_assembly| %>
       <tr>
+        <td><a href="/assemblies/<%= product_assembly.assembly.id %>/edit"><%= product_assembly.assembly.stock_name %></a></td>
         <td><a href="/assemblies/<%= product_assembly.assembly.id %>/edit"><%= product_assembly.assembly.name %></a></td>
         <td><%= product_assembly.qty %></td>
         <td><%= (product_assembly.assembly.production_cost * product_assembly.qty).round(3) %></td>

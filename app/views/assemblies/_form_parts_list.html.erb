@@ -2,6 +2,7 @@
 <table>
   <thead>
     <tr>
+      <th>Part ID</th>
       <th>Part</th>
       <th>Qty</th>
       <th>Cost</th>
@@ -12,6 +13,7 @@
   <tbody>
     <% @assembly.assembly_parts.each do |assembly_part| %>
       <tr>
+        <td><a href="/parts/<%= assembly_part.part.id %>/edit"><%= assembly_part.part.stock_name %></a></td>
         <td><a href="/parts/<%= assembly_part.part.id %>/edit"><%= assembly_part.part.name %></a></td>
         <td><%= assembly_part.qty %></td>
         <td><%= (assembly_part.part.purchase_cost * assembly_part.qty).round(3) %></td>  
