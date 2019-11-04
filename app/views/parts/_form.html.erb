@@ -54,6 +54,32 @@ function remove_part_supplier(part_supplier_id) {
     <tr><td>Cost (£)</td><td><%= part.purchase_cost.round(3) %></td></tr>
     <tr><td colspan="2">Shipping cost used to be here, but now its included in the unit price specified when an order line for this part is added to an Order In.</td></tr>
     
+    <tr><td>Purchase History</td>
+    <td>
+    <table>
+        <tr>
+          <th>Date</th>
+          <th>Supplier</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Currency</th>
+        </tr>
+    
+    <% @part.purchase_history.each do | order | %>
+    
+      <tr>
+        <td><%= order[:date] %></td>
+        <td><%= order[:supplier] %></td>
+        <td><%= order[:qty] %></td>
+        <td><%= order[:price] %></td>
+        <td><%= order[:currency] %></td>
+      </tr>
+    
+    <% end %>
+        
+    </table>
+    </td></tr>
+
     <tr><td>Total value of stock(£)</td><td><%= part.purchase_cost_all_stock.round(3) %></td></tr>
     
     <tr><td>Notes</td><td><%= f.text_area :notes, size: '50x10' %></td></tr>
@@ -98,6 +124,6 @@ function remove_part_supplier(part_supplier_id) {
 </select>    
 Code <input type="text" id="code_field" value=""/> 
 <input type="button" value="Add" onClick="javascript:add_supplier()"/>
-    
+
 
 
