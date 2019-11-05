@@ -21,5 +21,13 @@ class AdjustmentType < ApplicationRecord
         end
     end
 
+    def default_account()
+        # some adjustments may not have an account unless Amazon becomes an account
+        if (code == 'HMRC' || code == 'REIMBURSEMENT' || code == 'AMAZON_FEES')
+            return Account.for_code('CUR')
+        else
+            return nil
+        end
+    end
 
 end

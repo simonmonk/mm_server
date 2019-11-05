@@ -1,5 +1,6 @@
 class AdjustmentsController < ApplicationController
   before_action :set_adjustment, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token 
 
   # GET /adjustments
   # GET /adjustments.json
@@ -71,6 +72,7 @@ class AdjustmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def adjustment_params
-      params.require(:adjustment).permit(:adjustment_date, :value, :adjustment_type, :description, :organisation, :vat_value, :tax_region)
+      params.require(:adjustment).permit(:adjustment_date, :value, :adjustment_type, :description, :organisation, :vat_value, :tax_region,
+            :from_account_id, :to_account_id, :adjustment_type_id)
     end
 end

@@ -112,7 +112,7 @@
           </tr>
           <tr><td>
             <button type="button" v-on:click="cancel('#edit_adjustment_form')" class="btn btn-info">Cancel</button>
-            <button type="button" v-on:click="save_adjustment()" class="btn btn-success">Save</button>
+            <button type="button" v-on:click="save_adjustment('#edit_adjustment_form')" class="btn btn-success">Save</button>
           </td></tr>
         </table>
       </div>
@@ -141,6 +141,7 @@
   <td v-bind:class="transaction.direction" >{{transaction.vat}}</td>
   <td v-bind:class="transaction.direction" >{{transaction.with_vat}}</td>
   <td>{{transaction.vat_action}}</td>
+  <td><span v-on:click="edit_transaction(index)" class="badge badge-success">Edit</span></td>
 </tr>
 </table>
 
@@ -213,6 +214,29 @@ window.onload = function () {
               }
             });
           },
+          save_adjustment: function(modal_to_close) {
+            // save an edited PUT adjustment or create a new on on db POST
+            var that;
+            that = this;
+            var modal = modal_to_close;
+            var method = "POST";
+            var url = "/adjustments.json";
+            if (this.adjustment.id) {
+              method = "PUT";
+              url = "/adjustments/" + this.adjustment.id + ".json";
+            }
+            $.ajax({
+              type: method,
+              url: url,
+              data: {adjustment: this.adjustment},
+              success: function(res) {
+                if (modal) {
+                  $(modal).modal('hide');
+                }
+                that.adjustment.id = res.id; // set just the id - the rest of the object is fine
+              }
+            });
+          },
           // ******** next up add in tax regions **********
           dates_valid: function() {
             return (this.from_date && this.to_date && this.from_date < this.to_date);
@@ -227,6 +251,13 @@ window.onload = function () {
               from_account_id: null, to_account_id: null}
 
             $('#edit_adjustment_form').modal('show')
+          },
+          edit_transaction: function(index) {
+            var trans = this.filtered_results[index]
+            if (trans.transaction_type == 'ADJUSTMENT') {
+              this.adjustment = trans;
+              $('#edit_adjustment_form').modal('show');
+            };
           }
         },
         computed: {

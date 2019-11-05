@@ -5,9 +5,6 @@ FIXED - NOT TESTED. When doing update part price from a received order in dollar
 
 The sort order for purchases seems to be mad after LInda's added a whole load of new transactions in.
 
-x Only enable Invoice uploading once order is saved else no order_number
-
-
 Deducting stock at shipment seems to be deducting stock twice and then giving error message saying not enough stock in 
 the Transaction log.
 Can't replicate.
@@ -92,6 +89,7 @@ DONE: Needs a account money received into, add to reconcile form.
 
 Expenses
 --
+This doesn't need a separate view, add it into the bookkeeping view
 View needs usual sorting and filtering options
 Add photo capture of expense_receipts
 

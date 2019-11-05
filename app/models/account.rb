@@ -2,7 +2,17 @@ class Account < ApplicationRecord
 
 
     def Account.current_vat_rate()
-        return 20
+        v = Setting.get_setting('CURRENT_VAT_RATE')
+        if (v)
+            return v.to_f
+        else
+            puts "add a setting for CURRENT_VAT_RATE at /settings"
+            return 20
+        end
+    end
+
+    def Account.for_code(c)
+        return Account.find_by(code: c)
     end
 
     # Generate all the transactions and return them along with the 

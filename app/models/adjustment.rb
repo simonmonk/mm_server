@@ -1,4 +1,6 @@
 class Adjustment < ApplicationRecord
+  belongs_to :from_account, optional: true
+  belongs_to :to_account, optional: true
 
   # belongs_to :adjustment_type // nope cant do this beacuse of migration of string adjustment type to an object.
 
@@ -16,6 +18,26 @@ class Adjustment < ApplicationRecord
 
   def name()
     'ADJ-' + id.to_s
+  end
+
+  def Adjustment.migrate_accounts()
+    Adjustment.all.each do | adjustment |
+      # can't use relation to adjustment_type, as it may be a string
+      adj_type = AdjustmentType.find(adjustment.adjustment_type_id)
+      if (not adj_type)
+        puts "Adjustment not set for adjustment:" + adjustment.id.to_s + " adjustment_type string:" + adjustment.adjustment_type
+        puts "Run: AdjustmentType.migrate_string_adjustment_types()"
+      end
+      acc = adj_type.default_account()
+      # put in a check that there is an adj_type, or you will need to convert it from a string.
+      if (acc)
+        puts "Setting account of adjustment:" + adjustment.id.to_s + " to:" + acc.name
+        adjustment.from_account_id
+        adjustment.save()
+      else
+        puts "****** Manual Action Needed Cannot set account for adjustemnt:" + adjustment.id.to_s 
+      end
+    end
   end
 
   def direction()
@@ -51,9 +73,17 @@ class Adjustment < ApplicationRecord
 
   def accounts()
     if (adjustment_type == 'Transfer')
-      return 'acc1->acc2'
+      if (from_account and to_account)
+        return from_account.name + '>>>' + to_account.name
+      else
+        return "?"
+      end
     else
-      return 'acc1'
+      if (from_account)
+        return from_account.name
+      else
+        return "?"
+      end
     end
   end
 
