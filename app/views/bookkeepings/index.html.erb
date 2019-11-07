@@ -47,7 +47,8 @@
 </div>
 
 <div>
-<button :disabled="transactions.length == 0" type="button" v-on:click="open_adjustment_form_new()" class="badge badge-info">Create Adjustment</button>
+<button :disabled="transactions.length == 0" type="button" v-on:click="open_adjustment_form_new()" class="badge badge-info">Add New Adjustment</button>
+<button :disabled="transactions.length == 0" type="button" v-on:click="open_expense_form_new()" class="badge badge-info">Add New Expense</button>
 </div>
 
 <div v-if="filter_by_account.id != 0">
@@ -110,6 +111,10 @@
           <tr v-if="adjustment.adjustment_type_id == 3 && adjustment.from_account_id == adjustment.to_account_id">
             <td colspan="2"><span class="warning">From and to accounts must be different</td>
           </tr>
+          <tr>
+            <td>Description</td>
+            <td><input v-model="adjustment.description" type="text" value="" class="form-control" placeholder=""/></td>
+          </tr>
           <tr><td>
             <button type="button" v-on:click="cancel('#edit_adjustment_form')" class="btn btn-info">Cancel</button>
             <button type="button" v-on:click="save_adjustment('#edit_adjustment_form')" class="btn btn-success">Save</button>
@@ -121,6 +126,202 @@
 </div>
 
 
+<!-- Edit Expense Form -->
+<div id="edit_expense_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Expense Details</h1>
+        <table>
+            <tr>
+              <td>Person incuring expense</td>
+              <td>
+                  <select v-model="expense.user_id">
+                      <option v-for="(user, index) in users" v-bind:value="user.id">{{user.name}}</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Incurred Date</td>
+              <td><input v-model="expense.incurred_date" type="date" value="" class="form-control" placeholder="Date expense incurred"/></td>
+            </tr>
+            <tr>
+              <td>Reimbursed/Paid Date</td>
+              <td><input v-model="expense.reimbursed_date" type="date" value="" class="form-control" placeholder="Date expense incurred"/></td>
+            </tr>
+            <tr>
+              <td>Account (to reimburse or used for payment)</td>
+              <td>
+                  <select v-model="expense.account_id">
+                      <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Cost Centre</td>
+              <td>
+                <select v-model="expense.cost_centre_id">
+                    <option v-for="(cost_centre, index) in cost_centres" v-bind:value="cost_centre.id">{{cost_centre.name}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td><input v-model="expense.description" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+              <td>Mileage</td>
+              <td><input type="checkbox" v-model="expense.is_mileage"></td>
+            </tr>
+            <tr v-if="expense.is_mileage">
+              <td>Miles</td>
+              <td><input v-model="expense.miles" v-on:keyup="calc_miles()" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr v-if="expense.is_mileage">
+              <td>Mileage Rate (p/mile)</td>
+              <td><input v-model="expense.mileage_rate" v-on:keyup="calc_miles()" type="text" value="45" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr v-if="!expense.is_mileage">
+              <td>Supplier</td>
+              <td><input v-model="expense.supplier" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr v-if="!expense.is_mileage">
+              <td>Amount before VAT (£)</td>
+              <td><input v-model="expense.without_vat" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr v-if="!expense.is_mileage">
+              <td>VAT Amount (£)</td>
+              <td><input v-model="expense.vat" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+              <td>Total Amount (£)</td>
+              <td><input v-model="expense.with_vat" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+
+            <tr>
+              <td><button type="button" v-on:click="save_expense('#edit_expense_form')" class="btn btn-primary">Save</button></td>
+            </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Purchase Form -->
+<div id="edit_purchase_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Purchase</h1>
+        <table>
+            <tr>
+              <td>Order from</td>
+              <td v-if="order_in.supplier_name">{{ order_in.supplier_name}} </td>
+            </tr>
+            <tr>
+              <td>Order Number</td>
+              <td>{{order_in.order_number}}</td>
+            </tr>
+            <tr>
+              <td>Order Summary</td>
+              <td>{{order_in.summary}}</td>
+            </tr>
+            <tr>
+                <td>Account</td>
+                <td>
+                    <select v-model="order_in.account_id">
+                      <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Currency</td>
+                <td>
+                    <select v-model="order_in.currency">
+                        <option>GBP</option>
+                        <option>USD</option>
+                        <option>EUR</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Ordered Date</td>
+                <td><input v-model="order_in.placed_date" type="date" value="" class="form-control" placeholder="Date the order was placed"/></td>
+            </tr>
+            <tr>    
+                <td>Paid Date</td>
+                <td><input v-model="order_in.date_payment_made" type="date" value="" class="form-control" placeholder="Date the order was placed"/></td>
+            </tr>
+            <tr v-if="this.order_in.currency != 'GBP'">
+                <td>Exchange rate (E.g. 1.3)</td>
+                <td><input v-model="order_in.exch_rate" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>Invoice Goods Amount</td>
+                <td><input v-model="order_in.invoice_goods_ammout" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>Invoice VAT Amount</td>
+                <td><input v-model="order_in.invoice_vat_ammout" type="text" value="" class="form-control" placeholder=""/></td>
+            <tr>
+                <td>Shipping Amount</td>
+                <td><input v-model="order_in.shipping" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>Invoice Total Amount</td>
+                <td><input v-model="order_in.invoice_total_ammount" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td v-if="order_in.id && order_in.id > 0"><span v-on:click="open_capture_invoice()" class="badge badge-success">View/Add Invoice PDF</span></td>
+                <td colspan="2"v-else><span class="warning">You can't upload an invoice until you have saved this order.</span></td>
+            </tr>
+            <tr v-if="this.order_in.currency != 'GBP'">
+                <td>Amount actually paid in £</td>
+                <td><input v-model="order_in.actually_paid_gbp" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+              <td>Is a Service (and so NOY in box 9)</td>
+              <td><input v-model="order_in.is_service" type="checkbox" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td>VAT Information Collected (N/A, Y, N)</td>
+                <td><input v-model="order_in.vat_info_collected" type="text" value="" class="form-control" placeholder=""/></td>
+            </tr>
+            <tr>
+                <td colspan="2"><textarea v-model="order_in.notes" rows="3" class="form-control" placeholder="Notes about this order go here"></textarea></td>
+            </tr>
+            <tr><td><button type="button" :disabled="! this.order_in.supplier_id || !this.order_in.account_id" v-on:click="save_order_in('#edit_purchase_form')" class="btn btn-primary">Save</button>
+              <button type="button" v-on:click="cancel('#edit_purchase_form')" class="btn btn-info">Cancel</button></td>
+            </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Capture Attachement Form -->
+<div id="capture_attachement_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2>Capture Attachment</h2>
+        <table>
+          <tr>
+            <td>Print as PDF the invoice into the INVOICES shared folder on the MM Server then Click <b>Import</b></td>
+            <td><span v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
+          </tr>
+          <tr><td colspan="2">
+            <iframe id="invoice_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/purchasing_invoices/' + order_in.order_number + '.pdf?random=' + Date.now"></iframe>
+          </td></tr>
+          <tr><td>{{import_invoice_message}}</td></tr>
+          <tr><td>
+            <button type="button" v-on:click="cancel('#capture_attachement_form')" class="btn btn-info">Done</button>
+          </td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Transactions Table -->
 <table>
@@ -141,6 +342,7 @@
   <td v-bind:class="transaction.direction" >{{transaction.vat}}</td>
   <td v-bind:class="transaction.direction" >{{transaction.with_vat}}</td>
   <td>{{transaction.vat_action}}</td>
+  <td><img v-if="transaction.has_proof_uploaded" src="/images/attachment.png/" v-on:click="open_capture_invoice(index)"></td>
   <td><span v-on:click="edit_transaction(index)" class="badge badge-success">Edit</span></td>
 </tr>
 </table>
@@ -159,6 +361,9 @@ window.onload = function () {
             to_date: null,
             transactions: [],
             accounts: [],
+            categories: [],
+            cost_centres: [],
+            users: [],
             status: '',
             filter_by_account: null,
             show_purchases: true,
@@ -166,18 +371,23 @@ window.onload = function () {
             show_adjustments: true,
             show_expenses: true,
             adjustment_types: [],
-            adjustment: { 
+            adjustment: { // todo may only need the id if so delete the rest
               id: null, name: '', adjustment_type_id: null, organisation: null, description: '', 
               value: 0, vat_value: 0, vat_action: '', tax_region: null, is_checked: false,
-              from_account_id: null, to_account_id: null}
+              from_account_id: null, to_account_id: null},
+            expense: {id: null},
+            order_in: {id: null},
         },
         mounted: function() {
           var that;
           that = this;
           this.load_accounts();
           this.load_adjustment_types();
+          this.load_users();
+          this.load_cost_centres();
+          this.load_categories();
           this.from_date = new Date().addDays(-30).toISOString().slice(0,10)
-          this.to_date = new Date().toISOString().slice(0,10)
+          this.to_date = today_as_string()
         },
         methods: {
           load_transactions: function() { 
@@ -214,6 +424,36 @@ window.onload = function () {
               }
             });
           },
+          load_users: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: 'users.json',
+              success: function(res) {
+                that.users = res;
+              }
+            });
+          },
+          load_categories: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/book_keeping_categories.json',
+              success: function(res) {
+                that.categories = res;
+              }
+            });
+          },
+          load_cost_centres: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: '/cost_centres.json',
+              success: function(res) {
+                that.cost_centres = res;
+              }
+            });
+          },
           save_adjustment: function(modal_to_close) {
             // save an edited PUT adjustment or create a new on on db POST
             var that;
@@ -233,7 +473,41 @@ window.onload = function () {
                 if (modal) {
                   $(modal).modal('hide');
                 }
-                that.adjustment.id = res.id; // set just the id - the rest of the object is fine
+                that.adjustment = res; 
+                that.load_transactions();
+              }
+            });
+          },
+          open_expense_form_new: function() {
+            this.expense = { account_id: 1, account_ids: [1],
+            cost_centre_id: 4, description: "", id: null, incurred_date: today_as_string(),
+            is_mileage: false, mileage_rate: 50, miles: 0, reimbursed_date: null, supplier: "",
+            user_id: null, vat: null, with_vat: null, without_vat: null };
+            $('#edit_expense_form').modal('show')
+          },
+          save_expense: function(modal_to_close, callback) {
+            var that;
+            that = this;
+            var modal = modal_to_close;
+            url = '/expenses.json'
+            meth = 'POST'
+            if (this.expense.id) { // update existing
+              url = '/expenses/' + this.expense.id + '.json';
+              meth = 'PUT'
+            }
+            $.ajax({
+              type: meth,
+              url: url,
+              data: {expense: this.expense},
+              success: function(res) {
+                that.expense = res;
+                that.load_transactions();
+                if (modal) {
+                  $(modal).modal('hide');
+                }
+                if (callback) {
+                  callback();
+                }
               }
             });
           },
@@ -249,7 +523,6 @@ window.onload = function () {
               adjustment_type: null, organisation: null, description: '', 
               value: 0, vat_value: 0, vat_action: '', tax_region: null, is_checked: false,
               from_account_id: null, to_account_id: null}
-
             $('#edit_adjustment_form').modal('show')
           },
           edit_transaction: function(index) {
@@ -257,8 +530,21 @@ window.onload = function () {
             if (trans.transaction_type == 'ADJUSTMENT') {
               this.adjustment = trans;
               $('#edit_adjustment_form').modal('show');
-            };
-          }
+            }
+            if (trans.transaction_type == 'EXPENSE') {
+              this.expense = trans;
+              $('#edit_expense_form').modal('show');
+            }
+            if (trans.transaction_type == 'ORDER_IN') {
+              this.order_in = trans;
+              $('#edit_purchase_form').modal('show');
+            }
+          },
+          calc_miles: function() {
+            if (this.expense.miles > 0 && this.expense.mileage_rate >0) {
+              this.expense.with_vat = this.expense.miles * this.expense.mileage_rate / 100;
+            }
+          },
         },
         computed: {
           filtered_results: function() {

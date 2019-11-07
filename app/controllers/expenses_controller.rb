@@ -75,6 +75,7 @@ class ExpensesController < ApplicationController
     def expense_params
       params.require(:expense).permit(:incurred_date, :reimbursed_date, 
           :user_id, :account_id, :supplier, :description, :without_vat, 
-          :vat, :with_vat, :is_mileage, :miles, :mileage_rate, :expense)
+          :vat, :with_vat, :is_mileage, :miles, :mileage_rate, :expense,
+          :cost_centre_id, :is_checked)
     end
 end

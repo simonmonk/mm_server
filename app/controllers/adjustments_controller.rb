@@ -31,7 +31,7 @@ class AdjustmentsController < ApplicationController
       if @adjustment.save
         @adjustments = Adjustment.all
         format.html { render :index}
-        format.json { render :show, status: :created, location: @adjustment }
+        format.json { render :json => @adjustment }
       else
         format.html { render :new }
         format.json { render json: @adjustment.errors, status: :unprocessable_entity }
@@ -46,7 +46,7 @@ class AdjustmentsController < ApplicationController
       if @adjustment.update(adjustment_params)
         @adjustments = Adjustment.all
         format.html { render :index}
-        format.json { render :show, status: :ok, location: @adjustment }
+        format.json { render :json => @adjustment}
       else
         format.html { render :edit }
         format.json { render json: @adjustment.errors, status: :unprocessable_entity }

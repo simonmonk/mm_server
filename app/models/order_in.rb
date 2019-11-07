@@ -74,7 +74,11 @@ class OrderIn < ApplicationRecord
   end
 
   def accounts()
-    return account.name
+    if (account) # this guard clause for old transactions that don't have an account set.
+      return account.name
+    else
+      return "?"
+    end
   end
 
   def transaction_summary()
@@ -86,7 +90,11 @@ class OrderIn < ApplicationRecord
   end
 
   def account_ids()
-    return [account.id]
+    if (account) # this guard clause for old transactions that don't have an account set.
+      return [account.id]
+    else
+      return []
+    end
   end
 
   def organisation()

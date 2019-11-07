@@ -20,33 +20,42 @@ class Account < ApplicationRecord
     def Account.generateVATReportData(from_date, to_date)
         receipts = []
         Shipment.all.each do | shipment |
-            if (shipment.date_payment_received and
-                    (shipment.date_payment_received >= from_date) and
-                    (shipment.date_payment_received <= to_date) and
+            if (shipment.accounting_date and
+                    (shipment.accounting_date >= from_date) and
+                    (shipment.accounting_date <= to_date) and
                     not shipment.is_amazon())
                 receipts.append(shipment)
             end
         end
         payments = []
         OrderIn.all.each do | payment |
-            if (payment.date_payment_made and
-                    (payment.date_payment_made >= from_date) and
-                    (payment.date_payment_made <= to_date))
+            if (payment.accounting_date and
+                    (payment.accounting_date >= from_date) and
+                    (payment.accounting_date <= to_date))
                 payments.append(payment)
             end
         end
         adjustments = []
         Adjustment.all.each do | adjustment |
-            if (adjustment.adjustment_date and
-                    (adjustment.adjustment_date >= from_date) and
-                    (adjustment.adjustment_date <= to_date) and
-                    (adjustment.adjustment_type != 'Actual Income from Amazon'))
+            if (adjustment.accounting_date and
+                    (adjustment.accounting_date >= from_date) and
+                    (adjustment.accounting_date <= to_date) and
+                    (adjustment.accounting_date != 'Actual Income from Amazon'))
                 adjustments.append(adjustment)
+            end
+        end
+        expenses = []
+        Expense.all.each do | expense |
+            if (expense.accounting_date and
+                    (expense.accounting_date >= from_date) and
+                    (expense.accounting_date <= to_date))
+                puts "**** found expense"
+                expenses.append(expense)
             end
         end
 
         # will need adjustments here too
-        transactions = receipts + payments + adjustments
+        transactions = receipts + payments + adjustments + expenses
         transactions = transactions.sort do | a, b |
             a.accounting_date <=> b.accounting_date
         end

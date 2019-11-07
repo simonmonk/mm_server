@@ -171,7 +171,9 @@ class Shipment < ApplicationRecord
     return true
   end
 
-
+  def has_proof_uploaded()
+    return true
+  end
 
 
   # shipments are always invoiced in pounds (apart from Eduporium)
@@ -454,7 +456,7 @@ class Shipment < ApplicationRecord
   def as_json(options={})
     super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer,
                         :without_vat, :vat, :with_vat, :accounting_date, :transaction_type, :accounts, :transaction_summary, :direction,
-                        :account_ids])
+                        :account_ids, :has_proof_uploaded])
   end
     
 end

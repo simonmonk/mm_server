@@ -1,6 +1,13 @@
 class Adjustment < ApplicationRecord
-  belongs_to :from_account, optional: true
-  belongs_to :to_account, optional: true
+  
+  def from_account()
+    return Account.find_by_id(from_account_id)
+  end
+
+  def to_account()
+    return Account.find_by_id(to_account_id)
+  end
+
 
   # belongs_to :adjustment_type // nope cant do this beacuse of migration of string adjustment type to an object.
 
@@ -143,6 +150,12 @@ class Adjustment < ApplicationRecord
     return false
   end
 
+  def has_proof_uploaded()
+    root_dir = Setting.get_setting('ROOT_DIR')
+    file = Dir.glob(root_dir + '/public/adjustment_paperwork/' + name + '.pdf')
+    return (file.length == 1)
+  end
+
   # def tax_region()
   #   if (adjustment_type == 'Amazon Fees')
   #       return 'EU' # From Belgium in fact
@@ -166,7 +179,7 @@ class Adjustment < ApplicationRecord
 
   def as_json(options={})
     super(:methods => [ :without_vat, :vat, :with_vat, :accounting_date, :transaction_type, :accounts, :transaction_summary, :direction,
-                      :account_ids])
+                      :account_ids, :name, :has_proof_uploaded])
   end
 
 end
