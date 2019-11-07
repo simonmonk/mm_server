@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   get 'products/:id/print_labels/:qty', to: 'products#print_labels#qty'
   get 'bookkeepings/transactions', to: 'bookkeepings#transactions'
   get 'bookkeepings', to: 'bookkeepings#index'
+  get 'parts/:id/set_inactive/', to: 'parts#set_inactive'
   
   resources :accounts do
     collection do
@@ -51,6 +52,7 @@ Rails.application.routes.draw do
       get :remove_part_supplier
       get :export_parts
       get :stock_label
+      get :set_inactive
     end
   end
 

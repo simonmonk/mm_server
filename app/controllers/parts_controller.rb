@@ -1,5 +1,5 @@
 class PartsController < ApplicationController
-  before_action :set_part, only: [:show, :edit, :update, :destroy, :stock_label]
+  before_action :set_part, only: [:show, :edit, :update, :destroy, :stock_label, :set_inactive]
   skip_before_filter :verify_authenticity_token 
 
   # GET /parts
@@ -61,6 +61,13 @@ def remove_part_supplier
     redirect_to :action => "edit", :id => part_id
 end
 
+def set_inactive
+  @part.active = false
+  @part.save
+  @parts = Part.all.order(name: :asc)
+  redirect_to :action => "index"
+end
+
 
   # POST /parts
   # POST /parts.json
@@ -83,15 +90,15 @@ end
       end
   end
 
-  # DELETE /parts/1
+  # DELETE /parts/1 - nope - breaks all sorts of things like orders - make active=false instead
   # DELETE /parts/1.json
-  def destroy
-    @part.destroy
-    respond_to do |format|
-      format.html { redirect_to parts_url, notice: 'Part was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
+  # def destroy
+  #   @part.destroy
+  #   respond_to do |format|
+  #     format.html { redirect_to parts_url, notice: 'Part was successfully destroyed.' }
+  #     format.json { head :no_content }
+  #   end
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.
