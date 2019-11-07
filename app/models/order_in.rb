@@ -248,6 +248,7 @@ class OrderIn < ApplicationRecord
   
     
   def summary()
+    begin
       num_items = self.order_in_lines.length
       if (num_items == 0) 
           return "nothing"
@@ -266,6 +267,9 @@ class OrderIn < ApplicationRecord
           return first_name + " and one other item."
       end
       return first_name + " and " + (num_items - 1).to_s + " other items."
+    rescue
+      return "deleted part"
+    end
   end
     
    # todo delete probably redundant
