@@ -147,12 +147,12 @@ end
 </tr>
 <tr>
 <td>
+    <p><%=@shipment.retailer.fao_billing%></p>
     <% if (@shipment.retailer.name == 'amazon.com') %>
         <p>MonkMakes Ltd</p>
     <% else %>
         <p><%=@shipment.retailer.name%></p>
     <% end %>
-    <p><%=@shipment.retailer.fao_billing%></p>
     <p><%=@shipment.retailer.billing_ad_line1%></p>
     <p><%=@shipment.retailer.billing_ad_line2%></p>
     <p><%=@shipment.retailer.billing_ad_city%></p>
