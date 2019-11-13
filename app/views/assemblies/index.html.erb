@@ -45,7 +45,8 @@
           <th></th>
       </tr>
 <%
-    cat.assemblies.all.each do | assembly |
+    asses = cat.assemblies.all.order(name: :asc)
+    asses.each do | assembly |
         style_class = ""
         if (assembly.qty <= assembly.stock_warning_level)
             style_class = "warning"

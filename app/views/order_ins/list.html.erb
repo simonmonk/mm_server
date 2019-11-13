@@ -273,14 +273,15 @@ Sort by:
         <table>
           <tr>
             <td>Print as PDF the invoice into the INVOICES shared folder on the MM Server then Click <b>Import</b></td>
-            <td><span v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
+            <td><span :disabled="importing_message.length > 0" v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
           </tr>
+          <tr v-if="importing_message.length > 0"><td>{{importing_message}}</td></tr>
           <tr><td colspan="2">
             <iframe id="invoice_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/purchasing_invoices/' + order_in.order_number + '.pdf?random=' + Date.now"></iframe>
           </td></tr>
           <tr><td>{{import_invoice_message}}</td></tr>
           <tr><td>
-            <button type="button" v-on:click="cancel('#capture_invoice_form')" class="btn btn-info">Done</button>
+            <button v-if="importing_message.length == 0" type="button" v-on:click="cancel('#capture_invoice_form')" class="btn btn-info">Done</button>
           </td></tr>
         </table>
       </div>
@@ -374,7 +375,8 @@ window.onload = function () {
           qty_to_add_to_stock: null,
           invoice_url: null,
           import_invoice_message: '-',
-          status: ''
+          status: '',
+          importing_message: ''
         },
         mounted: function() {
           var that;
@@ -594,7 +596,8 @@ window.onload = function () {
                 supplier: {id: null, name: ""},
                 supplier_id: null, supplier_name: null,
                 vat_info_collected: "N/A", order_number: '',
-                placed_date: today_as_string()
+                placed_date: today_as_string(),
+                date_payment_made: today_as_string()
             };
             this.order_in_line = {id: null, part_id: null, part: {name: null, cost: 0, purchase_cost_today: 0}, name: '', price: null, qty: null, qty_in: null};
             this.parts = [];
@@ -609,6 +612,7 @@ window.onload = function () {
           request_import_invoice: function() {
             var that;
             that = this;
+            this.importing_message = "Importing, Please Wait....";
             $.ajax({
               type: 'POST',
               url: '/order_ins/import_invoice',
@@ -618,6 +622,7 @@ window.onload = function () {
               complete: function(res) {
                 that.import_invoice_message = res.responseText;
                 document.getElementById('invoice_iframe').contentDocument.location.reload();
+                that.importing_message = '';
               },
             });
           },

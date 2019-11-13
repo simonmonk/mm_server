@@ -42,6 +42,12 @@ $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
 
+FRCs
+====
+Sort parts within a category into alhpabetical order
+
+
+
 Massive Refactoring
 --------------------
 * Rename out of the way all the Non-view redundant stuff
@@ -55,6 +61,11 @@ Bookkeeping
 -----------------
 
 Where do wages payments get recorded? Or aren't they because its mostly about VAT ATM. - purchase to indidual
+
+wages
+--
+Move to the bookeeping view and do as new type, not as purchases
+
 
 Supporting Docs
 --
