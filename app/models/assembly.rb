@@ -11,6 +11,12 @@ class Assembly < ApplicationRecord
         return 'ASS-' + id.to_s.rjust(6, "0")
     end
 
+    # return all the Active assemblies
+    # sorted alphabeticaly for use in lists
+    def Assembly.active_assemblies
+        Assembly.all.where(active: true).order(name: :asc)
+    end
+
     def production_cost
         total = 0
         self.assembly_parts.each do | pp |

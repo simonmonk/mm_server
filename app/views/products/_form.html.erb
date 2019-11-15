@@ -68,6 +68,11 @@ function print_labels() {
       </ul>
     </div>
   <% end %>    
+
+  <% if (not @product.active) %>
+  <h1 class="warning">WARNING INACTIVE PRODUCT</h1>
+  <% end %>
+
 <table><tr>
     <td><table>
     <tr><th colspan="2">Basic</th></tr>

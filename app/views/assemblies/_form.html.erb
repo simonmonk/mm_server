@@ -51,6 +51,9 @@ function deduct(qty, qty_fails) {
 
 <table><tr>
     
+<% if (not @assembly.active) %>
+<h1 class="warning">WARNING INACTIVE ASSEMBLY</h1>
+<% end %>
 
 <td><table>
 <tr><td>Name</td><td><%= f.text_field :name %></td></tr>

@@ -29,7 +29,7 @@
 
 
 <select id="parts_list">
-<% parts = Part.all.order(name: :asc)
+<%  parts = Part.active_parts()
     parts.each do |part| %>
     <option value='<%= part.id %>'><%= part.name %></option>
 <% end %>

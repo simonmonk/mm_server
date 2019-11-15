@@ -32,7 +32,7 @@
 
     
 <select id="parts_list">
-<% parts = Part.where(active: true).order(name: :asc)
+<% parts = Part.active_parts()
     parts.each do |part| %>
     <option value='<%= part.id %>'><%= part.name %></option>option>
 <% end %>
@@ -76,7 +76,7 @@ qty <input type="number" id="part_qty_field" value="1"/>
 <p></p>
 
 <select id="assemblies_list">
-<% assemblies = Assembly.all.order(name: :asc)
+<%  assemblies = Assembly.active_assemblies()
     assemblies.each do |assembly| %>
     <option value='<%= assembly.id %>'><%= assembly.name %></option>option>
 <% end %>
