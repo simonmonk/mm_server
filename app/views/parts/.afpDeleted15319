@@ -1,8 +1,10 @@
 <h1>Editing Part: <%= @part.name %></h1>
 
 <p>This part is used in the following products: 
-<% @part.product_parts.each do |product_part| %>
-      <%= product_part.product.name %>;
+<% @part.product_parts.each do |product_part| 
+      if (product_part.product.active) %>
+            <%= product_part.product.name %>;
+      <% end %>
 <% end %>
 </p>
 

@@ -8,12 +8,15 @@ $(function() {
 
 <p>This part is used in the following products: 
 <% 
-	@part.product_parts.each do |product_part| %>
+  @part.product_parts.each do |product_part| 
+    %>
       <% 
-    	begin
+      begin
+        if (product_part.product.active)
       %>
     <a href="/products/<%=product_part.product_id %>/edit"><%= product_part.product.name %></a>
       <%
+        end
     	rescue Exception
     		""
     	end
@@ -25,10 +28,12 @@ $(function() {
 <% 
 	@part.assembly_parts.each do |assembly_part| %>
       <% 
-    	begin
+      begin
+        if (assembly_part.assembly.active)
       %>
     <a href="/assemblies/<%=assembly_part.assembly_id %>/edit"><%= assembly_part.assembly.name %></a>
       <%
+        end
     	rescue Exception
     		""
     	end
