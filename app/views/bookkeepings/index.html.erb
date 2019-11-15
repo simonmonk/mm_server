@@ -207,6 +207,8 @@
   </div>
 </div>
 
+//todo - add in attachements to expenses - and OCR values??
+
 <!-- Edit Purchase Form -->
 <div id="edit_purchase_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -272,7 +274,7 @@
                 <td><input v-model="order_in.invoice_total_ammount" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
             <tr>
-                <td v-if="order_in.id && order_in.id > 0"><span v-on:click="open_capture_invoice()" class="badge badge-success">View/Add Invoice PDF</span></td>
+                <td v-if="order_in.id && order_in.id > 0"><span v-on:click="show_attachment_purchase()" class="badge badge-success">View/Add Invoice PDF</span></td>
                 <td colspan="2"v-else><span class="warning">You can't upload an invoice until you have saved this order.</span></td>
             </tr>
             <tr v-if="this.order_in.currency != 'GBP'">
@@ -304,24 +306,126 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body">
-        <h2>Capture Attachment</h2>
+        <h2>Attachment</h2>
         <table>
           <tr>
             <td>Print as PDF the invoice into the INVOICES shared folder on the MM Server then Click <b>Import</b></td>
-            <td><span v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
+            <td><span :disabled="importing_message.length > 0" v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
           </tr>
+          <tr v-if="importing_message.length > 0"><td>{{importing_message}}</td></tr>
           <tr><td colspan="2">
             <iframe id="invoice_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/purchasing_invoices/' + order_in.order_number + '.pdf?random=' + Date.now"></iframe>
           </td></tr>
           <tr><td>{{import_invoice_message}}</td></tr>
           <tr><td>
-            <button type="button" v-on:click="cancel('#capture_attachement_form')" class="btn btn-info">Done</button>
+            <button type="button" v-if="importing_message.length == 0" v-on:click="cancel('#capture_attachement_form')" class="btn btn-info">Done</button>
           </td></tr>
         </table>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- Edit Shipment Form -->
+<div id="edit_shipment_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Shipment {{shipment.invoice_number}} {{ shipment.retailer_name  }}</h1>
+        <table>
+          <tr>
+            <td>Invoice Number</td>
+            <td>{{shipment.invoice_number}}</td>
+            <td>Order Received Date</td>
+            <td>{{shipment.date_order_received}}</td>
+          </tr>
+          <tr>
+            <td>VAT Rate (percent)</td>
+            <td>{{shipment.vat_rate}}</td>
+            <td>Invoice Sent Date</td>
+            <td>{{shipment.date_invoice_sent}}</td>
+          </tr>
+          <tr>
+            <td>Customer P.O. Number</td>
+            <td>{{shipment.po_reference}}</td>
+            <td>Despatched Date</td>
+            <td>{{shipment.date_dispatched}}</td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Provider</td>
+            <td>{{shipment.shipping_provider}}</td>
+            <td>Date Paid</td>
+            <td>{{shipment.date_payment_received}}</td>
+          </tr>
+          <tr>
+            <td>Customer Shipping Ac.</td>
+            <td>{{shipment.shipping_provider_ac_no}}</td>
+            <td>Actual Amount Collected £</td>
+            <td><input v-model="shipment.total_invoice_collected" type="text" class="form-control" placeholder="none"/></td>
+          </tr>
+          <tr>
+            <td>Discount</td>
+            <td>{{shipment.discount}}</td>
+            <td>Account</td>
+            <td>
+              <select v-model="shipment.account_id">
+                <option v-for="(account, index) in accounts" v-bind:value="account.id">{{account.name}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Weight (kg)</td>
+            <td>{{shipment.weight_kg}}</td>
+          </tr>
+          <tr>
+            <td>Dimensions (cm)</td>
+            <td>{{shipment.width_cm}} x  {{shipment.height_cm}} x {{shipment.depth_cm}}</td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td colspan="3"><textarea v-model="shipment.notes" rows="3" class="form-control" placeholder="Notes about this shipment go here"></textarea></td>
+          </tr>
+          <tr>
+            <td>Invoice Comment</td>
+            <td colspan="3">{{shipment.invoice_comment}}</td>
+          </tr>
+          <tr>
+            <td>Payment Received</td>
+            <td><input v-model="shipment.date_payment_received" type="date" value="" class="form-control" placeholder="Date payment received"/></td>
+          </tr>
+          <tr><td><span v-on:click="create_invoice(1)" class="badge badge-info">Invoice</span></td></tr>
+          <tr><td><button type="button" v-on:click="save_shipment('#edit_shipment_form')" class="btn btn-primary">Save</button>
+            <button type="button" v-on:click="cancel('#edit_shipment_form')" class="btn btn-info">Cancel</button></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Show Shipment Invoice Form -->
+<div id="show_shipment_invoice_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2>Shipment Invoice</h2>
+        <table>
+          <tr><td colspan="2">
+            <iframe id="shipment_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/shipments/invoice/'+shipment.invoice_number+ '?id=' + shipment.id+ '&pages=1'"></iframe>
+          </td></tr>
+          <tr><td>
+            <button type="button" v-on:click="cancel('#show_shipment_invoice_form')" class="btn btn-info">Done</button>
+          </td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 <!-- Transactions Table -->
 <table>
@@ -342,7 +446,9 @@
   <td v-bind:class="transaction.direction" >{{transaction.vat}}</td>
   <td v-bind:class="transaction.direction" >{{transaction.with_vat}}</td>
   <td>{{transaction.vat_action}}</td>
-  <td><img v-if="transaction.has_proof_uploaded" src="/images/attachment.png/" v-on:click="open_capture_invoice(index)"></td>
+  <td v-if="transaction.has_proof_uploaded && transaction.transaction_type == 'ORDER_IN'"><img src="/images/attachment.png/" v-on:click="show_attachment_purchase(index)"></td>
+  <td v-if="transaction.transaction_type == 'SHIPMENT'"><img src="/images/attachment.png/" v-on:click="show_attachment_shipment(index)"></td>
+  <td v-if="! transaction.has_proof_uploaded"></td>
   <td><span v-on:click="edit_transaction(index)" class="badge badge-success">Edit</span></td>
 </tr>
 </table>
@@ -365,6 +471,8 @@ window.onload = function () {
             cost_centres: [],
             users: [],
             status: '',
+            import_invoice_message: '',
+            importing_message: '',
             filter_by_account: null,
             show_purchases: true,
             show_sales: true,
@@ -377,6 +485,7 @@ window.onload = function () {
               from_account_id: null, to_account_id: null},
             expense: {id: null},
             order_in: {id: null},
+            shipment: {id: null},
         },
         mounted: function() {
           var that;
@@ -511,6 +620,35 @@ window.onload = function () {
               }
             });
           },
+          show_attachment_purchase: function(index) {
+            if (index != null) {
+              this.order_in = this.filtered_results[index];
+            }
+            $('#capture_attachement_form').modal('show');
+          },
+          show_attachment_shipment: function(index) {
+            if (index != null) {
+              this.shipment = this.filtered_results[index];
+            }
+            $('#show_shipment_invoice_form').modal('show');
+          },
+          request_import_invoice: function() {
+            var that;
+            that = this;
+            this.importing_message = "Importing, Please Wait....";
+            $.ajax({
+              type: 'POST',
+              url: '/order_ins/import_invoice',
+              data: {
+                order_number: this.order_in.order_number
+              },
+              complete: function(res) {
+                that.import_invoice_message = res.responseText;
+                document.getElementById('invoice_iframe').contentDocument.location.reload();
+                that.importing_message = '';
+              },
+            });
+          },
           // ******** next up add in tax regions **********
           dates_valid: function() {
             return (this.from_date && this.to_date && this.from_date < this.to_date);
@@ -539,6 +677,46 @@ window.onload = function () {
               this.order_in = trans;
               $('#edit_purchase_form').modal('show');
             }
+            if (trans.transaction_type == 'SHIPMENT') {
+              this.shipment = trans;
+              $('#edit_shipment_form').modal('show'); 
+            }
+          },
+          create_invoice: function(pages) {
+            window.open("/shipments/invoice/" + this.shipment.invoice_number + "?id=" + this.shipment.id + "&pages=" + pages, '_blank')
+          },
+          save_shipment: function(modal_to_close) {
+            var that;
+            that = this;
+            var modal = modal_to_close;
+            // delete computed attributes that cant be saved
+            delete this.shipment.retailer_name;
+            delete this.shipment.total_invoice_amount;
+            delete this.shipment.is_amazon;
+            delete this.shipment.is_new;
+            delete this.shipment.is_unpaid;
+            delete this.shipment.is_paid;
+            delete this.shipment.is_overdue;
+            delete this.shipment.shipment_products;
+            // POST for a new, PUT for an update
+            method = 'POST'
+            url = '/shipments.json'
+            
+            if (this.shipment.id) { // update existing
+              method = 'PUT';
+              url = '/shipments/' + this.shipment.id + '.json';
+            }
+            $.ajax({
+              type: method,
+              url: url,
+              data: {shipment: this.shipment},
+              success: function(res) {
+                that.load_transactions();
+                if (modal) {
+                  $(modal).modal('hide');
+                }
+              }
+            });
           },
           calc_miles: function() {
             if (this.expense.miles > 0 && this.expense.mileage_rate >0) {

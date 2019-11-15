@@ -604,7 +604,7 @@ window.onload = function () {
             $('#unordered_form').modal('show');
           },
           open_capture_invoice: function(index) {
-            if (index) {
+            if (index != null) {
               this.order_in = this.filtered_results[index];
             }
             $('#capture_invoice_form').modal('show');

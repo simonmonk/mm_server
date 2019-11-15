@@ -9,4 +9,20 @@ class Setting < ApplicationRecord
         end
     end
 
+    def Setting.set_setting(key, val)
+        setting = Setting.find_by(name: key)
+        if (not setting)
+            setting = new Setting(name: key, value: val)
+        else
+            setting.value = val
+        end
+        setting.save()
+    end
+
+    def Setting.set_test()
+        Setting.set_setting('INVOICE_SHARE', '/Users/si/invoice_share_test')
+        Setting.set_setting('ROOT_DIR', '/Users/si/mm_server')
+    end
+
+
 end
