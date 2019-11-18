@@ -5,11 +5,11 @@ td.barby-cell { width: 3px; height: 80px; }
 td.barby-cell.on { background: #000; }
 
 h1 {
-    font-size: 50px;
+    font-size: 40px;
 }
 
 h2 {
-    font-size: 30px;
+    font-size: 25px;
 }
 
 </style>
@@ -25,8 +25,8 @@ barcode = Barby::Code128B.new(barcode_txt)
 outputter = Barby::HtmlOutputter.new(barcode)
 %>
 
-<h2><%=@assembly.name%></h2>
+<h1><%=@assembly.name%></h1>
 
 <%= barcode.to_html.html_safe %>
 
-<h1><%=barcode_txt%></h1>
+<h2><%=barcode_txt%></h2>
