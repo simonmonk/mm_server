@@ -7,6 +7,10 @@ class Expense < ApplicationRecord
         return 'EXPENSE'
     end
 
+    def expense_number()
+        return "EXP-" + id.to_s
+    end
+
     def name()
         'EXP-' + id.to_s
     end
@@ -55,7 +59,8 @@ class Expense < ApplicationRecord
 
     def as_json(options={})
         super(:methods => [:accounting_date, :transaction_type, :vat_action, :is_income, :is_vatable,
-                        :accounts, :account_ids, :transaction_summary, :direction, :name, :has_proof_uploaded ])
+                        :accounts, :account_ids, :transaction_summary, :direction, :name, :has_proof_uploaded,
+                        :expense_number ])
   end  
 
 end

@@ -46,6 +46,12 @@ Rails.application.routes.draw do
   end
   
 
+  resources :expense do
+    collection do
+      post :import_receipt
+    end
+  end
+
   resources :parts do
     collection do
       get :add_supplier

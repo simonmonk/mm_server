@@ -197,7 +197,10 @@
               <td>Total Amount (£)</td>
               <td><input v-model="expense.with_vat" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
-
+            <tr>
+              <td v-if="!expense.is_mileage"><span v-on:click="show_attachment_expense()" class="badge badge-success">View/Add Invoice PDF</span></td>
+              <td colspan="2"v-else><span class="warning">You can't upload an invoice until you have saved this order.</span></td>
+            </tr>
             <tr>
               <td><button type="button" v-on:click="save_expense('#edit_expense_form')" class="btn btn-primary">Save</button></td>
             </tr>
@@ -301,6 +304,9 @@
   </div>
 </div>
 
+// stop trying to be clever and just dup this form for expenses receipts - too much different to reuse properly.
+
+
 <!-- Capture Attachement Form -->
 <div id="capture_attachement_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -310,7 +316,7 @@
         <table>
           <tr>
             <td>Print as PDF the invoice into the INVOICES shared folder on the MM Server then Click <b>Import</b></td>
-            <td><span :disabled="importing_message.length > 0" v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
+            <td><span :disabled="importing_message.length > 0" v-on:click="request_import('INVOICE')" class="badge badge-success">Import</span></td>
           </tr>
           <tr v-if="importing_message.length > 0"><td>{{importing_message}}</td></tr>
           <tr><td colspan="2">
@@ -632,6 +638,20 @@ window.onload = function () {
             }
             $('#show_shipment_invoice_form').modal('show');
           },
+          show_attachment_expense: function(index) {
+            if (index != null) {
+              this.expense = this.filtered_results[index];
+            }
+            $('#capture_attachement_form').modal('show');
+          },
+          request_import: function(trans_type) {
+            if (trans_type == 'INVOICE') {
+              request_import_invoice();
+            }
+            if (trans_type == 'EXPENSE') {
+              request_import_expense();
+            }
+          },
           request_import_invoice: function() {
             var that;
             that = this;
@@ -641,6 +661,23 @@ window.onload = function () {
               url: '/order_ins/import_invoice',
               data: {
                 order_number: this.order_in.order_number
+              },
+              complete: function(res) {
+                that.import_invoice_message = res.responseText;
+                document.getElementById('invoice_iframe').contentDocument.location.reload();
+                that.importing_message = '';
+              },
+            });
+          },
+          request_import_expense: function() {
+            var that;
+            that = this;
+            this.importing_message = "Importing, Please Wait....";
+            $.ajax({
+              type: 'POST',
+              url: '/expense/import_receipt',
+              data: {
+                expense_number: this.expense.expense_number
               },
               complete: function(res) {
                 that.import_invoice_message = res.responseText;
@@ -712,6 +749,34 @@ window.onload = function () {
               data: {shipment: this.shipment},
               success: function(res) {
                 that.load_transactions();
+                if (modal) {
+                  $(modal).modal('hide');
+                }
+              }
+            });
+          },
+          save_order_in: function(modal_to_close) {
+            var that;
+            that = this;
+            var modal = modal_to_close;
+            // delete computed attributes that cant be saved
+            delete this.order_in.supplier;
+            delete this.order_in.order_number;
+            delete this.order_in.summary;
+            delete this.order_in.is_not_ordered;
+            delete this.order_in.is_ordered_not_received;
+            delete this.order_in.is_received;
+            delete this.order_in.total_invoice_amount;
+            delete this.order_in.order_in_lines;
+            delete this.order_in.parts;
+            url = '/order_ins/update_order_in.json?id=' + this.order_in.id;
+            $.ajax({
+              type: 'POST',
+              url: url,
+              data: {order_in: this.order_in},
+              success: function(res) {
+                that.load_transactions();
+                that.order_in = res;
                 if (modal) {
                   $(modal).modal('hide');
                 }

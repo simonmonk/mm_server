@@ -25,9 +25,6 @@ class ExpensesController < ApplicationController
   # POST /expenses
   # POST /expenses.json
   def create
-    puts "**************"
-    puts params
-    puts "**************"
     @expense = Expense.new(expense_params)
 
     respond_to do |format|
@@ -62,6 +59,40 @@ class ExpensesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to expenses_url, notice: 'Expense was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+
+  def import_invoice
+    expense_number = params['expense_number']
+    # go and check INVOICES share iff there's a file there move and rename it into /public/expense_receipts
+    share = Setting.get_setting('INVOICE_SHARE')
+    root_dir = Setting.get_setting('ROOT_DIR')
+    files = Dir.glob(share + "/*.pdf")
+    if (files.length == 0)
+      render :json => 'no file to import'
+    elsif (files.length == 1)
+      file = files[0]
+      dest_file_name = order_number.to_s + '.pdf'
+      dest = root_dir + '/public/expense_receipts/' + dest_file_name
+      begin
+        FileUtils.mv(file, dest)
+      rescue Exception => boom
+        return render :json => 'couldnt move file' + boom.to_s
+      end
+      # also send files to googledrive using gdrive
+      puts "********** HERE"
+      guid = Rails.application.secrets.EXPENSE_RECEIPTS_SHARE_GUID
+      begin
+        command = '/home/si/gdrive upload --parent ' + guid + ' ' + dest
+        puts "******* command=" + command
+        puts system(command)
+      rescue Exception => boom
+        return render :json => 'couldnt upload to Google Drive: ' + boom.to_s
+      end
+      render :json => 'ok'
+    else
+      render :json => 'no file or multiple files'
     end
   end
 

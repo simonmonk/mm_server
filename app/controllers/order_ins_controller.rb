@@ -76,7 +76,7 @@ class OrderInsController < ApplicationController
 
   def import_invoice
     order_number = params['order_number']
-    # go and check INVOICES share iff there's a file there move and rename it into /public/invoices
+    # go and check INVOICES share iff there's a file there move and rename it into /public/purchasing_invoices/
     share = Setting.get_setting('INVOICE_SHARE')
     root_dir = Setting.get_setting('ROOT_DIR')
     files = Dir.glob(share + "/*.pdf")
