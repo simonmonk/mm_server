@@ -94,6 +94,6 @@ end
       :delivery_ad_postal_code, :delivery_ad_country, :delivery_ad_tel, :vatable, 
       :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :pref_shipping_provider_shipping_type,
       :active, :show_foreign_sku, :is_retail, :logo_url, :logo_buy_url, :region_id,
-      :mm_products_url, :base_url, :tax_region, :fao_billing)
+      :mm_products_url, :base_url, :tax_region, :fao_billing, :nickname)
     end
 end
