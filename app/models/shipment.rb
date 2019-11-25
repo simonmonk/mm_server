@@ -450,7 +450,7 @@ class Shipment < ApplicationRecord
 # for json interface
 
   def retailer_name
-    return self.retailer.name
+    return self.retailer.name_with_nickname
   end
 
   def as_json(options={})

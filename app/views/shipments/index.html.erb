@@ -199,7 +199,7 @@ Sort by:
             <td v-if="shipment.retailer_name">{{ shipment.retailer_name }} </td>
             <td v-else>
               <select v-model="shipment.retailer_id" @change="update_retailer_selection()">
-                <option v-for="(retailer, index) in retailers" v-bind:value="retailer.id">{{retailer.name}}</option>
+                <option v-for="(retailer, index) in retailers" v-bind:value="retailer.id">{{retailer.name_with_nickname}}</option>
               </select>
             </td>
           </tr>

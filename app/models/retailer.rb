@@ -9,6 +9,14 @@ class Retailer < ApplicationRecord
         return (name == 'Sending Samples')
     end
 
+    def name_with_nickname()
+        if (nickname and nickname.length > 0)
+            return name + " (" + nickname + ")"
+        else
+            return name
+        end
+    end
+
     def notes_line()
         if (notes) 
             return notes.gsub("\n", '').gsub("\r", '')
@@ -54,7 +62,7 @@ class Retailer < ApplicationRecord
 
 
     def as_json(options={})
-        super(:methods => [:owes_money, :is_sample])
+        super(:methods => [:owes_money, :is_sample, :name_with_nickname])
     end
     
 end
