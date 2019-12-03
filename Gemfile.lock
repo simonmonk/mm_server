@@ -53,7 +53,7 @@ GEM
     byebug (10.0.2)
     chart-js-rails (0.1.6)
       railties (> 3.1)
-    chartkick (3.0.2)
+    chartkick (3.3.0)
     climate_control (0.2.0)
     codemirror-rails (5.16.0)
       railties (>= 3.0, < 6.0)
