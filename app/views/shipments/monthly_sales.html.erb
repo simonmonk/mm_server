@@ -230,12 +230,17 @@ canvas{
 <td> <!-- Right column -->
 
     <table>
-    <tr><th>Product</th><th>Units sold</th><th>Units/month</th><th>Sales Value £</th></tr>
+    <tr><th>Product</th><th>Units sold</th><th>Units/month</th><th>Sales Value £</th><th>In Stock</th><th>Parts to Make</th></tr>
 
     <%
     0.upto products90.length-1 do | i |
+        product_name = products90[i]
+        product = Product.find_by_name(product_name)
     %>
-        <tr><td><%=products90[i]%></td><td><%=units90[i]%></td><td><%=units90[i]/4%></td><td><%=sales90[i]%></td></tr>
+        <tr>
+            <td><%=products90[i]%></td><td><%=units90[i]%></td><td><%=units90[i]/4%></td><td><%=sales90[i]%></td>
+            <td><%= product.qty%></td><td><%=product.possible_makes %></td>
+        </tr>
     <%
     end
     %>
