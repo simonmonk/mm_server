@@ -28,10 +28,14 @@ class ExpensesController < ApplicationController
     @expense = Expense.new(expense_params)
 
     respond_to do |format|
+      puts "********* creating an expense"
       if @expense.save
+        puts "** expense saved"
+        puts @expense.id.to_s
         format.html { redirect_to @expense, notice: 'Expense was successfully created.' }
         format.json { render :show, status: :created, location: @expense }
       else
+        puts "** expense not saved"
         format.html { render :new }
         format.json { render json: @expense.errors, status: :unprocessable_entity }
       end
@@ -63,7 +67,7 @@ class ExpensesController < ApplicationController
   end
 
 
-  def import_invoice
+  def import_receipt 
     expense_number = params['expense_number']
     # go and check INVOICES share iff there's a file there move and rename it into /public/expense_receipts
     share = Setting.get_setting('INVOICE_SHARE')
@@ -73,7 +77,7 @@ class ExpensesController < ApplicationController
       render :json => 'no file to import'
     elsif (files.length == 1)
       file = files[0]
-      dest_file_name = order_number.to_s + '.pdf'
+      dest_file_name = expense_number.to_s + '.pdf'
       dest = root_dir + '/public/expense_receipts/' + dest_file_name
       begin
         FileUtils.mv(file, dest)

@@ -53,7 +53,7 @@ class Expense < ApplicationRecord
 
     def has_proof_uploaded()
         root_dir = Setting.get_setting('ROOT_DIR')
-        file = Dir.glob(root_dir + '/public/adjustment_paperwork/' + name + '.pdf')
+        file = Dir.glob(root_dir + '/public/expense_receipts/' + name + '.pdf')
         return (file.length == 1)
     end
 

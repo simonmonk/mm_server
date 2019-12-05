@@ -46,9 +46,9 @@ Rails.application.routes.draw do
   end
   
 
-  resources :expense do
+  resources :expenses do
     collection do
-      post :import_receipt
+      post :import_receipt  
     end
   end
 

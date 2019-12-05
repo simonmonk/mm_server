@@ -28,84 +28,97 @@ table {
 td {
     vertical-align: top;  
 }
+
+canvas{
+  width:800px !important;
+  height:400px !important;
+}
         
 </style>
 
 <h1>Monthy Sales Trend</h1>
-<canvas id="sales_by_month" ></canvas>
 
-<%
-year = Date.today().year
-months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-result = Shipment.monthly_sales()
-sales_totals = result[0]
-last_year_sales = result[1]
-year_before_last_sales = result[2]
-%>
+<table><tr> <!-- single row table of 2 columns -->
 
-<script>
+<td> <!-- column 1 -->
+    <canvas id="sales_by_month" ></canvas>
 
+    <%
+    year = Date.today().year
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    result = Shipment.monthly_sales()
+    sales_totals = result[0]
+    last_year_sales = result[1]
+    year_before_last_sales = result[2]
+    %>
 
-var colors = ['#000000', '#00FFFF', '#8A2BE2', '#A52A2A', '#DEB887',
-                 '#5F9EA0', '#FF7F50', '#6495ED', '#DC143C', '#00008B',
-                 '#008B8B', '#B8860B', '#A9A9A9', '#006400', '#8B008B',
-                 '#FF8C00', '#9932CC', '#8B0000', '#8FBC8F', '#483D8B',
-                 '#00FF7F', '#4682B4', '#D2B48C', '#008080', '#D8BFD8',
-                 '#FF6347', '#40E0D0', '#EE82EE', '#F5DEB3', '#FFFF00']
+    <script>
 
 
-var ctx = document.getElementById("sales_by_month");
-new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: <%=months.to_json.html_safe%>,
-        datasets: [
-            {
-                label: 'This Year £', 
-                data:  <%=sales_totals.to_json.html_safe%>,
-                borderColor: '#00FFFF',
-                borderWidth: 4,
-                fill: false
-            },
-            {
-                label: '<%=year-1%> £', 
-                data:  <%=last_year_sales.to_json.html_safe%>,
-                borderColor: '#D2B48C',
-                borderWidth: 4,
-                fill: false
-            },
-            {
-                label: '<%=year-2%> £', 
-                data:  <%=year_before_last_sales.to_json.html_safe%>,
-                borderColor: '#4682B4',
-                borderWidth: 4,
-                fill: false
-            }
-        ]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
+    var colors = ['#000000', '#00FFFF', '#8A2BE2', '#A52A2A', '#DEB887',
+                    '#5F9EA0', '#FF7F50', '#6495ED', '#DC143C', '#00008B',
+                    '#008B8B', '#B8860B', '#A9A9A9', '#006400', '#8B008B',
+                    '#FF8C00', '#9932CC', '#8B0000', '#8FBC8F', '#483D8B',
+                    '#00FF7F', '#4682B4', '#D2B48C', '#008080', '#D8BFD8',
+                    '#FF6347', '#40E0D0', '#EE82EE', '#F5DEB3', '#FFFF00']
+
+
+    var ctx = document.getElementById("sales_by_month");
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <%=months.to_json.html_safe%>,
+            datasets: [
+                {
+                    label: 'This Year £', 
+                    data:  <%=sales_totals.to_json.html_safe%>,
+                    borderColor: '#00FFFF',
+                    borderWidth: 4,
+                    fill: false
+                },
+                {
+                    label: '<%=year-1%> £', 
+                    data:  <%=last_year_sales.to_json.html_safe%>,
+                    borderColor: '#D2B48C',
+                    borderWidth: 4,
+                    fill: false
+                },
+                {
+                    label: '<%=year-2%> £', 
+                    data:  <%=year_before_last_sales.to_json.html_safe%>,
+                    borderColor: '#4682B4',
+                    borderWidth: 4,
+                    fill: false
                 }
-            }]
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
         }
-    }
-});
-</script>
+    });
+    </script>
+</td> <!-- end of col 1 -->
 
+<td> <!-- col 2 -->
+    <table>
+        <tr><th>Month</th><th>Sales <%=year-2%></th><th>Sales <%=year-1%></th></th><th>Sales <%=year%></th></tr>
+    <%
+    0.upto 11 do | i |
+    %>
+        <tr><td><%=months[i]%></td><td><%=year_before_last_sales[i]%><td><%=last_year_sales[i]%></td><td><%=sales_totals[i]%></td></tr>
+    <%
+    end
+    %>
+    </table>
+</td>
 
-<table>
-    <tr><th>Month</th><th>Sales <%=year-2%></th><th>Sales <%=year-1%></th></th><th>Sales <%=year%></th></tr>
-<%
-0.upto 11 do | i |
-%>
-    <tr><td><%=months[i]%></td><td><%=year_before_last_sales[i]%><td><%=last_year_sales[i]%></td><td><%=sales_totals[i]%></td></tr>
-<%
-end
-%>
-</table>
+</tr></table>
 
 <hr/>
 
@@ -114,96 +127,125 @@ end
 <br/>
 <h1>Sales by Product £</h1>
 
-<table width="100%"><tr>
-
-<td>
 <h2>Top 20 in last 365 days</h2>
 
-<canvas id="sales_by_product" style="width:400px;"></canvas>
+<table width="100%"><tr> <!-- Single row table with 2 columns -->
 
-<%
-result = Shipment.sales_by_product_top_n(365, 20)
-products = result[0]
-sales = result[1]
-units = result[2]
-%>
+<td> <!-- Left column -->
+    <canvas id="sales_by_product" style="width:400px;"></canvas>
+    <%
+    result = Shipment.sales_by_product_top_n(365, 20)
+    products = result[0]
+    sales = result[1]
+    units = result[2]
+    %>
+    <script>
+    var ctx = document.getElementById("sales_by_product");
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: <%=products.to_json.html_safe%>,
+            datasets: [
+                {
+                    label: 'Sales £', 
+                    data:  <%=sales.to_json.html_safe%>,
+                    backgroundColor: colors,
+                    fill: true
+                },
+            ]
+        },
+        options: {
+            responsive: true
+        }
+    });
+    </script>
+</td> <!-- End of left column -->
+<td> <!-- Right column -->
 
-<script>
-var ctx = document.getElementById("sales_by_product");
+    <table>
+    <tr><th>Product</th><th>Units sold</th><th>Units/month</th><th>Sales Value £</th></tr>
 
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: <%=products.to_json.html_safe%>,
-        datasets: [
-            {
-                label: 'Sales £', 
-                data:  <%=sales.to_json.html_safe%>,
-                backgroundColor: colors,
-                fill: true
-            },
-        ]
-    },
-    options: {
-        responsive: true
-    }
-});
-</script>
-</td>
-<td>
+    <%
+    0.upto products.length-1 do | i |
+    %>
+        <tr><td><%=products[i]%></td><td><%=units[i]%></td><td><%=units[i]/12%></td><td><%=sales[i]%></td></tr>
+    <%
+    end
+    %>
 
-<table>
-<tr><th>Product</th><th>Units sold</th><th>Units/month</th><th>Sales Value £</th></tr>
+    </table>
 
-<%
-0.upto products.length-1 do | i |
-%>
-    <tr><td><%=products[i]%></td><td><%=units[i]%></td><td><%=units[i]/12%></td><td><%=sales[i]%></td></tr>
-<%
-end
-%>
+</td> <!-- end of right column -->
+    
 
-</table>
-
-</td>
 </tr></table>
 
 <br/>
 <br/>
 <br/>
 
+
+<!-- Last 90 days by product -->
+
+
+
 <h2>Top 20 in last 90 days</h2>
 
-<canvas id="sales_by_product90" ></canvas>
+<table width="100%"><tr> <!-- Single row table with 2 columns -->
 
-<%
-result = Shipment.sales_by_product_top_n(90, 20)
-products90 = result[0]
-sales90 = result[1]
-%>
+<td> <!-- Left column -->
 
-<script>
-var ctx = document.getElementById("sales_by_product90");
+    <canvas id="sales_by_product90" ></canvas>
 
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: <%=products90.to_json.html_safe%>,
-        datasets: [
-            {
-                label: 'Sales £', 
-                data:  <%=sales90.to_json.html_safe%>,
-                backgroundColor: colors,
-                fill: true
-            },
-        ]
-    },
-    options: {
-    }
-});
-</script>
+    <%
+    result = Shipment.sales_by_product_top_n(90, 20)
+    products90 = result[0]
+    sales90 = result[1]
+    units90 = result[2]
+    %>
+
+    <script>
+    var ctx = document.getElementById("sales_by_product90");
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: <%=products90.to_json.html_safe%>,
+            datasets: [
+                {
+                    label: 'Sales £', 
+                    data:  <%=sales90.to_json.html_safe%>,
+                    backgroundColor: colors,
+                    fill: true
+                },
+            ]
+        },
+        options: {
+        }
+    });
+    </script>
+</td> <!-- end of left column -->
 
 
+<td> <!-- Right column -->
+
+    <table>
+    <tr><th>Product</th><th>Units sold</th><th>Units/month</th><th>Sales Value £</th></tr>
+
+    <%
+    0.upto products90.length-1 do | i |
+    %>
+        <tr><td><%=products90[i]%></td><td><%=units90[i]%></td><td><%=units90[i]/12%></td><td><%=sales90[i]%></td></tr>
+    <%
+    end
+    %>
+
+    </table>
+
+</td> <!-- end of right column -->
+    
+
+</tr></table>
 
 
 

@@ -198,8 +198,8 @@
               <td><input v-model="expense.with_vat" type="text" value="" class="form-control" placeholder=""/></td>
             </tr>
             <tr>
-              <td v-if="!expense.is_mileage"><span v-on:click="show_attachment_expense()" class="badge badge-success">View/Add Invoice PDF</span></td>
-              <td colspan="2"v-else><span class="warning">You can't upload an invoice until you have saved this order.</span></td>
+              <td v-if="!expense.is_mileage"><span v-on:click="show_attachment_expense()" class="badge badge-success">View/Add Receipt PDF</span></td>
+              <td colspan="2" v-else><span class="warning">Mileage expenses do not have receipts.</span></td>
             </tr>
             <tr>
               <td><button type="button" v-on:click="save_expense('#edit_expense_form')" class="btn btn-primary">Save</button></td>
@@ -304,19 +304,18 @@
   </div>
 </div>
 
-// stop trying to be clever and just dup this form for expenses receipts - too much different to reuse properly.
 
 
-<!-- Capture Attachement Form -->
-<div id="capture_attachement_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- Capture Invoice Form - Goods In -->
+<div id="capture_invoice_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body">
-        <h2>Attachment</h2>
+        <h2>Invoice Attachment</h2>
         <table>
           <tr>
             <td>Print as PDF the invoice into the INVOICES shared folder on the MM Server then Click <b>Import</b></td>
-            <td><span :disabled="importing_message.length > 0" v-on:click="request_import('INVOICE')" class="badge badge-success">Import</span></td>
+            <td><span :disabled="importing_message.length > 0" v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
           </tr>
           <tr v-if="importing_message.length > 0"><td>{{importing_message}}</td></tr>
           <tr><td colspan="2">
@@ -324,7 +323,33 @@
           </td></tr>
           <tr><td>{{import_invoice_message}}</td></tr>
           <tr><td>
-            <button type="button" v-if="importing_message.length == 0" v-on:click="cancel('#capture_attachement_form')" class="btn btn-info">Done</button>
+            <button type="button" v-if="importing_message.length == 0" v-on:click="cancel('#capture_invoice_form')" class="btn btn-info">Done</button>
+          </td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Capture Receipt Form - Goods In -->
+<div id="capture_receipt_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2>Receipt Attachment</h2>
+        <table>
+          <tr>
+            <td>Print as PDF the receipt into the shared folder on the MM Server then Click <b>Import</b></td>
+            <td><span :disabled="importing_message.length > 0" v-on:click="request_import_receipt()" class="badge badge-success">Import</span></td>
+          </tr>
+          <tr v-if="importing_message.length > 0"><td>{{importing_message}}</td></tr>
+          <tr><td colspan="2">
+            <iframe id="expense_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/expense_receipts/' + expense.expense_number + '.pdf?random=' + Date.now"></iframe>
+          </td></tr>
+          <tr><td>{{import_invoice_message}}</td></tr>
+          <tr><td>
+            <button type="button" v-if="importing_message.length == 0" v-on:click="cancel('#capture_receipt_form')" class="btn btn-info">Done</button>
           </td></tr>
         </table>
       </div>
@@ -453,6 +478,7 @@
   <td v-bind:class="transaction.direction" >{{transaction.with_vat}}</td>
   <td>{{transaction.vat_action}}</td>
   <td v-if="transaction.has_proof_uploaded && transaction.transaction_type == 'ORDER_IN'"><img src="/images/attachment.png/" v-on:click="show_attachment_purchase(index)"></td>
+  <td v-if="transaction.has_proof_uploaded && transaction.transaction_type == 'EXPENSE'"><img src="/images/attachment.png/" v-on:click="show_attachment_expense(index)"></td>
   <td v-if="transaction.transaction_type == 'SHIPMENT'"><img src="/images/attachment.png/" v-on:click="show_attachment_shipment(index)"></td>
   <td v-if="! transaction.has_proof_uploaded"></td>
   <td><span v-on:click="edit_transaction(index)" class="badge badge-success">Edit</span></td>
@@ -630,7 +656,7 @@ window.onload = function () {
             if (index != null) {
               this.order_in = this.filtered_results[index];
             }
-            $('#capture_attachement_form').modal('show');
+            $('#capture_invoice_form').modal('show');
           },
           show_attachment_shipment: function(index) {
             if (index != null) {
@@ -642,15 +668,7 @@ window.onload = function () {
             if (index != null) {
               this.expense = this.filtered_results[index];
             }
-            $('#capture_attachement_form').modal('show');
-          },
-          request_import: function(trans_type) {
-            if (trans_type == 'INVOICE') {
-              request_import_invoice();
-            }
-            if (trans_type == 'EXPENSE') {
-              request_import_expense();
-            }
+            $('#capture_receipt_form').modal('show');
           },
           request_import_invoice: function() {
             var that;
@@ -669,24 +687,27 @@ window.onload = function () {
               },
             });
           },
-          request_import_expense: function() {
+
+
+          request_import_receipt: function() {
             var that;
             that = this;
             this.importing_message = "Importing, Please Wait....";
             $.ajax({
               type: 'POST',
-              url: '/expense/import_receipt',
+              url: '/expenses/import_receipt',
               data: {
                 expense_number: this.expense.expense_number
               },
               complete: function(res) {
                 that.import_invoice_message = res.responseText;
-                document.getElementById('invoice_iframe').contentDocument.location.reload();
+                document.getElementById('expense_iframe').contentDocument.location.reload();
                 that.importing_message = '';
               },
             });
           },
-          // ******** next up add in tax regions **********
+
+        
           dates_valid: function() {
             return (this.from_date && this.to_date && this.from_date < this.to_date);
           },
