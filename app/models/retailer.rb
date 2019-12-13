@@ -62,7 +62,7 @@ class Retailer < ApplicationRecord
 
 
     def as_json(options={})
-        super(:methods => [:owes_money, :is_sample, :name_with_nickname])
+        super(:methods => [:owes_money, :is_sample, :name_with_nickname, :credit_days])
     end
     
 end

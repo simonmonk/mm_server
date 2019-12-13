@@ -42,7 +42,7 @@ function copy_address() {
     <tr><td>Active</td><td><%= f.check_box :active %></td></tr> 
     <tr><td>General contact name</td><td><%= f.text_field :contact_name, size: '40' %></td></tr>    
     <tr><td>Contact email</td><td><%= f.text_field :contact_email, size: '40' %></td></tr>    
-     
+    <tr><td>Default Days Credit</td><td><%= f.text_field :credit_days %></td></tr>
     <tr><td>Pref Currency (GBP/USD/EUR)</td> 
       <td><%= f.select :pref_currency, 
     options_for_select(['GBP', 'USD', 'EUR'].map{|s|[s, s]}, :selected => retailer.pref_currency) %></td></tr>
