@@ -1,7 +1,10 @@
 Critical BUGS
 ==============
 
-FIXED - NOT TESTED. When doing update part price from a received order in dollars, the exchange rate doesnt get set seems to get lost. See last order of RGB LEDs for this.
+When doing update part price from a received order in dollars, the exchange rate doesnt get set seems to get lost. See last order of RGB LEDs for this.
+TEST: 
+
+On the part form would be good to show the login details next to the supplier info at the bottom.
 
 The sort order for purchases seems to be mad after LInda's added a whole load of new transactions in.
 

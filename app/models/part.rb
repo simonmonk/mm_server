@@ -9,6 +9,7 @@ class Part < ApplicationRecord
     # validates :stock_warning_level, numericality: { greater_than_or_equal_to: 0 }
     # validates :cost, presence: true
     
+
     def stock_name
         return 'PART-' + id.to_s.rjust(6, "0")
     end

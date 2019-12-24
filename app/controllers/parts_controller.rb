@@ -17,7 +17,6 @@ class PartsController < ApplicationController
   end
 
   def barcode
-    
   end
 
 

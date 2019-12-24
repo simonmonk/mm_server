@@ -184,6 +184,7 @@ class OrderInsController < ApplicationController
     render :json => order_in
   end
 
+
   def set_new_part_price_json
     part_id = params[:part_id]
     part_price = params[:part_price]
@@ -194,7 +195,10 @@ class OrderInsController < ApplicationController
     part.cost = part_price
     part.currency = part_currency
     part.exch_rate = order.exch_rate
-    part.save!
+    part.save
+    # update the part with a new price, switch to console and print part and the new price is there. BUT reload the part edit form and the old price returns.
+    # something is setting the part price as the edit form loads?
+    # ANSWER: On the edit partr page, when you refresh the page, it reposts the data without warning. No problem if you close the Part page and reopen it.
     render :json => order
   end
 
