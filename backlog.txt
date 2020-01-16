@@ -10,7 +10,7 @@ The sort order for purchases seems to be mad after LInda's added a whole load of
 
 Deducting stock at shipment seems to be deducting stock twice and then giving error message saying not enough stock in 
 the Transaction log.
-Can't replicate.
+- Think this was a double-click problem. This is now guarded against in the JS.
 
 ***** Purchase from Mouser, including 1000 100u caps has not added them to stock 
 ***** despite being marked as received and the Name column in the line items shows as blank.

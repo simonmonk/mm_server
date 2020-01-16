@@ -167,7 +167,7 @@
             </tr>
             <tr>
               <td>Description</td>
-              <td><input v-model="expense.description" type="text" value="" class="form-control" placeholder=""/></td>
+              <td><input v-model="expense.description" type="text" value="" class="form-control" placeholder="* Enter description here"/></td>
             </tr>
             <tr>
               <td>Mileage</td>
@@ -202,7 +202,7 @@
               <td colspan="2" v-else><span class="warning">Mileage expenses do not have receipts.</span></td>
             </tr>
             <tr>
-              <td><button type="button" v-on:click="save_expense('#edit_expense_form')" class="btn btn-primary">Save</button></td>
+              <td><button type="button" :disabled="!expense_valid()" v-on:click="save_expense('#edit_expense_form')" class="btn btn-primary">Save</button></td>
             </tr>
         </table>
       </div>
@@ -711,6 +711,14 @@ window.onload = function () {
           dates_valid: function() {
             return (this.from_date && this.to_date && this.from_date < this.to_date);
           },
+
+          expense_valid: function() {
+            if (! this.expense.user_id) return false;
+            if (! this.expense.description || this.expense.description.length < 5) return false;
+            if (! this.expense.incurred_date) return false;
+            return true;
+          },
+
           cancel: function(modal_to_close) {
             $(modal_to_close).modal('hide')
           },
