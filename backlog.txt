@@ -60,6 +60,8 @@ Massive Refactoring
 
 
 
+
+
 Bookkeeping 
 -----------------
 
@@ -94,6 +96,139 @@ Statement comes from Amazon and gets split into 3 adjustments:
 
 * HMRC Adjustment - money in or out of current E.g. VAT repayment (because can't do it as a purchase, as you would with a Tax bill)
 * Ebay sale - selling off crap (one off etc - prob better just to give away)
+
+
+AdjustmentType.migrate_string_adjustment_types() - run on live server after running on live data on test server
+- run with live data on test server [Y - all ok]
+- run on live server [Y - all ok]
+
+Adjustment.migrate_accounts()
+- run with live data on test server [Y - big llist of accounts to save, but can do from Bookeeping View]
+- run on live server [Y - same big list for Linda to edit.]
+
+run 16/1/2020
+2.4.0 :011 > Adjustment.migrate_accounts()
+****** Manual Action Needed Cannot set account for adjustemnt:2
+****** Manual Action Needed Cannot set account for adjustemnt:4
+****** Manual Action Needed Cannot set account for adjustemnt:5
+****** Manual Action Needed Cannot set account for adjustemnt:6
+****** Manual Action Needed Cannot set account for adjustemnt:7
+****** Manual Action Needed Cannot set account for adjustemnt:8
+****** Manual Action Needed Cannot set account for adjustemnt:9
+Setting account of adjustment:10 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:11
+****** Manual Action Needed Cannot set account for adjustemnt:12
+****** Manual Action Needed Cannot set account for adjustemnt:13
+****** Manual Action Needed Cannot set account for adjustemnt:14
+****** Manual Action Needed Cannot set account for adjustemnt:15
+****** Manual Action Needed Cannot set account for adjustemnt:16
+Setting account of adjustment:17 to:Current
+Setting account of adjustment:18 to:Current
+Setting account of adjustment:19 to:Current
+Setting account of adjustment:20 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:21
+****** Manual Action Needed Cannot set account for adjustemnt:22
+****** Manual Action Needed Cannot set account for adjustemnt:23
+****** Manual Action Needed Cannot set account for adjustemnt:24
+****** Manual Action Needed Cannot set account for adjustemnt:25
+****** Manual Action Needed Cannot set account for adjustemnt:26
+****** Manual Action Needed Cannot set account for adjustemnt:27
+****** Manual Action Needed Cannot set account for adjustemnt:29
+****** Manual Action Needed Cannot set account for adjustemnt:30
+****** Manual Action Needed Cannot set account for adjustemnt:31
+****** Manual Action Needed Cannot set account for adjustemnt:32
+****** Manual Action Needed Cannot set account for adjustemnt:33
+Setting account of adjustment:34 to:Current
+Setting account of adjustment:35 to:Current
+Setting account of adjustment:36 to:Current
+Setting account of adjustment:37 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:38
+****** Manual Action Needed Cannot set account for adjustemnt:39
+****** Manual Action Needed Cannot set account for adjustemnt:40
+****** Manual Action Needed Cannot set account for adjustemnt:41
+****** Manual Action Needed Cannot set account for adjustemnt:42
+****** Manual Action Needed Cannot set account for adjustemnt:43
+Setting account of adjustment:44 to:Current
+Setting account of adjustment:45 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:46
+Setting account of adjustment:47 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:48
+Setting account of adjustment:49 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:50
+****** Manual Action Needed Cannot set account for adjustemnt:51
+****** Manual Action Needed Cannot set account for adjustemnt:52
+****** Manual Action Needed Cannot set account for adjustemnt:53
+****** Manual Action Needed Cannot set account for adjustemnt:54
+****** Manual Action Needed Cannot set account for adjustemnt:55
+****** Manual Action Needed Cannot set account for adjustemnt:56
+****** Manual Action Needed Cannot set account for adjustemnt:57
+****** Manual Action Needed Cannot set account for adjustemnt:58
+****** Manual Action Needed Cannot set account for adjustemnt:59
+****** Manual Action Needed Cannot set account for adjustemnt:60
+****** Manual Action Needed Cannot set account for adjustemnt:61
+****** Manual Action Needed Cannot set account for adjustemnt:62
+****** Manual Action Needed Cannot set account for adjustemnt:63
+****** Manual Action Needed Cannot set account for adjustemnt:64
+****** Manual Action Needed Cannot set account for adjustemnt:65
+****** Manual Action Needed Cannot set account for adjustemnt:66
+****** Manual Action Needed Cannot set account for adjustemnt:67
+****** Manual Action Needed Cannot set account for adjustemnt:68
+****** Manual Action Needed Cannot set account for adjustemnt:69
+****** Manual Action Needed Cannot set account for adjustemnt:70
+Setting account of adjustment:71 to:Current
+Setting account of adjustment:72 to:Current
+Setting account of adjustment:73 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:74
+****** Manual Action Needed Cannot set account for adjustemnt:75
+****** Manual Action Needed Cannot set account for adjustemnt:76
+Setting account of adjustment:77 to:Current
+Setting account of adjustment:78 to:Current
+Setting account of adjustment:79 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:80
+****** Manual Action Needed Cannot set account for adjustemnt:81
+Setting account of adjustment:82 to:Current
+Setting account of adjustment:83 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:84
+Setting account of adjustment:85 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:86
+****** Manual Action Needed Cannot set account for adjustemnt:87
+Setting account of adjustment:88 to:Current
+Setting account of adjustment:89 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:90
+****** Manual Action Needed Cannot set account for adjustemnt:91
+****** Manual Action Needed Cannot set account for adjustemnt:92
+Setting account of adjustment:93 to:Current
+Setting account of adjustment:94 to:Current
+Setting account of adjustment:95 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:96
+Setting account of adjustment:97 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:98
+****** Manual Action Needed Cannot set account for adjustemnt:101
+Setting account of adjustment:102 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:103
+****** Manual Action Needed Cannot set account for adjustemnt:104
+****** Manual Action Needed Cannot set account for adjustemnt:105
+****** Manual Action Needed Cannot set account for adjustemnt:106
+Setting account of adjustment:107 to:Current
+****** Manual Action Needed Cannot set account for adjustemnt:108
+****** Manual Action Needed Cannot set account for adjustemnt:109
+****** Manual Action Needed Cannot set account for adjustemnt:110
+****** Manual Action Needed Cannot set account for adjustemnt:111
+****** Manual Action Needed Cannot set account for adjustemnt:112
+****** Manual Action Needed Cannot set account for adjustemnt:113
+****** Manual Action Needed Cannot set account for adjustemnt:114
+****** Manual Action Needed Cannot set account for adjustemnt:115
+****** Manual Action Needed Cannot set account for adjustemnt:116
+****** Manual Action Needed Cannot set account for adjustemnt:117
+****** Manual Action Needed Cannot set account for adjustemnt:118
+****** Manual Action Needed Cannot set account for adjustemnt:119
+****** Manual Action Needed Cannot set account for adjustemnt:120
+****** Manual Action Needed Cannot set account for adjustemnt:121
+****** Manual Action Needed Cannot set account for adjustemnt:122
+****** Manual Action Needed Cannot set account for adjustemnt:123
+****** Manual Action Needed Cannot set account for adjustemnt:124
+
+
 
 
 Shipment
