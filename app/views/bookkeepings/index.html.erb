@@ -753,16 +753,16 @@ window.onload = function () {
           delete_transaction: function(index) {
             var trans = this.filtered_results[index]
             if (trans.transaction_type == 'ADJUSTMENT') {
-              alert('nope')
+              this.delete_adjustment(trans.id);
             }
             if (trans.transaction_type == 'EXPENSE') {
-              alert('nope')
+              this.delete_expense(trans.id);
             }
             if (trans.transaction_type == 'ORDER_IN') {
-              this.delete_order_in(trans.id)
+              this.delete_order_in(trans.id);
             }
             if (trans.transaction_type == 'SHIPMENT') {
-              alert('nope')
+              alert("nope. Not a good idea.");
             }
           },
 
@@ -843,6 +843,35 @@ window.onload = function () {
               });
             }
           },
+
+          delete_expense: function(id) {
+            if (confirm("Are you sure?")) {
+              var that;
+              that = this;
+              $.ajax({
+                type: 'DELETE',
+                url: '/expenses/' + id,
+                success: function(res) {
+                  that.load_transactions();
+                }
+              });
+            }
+          },
+
+          delete_adjustment: function(id) {
+            if (confirm("Are you sure?")) {
+              var that;
+              that = this;
+              $.ajax({
+                type: 'DELETE',
+                url: '/adjustments/' + id,
+                success: function(res) {
+                  that.load_transactions();
+                }
+              });
+            }
+          },
+
 
           calc_miles: function() {
             if (this.expense.miles > 0 && this.expense.mileage_rate >0) {
