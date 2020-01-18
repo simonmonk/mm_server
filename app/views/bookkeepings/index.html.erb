@@ -482,6 +482,7 @@
   <td v-if="transaction.transaction_type == 'SHIPMENT'"><img src="/images/attachment.png/" v-on:click="show_attachment_shipment(index)"></td>
   <td v-if="! transaction.has_proof_uploaded"></td>
   <td><span v-on:click="edit_transaction(index)" class="badge badge-success">Edit</span></td>
+  <td><span v-on:click="delete_transaction(index)" class="badge badge-danger">Delete</span></td>
 </tr>
 </table>
 
@@ -748,6 +749,23 @@ window.onload = function () {
               $('#edit_shipment_form').modal('show'); 
             }
           },
+
+          delete_transaction: function(index) {
+            var trans = this.filtered_results[index]
+            if (trans.transaction_type == 'ADJUSTMENT') {
+              alert('nope')
+            }
+            if (trans.transaction_type == 'EXPENSE') {
+              alert('nope')
+            }
+            if (trans.transaction_type == 'ORDER_IN') {
+              this.delete_order_in(trans.id)
+            }
+            if (trans.transaction_type == 'SHIPMENT') {
+              alert('nope')
+            }
+          },
+
           create_invoice: function(pages) {
             window.open("/shipments/invoice/" + this.shipment.invoice_number + "?id=" + this.shipment.id + "&pages=" + pages, '_blank')
           },
@@ -812,6 +830,20 @@ window.onload = function () {
               }
             });
           },
+
+          delete_order_in: function(id) {
+            if (confirm("Are you sure?")) {
+              var that;
+              that = this;
+              $.ajax({
+                url: '/order_ins/delete_json?id=' + id,
+                success: function(res) {
+                  that.load_transactions();
+                }
+              });
+            }
+          },
+
           calc_miles: function() {
             if (this.expense.miles > 0 && this.expense.mileage_rate >0) {
               this.expense.with_vat = this.expense.miles * this.expense.mileage_rate / 100;
