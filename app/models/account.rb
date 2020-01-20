@@ -79,7 +79,7 @@ class Account < ApplicationRecord
                     transaction.vat_action += " + box 8 and 6"                      # This is because Adjustment doesn't know its tax region - add to db and UI
                 end
                 # Whatever the region the VAT needs adding to b1
-                if (transaction.vat)
+                if (transaction.vat != 0)
                     b1_vatDueSales += transaction.vat
                     transaction.vat_action += " + box 1 and 6"
                 end
