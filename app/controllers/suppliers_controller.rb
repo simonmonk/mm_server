@@ -13,6 +13,11 @@ class SuppliersController < ApplicationController
     render :json => @suppliers
   end
 
+  # json list of tax regions
+  def tax_regions
+    render :json => Supplier.tax_regions
+  end
+
   # GET /suppliers/1
   # GET /suppliers/1.json
   def show

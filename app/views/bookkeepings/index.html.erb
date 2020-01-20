@@ -100,6 +100,14 @@
               </select>
             </td>
           </tr>
+          <tr v-if="adjustment.adjustment_type_id != 3">
+          <td>Tax Region</td>
+          <td>
+            <select v-model="adjustment.tax_region">
+              <option v-for="(tax_region, index) in tax_regions" v-bind:value="tax_region">{{tax_region}}</option>
+            </select>
+          </td>
+        </tr>
           <tr>
             <td>Amount (+ for money in)</td>
             <td><input v-model="adjustment.value" type="text" value="" class="form-control" placeholder=""/></td>
@@ -503,6 +511,7 @@ window.onload = function () {
             categories: [],
             cost_centres: [],
             users: [],
+            tax_regions: [],
             status: '',
             import_invoice_message: '',
             importing_message: '',
@@ -528,6 +537,7 @@ window.onload = function () {
           this.load_users();
           this.load_cost_centres();
           this.load_categories();
+          this.load_tax_regions();
           this.from_date = new Date().addDays(-30).toISOString().slice(0,10)
           this.to_date = today_as_string()
         },
@@ -573,6 +583,16 @@ window.onload = function () {
               url: 'users.json',
               success: function(res) {
                 that.users = res;
+              }
+            });
+          },
+          load_tax_regions: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: 'suppliers/tax_regions',
+              success: function(res) {
+                that.tax_regions = res;
               }
             });
           },

@@ -141,6 +141,7 @@ Rails.application.routes.draw do
   resources :suppliers do
     collection do
       get :suppliers_list
+      get :tax_regions
     end
   end
 

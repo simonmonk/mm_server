@@ -20,7 +20,8 @@ class Adjustment < ApplicationRecord
   # for polymorphism using orders_in and shipments
 
   def transaction_summary()
-    'Adjustment ' + adjustment_type
+    adj_type = AdjustmentType.find(adjustment_type_id)
+    'Adjustment ' + adj_type.name
   end
 
   def name()
@@ -165,8 +166,9 @@ class Adjustment < ApplicationRecord
   # end
 
   def is_vatable()
-    vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees', 'Ebay Sale'] 
-    return vatable_codes.include?(adjustment_type)
+    # vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees', 'Ebay Sale'] 
+    # return vatable_codes.include?(adjustment_type)
+    return vat > 0
   end
 
   def currency()
