@@ -175,6 +175,9 @@ class OrderIn < ApplicationRecord
   end
 
   def boxes()
+    if (not is_vatable())
+      return []
+    end
     if (supplier.tax_region == 'EU')
       return [2, 4, 7, 9]
     else
