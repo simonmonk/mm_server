@@ -61,6 +61,6 @@ class Expense < ApplicationRecord
         super(:methods => [:accounting_date, :transaction_type, :vat_action, :is_income, :is_vatable,
                         :accounts, :account_ids, :transaction_summary, :direction, :name, :has_proof_uploaded,
                         :expense_number ])
-  end  
+    end  
 
 end
