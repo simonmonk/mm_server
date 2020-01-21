@@ -11,17 +11,20 @@ class Adjustment < ApplicationRecord
 
   # belongs_to :adjustment_type // nope cant do this beacuse of migration of string adjustment type to an object.
 
-    # This needs refactoring to use AdjustmentType - the method could 
-    def Adjustment.types()
-        return ['Overpayment', 'Underpayment', 'Transfer', 'Actual Income from Amazon', 'Reported Income from Amazon', 
-                  'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale', 'Reimbursement'] # Add but dont edit!
-    end
+    # THIS IS NOW IN SEPARATE ADJUSTMENT_TYPE OBJEVT - DELETE THIS !!!!!!!!!!!!!!!!!!!!!!!
+    # def Adjustment.types()
+    #     return ['Overpayment', 'Underpayment', 'Transfer', 'Actual Income from Amazon', 'Reported Income from Amazon', 
+    #               'Amazon Fees', 'HMRC Adjustment', 'Ebay Sale', 'Reimbursement'] # Add but dont edit!
+    # end
 
   # for polymorphism using orders_in and shipments
 
   def transaction_summary()
-    adj_type = AdjustmentType.find(adjustment_type_id)
-    'Adjustment ' + adj_type.name
+    'Adjustment ' + adj_type().name
+  end
+
+  def adj_type()
+    return AdjustmentType.find(adjustment_type_id)
   end
 
   def name()
@@ -165,6 +168,27 @@ class Adjustment < ApplicationRecord
   #   return 'UK'
   # end
 
+  def boxes()
+    code = adj_type.code
+    if (code == 'TRANSFER' or code == 'AMAZON_ACTUAL' or code == 'HMRC')
+      return []
+    elsif (code == 'OVER_PAYMENT' || code == 'UNDER_PAYMENT')
+      return [1, 6]
+    elsif (code == 'AMAZON_REPORTED' or code == 'EBAY')
+      # treat the same way as a sale
+      if (tax_region == 'EU')
+        return [1, 6, 8]
+      else
+        return [1, 6]
+      end
+    elsif (code == 'AMAZON_FEES')
+      return [2, 4, 7]
+    else
+      return []
+    end
+  end
+
+  # may be redundant
   def is_vatable()
     # vatable_codes = ['Overpayment', 'Underpayment', 'Reported Income from Amazon', 'Amazon Fees', 'Ebay Sale'] 
     # return vatable_codes.include?(adjustment_type)

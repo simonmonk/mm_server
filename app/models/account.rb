@@ -68,35 +68,38 @@ class Account < ApplicationRecord
         b9_totalAcquisitionsExVAT = 0 # [9]Total value of acquisitions of goods and related costs excluding any VAT, from other EC member states.
         
         transactions.each do | transaction | 
-            transaction.vat_action = ""
+            transaction.vat_action = "Boxes "
             # adding and taking away
-            if (transaction.is_income and transaction.transaction_type != 'Transfer' and transaction.transaction_type != 'HMRC Adjustment')
-                # Sales (Outputs)
+            boxes = transaction.boxes
+            if (boxes.include?(1)) 
                 b1_vatDueSales += transaction.vat
-                b6_totalValueSalesExVAT += transaction.without_vat
-                transaction.vat_action += " + box 1 and 6"
-                if (transaction.tax_region == 'EU')
-                    # EU sales also need to be added to box 8
-                    b8_totalValueGoodsSuppliedExVAT += transaction.without_vat      # Podconsult overpayment Adjustment went in boxes 1 and 6 but should go into box 8 as well but it didn't
-                    transaction.vat_action += " + box 8"                            # This is because Adjustment doesn't know its tax region - add to db and UI
-                end
-            else
-                # Purchases (Inputs)
-                # for all purchases irrespective of country
-                if (transaction.is_vatable)
-                    b7_totalValuePurchasesExVAT += transaction.without_vat   
-                    b4_vatReclaimedCurrPeriod += transaction.vat
-                    transaction.vat_action += " + boxes 4 and 7."
-                end
-                if (transaction.tax_region == 'EU') 
-                    b2_vatDueAcquisitions += transaction.vat
-                    transaction.vat_action += " + box 2."
-                end
-                if (transaction.tax_region == 'EU' and transaction.transaction_type == 'ORDER_IN' and not transaction.is_service)     
-                    b9_totalAcquisitionsExVAT += transaction.without_vat
-                    transaction.vat_action += " + box 9."
-                end
+                transaction.vat_action += "1 "
             end
+            if (boxes.include?(2)) 
+                b2_vatDueAcquisitions += transaction.vat
+                transaction.vat_action += "2 "
+            end
+            if (boxes.include?(4)) 
+                b4_vatReclaimedCurrPeriod += transaction.vat
+                transaction.vat_action += "4 "
+            end
+            if (boxes.include?(6)) 
+                b6_totalValueSalesExVAT += transaction.without_vat
+                transaction.vat_action += "6 "
+            end
+            if (boxes.include?(7)) 
+                b7_totalValuePurchasesExVAT += transaction.without_vat
+                transaction.vat_action += "7 "
+            end
+            if (boxes.include?(8)) 
+                b8_totalValueGoodsSuppliedExVAT += transaction.without_vat
+                transaction.vat_action += "8 "
+            end
+            if (boxes.include?(9)) 
+                b9_totalAcquisitionsExVAT += transaction.without_vat
+                transaction.vat_action += "9 "
+            end                
+
             transaction.save()
         end
         b3_totalVatDue = b1_vatDueSales + b2_vatDueAcquisitions # [3]Total VAT due (the sum of vatDueSales and vatDueAcquisitions). 

@@ -107,6 +107,16 @@ class Shipment < ApplicationRecord
     return true
   end
 
+  def boxes()
+    if (retailer.tax_region == 'UK')
+      return [1, 6]
+    elsif (retailer.tax_region == 'EU')
+      return [1, 6, 8]
+    else
+      return [6]
+    end
+  end
+
   # not part of the polymorphism but a utility fn.
   def sales_from_invoice()
     sales_total = 0

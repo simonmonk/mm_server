@@ -174,6 +174,15 @@ class OrderIn < ApplicationRecord
     return supplier.tax_region
   end
 
+  def boxes()
+    if (supplier.tax_region == 'EU')
+      return [4, 7, 9]
+    else
+      return [4, 7]
+    end
+  end
+
+  # This may be redundant now transactions are respoinsible for deciding on their own boxes.
   def is_vatable()
     if (order_in_lines.length == 1 and order_in_lines[0].book_keeping_category)
       return order_in_lines[0].book_keeping_category.is_vat_input_category() 

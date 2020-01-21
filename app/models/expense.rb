@@ -31,6 +31,12 @@ class Expense < ApplicationRecord
         return 'MONEY_OUT'
     end
 
+    # TBD
+    def boxes()
+        return []
+    end
+
+    # May be redundant
     def is_vatable()
         return false
     end
