@@ -72,17 +72,13 @@ class Account < ApplicationRecord
             # adding and taking away
             if (transaction.is_income and transaction.transaction_type != 'Transfer' and transaction.transaction_type != 'HMRC Adjustment')
                 # Sales (Outputs)
+                b1_vatDueSales += transaction.vat
+                b6_totalValueSalesExVAT += transaction.without_vat
+                transaction.vat_action += " + box 1 and 6"
                 if (transaction.tax_region == 'EU')
                     # EU sales also need to be added to box 8
                     b8_totalValueGoodsSuppliedExVAT += transaction.without_vat      # Podconsult overpayment Adjustment went in boxes 1 and 6 but should go into box 8 as well but it didn't
-                    b6_totalValueSalesExVAT += transaction.without_vat
-                    transaction.vat_action += " + box 8 and 6"                      # This is because Adjustment doesn't know its tax region - add to db and UI
-                end
-                # Whatever the region the VAT needs adding to b1
-                if (transaction.vat != 0)
-                    b1_vatDueSales += transaction.vat
-                    b6_totalValueSalesExVAT += transaction.without_vat
-                    transaction.vat_action += " + box 1 and 6"
+                    transaction.vat_action += " + box 8"                            # This is because Adjustment doesn't know its tax region - add to db and UI
                 end
             else
                 # Purchases (Inputs)
