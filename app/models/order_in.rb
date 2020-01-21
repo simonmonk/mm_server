@@ -190,7 +190,7 @@ class OrderIn < ApplicationRecord
     if (order_in_lines.length == 1 and order_in_lines[0].book_keeping_category)
       return order_in_lines[0].book_keeping_category.is_vat_input_category() 
     else
-      return true
+      return false # was true but should'nt get here anyway
     end
   end
 
