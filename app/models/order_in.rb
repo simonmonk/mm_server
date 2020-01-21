@@ -176,7 +176,7 @@ class OrderIn < ApplicationRecord
 
   def boxes()
     if (supplier.tax_region == 'EU')
-      return [4, 7, 9]
+      return [2, 4, 7, 9]
     else
       return [4, 7]
     end
