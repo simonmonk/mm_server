@@ -120,8 +120,9 @@ class OrderIn < ApplicationRecord
 # Actually for VAT they don't but for accounts spreadsheet generation, they will.
 # But, there are some accounting categories that affect the VAT applicability
 # so, if an Order_in only has one Line, use that line's category.
+# Change in logic Jan2020 use first cat even if there are multiple
   def category()
-    if (order_in_lines.length == 1)
+    if (order_in_lines.length > 0)
       cat = order_in_lines[0].book_keeping_category
       if (cat)
         return cat.name
