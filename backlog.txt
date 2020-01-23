@@ -3,6 +3,9 @@ Critical BUGS
 
 When doing update part price from a received order in dollars, the exchange rate doesnt get set seems to get lost. See last order of RGB LEDs for this.
 TEST: 
+Its because the order itself may not have an exchange rate. So if no exchange rate is set, use the current one, that's set from a cron tab.
+reinstate the cron tab.
+Fixed
 
 On the part form would be good to show the login details next to the supplier info at the bottom.
 
@@ -30,7 +33,7 @@ seems to be when add one item to stock.
 
 
 
--- could I just have deleted the part because there were dups? NO - have rep[roduced the problem without doiung this.]
+-- could I just have deleted the part because there were dups? NO - have rep[roduced the problem without doing this.]
 ***** fix live db by re adding line item, marking as rx and then deducting prev addition of 1000 to stock. DONE.
 
 

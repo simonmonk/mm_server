@@ -44,5 +44,6 @@ class Currency < ApplicationRecord
       dollar = Currency.usd()
       return dollar.updated_at
   end
+
     
 end

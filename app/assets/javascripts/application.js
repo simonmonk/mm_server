@@ -68,3 +68,4 @@ String.prototype.to_currency = function(currency) {
 today_as_string = function() {
     return new Date().toISOString().slice(0,10);
 }
+

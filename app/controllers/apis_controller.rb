@@ -197,10 +197,10 @@ end
 # http://localhost:3000/apis/nightly    
 def nightly()
    this_week = Sale.current_week_of_epoch
-   Notification.delete_all 
-   import_orders_amazon_com_week(this_week)
-   import_orders_amazon_uk_week(this_week)
-   check_stock_levels()
+   # Notification.delete_all 
+   # import_orders_amazon_com_week(this_week)
+   # import_orders_amazon_uk_week(this_week)
+   # check_stock_levels()
    Currency.set_usd_rate
 end
     

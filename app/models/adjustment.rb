@@ -63,7 +63,14 @@ class Adjustment < ApplicationRecord
 
   # TODO - make this use both accounts for transfer etc
   def account_ids()
-    return [1, 2]
+    ids = []
+    if (from_account_id)
+      ids.append(from_account_id)
+    end
+    if (to_account_id)
+      ids.append(to_account_id)
+    end
+    return ids
   end
 
   def transaction_type()

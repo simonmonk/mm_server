@@ -52,10 +52,18 @@
 </div>
 
 <div v-if="filter_by_account.id != 0">
+<div>
 <span>Opening Balance</span>
-<input v-model="filter_by_account.balance" type="text" class="form-control" placeholder="Opening balance"/>
+<input v-model="opening_balance" type="text" placeholder="Opening balance"/>
 </div>
 
+<div>
+<span>Closing Balance</span>
+<span>{{closing_balance}}</span>
+<span><button type="button" v-on:click="update_closing_balance()" class="btn btn-success">Update</button></span>
+</div>
+
+</div>
 
 <!-- Edit Adjustment Form  -->
 <div id="edit_adjustment_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -528,6 +536,8 @@ window.onload = function () {
             expense: {id: null},
             order_in: {id: null},
             shipment: {id: null},
+            opening_balance: 0,
+            closing_balance: 0,
         },
         mounted: function() {
           var that;
@@ -892,6 +902,26 @@ window.onload = function () {
             }
           },
 
+          update_closing_balance: function() {
+            var that;
+            that = this;
+            this.closing_balance = parseFloat(this.opening_balance);
+            if (this.filter_by_account.id == 0) {
+              return;
+            }
+            this.transactions.forEach(function (transaction, index) {
+              accs = transaction.account_ids;
+              if (accs > 0 && accs[0] == that.filter_by_account.id) {
+                if (transaction.direction == "MONEY_IN") {
+                  that.closing_balance += parseFloat(transaction.with_vat);
+                }
+                else {
+                  that.closing_balance -= parseFloat(transaction.with_vat);
+                }
+              }
+            });
+            this.closing_balance = this.closing_balance.toFixed(2);
+          },
 
           calc_miles: function() {
             if (this.expense.miles > 0 && this.expense.mileage_rate >0) {
