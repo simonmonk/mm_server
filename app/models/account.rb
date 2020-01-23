@@ -87,7 +87,7 @@ class Account < ApplicationRecord
             end
             if (boxes.include?(7)) 
                 b7_totalValuePurchasesExVAT += transaction.without_vat
-                transaction.vat_action += "7 "
+                transaction.vat_action += "7(" +  transaction.without_vat.to_s + ")"
             end
             if (boxes.include?(8)) 
                 b8_totalValueGoodsSuppliedExVAT += transaction.without_vat
