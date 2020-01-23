@@ -22,8 +22,7 @@ class Account < ApplicationRecord
         Shipment.all.each do | shipment |
             if (shipment.accounting_date and
                     (shipment.accounting_date >= from_date) and
-                    (shipment.accounting_date <= to_date) and
-                    not shipment.is_amazon())
+                    (shipment.accounting_date <= to_date))
                 receipts.append(shipment)
             end
         end
@@ -39,8 +38,7 @@ class Account < ApplicationRecord
         Adjustment.all.each do | adjustment |
             if (adjustment.accounting_date and
                     (adjustment.accounting_date >= from_date) and
-                    (adjustment.accounting_date <= to_date) and
-                    (adjustment.accounting_date != 'Actual Income from Amazon'))
+                    (adjustment.accounting_date <= to_date))
                 adjustments.append(adjustment)
             end
         end
