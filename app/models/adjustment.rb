@@ -90,7 +90,7 @@ class Adjustment < ApplicationRecord
   end
 
   def accounts()
-    if (adjustment_type == 'Transfer')
+    if (adj_type().code == 'TRANSFER')
       if (from_account and to_account)
         return from_account.name + '>>>' + to_account.name
       else
@@ -105,6 +105,7 @@ class Adjustment < ApplicationRecord
     end
   end
 
+  # this uses old adjustment type - fix
   def category()
     return adjustment_type
   end
@@ -190,6 +191,12 @@ class Adjustment < ApplicationRecord
       end
     elsif (code == 'AMAZON_FEES')
       return [2, 4, 7]
+    elsif (code == 'REIMBURSEMENT')
+      # ask Linda why 7 - prob only 7 if its a reimbursement for an EU purchase
+      return [4, 7]
+    elsif (code == 'REFUND')
+      # VAT for a refund needs knocking off from original purchase - its a kind of negative purchase
+      return [] # TBA - ask Linda
     else
       return []
     end
