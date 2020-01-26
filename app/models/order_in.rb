@@ -180,7 +180,7 @@ class OrderIn < ApplicationRecord
       return []
     end
     if (supplier.tax_region == 'EU')
-      if (is_service)
+      if (is_service == true )
         return [2, 4, 7, 9]
       else
         return [2, 4, 7]
