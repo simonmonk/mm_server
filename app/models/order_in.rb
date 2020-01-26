@@ -183,7 +183,7 @@ class OrderIn < ApplicationRecord
       if (is_service)
         return [2, 4, 7, 9]
       else
-        return [2. 4. 7]
+        return [2, 4, 7]
     else
       return [4, 7]
     end
