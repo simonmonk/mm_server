@@ -184,6 +184,7 @@ class OrderIn < ApplicationRecord
         return [2, 4, 7, 9]
       else
         return [2, 4, 7]
+      end
     else
       return [4, 7]
     end
