@@ -39,6 +39,10 @@ class ProductsController < ApplicationController
       render :layout => false
   end
 
+  def pricelist_csv
+    render :layout => false
+  end
+
   def image_links
     render :layout => false
   end

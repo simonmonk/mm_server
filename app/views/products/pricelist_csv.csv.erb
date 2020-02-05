@@ -1,0 +1,19 @@
+<%
+
+valid_until_date = params['date']
+valid_from_date = params['from_date']
+
+%>
+
+Name,SKU,Wholesale (GBP),SRP (GBP),Weight (g),Harmonized Tarrif No,Country of Origin,High Res Images,Product Info Page
+<%
+categories = ProductCategory.all.order(priority: :asc)
+i = 0
+categories.each do | cat |
+    cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each do | product |
+%>
+<%=product.name%>,<%=product.sku%>,<%=product.wholesale_price%>,<%=product.retail_price%>,<%=product.weight_g%>,<%=product.harmoized_tarrif_number%>,<%=product.country_of_origin%>,<%=product.high_res_image_share%>,<%=product.product_url%>
+<%
+    end
+end
+%>

@@ -78,6 +78,7 @@ Rails.application.routes.draw do
       get :sales_by_product
       get :sales_report
       get :image_links
+      get :pricelist_csv
       get :product_id_from_barcode
       get :print_labels
       get :stock_label
