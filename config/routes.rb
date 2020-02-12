@@ -137,6 +137,7 @@ Rails.application.routes.draw do
       post :set_new_part_price_json
       get :delete_json
       post :import_invoice
+      post :upload
     end
   end
   resources :suppliers do

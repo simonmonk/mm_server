@@ -107,6 +107,17 @@ class OrderInsController < ApplicationController
     end
   end
 
+  # For file upload of invoices
+  def upload
+    uploaded_io = params[:file]
+    share = Setting.get_setting('INVOICE_SHARE')
+    filename = share + "/temp.pdf"
+    File.open(filename, 'wb') do |file|
+        file.write(uploaded_io.read)
+    end
+  end
+
+
   def update
       if @order_in.update(order_in_params)
         redirect_to :action => "edit", :id =>@order_in.id

@@ -275,6 +275,10 @@ Sort by:
             <td>Print as PDF the invoice into the INVOICES shared folder on the MM Server then Click <b>Import</b></td>
             <td><span :disabled="importing_message.length > 0" v-on:click="request_import_invoice()" class="badge badge-success">Import</span></td>
           </tr>
+          <tr>
+          <td>.. or upload a file, then hit <b>Import</b></td>
+          <td><input type="file" accept="application/pdf" @change="uploadImage($event)" id="file-input"></td>
+        </tr>
           <tr v-if="importing_message.length > 0"><td>{{importing_message}}</td></tr>
           <tr><td colspan="2">
             <iframe id="invoice_iframe" width="600" height="300" type="application/pdf" v-bind:src="'/purchasing_invoices/' + order_in.order_number + '.pdf?random=' + Date.now"></iframe>
@@ -283,6 +287,7 @@ Sort by:
           <tr><td>
             <button v-if="importing_message.length == 0" type="button" v-on:click="cancel('#capture_invoice_form')" class="btn btn-info">Done</button>
           </td></tr>
+
         </table>
       </div>
     </div>
@@ -732,6 +737,21 @@ window.onload = function () {
           open_in_new_tab: function(url) {
             var win = window.open(url, '_blank');
             win.focus();
+          },
+          uploadImage: function(event) {
+            const url = '/order_ins/upload'; 
+            let data = new FormData();
+            data.append('file', event.target.files[0]); 
+            $.ajax({
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: url,
+              data: data,
+              success: function(res) {
+                alert("Now press the IMPORT button")
+              }
+            });
           }
         },
         computed: {
