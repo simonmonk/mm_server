@@ -1,3 +1,5 @@
+require "peddler"
+
 class Account < ApplicationRecord
 
 
@@ -118,6 +120,21 @@ class Account < ApplicationRecord
         }
         return [transactions, summary_data]
     end
+
+
+    def Account.getAmazonFinancials(month, country)
+        
+        client = MWS.finances(
+                marketplace: Rails.application.secrets.AM_UK_PRIMARY_MARKETPLACE_ID,
+                merchant_id: Rails.application.secrets.AM_UK_MERCHANT_ID,
+                aws_access_key_id: Rails.application.secrets.AM_UK_ACCESS_KEY,
+                aws_secret_access_key: Rails.application.secrets.AM_UK_SECRET_KEY)
+        
+        parser = client.list_financial_event_groups(Time.now.to_s)
+        x = parser.parse
+        puts x['Orders']
+    end
+    
 
 
 end

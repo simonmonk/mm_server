@@ -22,6 +22,8 @@
 
 <!-- Time selection and loading form -->
 <div>
+<button type="button" v-on:click="set_dates_last_q()" class="badge badge-info">Last Quarter</button>
+<button type="button" v-on:click="set_dates_this_q()" class="badge badge-info">This Quarter</button>
 <span>
 <form class="form-inline my-2 my-lg-0">
 <span>From Date: </span><input v-model="from_date" type="date" value="" class="form-control" placeholder="First day of period"/>
@@ -625,6 +627,14 @@ window.onload = function () {
                 that.cost_centres = res;
               }
             });
+          },
+          set_dates_last_q: function() {
+            this.from_date = quarter_dates("previous").StartDate;
+            this.to_date = quarter_dates("previous").EndDate;
+          },
+          set_dates_this_q: function() {
+            this.from_date = quarter_dates("this").StartDate;
+            this.to_date = quarter_dates("this").EndDate;
           },
           save_adjustment: function(modal_to_close) {
             // save an edited PUT adjustment or create a new on on db POST

@@ -1,41 +1,3 @@
-Critical BUGS
-==============
-
-When doing update part price from a received order in dollars, the exchange rate doesnt get set seems to get lost. See last order of RGB LEDs for this.
-TEST: 
-Its because the order itself may not have an exchange rate. So if no exchange rate is set, use the current one, that's set from a cron tab.
-reinstate the cron tab.
-Fixed
-
-On the part form would be good to show the login details next to the supplier info at the bottom.
-
-The sort order for purchases seems to be mad after LInda's added a whole load of new transactions in.
-
-Deducting stock at shipment seems to be deducting stock twice and then giving error message saying not enough stock in 
-the Transaction log.
-- Think this was a double-click problem. This is now guarded against in the JS.
-
-***** Purchase from Mouser, including 1000 100u caps has not added them to stock 
-***** despite being marked as received and the Name column in the line items shows as blank.
-***** Show the purchases for a part on the parts page as something useful; and to help debugging.
-- the order in line has the wrong part_id (245) which is 1 more than the highest part_id. Item 12 in orginal request.
-- whats different about this order?
--- its mixed, parts and non-parts? Test - nope, doesn't seem to be a problem.
--- could it be to do with confused action around editing a line item, which creates a new one? - Yes
-when I edited another line item on the list, it did not damage that line item or its duplicate, but did destroy the part_id of a duplicate 
-of the original line_item problem. But after a reload, only the originasl item was damaged.
-
-Try to reproduce from scratch:
-Note - when we create a new order_in the whole list is reloaded - this seems excessive. 
-Could it be to do with an update request hapenning before a load has finished?
-
-seems to be when add one item to stock.
-
-
-
--- could I just have deleted the part because there were dups? NO - have rep[roduced the problem without doing this.]
-***** fix live db by re adding line item, marking as rx and then deducting prev addition of 1000 to stock. DONE.
-
 
 MM Server Backlog
 ==================
@@ -48,9 +10,17 @@ $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
 
-FRCs
-====
+Critical BUGS
+==============
+
+
+Changes Needed
+===============
 Sort parts within a category into alhpabetical order
+
+On the part form would be good to show the login details next to the supplier info at the bottom.
+
+The sort order for purchases seems to be mad after LInda's added a whole load of new transactions in.
 
 
 
@@ -68,6 +38,25 @@ Massive Refactoring
 Bookkeeping 
 -----------------
 
+Reconciled / checked flag against all items
+SO! we don't need this, because reconciliation is about finding things in the bank account that aren't in this list. 
+The other way around shouldn't be possible.
+
+So Linda's system for reconciliation is print off the list per account and paper ticks here and paper ticks on every account statement.
+
+Amazon
+-
+Amazon fees - are a magic number we get the gross amount and can deduce the VAT that needs 
+to go on the EU stats collecting thing even though its zero rated. 
+For Amazon.com fees are payable in dollars and need to be converted using exchange rate 
+- check that Amazon fee adjustment goes in right VAT boxes.
+
+Amazon statements - 
+
+
+
+
+
 Where do wages payments get recorded? Or aren't they because its mostly about VAT ATM. - purchase to indidual
 
 wages
@@ -84,200 +73,13 @@ DONT REALLY NEED SINCE THESE ARE GENERATED FROM DATQA /public/sales_invoices
 
 and get gdrived into folders of same name on shared drive
 
-Adjustment
---
- is a bit crap because it models:
-* transfers - from one account to another 
-(change to drop-downs and provide migration script to be called from console ]
-to find all and link from acc and to acc). Also type (transfer etc) should be from drop-down with switched UI.
-* Overpayment / Underpayment - by our customers to use
-Statement comes from Amazon and gets split into 3 adjustments:
-* Actual Income from Amazon - uk income into current account, US into world first as dollars, EU into world first as euros
- and is sales for period - fees. But some may be held back.
-* Reported Income from Amazon - income amount from actual income from Amazon.
-* Amazon fees - the fees part from the statement
 
-* HMRC Adjustment - money in or out of current E.g. VAT repayment (because can't do it as a purchase, as you would with a Tax bill)
-* Ebay sale - selling off crap (one off etc - prob better just to give away)
-
-
-AdjustmentType.migrate_string_adjustment_types() - run on live server after running on live data on test server
-- run with live data on test server [Y - all ok]
-- run on live server [Y - all ok]
-
-Adjustment.migrate_accounts()
-- run with live data on test server [Y - big llist of accounts to save, but can do from Bookeeping View]
-- run on live server [Y - same big list for Linda to edit.]
-
-run 16/1/2020
-2.4.0 :011 > Adjustment.migrate_accounts()
-****** Manual Action Needed Cannot set account for adjustemnt:2
-****** Manual Action Needed Cannot set account for adjustemnt:4
-****** Manual Action Needed Cannot set account for adjustemnt:5
-****** Manual Action Needed Cannot set account for adjustemnt:6
-****** Manual Action Needed Cannot set account for adjustemnt:7
-****** Manual Action Needed Cannot set account for adjustemnt:8
-****** Manual Action Needed Cannot set account for adjustemnt:9
-Setting account of adjustment:10 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:11
-****** Manual Action Needed Cannot set account for adjustemnt:12
-****** Manual Action Needed Cannot set account for adjustemnt:13
-****** Manual Action Needed Cannot set account for adjustemnt:14
-****** Manual Action Needed Cannot set account for adjustemnt:15
-****** Manual Action Needed Cannot set account for adjustemnt:16
-Setting account of adjustment:17 to:Current
-Setting account of adjustment:18 to:Current
-Setting account of adjustment:19 to:Current
-Setting account of adjustment:20 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:21
-****** Manual Action Needed Cannot set account for adjustemnt:22
-****** Manual Action Needed Cannot set account for adjustemnt:23
-****** Manual Action Needed Cannot set account for adjustemnt:24
-****** Manual Action Needed Cannot set account for adjustemnt:25
-****** Manual Action Needed Cannot set account for adjustemnt:26
-****** Manual Action Needed Cannot set account for adjustemnt:27
-****** Manual Action Needed Cannot set account for adjustemnt:29
-****** Manual Action Needed Cannot set account for adjustemnt:30
-****** Manual Action Needed Cannot set account for adjustemnt:31
-****** Manual Action Needed Cannot set account for adjustemnt:32
-****** Manual Action Needed Cannot set account for adjustemnt:33
-Setting account of adjustment:34 to:Current
-Setting account of adjustment:35 to:Current
-Setting account of adjustment:36 to:Current
-Setting account of adjustment:37 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:38
-****** Manual Action Needed Cannot set account for adjustemnt:39
-****** Manual Action Needed Cannot set account for adjustemnt:40
-****** Manual Action Needed Cannot set account for adjustemnt:41
-****** Manual Action Needed Cannot set account for adjustemnt:42
-****** Manual Action Needed Cannot set account for adjustemnt:43
-Setting account of adjustment:44 to:Current
-Setting account of adjustment:45 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:46
-Setting account of adjustment:47 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:48
-Setting account of adjustment:49 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:50
-****** Manual Action Needed Cannot set account for adjustemnt:51
-****** Manual Action Needed Cannot set account for adjustemnt:52
-****** Manual Action Needed Cannot set account for adjustemnt:53
-****** Manual Action Needed Cannot set account for adjustemnt:54
-****** Manual Action Needed Cannot set account for adjustemnt:55
-****** Manual Action Needed Cannot set account for adjustemnt:56
-****** Manual Action Needed Cannot set account for adjustemnt:57
-****** Manual Action Needed Cannot set account for adjustemnt:58
-****** Manual Action Needed Cannot set account for adjustemnt:59
-****** Manual Action Needed Cannot set account for adjustemnt:60
-****** Manual Action Needed Cannot set account for adjustemnt:61
-****** Manual Action Needed Cannot set account for adjustemnt:62
-****** Manual Action Needed Cannot set account for adjustemnt:63
-****** Manual Action Needed Cannot set account for adjustemnt:64
-****** Manual Action Needed Cannot set account for adjustemnt:65
-****** Manual Action Needed Cannot set account for adjustemnt:66
-****** Manual Action Needed Cannot set account for adjustemnt:67
-****** Manual Action Needed Cannot set account for adjustemnt:68
-****** Manual Action Needed Cannot set account for adjustemnt:69
-****** Manual Action Needed Cannot set account for adjustemnt:70
-Setting account of adjustment:71 to:Current
-Setting account of adjustment:72 to:Current
-Setting account of adjustment:73 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:74
-****** Manual Action Needed Cannot set account for adjustemnt:75
-****** Manual Action Needed Cannot set account for adjustemnt:76
-Setting account of adjustment:77 to:Current
-Setting account of adjustment:78 to:Current
-Setting account of adjustment:79 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:80
-****** Manual Action Needed Cannot set account for adjustemnt:81
-Setting account of adjustment:82 to:Current
-Setting account of adjustment:83 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:84
-Setting account of adjustment:85 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:86
-****** Manual Action Needed Cannot set account for adjustemnt:87
-Setting account of adjustment:88 to:Current
-Setting account of adjustment:89 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:90
-****** Manual Action Needed Cannot set account for adjustemnt:91
-****** Manual Action Needed Cannot set account for adjustemnt:92
-Setting account of adjustment:93 to:Current
-Setting account of adjustment:94 to:Current
-Setting account of adjustment:95 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:96
-Setting account of adjustment:97 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:98
-****** Manual Action Needed Cannot set account for adjustemnt:101
-Setting account of adjustment:102 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:103
-****** Manual Action Needed Cannot set account for adjustemnt:104
-****** Manual Action Needed Cannot set account for adjustemnt:105
-****** Manual Action Needed Cannot set account for adjustemnt:106
-Setting account of adjustment:107 to:Current
-****** Manual Action Needed Cannot set account for adjustemnt:108
-****** Manual Action Needed Cannot set account for adjustemnt:109
-****** Manual Action Needed Cannot set account for adjustemnt:110
-****** Manual Action Needed Cannot set account for adjustemnt:111
-****** Manual Action Needed Cannot set account for adjustemnt:112
-****** Manual Action Needed Cannot set account for adjustemnt:113
-****** Manual Action Needed Cannot set account for adjustemnt:114
-****** Manual Action Needed Cannot set account for adjustemnt:115
-****** Manual Action Needed Cannot set account for adjustemnt:116
-****** Manual Action Needed Cannot set account for adjustemnt:117
-****** Manual Action Needed Cannot set account for adjustemnt:118
-****** Manual Action Needed Cannot set account for adjustemnt:119
-****** Manual Action Needed Cannot set account for adjustemnt:120
-****** Manual Action Needed Cannot set account for adjustemnt:121
-****** Manual Action Needed Cannot set account for adjustemnt:122
-****** Manual Action Needed Cannot set account for adjustemnt:123
-****** Manual Action Needed Cannot set account for adjustemnt:124
-
-
-
-
-Shipment
---
-DONE: Needs a account money received into, add to reconcile form.
-
-
-Expenses
---
-This doesn't need a separate view, add it into the bookkeeping view
-View needs usual sorting and filtering options
-Add photo capture of expense_receipts
-
-
-
-
-Bookkepeping view
---
-
-Base on VAT page and show icon for uploaded supporting file - allow file association here
-
-DONE - Add a flag to all kinds of bookeeping transaction 'is_checked' - means its finalized and good to go.
-DONE - Generate a controller for 'bookkeeping'
-DONE - Add a has_proof_uploaded method to order_ins that searches 'public/invoices' dir
-Add a has_proof_uploaded to expenses (Camera option)
-Add a has_proof_uploaded to adjustments
 
 
 
 I don't think we need specialised components - because the view from the BookKeeping view will be different - simpler and only concerned with auditability.
 
 
-
-General
---------
-
-Shipping to Amazon - put the code back in to pull over an order. (may just be a button)
-
-There needs to be a way to record failures - E.g. you make 100 RGB LEDs but 10 didn't work. Put on the deduct stock page for assemblies - shouldn't need for parts.
-
-
-
-
-Expenses
---------
-* drop-down for time period
 
 New MM Website
 --------------
@@ -332,45 +134,6 @@ output -
 
 
 
-
-BUGS
-=====
-
-
-Changes to OrderIn
-==================
-
-OrderIn changes.
-- account_id - used to pay the invoice
-- invoice_uri - of a scan of the invoice, or saved invoice
-
-
-OrderInLine changes.
-- Add a flag - stock_added - so that button Add Stock can be greyed out on an order line.
-- category_id - what type of purchase, Materials (Part), stationary, postage, insurance, PAYE etc - get from spreadsheet
-This triggers lots of conditional UI.
-- cost_centre_id - a single invoice CAN be split accross cost centres
-
-- OrderInLine becomes poymorphic - parts and non-parts, so, it needs extra non-part fields of:
--- name, order code, note
-
-
-
-Generating payments CSV
------------------------
-
-
-????? Parts probably shouldn't have an exchange rate. Product estimated pricing should prob go off current exchange rate for next order.
-
-
-
-New rule for shipments list.
----
-
-Amazon orders (both) should count as invoiced as long as they are shipped.
-Shipment line items for Amazon.com should have extra columns for retail price dollars, extended price in dollars.
-This is done, but the total needs to be in dollars too. Also change the Copy Customs Dec field so that it prepends the name.
----
 
 Shipments
 -----------
@@ -435,15 +198,6 @@ Total
 Nice stuff
 ---------
 Parts and view of parts in order-in to show previous prices and who from.
-
-
-BUGS
-----
-
-Parts no longer show what they are used in.
-
-Invoives: Checkbox for VAT should be applied to shipping - Uncompleted and probably needs backing out.
-
 
 
 Global

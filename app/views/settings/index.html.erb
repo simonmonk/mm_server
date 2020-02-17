@@ -27,3 +27,13 @@
 <br>
 
 <%= link_to 'New Setting', new_setting_path %>
+
+
+<% if (Dir.pwd != '/')%>
+
+<br/>
+<a href="/settings/set_test_env">Set to Test Env</a>
+
+<%end%>
+
+

@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
   resources :adjustment_types
-  resources :settings
   resources :assembly_categories
   resources :expenses
   resources :adjustments
@@ -32,6 +31,7 @@ Rails.application.routes.draw do
   get 'bookkeepings/transactions', to: 'bookkeepings#transactions'
   get 'bookkeepings', to: 'bookkeepings#index'
   get 'parts/:id/set_inactive/', to: 'parts#set_inactive'
+
   
   resources :accounts do
     collection do
@@ -164,6 +164,18 @@ Rails.application.routes.draw do
           get :financial
       end
   end
-    
+
+  resources :settings do
+    collection do
+        get :set_test_env
+    end
+  end
+
+  resources :website do
+    collection do
+      get :index  
+    end
+  end
+
   root 'welcome#index'
 end

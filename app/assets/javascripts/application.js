@@ -69,3 +69,23 @@ today_as_string = function() {
     return new Date().toISOString().slice(0,10);
 }
 
+quarter_dates = function(value) {
+    var today = new Date(),
+        quarter = Math.floor((today.getMonth() / 3)),
+        startDate,
+        endDate;
+    switch (value) {
+        case "previous":
+            startDate = new Date(today.getFullYear(), quarter * 3 - 3, 2); // was 1
+            endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 3, 1);
+            break;
+        default:
+            startDate = new Date(today.getFullYear(), quarter * 3, 2);
+            endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 3, 1);
+            break;
+    }
+    return {
+        StartDate: startDate.toISOString().slice(0,10),
+        EndDate: endDate.toISOString().slice(0,10)
+    };
+}
