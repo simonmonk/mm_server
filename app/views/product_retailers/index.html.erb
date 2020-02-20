@@ -10,13 +10,22 @@
   </thead>
 
   <tbody>
-    <% @product_retailers.each do |product_retailer| %>
+    <% 
+      prs = @product_retailers.sort { |a,b| a.retailer.name <=> b.retailer.name }
+      prs.each do | product_retailer | 
+      product = product_retailer.product
+      retailer = product_retailer.retailer
+      if (retailer.include_in_website and retailer.active and not retailer.is_retail)
+    %>
       <tr>
+        <td><%=retailer.name%></td>
+        <td><%=product.name%></td>
+        <td><%=product_retailer.url%></td>
         <td><%= link_to 'Show', product_retailer %></td>
         <td><%= link_to 'Edit', edit_product_retailer_path(product_retailer) %></td>
         <td><%= link_to 'Destroy', product_retailer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-    <% end %>
+    <% end end%>
   </tbody>
 </table>
 
