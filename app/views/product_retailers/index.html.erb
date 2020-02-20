@@ -10,6 +10,11 @@
   </thead>
 
   <tbody>
+    <tr>
+      <th>Retailer</th>
+      <th>Product</th>
+      <th>Product page URL for retailer</th>
+    </tr>
     <% 
       prs = @product_retailers.sort { |a,b| a.retailer.name <=> b.retailer.name }
       prs.each do | product_retailer | 
