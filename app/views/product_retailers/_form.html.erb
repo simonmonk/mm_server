@@ -39,7 +39,10 @@
 end %>
 
 <table>
-  <tr><td>URL</td><td><%= f.text_field :url, :maxlength=>"100" %></td></tr>
+  <tr>
+    <td>URL</td><td><%= f.text_field :url, :maxlength=>"100" %></td>
+    <td><a href="https://www.google.com/search?q=<%=product_retailer.retailer.name%>+monkmakes+<%=product_retailer.product.name%>">Google It</td>
+  </tr>
   <tr><td>sku</td><td><%= f.text_field :sku %></td></tr>
   <tr><td>Weekly sales average</td><td><%= product_retailer.weekly_sales_avg.round(1) %></td></tr>
 </table>

@@ -10,7 +10,7 @@
     <div class="container">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="home.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item"><a href="products.html">Products</a></li>
           <li class="breadcrumb-item"><a href="products.html#<%=@product.product_category.name%>"><%=@product.product_category.name%></a></li>
           <li class="breadcrumb-item active" aria-current="page"><%=@product.name%></li>
@@ -96,7 +96,7 @@
 %>
 
         <!-- Retailer-Product Info section -->
-        <div class="card" style="width: 15rem; height: 10rem">
+        <div class="card" style="width: 15rem; height: 20rem">
             <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
             <div class="card-body d-flex flex-column">
             <p class="card-text"></p>
@@ -106,7 +106,7 @@
                 <img src="img/flags/<%=retailer.billing_ad_country.downcase%>-64.png"/>
             </div>
                 <% else %>
-                <p>Set Buy Link: /product_retailers/<%=product_retailer.id%>/edit</p>
+                <p>Set Buy Link: http://localhost:3000/product_retailers/<%=product_retailer.id%>/edit</p>
 <% end %>
                 
             </div>

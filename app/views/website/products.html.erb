@@ -10,8 +10,8 @@
     <div class="container">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="/home">Home</a></li>
-          <li class="breadcrumb-item active"><a href="#">Products</a></li>
+            <li class="breadcrumb-item active"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active"><a href="products.html">Products</a></li>
         </ol>
       </nav>
       <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,10 +83,10 @@
 
 <!-- Product Info -->
 <div class="card" style="width: 15rem; height: 20rem;">
-  <img class="card-img-top" src="<%=product.product_photo_uri%>" alt="<%=product.name%>" width="10rem">
+  <a href="<%=product.webpage_name%>.html"><img class="card-img-top" src="<%=product.product_photo_uri%>" alt="<%=product.name%>" width="10rem"></a>
   <div class="card-body d-flex flex-column">
     <div class="mt-auto">
-        <a href="<%=product.webpage_name%>"><%=product.name%></a>&nbsp;&nbsp;&nbsp;
+        <a href="<%=product.webpage_name%>.html"><%=product.name%></a>&nbsp;&nbsp;&nbsp;
     </div>
   </div>
 </div>
