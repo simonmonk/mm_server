@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200217082156) do
+ActiveRecord::Schema.define(version: 20200220135012) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -287,6 +287,14 @@ ActiveRecord::Schema.define(version: 20200217082156) do
     t.boolean  "end_of_line_in_catalog"
     t.boolean  "rohs_compliant"
     t.float    "catalog_priority"
+    t.string   "carousel_0"
+    t.string   "carousel_1"
+    t.string   "carousel_2"
+    t.string   "carousel_3"
+    t.string   "carousel_4"
+    t.string   "tutorial_url"
+    t.string   "datasheet_url"
+    t.string   "video_url_0"
   end
 
   create_table "prospects", force: :cascade do |t|

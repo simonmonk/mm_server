@@ -1,24 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>MonkMakes - Sensor for micro:bit</title>
-
-  <!-- Custom fonts for this theme -->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-
-  <!-- Theme CSS -->
-  <link href="css/freelancer.css" rel="stylesheet">
-
-</head>
+<%= render 'header' %>
 
 <body id="page-top">
 
@@ -28,9 +11,9 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="home.html">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">Products</a></li>
-          <li class="breadcrumb-item"><a href="#">micro:bit</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Sensor for micro:bit</li>
+          <li class="breadcrumb-item"><a href="products.html">Products</a></li>
+          <li class="breadcrumb-item"><a href="products.html#<%=@product.product_category.name%>"><%=@product.product_category.name%></a></li>
+          <li class="breadcrumb-item active" aria-current="page"><%=@product.name%></li>
         </ol>
       </nav>
       <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,10 +42,10 @@
 
 
       <!-- Masthead Heading -->
-      <h1 class="masthead-heading text-uppercase mb-0 text-primary">Sensor for micro:bit</h1>
+      <h1 class="masthead-heading text-uppercase mb-0 text-primary"><%=@product.name%></h1>
 
       <!-- Masthead Subheading -->
-      <p class="masthead-subheading font-weight-light mb-0 text-primary">Measure sound, temperature and light with your micro:bit</p>
+      <p class="masthead-subheading font-weight-light mb-0 text-primary"><%=@product.short_description%></p>
       <br/>
 
       <!-- Carousel for this product-->
@@ -92,37 +75,47 @@
 
   </header>
 
+
   <!-- Section: Where to Buy -->
   <section class="page-section portfolio bg-primary text-white" id="section2">
     <div class="container d-flex align-items-center flex-column">
 
       <!-- Where to Buy Section Heading -->
       <h1 class="page-section-heading text-center text-uppercase mb-0">Where to Buy</h1>
-      <p class="masthead-subheading font-weight-light mb-0">You can buy the Sensor for micro:bit directly from the following retailers.</p>
+      <p class="masthead-subheading font-weight-light mb-0">You can buy the <%=@product.name%> directly from the following retailers.</p>
       <br/>
 
       <!-- Grid Items -->
       <div class="row text-primary">
 
-      <!-- Retailer-Product Info section -->
-      <div class="card" style="width: 10rem; height: 13rem">
-        <img class="card-img-top" src="https://drive.google.com/uc?id=1hnQtKgRJ-xo5ydLFR71jHQ61wNRZSuw2" alt="Card image cap">
-        <div class="card-body">
-          <p class="card-text"><img src="img/flags/uk-32.png"/> Kitronik Ltd.</p>
-          <a href="#" class="btn btn-primary">Buy</a>
+<%
+    @product.product_retailers.each do | product_retailer |
+        retailer = product_retailer.retailer
+        if (retailer.include_in_website == true)
+            buy_link = product_retailer.url
+%>
+
+        <!-- Retailer-Product Info section -->
+        <div class="card" style="width: 15rem; height: 10rem">
+            <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
+            <div class="card-body d-flex flex-column">
+            <p class="card-text"></p>
+<% if (buy_link and buy_link.length > 3) %>
+            <div class="mt-auto">
+                <a href="<%=product_retailer.url%>" class="btn btn-primary">Buy</a> &nbsp;
+                <img src="img/flags/<%=retailer.billing_ad_country.downcase%>-64.png"/>
+            </div>
+                <% else %>
+                <p>Set Buy Link: /product_retailers/<%=product_retailer.id%>/edit</p>
+<% end %>
+                
+            </div>
         </div>
-      </div>
 
-      <!-- Retailer-Product Info section -->
-      <div class="card" style="width: 10rem; height: 13rem">
-        <img class="card-img-top" src="https://drive.google.com/uc?id=1hnQtKgRJ-xo5ydLFR71jHQ61wNRZSuw2" alt="Card image cap">
-        <div class="card-body">
-          <p class="card-text"><img src="img/flags/usa-32.png"/>Kitronik Ltd.</p>
-          <a href="#" class="btn btn-primary">Buy</a>
-        </div>
-      </div>
-
-
+<%
+        end
+    end        
+%>
       </div>
       <!-- /.row -->
 
@@ -142,15 +135,7 @@
           <div class="text-center"><img class="img-fluid" src="https://drive.google.com/uc?id=0B-Kwyqk37fgpN1lDSE1zMzc2Y0k" width="500" alt="..."/>
           </div>
           <div class="masthead-subheading font-weight-light mb-0 text-primary text-left">
-            <p>The MonkMakes Sensor Board for micro:bit can be used to measure sound levels, temperature and light levels.</p> 
-            <p>Please note that the individual boards are packed in antistatic bubblewrap bags.</p>
-            <h3>Features</h3>
-            <ul>
-              <li>3V and GND connections can be made from either side and allow you to power a second board such as the MonkMakes Relay Board or MonkMakes Speaker.</li>
-              <li>LED ‘power on’ indicator</li>
-              <li>Reverse polarity protection</li>
-              <li>All three sensors are analog and can be connected to pins P0, P1 and P2 using alligator clips.</li>
-            </ul>  
+            <%=@product.long_description%>
           </div>
         </div>
       </div>
@@ -187,71 +172,9 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer text-center">
-    <div class="container">
-      <div class="row">
+  <%= render 'footer' %>
 
-        <!-- Footer Location -->
-        <div class="col-lg-4 mb-5 mb-lg-0">
-          <h4 class="text-uppercase mb-4">Location</h4>
-          <p class="lead mb-0">41 Dollywaggon Way
-            <br>Preston, PR5 6EW, UK</p>
-        </div>
 
-        <!-- Footer Social Icons -->
-        <div class="col-lg-4 mb-5 mb-lg-0">
-          <h4 class="text-uppercase mb-4">Around the Web</h4>
-          <a class="btn btn-outline-light btn-social mx-1" href="#">
-            <i class="fab fa-fw fa-twitter"></i>
-          </a>
-          <a class="btn btn-outline-light btn-social mx-1" href="#">
-            <i class="fab fa-fw fa-linkedin-in"></i>
-          </a>
-          <a class="btn btn-outline-light btn-social mx-1" href="#">
-            <i class="fab fa-fw fa-instagram"></i>
-          </a>
-        </div>
-
-        <!-- Footer About Text -->
-        <div class="col-lg-4">
-          <h4 class="text-uppercase mb-4">About MonkMakes</h4>
-          <p class="lead mb-0">Incorporated in the UK.<br/>Company Number: <br/>VAT Number: </p>
-        </div>
-
-      </div>
-    </div>
-  </footer>
-
-  <!-- Copyright Section -->
-  <section class="copyright py-4 text-center text-white">
-    <div class="container">
-      <small>Copyright &copy; MonkMakes Ltd 2020</small>
-    </div>
-  </section>
-
-  <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-  <div class="scroll-to-top d-lg-none position-fixed ">
-    <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
-      <i class="fa fa-chevron-up"></i>
-    </a>
-  </div>
-
- 
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Contact Form JavaScript -->
-  <script src="js/jqBootstrapValidation.js"></script>
-  <script src="js/contact_me.js"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="js/freelancer.min.js"></script>
 
 </body>
 

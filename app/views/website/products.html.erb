@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%= render 'header' %>
+
+<body id="page-top">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active"><a href="/home">Home</a></li>
+          <li class="breadcrumb-item active"><a href="#">Products</a></li>
+        </ol>
+      </nav>
+      <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+<%
+    ProductCategory.all.each do | cat |
+%>
+          <li class="nav-item mx-0 mx-lg-1">
+            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#<%=cat.name%>"><%=cat.name%></a>
+          </li>
+<%
+    end
+%>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Masthead -->
+  <header class="masthead text-white text-center">
+    <div class="container d-flex align-items-center flex-column">
+
+      <!-- Masthead Heading -->
+      <h1 class="masthead-heading text-uppercase mb-0 text-primary">Products</h1>
+
+      <!-- Masthead Subheading -->
+      <p class="masthead-subheading font-weight-light mb-0 text-primary">General blurb about our products.</p>
+      <br/>
+      
+      <div class="font-weight-light mb-0 text-primary text-left">
+        <br/>
+        <p>More smaller blurb.</p>
+      </div>
+    </div>
+  </header>
+
+
+<%
+    i = 1
+    ProductCategory.all.each do | cat |
+        text_colour = 'text-white'
+        bg_colour = 'bg-primary'
+        if (i % 2 == 0)
+            text_colour = 'text-primary' # even
+            bg_colour = ''
+        end
+        i += 1
+%>
+
+  <!-- Product Category Section -->
+  <section class="page-section portfolio <%=bg_colour%> <%=text_colour%>" id="<%=cat.name%>">
+    <div class="container align-items-center flex-column">
+
+      <!-- Category Heading -->
+      <h1 class="page-section-heading text-center text-uppercase mb-0"><%=cat.name%></h1>
+      <p class="masthead-subheading font-weight-light mb-0">a cat description?</p>
+      <br/>
+
+      <!-- Grid Items -->
+      <div class="row text-primary">
+
+<%
+        cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each do | product |
+%>
+
+<!-- Product Info -->
+<div class="card" style="width: 15rem; height: 20rem;">
+  <img class="card-img-top" src="<%=product.product_photo_uri%>" alt="<%=product.name%>" width="10rem">
+  <div class="card-body d-flex flex-column">
+    <div class="mt-auto">
+        <a href="<%=product.webpage_name%>"><%=product.name%></a>&nbsp;&nbsp;&nbsp;
+    </div>
+  </div>
+</div>
+
+<%
+        end
+%>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+  </section>
+
+<%
+    end
+%>
+
+
+  <%= render 'footer' %>
+
+</body>
+
+</html>

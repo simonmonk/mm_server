@@ -133,6 +133,16 @@ function print_labels() {
     </tr>
     <% end %>
 
+    <tr><th colspan="2">Website</th></tr>
+    <tr><td>Carousel Photo 0</td><td> <%= f.text_field :carousel_0, size: '50' %> </td></tr>   
+    <tr><td>Carousel Photo 1</td><td> <%= f.text_field :carousel_1, size: '50' %> </td></tr>   
+    <tr><td>Carousel Photo 2</td><td> <%= f.text_field :carousel_2, size: '50' %> </td></tr>   
+    <tr><td>Carousel Photo 3</td><td> <%= f.text_field :carousel_3, size: '50' %> </td></tr>   
+    <tr><td>Carousel Photo 4</td><td> <%= f.text_field :carousel_4, size: '50' %> </td></tr>   
+    <tr><td>Tutorial URL</td><td> <%= f.text_field :tutorial_url, size: '50' %> </td></tr>   
+    <tr><td>Datasheet URL</td><td> <%= f.text_field :datasheet_url, size: '50' %> </td></tr>   
+    <tr><td>Video URL</td><td> <%= f.text_field :video_url_0, size: '50' %> </td></tr>   
+
 
     <tr><th colspan="2">Pricing</th></tr>
         <tr><td colspan="2">The manufacturing cost of this product is £<%= product.production_cost.round(2) %></td><td>

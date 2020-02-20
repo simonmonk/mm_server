@@ -65,7 +65,7 @@ class SettingsController < ApplicationController
 
   def set_test_env
     Setting.set_setting('INVOICE_SHARE', '/Users/si')
-    Setting.set_setting('ROOT_DIR', '/Users/si/mm_server	')
+    Setting.set_setting('ROOT_DIR', '/Users/si/mm_server')
     @settings = Setting.all
     render :index
   end

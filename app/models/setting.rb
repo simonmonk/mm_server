@@ -12,7 +12,7 @@ class Setting < ApplicationRecord
     def Setting.set_setting(key, val)
         setting = Setting.find_by(name: key)
         if (not setting)
-            setting = new Setting(name: key, value: val)
+            setting = Setting.new(name: key, value: val)
         else
             setting.value = val
         end

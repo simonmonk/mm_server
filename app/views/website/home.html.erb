@@ -1,24 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>MonkMakes - Sensor for micro:bit</title>
-
-  <!-- Custom fonts for this theme -->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-
-  <!-- Theme CSS -->
-  <link href="css/freelancer.css" rel="stylesheet">
-
-</head>
+<%= render 'header' %>
 
 <body id="page-top">
 
@@ -37,13 +20,13 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#section2">Our Distribution Partners</a>
+            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#section2">Our Resellers</a>
           </li>
           <li class="nav-item mx-0 mx-lg-1">
             <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#section3">Become a Reseller</a>
           </li>
           <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#section4">?</a>
+            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="products">Products</a>
           </li>
         </ul>
       </div>
@@ -53,7 +36,6 @@
   <!-- Masthead -->
   <header class="masthead text-white text-center">
     <div class="container d-flex align-items-center flex-column">
-
 
       <!-- Masthead Heading -->
       <h1 class="masthead-heading text-uppercase mb-0 text-primary">Monk Makes Ltd</h1>
@@ -96,15 +78,14 @@
           Each product page has direct links to the BUY page from our retailers who stock that product.</p>
       </div>
     </div>
-
   </header>
 
   <!-- Retailers Section -->
   <section class="page-section portfolio bg-primary text-white" id="section2">
-    <div class="container d-flex align-items-center flex-column">
+    <div class="container align-items-center flex-column">
 
       <!-- Retailers Heading -->
-      <h1 class="page-section-heading text-center text-uppercase mb-0">Our Distribution Partners</h1>
+      <h1 class="page-section-heading text-center text-uppercase mb-0">Our Resellers</h1>
       <p class="masthead-subheading font-weight-light mb-0">Here is our current list of distributers. Click on the button to see the 
         MonkMakes products that they sell.</p>
       
@@ -113,24 +94,28 @@
       <!-- Grid Items -->
       <div class="row text-primary">
 
+<%
+country = ''
+retailers = Retailer.all
+retailers = retailers.sort_by{|a| [a.delivery_ad_country, -a.shipments.length]}
+retailers.each do | retailer |
+    if (not retailer.is_retail and retailer.active and retailer.include_in_website)
+        country = retailer.billing_ad_country
+%>
         <!-- Retailer Info -->
-        <div class="card" style="width: 10rem; height: 13rem">
-          <img class="card-img-top" src="https://drive.google.com/uc?id=1hnQtKgRJ-xo5ydLFR71jHQ61wNRZSuw2" alt="Card image cap">
-          <div class="card-body">
-            <p class="card-text"><img src="img/flags/uk-32.png"/> Kitronik Ltd.</p>
-            <a href="#" class="btn btn-primary">Web Store</a>
+        <div class="card" style="width: 15rem; height: 15rem; spacing: 10">
+          <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
+          <div class="card-body d-flex flex-column">
+            <div class="mt-auto">
+                <a href="" class="btn btn-primary">Web Store</a>&nbsp;&nbsp;&nbsp;
+                <img src="img/flags/<%=country.downcase%>-64.png" alt="<%=country%>"/>
+            </div>
           </div>
         </div>
 
-        <!-- Retailer Info -->
-        <div class="card" style="width: 10rem; height: 13rem">
-          <img class="card-img-top" src="https://drive.google.com/uc?id=1hnQtKgRJ-xo5ydLFR71jHQ61wNRZSuw2" alt="Card image cap">
-          <div class="card-body">
-            <p class="card-text"><img src="img/flags/usa-32.png"/>Kitronik Ltd.</p>
-            <a href="#" class="btn btn-primary">Buy</a>
-          </div>
-        </div>
-
+<%          
+        end 
+    end %>
 
       </div>
       <!-- /.row -->
@@ -165,78 +150,8 @@
     </div>
   </section>
 
-  <!-- Section 4 -->
-  <section class="page-section bg-primary" id="section4">
-    <div class="container">
 
-      <!-- Contact Section Heading -->
-      <h1 class="page-section-heading text-center text-uppercase mb-0 text-white">?</h1>
-
-
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer text-center">
-    <div class="container">
-      <div class="row">
-
-        <!-- Footer Location -->
-        <div class="col-lg-4 mb-5 mb-lg-0">
-          <h4 class="text-uppercase mb-4">Location</h4>
-          <p class="lead mb-0">41 Dollywaggon Way
-            <br>Preston, PR5 6EW, UK</p>
-        </div>
-
-        <!-- Footer Social Icons -->
-        <div class="col-lg-4 mb-5 mb-lg-0">
-          <h4 class="text-uppercase mb-4">Around the Web</h4>
-          <a class="btn btn-outline-light btn-social mx-1" href="#">
-            <i class="fab fa-fw fa-twitter"></i>
-          </a>
-          <a class="btn btn-outline-light btn-social mx-1" href="#">
-            <i class="fab fa-fw fa-linkedin-in"></i>
-          </a>
-          <a class="btn btn-outline-light btn-social mx-1" href="#">
-            <i class="fab fa-fw fa-instagram"></i>
-          </a>
-        </div>
-
-        <!-- Footer About Text -->
-        <div class="col-lg-4">
-          <h4 class="text-uppercase mb-4">About MonkMakes</h4>
-          <p class="lead mb-0">Incorporated in the UK.<br/>Company Number: <br/>VAT Number: </p>
-        </div>
-
-      </div>
-    </div>
-  </footer>
-
-  <!-- Copyright Section -->
-  <section class="copyright py-4 text-center text-white">
-    <div class="container">
-      <small>Copyright &copy; MonkMakes Ltd 2020</small>
-    </div>
-  </section>
-
-  <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-  <div class="scroll-to-top d-lg-none position-fixed ">
-    <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
-      <i class="fa fa-chevron-up"></i>
-    </a>
-  </div>
-
-  
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="js/freelancer.js"></script>
+  <%= render 'footer' %>
 
 </body>
 

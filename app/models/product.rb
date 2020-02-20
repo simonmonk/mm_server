@@ -46,6 +46,10 @@ class Product < ApplicationRecord
         end
         return total
     end
+
+    def webpage_name
+        return product_url.split('/').last
+    end
     
     def units_and_value_shipped(start_date, end_date)
         #shipments = Shipment.where("date_order_received >= :start_date AND date_order_received < :end_date", {start_date: start_date, end_date: end_date})

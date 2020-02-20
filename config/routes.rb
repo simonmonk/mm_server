@@ -174,6 +174,10 @@ Rails.application.routes.draw do
   resources :website do
     collection do
       get :index  
+      get :home
+      get :product_page
+      get :generate_files
+      get :products
     end
   end
 
