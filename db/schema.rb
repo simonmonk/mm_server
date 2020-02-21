@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200220135012) do
+ActiveRecord::Schema.define(version: 20200221082123) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 20200220135012) do
     t.string   "tutorial_url"
     t.string   "datasheet_url"
     t.string   "video_url_0"
+    t.string   "instructions_url"
   end
 
   create_table "prospects", force: :cascade do |t|
