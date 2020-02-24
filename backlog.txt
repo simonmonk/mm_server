@@ -14,6 +14,25 @@ Critical BUGS
 ==============
 
 
+MM Website genberation
+==========================
+
+MM new website data tasks
+--
+Kate - update prod retailer links
+Copy chrger kit web page into Instructions.pdf and Datasheet.pdf
+Copy mb relay web page into Instructions.pdf and Datasheet.pdf
+Copy mb speaker web page into Instructions.pdf and Datasheet.pdf
+Copy mb sensor web page into Instructions.pdf and Datasheet.pdf
+Copy mb RGB LED web page into Instructions.pdf and Datasheet.pdf
+Copy mb 7-seg LED web page into Instructions.pdf and Datasheet.pdf
+Make a video of 7-seg
+Copy mb Power web page into Instructions.pdf and Datasheet.pdf
+Copy mb CO2 web page into Instructions.pdf and Datasheet.pdf
+Copy mb Servo web page into Instructions.pdf and Datasheet.pdf
+
+
+
 Changes Needed
 ===============
 Sort parts within a category into alhpabetical order

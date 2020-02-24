@@ -13,7 +13,7 @@ class WebsiteController < ApplicationController
     end
 
     def products
-        #render :layout => false
+        render :layout => false
     end
 
     # Controlling page for website generation

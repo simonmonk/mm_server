@@ -50,6 +50,28 @@ class Product < ApplicationRecord
     def webpage_name
         return product_url.split('/').last
     end
+
+    def carousel_images
+        images = []
+        for i in 0..4 do
+            im = self.send('carousel_' + i.to_s)
+            if (im and im.length > 2)
+                images.append(im)
+            end
+        end
+        return images
+    end
+
+    def website_product_retailers
+        rets = []
+        self.product_retailers.each do | product_retailer |
+            retailer = product_retailer.retailer
+            if (retailer.include_in_website == true and retailer.active and not retailer.is_retail)
+                rets.append(product_retailer)
+            end
+        end
+        return rets
+    end
     
     def units_and_value_shipped(start_date, end_date)
         #shipments = Shipment.where("date_order_received >= :start_date AND date_order_received < :end_date", {start_date: start_date, end_date: end_date})

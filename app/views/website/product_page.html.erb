@@ -1,9 +1,15 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <%= render 'header' %>
 
+
 <body id="page-top">
+
+<div id="app">
 
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
@@ -39,11 +45,8 @@
   <!-- Masthead -->
   <header class="masthead text-white text-center">
     <div class="container d-flex align-items-center flex-column">
-
-
       <!-- Masthead Heading -->
       <h1 class="masthead-heading text-uppercase mb-0 text-primary"><%=@product.name%></h1>
-
       <!-- Masthead Subheading -->
       <p class="masthead-subheading font-weight-light mb-0 text-primary"><%=@product.short_description%></p>
       <br/>
@@ -54,13 +57,21 @@
           <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
         </ol>
         <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="https://drive.google.com/uc?id=0B-Kwyqk37fgpM0Jtd29fUlFCQ2s"  height="400" alt="...">
+<%
+        images = @product.carousel_images
+        i = 0
+        images.each do | im |
+            active = ''
+            i += 1
+            active = 'active' if (i == 1)
+%>
+          <div class="carousel-item <%=active%>">
+            <img src="<%=im%>" height="400" alt="..."/>
           </div>
-          <div class="carousel-item">
-            <img src="https://drive.google.com/uc?id=0B-Kwyqk37fgpN1lDSE1zMzc2Y0k" height="400" alt="...">
-          </div>
-        </div>
+<%
+        end
+%>
+        </div> <!-- carrousel-inner -->
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="sr-only">Previous</span>
@@ -69,9 +80,8 @@
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
         </a>
-      </div>
-      
-    </div>
+      </div> <!-- example indicators -->
+    </div> <!-- container -->
 
   </header>
 
@@ -85,18 +95,35 @@
       <p class="masthead-subheading font-weight-light mb-0">You can buy the <%=@product.name%> directly from the following retailers.</p>
       <br/>
 
+      <div v-if="<%=@product.website_product_retailers.length%> > 10">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{selected_region}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button v-on:click="selected_region = 'All Regions'" class="dropdown-item" type="button">All Regions</button>
+<%
+Region.all.each do | region |
+%>
+                <button v-on:click="selected_region = '<%=region.name%>'" class="dropdown-item" type="button"><%=region.name%></button>
+<%
+end
+%>
+            </div>
+        </div>
+      </div>
+
       <!-- Grid Items -->
-      <div class="row text-primary">
+      <div class="row text-primary justify-content-center m-1">
 
 <%
-    @product.product_retailers.each do | product_retailer |
+    @product.website_product_retailers.each do | product_retailer |
         retailer = product_retailer.retailer
-        if (retailer.include_in_website == true)
-            buy_link = product_retailer.url
+        buy_link = product_retailer.url
 %>
 
         <!-- Retailer-Product Info section -->
-        <div class="card" style="width: 15rem; height: 20rem">
+        <div  v-if="selected_region == '<%=retailer.region.name%>' || selected_region == 'All Regions'" class="card m-2" style="width: 10rem; height: 15rem">
             <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
             <div class="card-body d-flex flex-column">
             <p class="card-text"></p>
@@ -113,12 +140,9 @@
         </div>
 
 <%
-        end
     end        
 %>
-      </div>
-      <!-- /.row -->
-
+      </div> <!-- /.row -->
     </div>
   </section>
 
@@ -132,10 +156,10 @@
       <!-- Details Section Content -->
       <div class="row">
         <div>
-          <div class="text-center"><img class="img-fluid" src="https://drive.google.com/uc?id=0B-Kwyqk37fgpN1lDSE1zMzc2Y0k" width="500" alt="..."/>
+          <div class="text-center"><img class="img-fluid" src="<%=@product.product_photo_uri%>" width="500" alt="..."/>
           </div>
           <div class="masthead-subheading font-weight-light mb-0 text-primary text-left">
-            <%=@product.long_description%>
+            <%=@product.long_description.html_safe%>
           </div>
         </div>
       </div>
@@ -149,21 +173,43 @@
       <!-- Resources Section Heading -->
       <h1 class="page-section-heading text-center text-uppercase mb-0 text-white">Resources</h1>
 
-
-      <!-- Resources Section Button -->
+<% if (@product.tutorial_url and @product.tutorial_url.length > 3) %>
+      <!-- Tutorial Button -->
       <div class="text-center mt-4">
-        <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/themes/freelancer/">
+        <a class="btn btn-xl btn-outline-light" href="<%=@product.tutorial_url%>">
           <i class="fas fa-download mr-2"></i>
           Getting Started Tutorial (PDF)
         </a>
       </div>
+<% end %>
 
+<% if (@product.instructions_url and @product.instructions_url.length > 3) %>
+      <!-- Instructions Button -->
       <div class="text-center mt-4">
-        <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/themes/freelancer/">
+        <a class="btn btn-xl btn-outline-light" href="<%=@product.instructions_url%>">
+          <i class="fas fa-download mr-2"></i>
+          Instructions (PDF)
+        </a>
+      </div>
+<% end %>
+
+<% if (@product.datasheet_url and @product.datasheet_url.length > 3) %>
+      <!-- Datasheet Button -->
+      <div class="text-center mt-4">
+        <a class="btn btn-xl btn-outline-light" href="<%=@product.datasheet_url%>">
           <i class="fas fa-download mr-2"></i>
           Datasheet (PDF)
         </a>
       </div>
+<% end %>
+
+<% if (@product.video_url_0 and @product.video_url_0.length > 3) %>
+    <!-- Video -->
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" src="<%=@product.video_url_0%>" allowfullscreen></iframe>
+    </div>
+<% end %>
+
 
       <div class="text-center mt-4 text-white">
         <h3>For further help please email support@monkmakes.com</h3>
@@ -172,10 +218,40 @@
     </div>
   </section>
 
+</div> <!-- end of Vue app -->  
+
   <%= render 'footer' %>
 
 
 
 </body>
 
+
+
+
 </html>
+
+
+
+
+<script>
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          selected_region: 'All Regions',
+        },
+        mounted: function() {
+          var that;
+        },
+        methods: {
+            test: function() {
+                this.status = 'test'
+                alert("here")
+            },
+        }
+    });
+}
+
+</script>
+    

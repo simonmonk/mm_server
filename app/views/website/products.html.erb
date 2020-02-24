@@ -75,14 +75,14 @@
       <br/>
 
       <!-- Grid Items -->
-      <div class="row text-primary">
+      <div class="row text-primary justify-content-center m-1">
 
 <%
         cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each do | product |
 %>
 
 <!-- Product Info -->
-<div class="card" style="width: 15rem; height: 20rem;">
+<div class="card m-2" style="width: 15rem; height: 20rem;">
   <a href="<%=product.webpage_name%>.html"><img class="card-img-top" src="<%=product.product_photo_uri%>" alt="<%=product.name%>" width="10rem"></a>
   <div class="card-body d-flex flex-column">
     <div class="mt-auto">
