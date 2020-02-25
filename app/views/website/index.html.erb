@@ -2,6 +2,16 @@
 
 <p>Build a deployable set of static files for your website, based on the product and retailer data in this system.</p>
 
+<h2>Home Page Settings</h2>
+
+<table>
+<tr>
+    <td>Strapline</td><td><%=Website.strap_line%></td>
+
+</tr>
+
+</table>
+
 <h2>File Structure</h2>
 
 <pre>
@@ -31,7 +41,8 @@ window.onload = function () {
     var app = new Vue({
         el: '#app',
         data: {
-          status: ''
+          status: '',
+
         },
         mounted: function() {
           var that;

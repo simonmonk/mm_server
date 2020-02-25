@@ -30,8 +30,10 @@ Make a video of 7-seg
 Copy mb Power web page into Instructions.pdf and Datasheet.pdf
 Copy mb CO2 web page into Instructions.pdf and Datasheet.pdf
 Copy mb Servo web page into Instructions.pdf and Datasheet.pdf
-
-
+ditto - Servo Six and ServoSix kit
+- amp speaker and kit
+- squid and other combos
+-
 
 Changes Needed
 ===============

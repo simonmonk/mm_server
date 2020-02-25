@@ -41,7 +41,7 @@
       <h1 class="masthead-heading text-uppercase mb-0 text-primary">Monk Makes Ltd</h1>
 
       <!-- Masthead Subheading -->
-      <p class="masthead-subheading font-weight-light mb-0 text-primary">Manufacturer of kits and accessories for the BBC micro:bit and Raspberry Pi.</p>
+      <p class="masthead-subheading font-weight-light mb-0 text-primary"><%=Website.strap_line.html_safe%></p>
       <br/>
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -66,16 +66,7 @@
       </div>
       <div class="font-weight-light mb-0 text-primary text-left">
         <br/>
-        <p>Founded in 2013, Monk Makes Ltd designs and manufacturers 
-          a wide range of electronics kits and circuit boards from its base in the North West of England.</p>
-        <p>Nearly all of our products are manufacturerd or assembled 
-            in the UK using our PCB assembly facility and our local workforce.</p>
-        <p>As well as supporting educators, our products are also popular
-          with electronics makers and enthusiasts.</p>
-        <p>We are not a retail outlet, we concentrate on out strength 
-          in design and manufacturing and so, if you have come here looking to 
-          buy a specific product, then please click <a href="#">HERE</a> to find a product information for each of our products. 
-          Each product page has direct links to the BUY page from our retailers who stock that product.</p>
+        <%=Website.homepage_blurb.html_safe%>
       </div>
     </div>
   </header>
@@ -86,8 +77,7 @@
 
       <!-- Retailers Heading -->
       <h1 class="page-section-heading text-center text-uppercase mb-0">Our Resellers</h1>
-      <p class="masthead-subheading font-weight-light mb-0">Here is our current list of distributers. Click on the button to see the 
-        MonkMakes products that they sell.</p>
+      <p class="masthead-subheading font-weight-light mb-0"><%=Website.distributers_blurb.html_safe%></p>
       
       <br/>
 
@@ -103,7 +93,7 @@ retailers.each do | retailer |
         country = retailer.billing_ad_country
 %>
         <!-- Retailer Info -->
-        <div class="card m-2" style="width: 15rem; height: 15rem; spacing: 10">
+        <div class="card m-2" style="width: 17rem; height: 15rem; spacing: 10">
           <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
           <div class="card-body d-flex flex-column">
             <div class="mt-auto">
@@ -134,17 +124,7 @@ retailers.each do | retailer |
       <div class="row">
         <div>
           <br/>
-          <p>If you would like to become a reseller of MonkMakes products, then
-            please email linda@monkmakes.com. She'll need a few details from you 
-            and then you can start ordering at our wholesale prices.
-          </p> 
-          <p>We are a small company and like to keep things agile. We ship orders 
-            often on the day or order and won't tie you up with contracts.
-          </p>
-          <p>We are happy to support new businessses around the world who are 
-            making the most of these exciting times as micro:bit rolls out around
-            the globe.
-          </p>
+          <%=Website.become_reller_blurb.html_safe%>
         </div>
       </div>
     </div>

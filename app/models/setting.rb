@@ -25,4 +25,5 @@ class Setting < ApplicationRecord
     end
 
 
+
 end

@@ -6,8 +6,8 @@
       <!-- Footer Location -->
       <div class="col-lg-4 mb-5 mb-lg-0">
         <h4 class="text-uppercase mb-4">Location</h4>
-        <p class="lead mb-0">41 Dollywaggon Way
-          <br>Preston, PR5 6EW, UK</p>
+        <p class="lead mb-0"><%=Setting.get_setting('ADDR_LINE_1')%>, <%=Setting.get_setting('ADDR_LINE_2')%><br/>
+          <br><%=Setting.get_setting('ADDR_CITY')%>, <%=Setting.get_setting('ADDR_POSTAL_CODE')%>, <%=Setting.get_setting('ADDR_COUNTRY')%></p>
       </div>
 
       <!-- Footer Social Icons -->
@@ -27,7 +27,7 @@
       <!-- Footer About Text -->
       <div class="col-lg-4">
         <h4 class="text-uppercase mb-4">About MonkMakes</h4>
-        <p class="lead mb-0">Incorporated in the UK.<br/>Company Number: <br/>VAT Number: </p>
+        <p class="lead mb-0">Company Number: <%=Setting.get_setting('COMPANY_NUMBER')%><br/>VAT Number: <%=Setting.get_setting('VAT_NUMBER')%></p>
       </div>
 
     </div>
