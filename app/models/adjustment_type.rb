@@ -1,6 +1,10 @@
 class AdjustmentType < ApplicationRecord
 
     has_many :adjustments
+
+    def AdjustmentType.for_code(c)
+        return AdjustmentType.find_by(code: c)
+    end
     
     # Run this to migrate adjustments with an adjustment type as a string in the field adjustment_type
     # into a reference to an AdjustmentType object with the same name
@@ -20,6 +24,7 @@ class AdjustmentType < ApplicationRecord
             end
         end
     end
+
 
     def default_account()
         # some adjustments may not have an account unless Amazon becomes an account

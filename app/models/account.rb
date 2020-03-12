@@ -125,14 +125,29 @@ class Account < ApplicationRecord
     def Account.getAmazonFinancials(month, country)
         
         client = MWS.finances(
-                marketplace: Rails.application.secrets.AM_UK_PRIMARY_MARKETPLACE_ID,
-                merchant_id: Rails.application.secrets.AM_UK_MERCHANT_ID,
-                aws_access_key_id: Rails.application.secrets.AM_UK_ACCESS_KEY,
-                aws_secret_access_key: Rails.application.secrets.AM_UK_SECRET_KEY)
+                marketplace: Rails.application.secrets.AM_US_PRIMARY_MARKETPLACE_ID,
+                merchant_id: Rails.application.secrets.AM_US_MERCHANT_ID,
+                aws_access_key_id: Rails.application.secrets.AM_US_ACCESS_KEY,
+                aws_secret_access_key: Rails.application.secrets.AM_US_SECRET_KEY)
         
-        parser = client.list_financial_event_groups(Time.now.to_s)
+        start_date = Date.new(2020,02,01)
+        end_date = Date.new(2020,02,29)
+        parser = client.list_financial_event_groups(start_date.iso8601)
         x = parser.parse
-        puts x['Orders']
+        event_groups = x['FinancialEventGroupList']['FinancialEventGroup']
+        event_groups.each do | event_group |
+            group_id = event_group['FinancialEventGroupId']
+            parser = client.list_financial_events({financial_event_group_id: group_id, posted_after: start_date.iso8601, posted_before: end_date.iso8601})
+            event = parser.parse
+            puts group_id
+            events = event['FinancialEvents']
+            events.keys.each do | key |
+                if (events[key])
+                    puts events[key]
+                end
+            end
+            puts
+        end
     end
     
 

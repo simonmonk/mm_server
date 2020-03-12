@@ -22,9 +22,10 @@
         <ul class="navbar-nav ml-auto">
 <%
     ProductCategory.all.each do | cat |
+        cat_name_ = cat.name.parameterize.underscore
 %>
           <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#<%=cat.name%>"><%=cat.name%></a>
+            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#<%=cat_name_%>"><%=cat.name%></a>
           </li>
 <%
     end
@@ -42,12 +43,12 @@
       <h1 class="masthead-heading text-uppercase mb-0 text-primary">Products</h1>
 
       <!-- Masthead Subheading -->
-      <p class="masthead-subheading font-weight-light mb-0 text-primary">General blurb about our products.</p>
+      <p class="masthead-subheading font-weight-light mb-0 text-primary"><%=Website.product_head_blurb.html_safe%></p>
       <br/>
       
       <div class="font-weight-light mb-0 text-primary text-left">
         <br/>
-        <p>More smaller blurb.</p>
+        <p><%=Website.product_detail_blurb.html_safe%></p>
       </div>
     </div>
   </header>
@@ -58,6 +59,7 @@
     ProductCategory.all.each do | cat |
         text_colour = 'text-white'
         bg_colour = 'bg-primary'
+        cat_name_ = cat.name.parameterize.underscore
         if (i % 2 == 0)
             text_colour = 'text-primary' # even
             bg_colour = ''
@@ -66,12 +68,13 @@
 %>
 
   <!-- Product Category Section -->
-  <section class="page-section portfolio <%=bg_colour%> <%=text_colour%>" id="<%=cat.name%>">
+  <section class="page-section portfolio <%=bg_colour%> <%=text_colour%>" id="<%=cat_name_%>">
     <div class="container align-items-center flex-column">
 
       <!-- Category Heading -->
       <h1 class="page-section-heading text-center text-uppercase mb-0"><%=cat.name%></h1>
-      <p class="masthead-subheading font-weight-light mb-0">a cat description?</p>
+      <br/>
+      <%=cat.catalog_description.html_safe%>
       <br/>
 
       <!-- Grid Items -->
@@ -82,12 +85,14 @@
 %>
 
 <!-- Product Info -->
-<div class="card m-2" style="width: 15rem; height: 20rem;">
-  <a href="<%=product.webpage_name%>.html"><img class="card-img-top" src="<%=product.product_photo_uri%>" alt="<%=product.name%>" width="10rem"></a>
-  <div class="card-body d-flex flex-column">
+<div class="card m-1" style="width: 12rem; height: 20rem;">
+  <div class="card-body">
     <div class="mt-auto">
         <a href="<%=product.webpage_name%>.html"><%=product.name%></a>&nbsp;&nbsp;&nbsp;
     </div>
+  </div>
+  <div class="card-body">
+    <a href="<%=product.webpage_name%>.html"><img class="card-img-bottom" src="<%=product.product_photo_uri%>" alt="<%=product.name%>" width="10rem"></a>
   </div>
 </div>
 

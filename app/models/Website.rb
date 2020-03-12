@@ -17,7 +17,25 @@ class Website
     def Website.become_reller_blurb()
         return Setting.get_setting('WEBSITE_BECOME_RESELLER_BLURB')
     end
-        
+
+    def Website.product_head_blurb()
+        return Setting.get_setting('WEBSITE_PRODUCT_HEAD_BLURB')
+    end
+
+    def Website.product_detail_blurb()
+        return Setting.get_setting('WEBSITE_PRODUCT_DETAIL_BLURB')
+    end
     
+        
+    def Website.carousel_images()
+        images = []
+        for i in 0..3 do
+            im = Setting.send('get_setting', "WEBSITE_CAROUSEL_" + i.to_s)
+            if (im and im.length > 2)
+                images.append(im)
+            end
+        end
+        return images
+    end
 
 end

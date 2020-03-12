@@ -6,7 +6,6 @@
 
 <%= render 'header' %>
 
-
 <body id="page-top">
 
 <div id="app">
@@ -120,26 +119,23 @@ end
     @product.website_product_retailers.each do | product_retailer |
         retailer = product_retailer.retailer
         buy_link = product_retailer.url
+        if (buy_link and buy_link.length > 5)
 %>
 
         <!-- Retailer-Product Info section -->
-        <div  v-if="selected_region == '<%=retailer.region.name%>' || selected_region == 'All Regions'" class="card m-2" style="width: 12rem; height: 15rem">
+        <div v-if="selected_region == '<%=retailer.region.name%>' || selected_region == 'All Regions'" class="card m-2" style="width: 12rem; height: 15rem">
             <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
             <div class="card-body d-flex flex-column">
-            <p class="card-text"></p>
-<% if (buy_link and buy_link.length > 3) %>
-            <div class="mt-auto">
-                <a href="<%=product_retailer.url%>" class="btn btn-primary">Buy</a> &nbsp;
-                <img src="img/flags/<%=retailer.billing_ad_country.downcase%>-64.png"/>
-            </div>
-                <% else %>
-                <p>Set Buy Link: http://localhost:3000/product_retailers/<%=product_retailer.id%>/edit</p>
-<% end %>
-                
+              <p class="card-text"></p>
+              <div class="mt-auto">
+                  <a href="<%=product_retailer.url%>" class="btn btn-primary">Buy</a> &nbsp;
+                  <img src="img/flags/<%=retailer.billing_ad_country.downcase%>-64.png"/>
+              </div>
             </div>
         </div>
 
 <%
+        end
     end        
 %>
       </div> <!-- /.row -->
@@ -203,13 +199,6 @@ end
       </div>
 <% end %>
 
-<% if (@product.video_url_0 and @product.video_url_0.length > 3) %>
-    <!-- Video -->
-    <div class="embed-responsive embed-responsive-16by9">
-      <iframe class="embed-responsive-item" src="<%=@product.video_url_0%>" allowfullscreen></iframe>
-    </div>
-<% end %>
-
 
       <div class="text-center mt-4 text-white">
         <h3>For further help please email support@monkmakes.com</h3>
@@ -220,18 +209,11 @@ end
 
 </div> <!-- end of Vue app -->  
 
-  <%= render 'footer' %>
-
+<%= render 'footer' %>
 
 
 </body>
-
-
-
-
 </html>
-
-
 
 
 <script>

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :adjustment_types
   resources :assembly_categories
   resources :expenses
-  resources :adjustments
+  
   resources :book_keeping_categories
   resources :cost_centres
   resources :regions
@@ -42,6 +42,14 @@ Rails.application.routes.draw do
       get :vat_report
       get :vatSummary
       post :submit_vat_return
+    end
+  end
+    
+  resources :adjustments do
+    collection do
+      get :amazon_countries
+      get :amazon_months
+      post :generate_amazon_adjustments
     end
   end
   

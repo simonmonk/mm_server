@@ -20,20 +20,31 @@ MM Website genberation
 MM new website data tasks
 --
 Kate - update prod retailer links
-Copy chrger kit web page into Instructions.pdf and Datasheet.pdf
-Copy mb relay web page into Instructions.pdf and Datasheet.pdf
-Copy mb speaker web page into Instructions.pdf and Datasheet.pdf
-Copy mb sensor web page into Instructions.pdf and Datasheet.pdf
+x Copy chrger kit web page into Instructions.pdf and Datasheet.pdf
+x Copy mb relay web page into Instructions.pdf and Datasheet.pdf
+x Copy mb speaker web page into Instructions.pdf and Datasheet.pdf
+Copy mb sensor web page into Instructions.pdf and  x Datasheet.pdf - consider making blockcode lib the standard way of doing this, and make Python fn
 Copy mb RGB LED web page into Instructions.pdf and Datasheet.pdf
-Copy mb 7-seg LED web page into Instructions.pdf and Datasheet.pdf
+x Copy mb 7-seg LED web page into Instructions.pdf and x Datasheet.pdf - make a lib that hides the double buffering, also a fn for Python that can be copied.
 Make a video of 7-seg
 Copy mb Power web page into Instructions.pdf and Datasheet.pdf
 Copy mb CO2 web page into Instructions.pdf and Datasheet.pdf
-Copy mb Servo web page into Instructions.pdf and Datasheet.pdf
+Copy mb Servo web page into Instructions.pdf and x Datasheet.pdf
 ditto - Servo Six and ServoSix kit
 - amp speaker and kit
 - squid and other combos
--
+Hacking Mega - datasheet that includes list of parts
+Protoboard kit - Instructions
+MMD Single - datasheet
+Cookies - can be implememted in Boostrap. https://www.jqueryscript.net/other/GDPR-Cookie-Consent-Bootstrap-4-bsgdprcookies.html
+
+How does hosting work?
+- Maybe setup a new micro host with the Wordpress image files copied accross and served by Apache/nginx etc.
+
+Put a link to a micro:bit getting started guide in the m:b product category section. Ditto Pi.
+
+
+
 
 Changes Needed
 ===============
@@ -41,7 +52,7 @@ Sort parts within a category into alhpabetical order
 
 On the part form would be good to show the login details next to the supplier info at the bottom.
 
-The sort order for purchases seems to be mad after LInda's added a whole load of new transactions in.
+The sort order for purchases seems to be mad after Linda's added a whole load of new transactions in.
 
 
 
@@ -74,7 +85,11 @@ For Amazon.com fees are payable in dollars and need to be converted using exchan
 
 Amazon statements - 
 
+Amazon dev user A14D2WDBSBCN3L / linda@monkmakes.com
+AWS Access Key ID AKIAISNBGVKB2MW7DNJQ
+secret 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
 
+detail report feb 2020Date.new()
 
 
 
@@ -128,7 +143,7 @@ General
 --------
 Put P.O.s back in.
 
-Add social meadia fields to customer table:
+Add social media fields to customer table:
 * instagram account
 * following on instagram
 * twitter account

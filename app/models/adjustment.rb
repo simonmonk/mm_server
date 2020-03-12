@@ -8,6 +8,26 @@ class Adjustment < ApplicationRecord
     return Account.find_by_id(to_account_id)
   end
 
+  def Adjustment.amazon_countries()
+    return ['UK', 'USA', 'FR', 'DE']
+  end
+
+  def Adjustment.amazon_months()
+    months = []
+    today = Time.now
+    current_month_num = today.month
+    year = today.year
+    for i in 0..11 do
+      month_num = current_month_num - i
+      if (month_num < 1)
+        month_num = current_month_num + 12 - i
+        year = today.year - 1
+      end
+      month_name = Date::MONTHNAMES[month_num] + ' ' + year.to_s
+      months.append({name: month_name, date: Date.new(year, month_num, 1).iso8601})
+    end
+    return months
+  end
 
   # belongs_to :adjustment_type // nope cant do this beacuse of migration of string adjustment type to an object.
 

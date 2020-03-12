@@ -1,9 +1,14 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <%= render 'header' %>
 
 <body id="page-top">
+
+<div id="app">
 
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
@@ -48,12 +53,20 @@
           <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
         </ol>
         <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="https://drive.google.com/uc?id=0B-Kwyqk37fgpM0Jtd29fUlFCQ2s"  height="400" alt="...">
+<%
+        images = Website.carousel_images
+        i = 0
+        images.each do | im |
+            active = ''
+            i += 1
+            active = 'active' if (i == 1)
+%>
+          <div class="carousel-item <%=active%>">
+            <img src="<%=im%>" height="400" alt="..."/>
           </div>
-          <div class="carousel-item">
-            <img src="https://drive.google.com/uc?id=0B-Kwyqk37fgpN1lDSE1zMzc2Y0k" height="400" alt="...">
-          </div>
+<%
+        end
+%>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -71,6 +84,8 @@
     </div>
   </header>
 
+
+
   <!-- Retailers Section -->
   <section class="page-section portfolio bg-primary text-white" id="section2">
     <div class="container d-flex align-items-center flex-column">
@@ -80,6 +95,26 @@
       <p class="masthead-subheading font-weight-light mb-0"><%=Website.distributers_blurb.html_safe%></p>
       
       <br/>
+
+      <div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{selected_region}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button v-on:click="selected_region = 'All Regions'" class="dropdown-item" type="button">All Regions</button>
+<%
+Region.all.each do | region |
+%>
+                <button v-on:click="selected_region = '<%=region.name%>'" class="dropdown-item" type="button"><%=region.name%></button>
+<%
+end
+%>
+            </div>
+        </div>
+      </div>
+
+
 
       <!-- Grid Items -->
       <div class="row text-primary justify-content-center m-1">
@@ -93,7 +128,7 @@ retailers.each do | retailer |
         country = retailer.billing_ad_country
 %>
         <!-- Retailer Info -->
-        <div class="card m-2" style="width: 17rem; height: 15rem; spacing: 10">
+        <div v-if="selected_region == '<%=retailer.region.name%>' || selected_region == 'All Regions'" class="card m-2" style="width: 17rem; height: 17rem; spacing: 10">
           <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
           <div class="card-body d-flex flex-column">
             <div class="mt-auto">
@@ -130,9 +165,31 @@ retailers.each do | retailer |
     </div>
   </section>
 
+  </div> <!-- end of Vue app -->  
 
   <%= render 'footer' %>
 
 </body>
 
 </html>
+
+<script>
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          selected_region: 'All Regions',
+        },
+        mounted: function() {
+          var that;
+        },
+        methods: {
+            test: function() {
+                this.status = 'test'
+                alert("here")
+            },
+        }
+    });
+}
+
+</script>

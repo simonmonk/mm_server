@@ -51,6 +51,7 @@
 <div>
 <button :disabled="transactions.length == 0" type="button" v-on:click="open_adjustment_form_new()" class="badge badge-info">Add New Adjustment</button>
 <button :disabled="transactions.length == 0" type="button" v-on:click="open_expense_form_new()" class="badge badge-info">Add New Expense</button>
+<button :disabled="transactions.length == 0" type="button" v-on:click="open_amazon_form()" class="badge badge-info">Create Amazon Adjustments</button>
 </div>
 
 <div v-if="filter_by_account.id != 0">
@@ -143,6 +144,56 @@
   </div>
 </div>
 
+<!-- Amazon Form  -->
+<div id="amazon_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1>Amazon Adjustment Tool</h1>
+        <table>
+          <tr>
+            <td>Month</td>
+            <td>
+              <select v-model="selected_amazon_month">
+                <option v-for="(month, index) in amazon_months" v-bind:value="month.date">{{month.name}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Country</td>
+            <td>
+              <select v-model="selected_amazon_country">
+                <option v-for="(country, index) in amazon_countries" v-bind:value="country">{{country}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Income</td>
+            <td>
+              <input v-model="amazon_income" type="text" value="" class="form-control" placeholder=""/>
+            </td>
+          </tr>
+          <tr>
+            <td>Expenses</td>
+            <td>
+              <input v-model="amazon_expenses" type="text" value="" class="form-control" placeholder=""/>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2"><pre>{{amazon_adjustment_status}}</pre></td>
+          </tr>
+
+          <tr><td>
+            <button type="button" v-on:click="cancel('#amazon_form')" class="btn btn-info">Close</button>
+            <button type="button" v-on:click="generate_amazon_adjustments()" class="btn btn-success">Generate Adjustments</button>
+          </td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Edit Expense Form -->
 <div id="edit_expense_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
@@ -228,7 +279,6 @@
   </div>
 </div>
 
-//todo - add in attachements to expenses - and OCR values??
 
 <!-- Edit Purchase Form -->
 <div id="edit_purchase_form" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
@@ -522,6 +572,7 @@ window.onload = function () {
             cost_centres: [],
             users: [],
             tax_regions: [],
+            amazon_countries: [],
             status: '',
             import_invoice_message: '',
             importing_message: '',
@@ -540,6 +591,11 @@ window.onload = function () {
             shipment: {id: null},
             opening_balance: 0,
             closing_balance: 0,
+            selected_amazon_month: null,
+            selected_amazon_country: null,
+            amazon_income: 0,
+            amazon_expenses: 0,
+            amazon_adjustment_status: '',
         },
         mounted: function() {
           var that;
@@ -550,8 +606,9 @@ window.onload = function () {
           this.load_cost_centres();
           this.load_categories();
           this.load_tax_regions();
-          this.from_date = new Date().addDays(-30).toISOString().slice(0,10)
-          this.to_date = today_as_string()
+          this.load_amazon_countries();
+          this.load_amazon_months();
+          this.set_dates_last_q();
         },
         methods: {
           load_transactions: function() { 
@@ -608,6 +665,26 @@ window.onload = function () {
               }
             });
           },
+          load_amazon_countries: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: 'adjustments/amazon_countries',
+              success: function(res) {
+                that.amazon_countries = res;
+              }
+            });
+          },
+          load_amazon_months: function() {
+            var that;
+            that = this;
+            $.ajax({
+              url: 'adjustments/amazon_months',
+              success: function(res) {
+                that.amazon_months = res;
+              }
+            });
+          },
           load_categories: function() {
             var that;
             that = this;
@@ -656,6 +733,25 @@ window.onload = function () {
                   $(modal).modal('hide');
                 }
                 that.adjustment = res; 
+                that.load_transactions();
+              }
+            });
+          },
+          generate_amazon_adjustments: function() {
+            var that;
+            that = this;
+            data = {
+              amazon_month: this.selected_amazon_month,
+              amazon_country: this.selected_amazon_country,
+              amazon_income: this.amazon_income,
+              amazon_expenses: this.amazon_expenses
+            };
+            $.ajax({
+              url: 'adjustments/generate_amazon_adjustments',
+              type: 'POST',
+              data: data,
+              success: function(res) {
+                that.amazon_adjustment_status = res;
                 that.load_transactions();
               }
             });
@@ -710,6 +806,10 @@ window.onload = function () {
               this.expense = this.filtered_results[index];
             }
             $('#capture_receipt_form').modal('show');
+          },
+          open_amazon_form: function() {
+            this.amazon_adjustment_status = '';
+            $('#amazon_form').modal('show');
           },
           request_import_invoice: function() {
             var that;
