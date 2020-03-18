@@ -134,6 +134,10 @@
             <td>Description</td>
             <td><input v-model="adjustment.description" type="text" value="" class="form-control" placeholder=""/></td>
           </tr>
+          <tr>
+            <td>Notes</td>
+            <td><input v-model="adjustment.adj_notes" type="text" value="" class="form-control" placeholder=""/></td>
+          </tr>
           <tr><td>
             <button type="button" v-on:click="cancel('#edit_adjustment_form')" class="btn btn-info">Cancel</button>
             <button type="button" v-on:click="save_adjustment('#edit_adjustment_form')" class="btn btn-success">Save</button>
@@ -167,19 +171,48 @@
               </select>
             </td>
           </tr>
+          <tr v-if="selected_amazon_country != 'UK'">
+            <td>Exch rate for calculations</td>
+            <td>
+              <input v-model="amazon_adj_exch_rate" type="text" value="" class="form-control"/>
+            </td>
+          </tr>
+          <tr><td colspan="2"><h2>Income</h2></td></tr>
+          <tr v-if="selected_amazon_country != 'UK'">
+            <td>
+              Income Amount in Currency
+              <input v-model="amazon_adj_currency_income" type="text" value="" length="8"/>
+            </td>
+            <td>
+              x {{amazon_adj_exch_rate}}
+              <span v-on:click="calc_amazon_income()" class="badge badge-success">Calc</span>
+            </td>
+          </tr>
           <tr>
-            <td>Income</td>
+            <td>Income GBP</td>
             <td>
               <input v-model="amazon_income" type="text" value="" class="form-control" placeholder=""/>
             </td>
           </tr>
+          <tr><td colspan="2">{{amazon_adj_msg_income}}</td></tr>
+          <tr><td colspan="2"><h2>Expenses</h2></td></tr>
+          <tr v-if="selected_amazon_country != 'UK'">
+            <td>
+              Fees Amount in Currency
+              <input v-model="amazon_adj_currency_expenses" type="text" value="" length="8"/>
+            </td>
+            <td>
+              x {{amazon_adj_exch_rate}}
+              <span v-on:click="calc_amazon_expenses()" class="badge badge-success">Calc</span>
+            </td>
+          </tr>
           <tr>
-            <td>Expenses</td>
+            <td>Expenses GBP</td>
             <td>
               <input v-model="amazon_expenses" type="text" value="" class="form-control" placeholder=""/>
             </td>
           </tr>
-
+          <tr><td colspan="2">{{amazon_adj_msg_expenses}}</td></tr>
           <tr>
             <td colspan="2"><pre>{{amazon_adjustment_status}}</pre></td>
           </tr>
@@ -596,6 +629,11 @@ window.onload = function () {
             amazon_income: 0,
             amazon_expenses: 0,
             amazon_adjustment_status: '',
+            amazon_adj_exch_rate: 1,
+            amazon_adj_currency_income: 0,
+            amazon_adj_currency_expenses: 0,
+            amazon_adj_msg_income: '',
+            amazon_adj_msg_expenses: '',
         },
         mounted: function() {
           var that;
@@ -744,7 +782,9 @@ window.onload = function () {
               amazon_month: this.selected_amazon_month,
               amazon_country: this.selected_amazon_country,
               amazon_income: this.amazon_income,
-              amazon_expenses: this.amazon_expenses
+              amazon_expenses: this.amazon_expenses,
+              amazon_adj_msg_income: this.amazon_adj_msg_income,
+              amazon_adj_msg_expenses: this.amazon_adj_msg_expenses
             };
             $.ajax({
               url: 'adjustments/generate_amazon_adjustments',
@@ -755,6 +795,16 @@ window.onload = function () {
                 that.load_transactions();
               }
             });
+          },
+          calc_amazon_income: function() {
+            this.amazon_income = this.amazon_adj_currency_income / this.amazon_adj_exch_rate;
+            this.amazon_adj_msg_income = 'Calculated as ' + this.selected_amazon_country 
+                + ' ' + this.amazon_adj_currency_income +'@' + this.amazon_adj_exch_rate + '=' + this.amazon_income;
+          },
+          calc_amazon_expenses: function() {
+            this.amazon_expenses = this.amazon_adj_currency_expenses / this.amazon_adj_exch_rate;
+            this.amazon_adj_msg_expenses = 'Calculated as ' + this.selected_amazon_country 
+                + ' ' + this.amazon_adj_currency_expenses +'@' + this.amazon_adj_exch_rate + '=' + this.amazon_expenses;
           },
           open_expense_form_new: function() {
             this.expense = { account_id: 1, account_ids: [1],

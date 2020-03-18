@@ -49,32 +49,45 @@ class AdjustmentsController < ApplicationController
 
   def generate_amazon_adjustments
     result = ''
-    date = params['amazon_month']
-    income = params['amazon_income']
-    expense = params['amazon_expenses']
+    date = Date.parse(params['amazon_month']).end_of_month()
+    income = params['amazon_income'].to_f
+    expense = params['amazon_expenses'].to_f
     country = params['amazon_country']
-    desc = date + ' ' + country
+    msg_expenses = params['amazon_adj_msg_expenses']
+    msg_income = params['amazon_adj_msg_income']
+
+    desc = date.to_s + ' ' + country
 
     if (Adjustment.find_by(description: desc))
-      result += 'There are all ready adjustment(s) for this month and country: ' + desc + '. To replace them delete them manually and do this again.'
+      result += "There are all ready adjustment(s) for this month and country: \n" + desc + '. To replace them, delete them manually and do this again.'
     else
-      result += generate_amazon_income_adjustment(date, income, country, desc)
-      result += generate_amazon_expense_adjustment(date, expense, country, desc)
+      result += generate_amazon_income_adjustment(date, income, country, desc, msg_income)
+      result += generate_amazon_expense_adjustment(date, expense, country, desc, msg_expenses)
     end
     render :json => result.to_json
   end
 
-  def generate_amazon_income_adjustment(date, income, country, desc)
+
+
+
+  def generate_amazon_income_adjustment(date, income, country, desc, notes)
     adj_type = AdjustmentType.for_code('AMAZON_REPORTED')
+    acc = nil
+    if (country == 'UK')
+      acc = Account.for_code('CUR').id
+    else
+      acc = Account.for_code('WF').id
+    end
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
-      value: income, 
-      vat_value: 0,
-      tax_region: 'UK', # ['UK', 'EU', 'Rest of the World']
+      value: income - (income / 6), 
+      vat_value: income / 6,
+      tax_region: Adjustment.region_for_country(country), # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
       from_account_id: Account.for_code('AM').id,
-      to_account_id: Account.for_code('CUR').id, # prob diff for diff countries
+      to_account_id: acc, 
+      adj_notes: notes
       )
     if (amazon_income_adjustment.save)
       return 'Created adjustment ' + adj_type.name + ' ' + desc + "\n"
@@ -83,17 +96,19 @@ class AdjustmentsController < ApplicationController
     end
   end
 
-  def generate_amazon_expense_adjustment(date, expense, country, desc)
+
+  def generate_amazon_expense_adjustment(date, expense, country, desc, notes)
     adj_type = AdjustmentType.for_code('AMAZON_FEES')
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
       value: expense, 
-      vat_value: 0,
-      tax_region: 'UK', # ['UK', 'EU', 'Rest of the World']
+      vat_value: expense / 5,
+      tax_region: 'EU', # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
       to_account_id: Account.for_code('AM').id,
-      from_account_id: Account.for_code('CUR').id, # prob diff for diff countries
+      from_account_id: Account.for_code('CUR').id, # fees never actuall payed, they just get deducted 
+      adj_notes: notes
       )
     if (amazon_income_adjustment.save)
       return 'Created adjustment ' + adj_type.name + ' ' + desc + "\n"

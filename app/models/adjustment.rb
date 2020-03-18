@@ -9,8 +9,19 @@ class Adjustment < ApplicationRecord
   end
 
   def Adjustment.amazon_countries()
-    return ['UK', 'USA', 'FR', 'DE']
+    return ['UK', 'USA', 'FR', 'DE', 'IT', 'ES', 'NL']
   end
+
+  def Adjustment.region_for_country(country)
+    if (country == 'UK')
+      return 'UK'
+    elsif (country = 'USA')
+      return Supplier.tax_regions().last # Rest of World
+    else
+      return 'EU'
+    end
+  end
+
 
   def Adjustment.amazon_months()
     months = []
