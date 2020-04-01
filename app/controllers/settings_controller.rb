@@ -67,6 +67,7 @@ class SettingsController < ApplicationController
     Setting.set_setting('INVOICE_SHARE', '/Users/si')
     Setting.set_setting('ROOT_DIR', '/Users/si/mm_server')
     Setting.set_setting('TEMP_DIR', '/tmp/')
+    Setting.set_setting('UPLOAD_COMMAND_HTML', 'scp -i /Users/si/certs/MMServerKeys/MMServer2020.pem /tmp/website/*.html ec2-user@3.11.90.43:/data/www	')
     @settings = Setting.all
     render :index
   end
