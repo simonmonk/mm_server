@@ -23,23 +23,28 @@ Kate - update prod retailer links
 x Copy chrger kit web page into Instructions.pdf and Datasheet.pdf
 x Copy mb relay web page into Instructions.pdf and Datasheet.pdf
 x Copy mb speaker web page into Instructions.pdf and Datasheet.pdf
-Copy mb sensor web page into Instructions.pdf and  x Datasheet.pdf - consider making blockcode lib the standard way of doing this, and make Python fn
-Copy mb RGB LED web page into Instructions.pdf and Datasheet.pdf
-x Copy mb 7-seg LED web page into Instructions.pdf and x Datasheet.pdf - make a lib that hides the double buffering, also a fn for Python that can be copied.
-Make a video of 7-seg
-Copy mb Power web page into Instructions.pdf and Datasheet.pdf
-Copy mb CO2 web page into Instructions.pdf and Datasheet.pdf
-Copy mb Servo web page into Instructions.pdf and x Datasheet.pdf
-ditto - Servo Six and ServoSix kit
-- amp speaker and kit
-- squid and other combos
-Hacking Mega - datasheet that includes list of parts
-Protoboard kit - Instructions
-MMD Single - datasheet
-Cookies - can be implememted in Boostrap. https://www.jqueryscript.net/other/GDPR-Cookie-Consent-Bootstrap-4-bsgdprcookies.html
+x Copy mb sensor web page into Instructions.pdf and Datasheet.pdf - needs a rewrite maybe using lib only
+x Copy mb RGB LED web page into Instructions.pdf and Datasheet.pdf
+x Copy mb 7-seg LED web page into Instructions.pdf and Datasheet.pdf - make a lib that hides the double buffering, also a fn for Python that can be copied.
+x Copy mb Power web page into Instructions.pdf and Datasheet.pdf
+x Copy mb CO2 web page into Instructions.pdf and Datasheet.pdf
+x Copy mb Servo web page into Instructions.pdf and x Datasheet.pdf
+x ditto - Servo Six 
+x and ServoSix kit instructions
+x amp speaker datasheet
+x and kit instructions
+x squid and other combos
+x(but not ftp'd or added to mm server) Hacking Mega - datasheet that includes list of parts
+x Protoboard kit - Instructions
+x MMD Single - datasheet
+
+
+x Cookies - can be implememted in Boostrap. https://www.jqueryscript.net/other/GDPR-Cookie-Consent-Bootstrap-4-bsgdprcookies.html
+404, 500
 
 How does hosting work?
-- Maybe setup a new micro host with the Wordpress image files copied accross and served by Apache/nginx etc.
+- Maybe setup a new micro host with the Wordpress image files copied accross and served by Apache/nginx/Lighttpd etc.
+
 
 Put a link to a micro:bit getting started guide in the m:b product category section. Ditto Pi.
 

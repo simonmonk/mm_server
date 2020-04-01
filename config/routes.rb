@@ -185,6 +185,7 @@ Rails.application.routes.draw do
       get :home
       get :product_page
       get :generate_files
+      get :upload_files
       get :products
     end
   end

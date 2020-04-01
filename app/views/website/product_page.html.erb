@@ -1,4 +1,20 @@
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+function set_region(region) {
+  selected_region_control = document.getElementById('selected_region_control');
+  selected_region_control.textContent = region;
+  suppliers_list_div = $('#suppliers_list_div');
+  let divs = suppliers_list_div.children();
+  divs.each(function(i) {
+    div = divs.eq(i)
+    div_reg = div.data("region");
+    if (div_reg == region || region == 'All Regions') {
+      div.show();
+    } else {
+      div.hide();
+    }
+  });
+}
+</script>
 
 
 <!DOCTYPE html>
@@ -96,15 +112,15 @@
 
       <div v-if="<%=@product.website_product_retailers.length%> > 10">
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{selected_region}}
+            <button id="selected_region_control" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                All Regions
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button v-on:click="selected_region = 'All Regions'" class="dropdown-item" type="button">All Regions</button>
+                <button onClick="set_region('All Regions')" class="dropdown-item" type="button">All Regions</button>
 <%
 Region.all.each do | region |
 %>
-                <button v-on:click="selected_region = '<%=region.name%>'" class="dropdown-item" type="button"><%=region.name%></button>
+                <button onClick="set_region('<%=region.name%>')" class="dropdown-item" type="button"><%=region.name%></button>
 <%
 end
 %>
@@ -113,7 +129,7 @@ end
       </div>
 
       <!-- Grid Items -->
-      <div class="row text-primary justify-content-center m-1">
+      <div id="suppliers_list_div" class="row text-primary justify-content-center m-1">
 
 <%
     @product.website_product_retailers.each do | product_retailer |
@@ -123,8 +139,8 @@ end
 %>
 
         <!-- Retailer-Product Info section -->
-        <div v-if="selected_region == '<%=retailer.region.name%>' || selected_region == 'All Regions'" class="card m-2" style="width: 12rem; height: 15rem">
-            <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
+        <div data-region='<%=retailer.region.name%>' class="card m-2" style="width: 12rem; height: 15rem">
+          <a href="<%=product_retailer.url%>"><img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>"></a>
             <div class="card-body d-flex flex-column">
               <p class="card-text"></p>
               <div class="mt-auto">

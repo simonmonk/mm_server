@@ -1,4 +1,21 @@
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+function set_region(region) {
+  selected_region_control = document.getElementById('selected_region_control');
+  selected_region_control.textContent = region;
+  suppliers_list_div = $('#suppliers_list_div');
+  let divs = suppliers_list_div.children();
+  divs.each(function(i) {
+    div = divs.eq(i)
+    div_reg = div.data("region");
+    if (div_reg == region || region == 'All Regions') {
+      div.show();
+    } else {
+      div.hide();
+    }
+  });
+}
+</script>
+
 
 
 <!DOCTYPE html>
@@ -8,7 +25,6 @@
 
 <body id="page-top">
 
-<div id="app">
 
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
@@ -98,15 +114,15 @@
 
       <div>
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{selected_region}}
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="selected_region_control" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                All Regions
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button v-on:click="selected_region = 'All Regions'" class="dropdown-item" type="button">All Regions</button>
+                <button onClick="set_region('All Regions')" class="dropdown-item" type="button">All Regions</button>
 <%
 Region.all.each do | region |
 %>
-                <button v-on:click="selected_region = '<%=region.name%>'" class="dropdown-item" type="button"><%=region.name%></button>
+                <button onClick="set_region('<%=region.name%>')" class="dropdown-item" type="button"><%=region.name%></button>
 <%
 end
 %>
@@ -117,7 +133,7 @@ end
 
 
       <!-- Grid Items -->
-      <div class="row text-primary justify-content-center m-1">
+      <div id="suppliers_list_div" class="row text-primary justify-content-center m-1">
 
 <%
 country = ''
@@ -128,11 +144,11 @@ retailers.each do | retailer |
         country = retailer.billing_ad_country
 %>
         <!-- Retailer Info -->
-        <div v-if="selected_region == '<%=retailer.region.name%>' || selected_region == 'All Regions'" class="card m-2" style="width: 17rem; height: 17rem; spacing: 10">
+        <div data-region='<%=retailer.region.name%>' class="card m-2" style="width: 17rem; height: 17rem; spacing: 10">
           <img class="card-img-top" src="<%=retailer.logo_url%>" alt="<%=retailer.name%>">
           <div class="card-body d-flex flex-column">
             <div class="mt-auto">
-                <a href="" class="btn btn-primary">Web Store</a>&nbsp;&nbsp;&nbsp;
+                <a href="<%=retailer.mm_products_url%>" class="btn btn-primary">Web Store</a>&nbsp;&nbsp;&nbsp;
                 <img src="img/flags/<%=country.downcase%>-64.png" alt="<%=country%>"/>
             </div>
           </div>
@@ -165,7 +181,6 @@ retailers.each do | retailer |
     </div>
   </section>
 
-  </div> <!-- end of Vue app -->  
 
   <%= render 'footer' %>
 
@@ -173,23 +188,4 @@ retailers.each do | retailer |
 
 </html>
 
-<script>
-window.onload = function () {
-    var app = new Vue({
-        el: '#app',
-        data: {
-          selected_region: 'All Regions',
-        },
-        mounted: function() {
-          var that;
-        },
-        methods: {
-            test: function() {
-                this.status = 'test'
-                alert("here")
-            },
-        }
-    });
-}
 
-</script>

@@ -62,6 +62,9 @@ class WebsiteController < ApplicationController
             FileUtils.cp_r(rails_dir + "/public/js", website_dir)
             FileUtils.cp_r(rails_dir + "/public/vendor", website_dir)
             FileUtils.cp_r(rails_dir + "/public/css", website_dir)
+            FileUtils.cp_r(rails_dir + "/public/privacy-policy.html", website_dir)
+            FileUtils.cp_r(rails_dir + "/public/404.html", website_dir)
+            FileUtils.cp_r(rails_dir + "/public/500.html", website_dir)
             log += "\nDirectory: " + website_dir + " copied OK"
         rescue
             log += "\nDirectory: " + website_dir + " Could NOT be copied"
@@ -82,9 +85,16 @@ class WebsiteController < ApplicationController
             cmd = "curl http://localhost:3000/website/product_page?id=" + product.id.to_s + " > " + website_dir +  product.webpage_name + ".html &"
             system(cmd)
         end
-
         return render :json => { result: log }
-
     end
 
+    def upload_files
+        log = 'done'
+        temp_dir = Setting.get_setting('TEMP_DIR')
+        website_dir = temp_dir + "website/"
+        scp_upload_command = Setting.get_setting('UPLOAD_COMMAND_HTML')
+        system(scp_upload_command)
+
+        return render :json => { result: log }
+    end
 end

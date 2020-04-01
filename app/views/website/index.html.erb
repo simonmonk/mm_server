@@ -12,19 +12,15 @@
 
 </table>
 
-<h2>File Structure</h2>
+<h2>Generated files go to /tmp/website</h2>
 
-<pre>
-/tmp/website/
-  index.html - Home Page, with list of retailers
-  products.html - List of products grouped by product category
-  <product_webpage>.html - A product page for each product
-
-</pre>
 
 <div id="app">
     <div>
         <button type="button" v-on:click="generate_files" class="btn btn-primary">Generate Files</button>
+    </div>
+    <div>
+        <button type="button" v-on:click="upload_files" class="btn btn-primary">Upload to Live Server</button>
     </div>
     <div><pre>{{status}}</pre></div>
     <div>
@@ -51,9 +47,20 @@ window.onload = function () {
             generate_files: function() {
                 var that;
                 that = this;
-                this.status = 'Working:'
+                this.status = 'Generating:'
                 $.ajax({
                     url: 'website/generate_files',
+                    success: function(res) {
+                        that.status = res.result
+                    }
+                });
+            },
+            upload_files: function() {
+                var that;
+                that = this;
+                this.status = 'Uploading:'
+                $.ajax({
+                    url: 'website/upload_files',
                     success: function(res) {
                         that.status = res.result
                     }

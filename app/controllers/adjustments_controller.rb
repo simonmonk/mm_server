@@ -68,8 +68,6 @@ class AdjustmentsController < ApplicationController
   end
 
 
-
-
   def generate_amazon_income_adjustment(date, income, country, desc, notes)
     adj_type = AdjustmentType.for_code('AMAZON_REPORTED')
     acc = nil
