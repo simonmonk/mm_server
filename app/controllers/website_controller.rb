@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'securerandom'
 
 class WebsiteController < ApplicationController
 
@@ -97,4 +98,36 @@ class WebsiteController < ApplicationController
 
         return render :json => { result: log }
     end
+
+    # def upload_images
+    #     # RUN ONCE UPDATE UTILITY
+    #     # assumes an unzipped backup from the old folder
+        
+    #     # upload just the images that are used into the wp-content folder 
+    #     # also rewrite the URLs 
+    #     Product.where(include_in_catalog: true).each do | product |
+    #         product.product_photo_uri = rewrite_image(product.product_photo_uri, 'product_photos')
+    #     end
+
+    #     # upload carousel images and 
+    #     image_urls = ""
+    # end
+
+    # def rewrite_image(original_url, folder)
+    #     # https://www.monkmakes.com/wp-content/uploads/2014/12/cck-300x79.jpg
+    #     # to:
+    #     # https://www.monkmakes.com/product_photos/cck-300x79.jpg
+    #     temp_dir = Setting.get_setting('TEMP_DIR')
+    #     website_dir = temp_dir + "website/"
+    #     old_server_backup_folder = '/Users/si/backups/backup/www/html/wp-content/uploads'
+    #     server = 'https://monkmakes.com/'
+    #     guid = SecureRandom.uuid
+    #     file_name = original_url.split('/').last
+    #     folder_path = original_url.split('/')[]
+    #     dest_file_name = guid + '_' + file_name
+    #     backup_file = old_server_backup_folder + 
+
+    #     copy_command = 'cp ' + backup_file + " " + website_dir + "/" + folder + "/" + dest_file_name
+    # end
+
 end

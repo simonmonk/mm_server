@@ -140,7 +140,7 @@ country = ''
 retailers = Retailer.all
 retailers = retailers.sort_by{|a| [a.delivery_ad_country, -a.shipments.length]}
 retailers.each do | retailer |
-    if (not retailer.is_retail and retailer.active and retailer.include_in_website)
+    if (not retailer.is_retail and retailer.active and retailer.include_in_website == true)
         country = retailer.billing_ad_country
 %>
         <!-- Retailer Info -->

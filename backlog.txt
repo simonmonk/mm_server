@@ -38,6 +38,19 @@ x(but not ftp'd or added to mm server) Hacking Mega - datasheet that includes li
 x Protoboard kit - Instructions
 x MMD Single - datasheet
 
+All upload images are not there - write script to copy every one referenced
+in the database in: product carousells, company logos, 
+
+
+Centre wording for product category
+
+
+
+
+https://www.monkmakes.com/wp-content/uploads/2014/12/cdsoft-300x79.jpg
+
+
+
 
 x Cookies - can be implememted in Boostrap. https://www.jqueryscript.net/other/GDPR-Cookie-Consent-Bootstrap-4-bsgdprcookies.html
 404, 500

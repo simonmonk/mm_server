@@ -135,7 +135,7 @@ end
     @product.website_product_retailers.each do | product_retailer |
         retailer = product_retailer.retailer
         buy_link = product_retailer.url
-        if (buy_link and buy_link.length > 5)
+        if (buy_link and buy_link.length > 5 and not retailer.is_retail and retailer.active and retailer.include_in_website == true)
 %>
 
         <!-- Retailer-Product Info section -->
