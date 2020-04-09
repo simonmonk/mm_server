@@ -45,7 +45,8 @@ in the database in: product carousells, company logos,
 Centre wording for product category
 
 
-
+sftp://ec2-user@3.11.90.43/data/www/wp-content/uploads/logos/friedrikson_sci.png
+https://monkmakes.com/              wp-content/uploads/logos/friedrikson_sci.png
 
 https://www.monkmakes.com/wp-content/uploads/2014/12/cdsoft-300x79.jpg
 
