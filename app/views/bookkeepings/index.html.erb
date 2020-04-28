@@ -1071,7 +1071,7 @@ window.onload = function () {
             }
             this.transactions.forEach(function (transaction, index) {
               accs = transaction.account_ids;
-              if (accs > 0 && accs[0] == that.filter_by_account.id) {
+              if (accs.length == 1 && accs[0] == that.filter_by_account.id) {
                 if (transaction.direction == "MONEY_IN") {
                   that.closing_balance += parseFloat(transaction.with_vat);
                 }
@@ -1079,6 +1079,15 @@ window.onload = function () {
                   that.closing_balance -= parseFloat(transaction.with_vat);
                 }
               }
+              if (accs.length == 2) {
+                // IF 2 ACCOUNTS POSITIVE AMOUNT MEANS MONEY LEAVING FIRST ACCOUNT AND GOING IN TO SECOND
+                if (accs[0] == that.filter_by_account.id) {
+                  that.closing_balance -= parseFloat(transaction.with_vat);
+                }
+                else {
+                  that.closing_balance += parseFloat(transaction.with_vat);
+                }
+              } 
             });
             this.closing_balance = this.closing_balance.toFixed(2);
           },
