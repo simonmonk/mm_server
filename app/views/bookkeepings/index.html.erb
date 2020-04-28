@@ -1081,7 +1081,7 @@ window.onload = function () {
                   that.closing_balance -= parseFloat(transaction.with_vat);
                 }
               }
-              if (accs.length == 2 && accs[0] == that.filter_by_account.id) {
+              if (accs.length == 2 && (accs[0] == that.filter_by_account.id || accs[1] == that.filter_by_account.id)) {
                 // IF 2 ACCOUNTS POSITIVE AMOUNT MEANS MONEY LEAVING FIRST ACCOUNT AND GOING IN TO SECOND
                 if (accs[0] == that.filter_by_account.id) {
                   that.closing_balance -= parseFloat(transaction.with_vat);
