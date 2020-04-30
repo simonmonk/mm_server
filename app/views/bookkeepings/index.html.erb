@@ -120,8 +120,13 @@
           </td>
         </tr>
           <tr>
-            <td>Amount (+ for money in)</td>
+            <td v-if="adjustment.adjustment_type_id != 3" >Amount (+ for money in)</td>
+            <td v-if="adjustment.adjustment_type_id == 3" >Amount (from account)</td>
             <td><input v-model="adjustment.value" type="text" value="" class="form-control" placeholder=""/></td>
+          </tr>
+          <tr v-if="adjustment.adjustment_type_id == 3">
+            <td>Amount (to account)</td>
+            <td><input v-model="adjustment.destination_currency_value" type="text" value="" class="form-control" placeholder=""/></td>
           </tr>
           <tr v-if="[1, 2, 4, 5, 6, 8, 9, 10].includes(adjustment.adjustment_type_id)">
             <td>VAT Amount</td>
@@ -184,7 +189,7 @@
               <input v-model="amazon_adj_currency_income" type="text" value="" length="8"/>
             </td>
             <td>
-              x {{amazon_adj_exch_rate}}
+              @ {{amazon_adj_exch_rate}}
               <span v-on:click="calc_amazon_income()" class="badge badge-success">Calc</span>
             </td>
           </tr>
@@ -202,7 +207,7 @@
               <input v-model="amazon_adj_currency_expenses" type="text" value="" length="8"/>
             </td>
             <td>
-              x {{amazon_adj_exch_rate}}
+              @ {{amazon_adj_exch_rate}}
               <span v-on:click="calc_amazon_expenses()" class="badge badge-success">Calc</span>
             </td>
           </tr>
@@ -618,7 +623,7 @@ window.onload = function () {
             adjustment: { // todo may only need the id if so delete the rest
               id: null, name: '', adjustment_type_id: null, organisation: null, description: '', 
               value: 0, vat_value: 0, vat_action: '', tax_region: null, is_checked: false,
-              from_account_id: null, to_account_id: null},
+              from_account_id: null, to_account_id: null, destination_currency_value: 0},
             expense: {id: null},
             order_in: {id: null},
             shipment: {id: null},
@@ -797,12 +802,12 @@ window.onload = function () {
             });
           },
           calc_amazon_income: function() {
-            this.amazon_income = this.amazon_adj_currency_income / this.amazon_adj_exch_rate;
+            this.amazon_income = (this.amazon_adj_currency_income / this.amazon_adj_exch_rate).toFixed(2);
             this.amazon_adj_msg_income = 'Calculated as ' + this.selected_amazon_country 
                 + ' ' + this.amazon_adj_currency_income +'@' + this.amazon_adj_exch_rate + '=' + this.amazon_income;
           },
           calc_amazon_expenses: function() {
-            this.amazon_expenses = this.amazon_adj_currency_expenses / this.amazon_adj_exch_rate;
+            this.amazon_expenses = (this.amazon_adj_currency_expenses / this.amazon_adj_exch_rate).toFixed(2)
             this.amazon_adj_msg_expenses = 'Calculated as ' + this.selected_amazon_country 
                 + ' ' + this.amazon_adj_currency_expenses +'@' + this.amazon_adj_exch_rate + '=' + this.amazon_expenses;
           },

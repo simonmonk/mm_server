@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200318111224) do
+ActiveRecord::Schema.define(version: 20200430101209) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "currency_id", default: 1
   end
 
   create_table "adjustment_types", force: :cascade do |t|
@@ -31,18 +32,19 @@ ActiveRecord::Schema.define(version: 20200318111224) do
     t.date     "adjustment_date"
     t.decimal  "value"
     t.string   "adjustment_type"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.string   "organisation"
     t.string   "description"
-    t.decimal  "vat_value",          precision: 10, scale: 3
+    t.decimal  "vat_value",                  precision: 10, scale: 3
     t.string   "vat_action"
     t.string   "tax_region"
-    t.boolean  "is_checked",                                  default: false
+    t.boolean  "is_checked",                                          default: false
     t.integer  "from_account_id"
     t.integer  "to_account_id"
     t.integer  "adjustment_type_id"
     t.string   "adj_notes"
+    t.decimal  "destination_currency_value", precision: 10, scale: 3
   end
 
   create_table "assemblies", force: :cascade do |t|

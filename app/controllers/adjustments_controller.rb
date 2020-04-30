@@ -78,8 +78,8 @@ class AdjustmentsController < ApplicationController
     end
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
-      value: income - (income / 6), 
-      vat_value: income / 6,
+      value: (income - (income / 6)).round(2), 
+      vat_value: (income / 6).round(2),
       tax_region: Adjustment.region_for_country(country), # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
@@ -100,12 +100,12 @@ class AdjustmentsController < ApplicationController
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
       value: expense, 
-      vat_value: expense / 5,
+      vat_value: (expense / 5).round(2),
       tax_region: 'EU', # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
       to_account_id: Account.for_code('AM').id,
-      from_account_id: Account.for_code('CUR').id, # fees never actuall payed, they just get deducted 
+      from_account_id: Account.for_code('AM').id, # fees never actuall payed, they just get deducted from Amazon balance
       adj_notes: notes
       )
     if (amazon_income_adjustment.save)
@@ -151,6 +151,6 @@ class AdjustmentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def adjustment_params
       params.require(:adjustment).permit(:adjustment_date, :value, :adjustment_type, :description, :organisation, :vat_value, :tax_region,
-            :from_account_id, :to_account_id, :adjustment_type_id)
+            :from_account_id, :to_account_id, :adjustment_type_id, :destination_currency_value)
     end
 end

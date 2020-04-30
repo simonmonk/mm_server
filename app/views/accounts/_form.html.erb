@@ -21,6 +21,11 @@
     <%= f.text_field :code %>
   </div>
 
+  <div class="field">
+  Currency
+  <%= f.collection_select(:currency_id, Currency.all, :id, :name) %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

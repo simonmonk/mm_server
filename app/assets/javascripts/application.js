@@ -76,7 +76,7 @@ quarter_dates = function(value) {
         endDate;
     switch (value) {
         case "previous":
-            startDate = new Date(today.getFullYear(), quarter * 3 - 3, 2); // was 1
+            startDate = new Date(today.getFullYear(), quarter * 3 - 3, 1); 
             endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 3, 1);
             break;
         default:
