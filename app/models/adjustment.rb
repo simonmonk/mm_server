@@ -51,7 +51,11 @@ class Adjustment < ApplicationRecord
   # for polymorphism using orders_in and shipments
 
   def transaction_summary()
-    'Adjustment ' + adj_type().name
+    result = 'Adjustment ' + adj_type().name
+    if (adj_type.code == 'AMAZON_REPORTED' or adj_type.code == 'AMAZON_FEES')
+      result += ' (' + description + ')'
+    end
+    return result
   end
 
   def adj_type()
