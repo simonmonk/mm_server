@@ -35,4 +35,5 @@ class AdjustmentType < ApplicationRecord
         end
     end
 
+
 end

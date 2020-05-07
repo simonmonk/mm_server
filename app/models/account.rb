@@ -57,7 +57,11 @@ class Account < ApplicationRecord
         # will need adjustments here too
         transactions = receipts + payments + adjustments + expenses
         transactions = transactions.sort do | a, b |
-            a.accounting_date <=> b.accounting_date
+            a.accounting_date.to_s + a.description.reverse <=> b.accounting_date.to_s + b.description.reverse
+            # this apparent madness is that for multiple transactions on the same date they are
+            # sorted within that date by this: Adjustment Amazon Fees (2020-01-31 UK)
+            #                                                         ---------------
+            # to keep relevant transactions together to see which are missing better
         end
         b1_vatDueSales = 0 # [1]VAT due on sales and other outputs.
         b2_vatDueAcquisitions = 0 # [2]NEGATIVE. VAT due on acquisitions from other EC Member States. 

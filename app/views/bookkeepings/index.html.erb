@@ -87,7 +87,7 @@
               </select>
             </td>
           </tr>
-          <tr v-if="adjustment.adjustment_type_id != 3">
+          <tr v-if="adjustment.adjustment_type_id != adjustment_type_id_for('TRANSFER')">  
             <td>Account</td>
             <td>
               <select v-model="adjustment.from_account_id">
@@ -95,7 +95,7 @@
               </select>
             </td>
           </tr>
-          <tr v-if="adjustment.adjustment_type_id == 3">
+          <tr v-if="adjustment.adjustment_type_id == adjustment_type_id_for('TRANSFER')">
             <td>From Account</td>
             <td>
               <select v-model="adjustment.from_account_id">
@@ -103,7 +103,7 @@
               </select>
             </td>
           </tr>
-          <tr v-if="adjustment.adjustment_type_id == 3">
+          <tr v-if="adjustment.adjustment_type_id == adjustment_type_id_for('TRANSFER')">
             <td>To Account</td>
             <td>
               <select v-model="adjustment.to_account_id">
@@ -111,7 +111,7 @@
               </select>
             </td>
           </tr>
-          <tr v-if="adjustment.adjustment_type_id != 3">
+          <tr v-if="adjustment.adjustment_type_id != adjustment_type_id_for('TRANSFER')">
           <td>Tax Region</td>
           <td>
             <select v-model="adjustment.tax_region">
@@ -120,18 +120,25 @@
           </td>
         </tr>
           <tr>
-            <td v-if="adjustment.adjustment_type_id != 3" >Amount (+ for money in)</td>
-            <td v-if="adjustment.adjustment_type_id == 3" >Amount (from account)</td>
+            <td v-if="adjustment.adjustment_type_id != adjustment_type_id_for('TRANSFER')" >Amount (+ for money in)</td>
+            <td v-if="adjustment.adjustment_type_id == adjustment_type_id_for('TRANSFER')" >Amount (from account)</td>
             <td><input v-model="adjustment.value" type="text" value="" class="form-control" placeholder=""/></td>
           </tr>
-          <tr v-if="adjustment.adjustment_type_id == 3">
+          <tr v-if="adjustment.adjustment_type_id == adjustment_type_id_for('TRANSFER')">
             <td>Amount (to account)</td>
             <td><input v-model="adjustment.destination_currency_value" type="text" value="" class="form-control" placeholder=""/></td>
           </tr>
-          <tr v-if="[1, 2, 4, 5, 6, 8, 9, 10].includes(adjustment.adjustment_type_id)">
+          <tr v-if="adjustment.adjustment_type_id != adjustment_type_id_for('TRANSFER') && adjustment.adjustment_type_id != adjustment_type_id_for('HMRC')">
             <td>VAT Amount</td>
             <td><input v-model="adjustment.vat_value" type="text" value="" class="form-control" placeholder=""/></td>
           </tr>
+
+          <tr v-if="adjustment.adjustment_type_id == adjustment_type_id_for('AMAZON_REPORTED') || adjustment.adjustment_type_id == adjustment_type_id_for('AMAZON_FEES')">
+            <td>Total</td>
+            <td>{{parseFloat(adjustment.value) + parseFloat(adjustment.vat_value)}}</td>
+          </tr>
+
+
           <tr v-if="adjustment.adjustment_type_id == 3 && adjustment.from_account_id == adjustment.to_account_id">
             <td colspan="2"><span class="warning">From and to accounts must be different</td>
           </tr>
@@ -800,6 +807,17 @@ window.onload = function () {
                 that.load_transactions();
               }
             });
+          },
+          adjustment_type_id_for: function(code) {
+            var matches = this.adjustment_types.filter(function (adj_type) {
+              return adj_type.code == code;
+            });
+            if (matches.length == 1) {
+              return matches[0].id;
+            }
+            else {
+              return -1;
+            }
           },
           calc_amazon_income: function() {
             this.amazon_income = (this.amazon_adj_currency_income / this.amazon_adj_exch_rate).toFixed(2);

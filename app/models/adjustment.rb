@@ -12,10 +12,14 @@ class Adjustment < ApplicationRecord
     return ['UK', 'USA', 'FR', 'DE', 'IT', 'ES', 'NL']
   end
 
+  def Adjustment.amazon_eu_countries()
+    return ['FR', 'DE', 'IT', 'ES', 'NL']
+  end
+
   def Adjustment.region_for_country(country)
     if (country == 'UK')
       return 'UK'
-    elsif (country = 'USA')
+    elsif (country == 'USA')
       return Supplier.tax_regions().last # Rest of World
     else
       return 'EU'

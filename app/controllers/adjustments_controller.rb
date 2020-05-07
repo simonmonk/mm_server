@@ -69,17 +69,24 @@ class AdjustmentsController < ApplicationController
 
 
   def generate_amazon_income_adjustment(date, income, country, desc, notes)
+    # notes should include the gross amount used in the calcs for value and vat
     adj_type = AdjustmentType.for_code('AMAZON_REPORTED')
     acc = nil
+    vat_value = 0
     if (country == 'UK')
       acc = Account.for_code('CUR').id
+      vat_value = (income / 6).round(2)
+    elsif (country == 'USA')
+      acc = Account.for_code('WF').id 
     else
-      acc = Account.for_code('WF').id
+      # defualt is europe
+      acc = Account.for_code('WFE').id 
+      vat_value = (income / 6).round(2)
     end
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
       value: (income - (income / 6)).round(2), 
-      vat_value: (income / 6).round(2),
+      vat_value: vat_value,
       tax_region: Adjustment.region_for_country(country), # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
@@ -97,11 +104,20 @@ class AdjustmentsController < ApplicationController
 
   def generate_amazon_expense_adjustment(date, expense, country, desc, notes)
     adj_type = AdjustmentType.for_code('AMAZON_FEES')
+    tax_region = 'Rest of the World'
+    vat_value = 0
+    if (country == 'UK')
+      tax_region = 'UK'
+      vat_value = (expense / 5).round(2)
+    elsif (Adjustment.amazon_eu_countries.include?(country))
+      tax_region = 'EU'
+      vat_value = (expense / 5).round(2)
+    end
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
       value: expense, 
-      vat_value: (expense / 5).round(2),
-      tax_region: 'EU', # ['UK', 'EU', 'Rest of the World']
+      vat_value: vat_value,
+      tax_region: tax_region, # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
       to_account_id: Account.for_code('AM').id,
