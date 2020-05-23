@@ -74,13 +74,13 @@ class AdjustmentsController < ApplicationController
     acc = nil
     vat_value = 0
     if (country == 'UK')
-      acc = Account.for_code('CUR').id
+      #acc = Account.for_code('CUR').id
       vat_value = (income / 6).round(2)
     elsif (country == 'USA')
-      acc = Account.for_code('WF').id 
+      #acc = Account.for_code('WF').id 
     else
       # defualt is europe
-      acc = Account.for_code('WFE').id 
+      #acc = Account.for_code('WFE').id 
       vat_value = (income / 6).round(2)
     end
     amazon_income_adjustment = Adjustment.new(
@@ -91,7 +91,7 @@ class AdjustmentsController < ApplicationController
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
       from_account_id: Account.for_code('AM').id,
-      to_account_id: acc, 
+      to_account_id: nil, 
       adj_notes: notes
       )
     if (amazon_income_adjustment.save)
