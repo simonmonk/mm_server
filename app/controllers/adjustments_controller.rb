@@ -71,21 +71,21 @@ class AdjustmentsController < ApplicationController
   def generate_amazon_income_adjustment(date, income, country, desc, notes)
     # notes should include the gross amount used in the calcs for value and vat
     adj_type = AdjustmentType.for_code('AMAZON_REPORTED')
-    acc = nil
     vat_value = 0
+    val = 0
     if (country == 'UK')
-      #acc = Account.for_code('CUR').id
       vat_value = (income / 6).round(2)
+      val = (income - (income / 6)).round(2)
     elsif (country == 'USA')
       #acc = Account.for_code('WF').id 
     else
-      # defualt is europe
-      #acc = Account.for_code('WFE').id 
+      # by default europe for Amazon
       vat_value = (income / 6).round(2)
+      val = (income - (income / 6)).round(2)
     end
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
-      value: (income - (income / 6)).round(2), 
+      value: val, 
       vat_value: vat_value,
       tax_region: Adjustment.region_for_country(country), # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
