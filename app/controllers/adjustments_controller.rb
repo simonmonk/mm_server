@@ -72,7 +72,7 @@ class AdjustmentsController < ApplicationController
     # notes should include the gross amount used in the calcs for value and vat
     adj_type = AdjustmentType.for_code('AMAZON_REPORTED')
     vat_value = 0
-    val = 0
+    val = income
     if (country == 'UK')
       vat_value = (income / 6).round(2)
       val = (income - (income / 6)).round(2)
