@@ -586,9 +586,9 @@
   <td>{{transaction.accounting_date}}</td>
   <td>{{transaction.transaction_summary}}</td>
   <td>{{transaction.accounts}}</td>
-  <td v-bind:class="transaction.direction" >{{transaction.without_vat}}</td>
-  <td v-bind:class="transaction.direction" >{{transaction.vat}}</td>
-  <td v-bind:class="transaction.direction" >{{transaction.with_vat}}</td>
+  <td v-bind:class="transaction.direction" >{{transaction.without_vat.to_gbp()}}</td>
+  <td v-bind:class="transaction.direction" >{{transaction.vat.to_gbp()}}</td>
+  <td v-bind:class="transaction.direction" >{{transaction.with_vat.to_gbp()}}</td>
   <td>{{transaction.vat_action}}</td>
   <td v-if="transaction.has_proof_uploaded && transaction.transaction_type == 'ORDER_IN'"><img src="/images/attachment.png/" v-on:click="show_attachment_purchase(index)"></td>
   <td v-if="transaction.has_proof_uploaded && transaction.transaction_type == 'EXPENSE'"><img src="/images/attachment.png/" v-on:click="show_attachment_expense(index)"></td>

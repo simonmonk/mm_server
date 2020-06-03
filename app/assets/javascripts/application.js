@@ -32,6 +32,13 @@ Date.prototype.addDays = function(days) {
     return date;
 }
 
+
+
+String.prototype.to_dp = function(n) {
+    return parseFloat(this.valueOf()).toFixed(n);
+}
+
+
 Number.prototype.to_gbp = function() {
     var formatter = new Intl.NumberFormat('en-UK', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2 });
     return formatter.format(this.valueOf())
