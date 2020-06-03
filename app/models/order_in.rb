@@ -138,12 +138,46 @@ class OrderIn < ApplicationRecord
     return false
   end
 
+
+  # def without_vat()
+  #   if (currency != 'GBP' and exch_rate)
+  #     if (actually_paid_gbp)
+  #       return actually_paid_gbp
+  #     else
+  #       return 0
+  #     end
+  #   else
+  #     return without_vat_original_currency()
+  #   end
+  # end
+
+  # def vat()
+  #   if (currency != 'GBP' and exch_rate)
+  #     return vat_original_currency() / exch_rate
+  #   else
+  #     return vat_original_currency()
+  #   end
+  # end
+
+  # def with_vat()
+  #   if (currency != 'GBP' and exch_rate)
+  #     # return with_vat_original_currency() / exch_rate
+  #     if (actually_paid_gbp)
+  #       return actually_paid_gbp
+  #     else
+  #       return 0
+  #     end
+  #   else
+  #     return with_vat_original_currency()
+  #   end
+  # end
+
   def without_vat()
     if (currency != 'GBP' and exch_rate)
       if (actually_paid_gbp)
-        return actually_paid_gbp
+        return actually_paid_gbp - vat()
       else
-        return 0
+        return 0 # to flag that there should be an actual amount in GBP
       end
     else
       return without_vat_original_currency()
@@ -164,7 +198,7 @@ class OrderIn < ApplicationRecord
       if (actually_paid_gbp)
         return actually_paid_gbp
       else
-        return 0
+        return 0 # to flag that an exch rate is needed
       end
     else
       return with_vat_original_currency()

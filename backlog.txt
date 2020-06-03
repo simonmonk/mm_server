@@ -21,9 +21,7 @@ Model accounts better.
 ** delete the transfer type of Actual Income from Amazon and just do it as a transfer from Amazon to appropriate account!
 
 
-
-
-
+Bookkeeping view 2dp on all currency amounts displayed but 4 dp on exchange rate.
 
 
 
