@@ -105,13 +105,11 @@ class AdjustmentsController < ApplicationController
   def generate_amazon_expense_adjustment(date, expense, country, desc, notes)
     adj_type = AdjustmentType.for_code('AMAZON_FEES')
     tax_region = 'Rest of the World'
-    vat_value = 0
+    vat_value = (expense / 5).round(2)
     if (country == 'UK')
       tax_region = 'UK'
-      vat_value = (expense / 5).round(2)
     elsif (Adjustment.amazon_eu_countries.include?(country))
       tax_region = 'EU'
-      vat_value = (expense / 5).round(2)
     end
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 

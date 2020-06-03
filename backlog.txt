@@ -20,45 +20,13 @@ Model accounts better.
 - For adjustment actual amazon income - add UI to use destination_currency_value and make labels unambiguous and smart based on acc selections
 ** delete the transfer type of Actual Income from Amazon and just do it as a transfer from Amazon to appropriate account!
 
-change amazon adjustment so that * says divide and fix number of dps for calculated valur from exch rate
 
 
 
-MM Website genberation
-==========================
-
-MM new website data tasks
---
-Kate - update prod retailer links
-x Copy chrger kit web page into Instructions.pdf and Datasheet.pdf
-x Copy mb relay web page into Instructions.pdf and Datasheet.pdf
-x Copy mb speaker web page into Instructions.pdf and Datasheet.pdf
-x Copy mb sensor web page into Instructions.pdf and Datasheet.pdf - needs a rewrite maybe using lib only
-x Copy mb RGB LED web page into Instructions.pdf and Datasheet.pdf
-x Copy mb 7-seg LED web page into Instructions.pdf and Datasheet.pdf - make a lib that hides the double buffering, also a fn for Python that can be copied.
-x Copy mb Power web page into Instructions.pdf and Datasheet.pdf
-x Copy mb CO2 web page into Instructions.pdf and Datasheet.pdf
-x Copy mb Servo web page into Instructions.pdf and x Datasheet.pdf
-x ditto - Servo Six 
-x and ServoSix kit instructions
-x amp speaker datasheet
-x and kit instructions
-x squid and other combos
-x(but not ftp'd or added to mm server) Hacking Mega - datasheet that includes list of parts
-x Protoboard kit - Instructions
-x MMD Single - datasheet
-
-All upload images are not there - write script to copy every one referenced
-in the database in: product carousells, company logos, 
 
 
-Centre wording for product category
 
 
-sftp://ec2-user@3.11.90.43/data/www/wp-content/uploads/logos/friedrikson_sci.png
-https://monkmakes.com/              wp-content/uploads/logos/friedrikson_sci.png
-
-https://www.monkmakes.com/wp-content/uploads/2014/12/cdsoft-300x79.jpg
 
 
 
