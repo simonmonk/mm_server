@@ -73,21 +73,24 @@ class AdjustmentsController < ApplicationController
     adj_type = AdjustmentType.for_code('AMAZON_REPORTED')
     vat_value = 0
     val = income
+    tax_region = 'Rest of the World'
     if (country == 'UK')
       vat_value = (income / 6).round(2)
       val = (income - (income / 6)).round(2)
+      tax_region = 'UK'
     elsif (country == 'USA')
-      #acc = Account.for_code('WF').id 
+      tax_region = 'Rest of the World' 
     else
       # by default europe for Amazon
       vat_value = (income / 6).round(2)
       val = (income - (income / 6)).round(2)
+      tax_region = 'EU'
     end
     amazon_income_adjustment = Adjustment.new(
       adjustment_date: date, 
       value: val, 
       vat_value: vat_value,
-      tax_region: Adjustment.region_for_country(country), # ['UK', 'EU', 'Rest of the World']
+      tax_region: tax_region, # ['UK', 'EU', 'Rest of the World']
       adjustment_type_id: adj_type.id,
       description: desc, # don'r mess with format of this, its used as a key ro check adjusment not already created
       from_account_id: Account.for_code('AM').id,
