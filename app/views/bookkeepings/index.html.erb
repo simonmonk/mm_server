@@ -596,6 +596,7 @@
   <td v-if="! transaction.has_proof_uploaded"></td>
   <td><span v-on:click="edit_transaction(index)" class="badge badge-success">Edit</span></td>
   <td><span v-on:click="delete_transaction(index)" class="badge badge-danger">Delete</span></td>
+  <td>id={{transaction.id}}</td>
 </tr>
 </table>
 
