@@ -110,6 +110,6 @@ end
     def part_params
       params.require(:part).permit(:name, :part_category_id, :active, :qty, :cost, 
                 :currency, :exch_rate, :stock_warning_level, :shipping_cost, :notes,
-                :weight_g)
+                :weight_g, :image_url)
     end
 end

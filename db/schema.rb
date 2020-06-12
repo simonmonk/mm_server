@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200430101209) do
+ActiveRecord::Schema.define(version: 20200612120800) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -210,6 +210,7 @@ ActiveRecord::Schema.define(version: 20200430101209) do
     t.text     "notes"
     t.integer  "part_category_id"
     t.float    "weight_g"
+    t.string   "image_url"
   end
 
   create_table "product_assemblies", force: :cascade do |t|

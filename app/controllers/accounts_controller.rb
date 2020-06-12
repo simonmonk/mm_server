@@ -96,7 +96,7 @@ class AccountsController < ApplicationController
     vat_return[:vatDueAcquisitions] = '%.2f' % vat_return[:vatDueAcquisitions].to_f
     vat_return[:totalVatDue] = '%.2f' % vat_return[:totalVatDue].to_f
     vat_return[:vatReclaimedCurrPeriod] = '%.2f' % vat_return[:vatReclaimedCurrPeriod].to_f
-    vat_return[:netVatDue] = '%.2f' % vat_return[:netVatDue].to_f
+    vat_return[:netVatDue] = '%.2f' % vat_return[:netVatDue].to_f.abs() # abs value demanded by MTD API
     vat_return[:totalValueSalesExVAT] = '%.2f' % vat_return[:totalValueSalesExVAT].to_f
     vat_return[:totalValuePurchasesExVAT] = '%.2f' % vat_return[:totalValuePurchasesExVAT].to_f
     vat_return[:totalValueGoodsSuppliedExVAT] = '%.2f' % vat_return[:totalValueGoodsSuppliedExVAT].to_f

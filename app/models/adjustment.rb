@@ -157,7 +157,7 @@ class Adjustment < ApplicationRecord
     end
   end
 
-  def without_vat() # currency ignored
+  def without_vat() # sign ignored use type for direction of money movement
     if (value)
       if (value < 0)
         return -value
@@ -169,7 +169,7 @@ class Adjustment < ApplicationRecord
     end
   end
 
-  def vat()
+  def vat() # sign ignored use type for direction of money movement
     if (vat_value)
       if (vat_value < 0)
         return -vat_value
@@ -235,7 +235,7 @@ class Adjustment < ApplicationRecord
       return [4, 7]
     elsif (code == 'REFUND')
       # VAT for a refund needs knocking off from original purchase - its a kind of negative purchase
-      return [] # TBA - ask Linda
+      return [4, 7] # TBA - ask Linda
     else
       return []
     end
