@@ -41,7 +41,7 @@ function remove_part_supplier(part_supplier_id) {
   <tr><td>Part Name</td><td><%= f.text_field :name %></td></tr>
   <tr><td>Part Image URL</td><td><%= f.text_field :image_url %></td></tr>
   <% if (part.image_url and part.image_url.length > 3) %>
-    <tr><td colspan="2"><img src="<%=part.image_url%>"/></td></tr>
+    <tr><td colspan="2"><img src="<%=part.image_url%>" width="200"/></td></tr>
   <% end %>
   <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
   <tr><td>Weight (<b>In GRAMS</b>)</td><td><%= f.text_field :weight_g %></td></tr>
