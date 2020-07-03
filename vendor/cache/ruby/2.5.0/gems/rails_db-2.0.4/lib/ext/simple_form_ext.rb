@@ -1,1 +1,0 @@
-SimpleForm::FormBuilder.mappings[:inet] ||= SimpleForm::Inputs::StringInput
