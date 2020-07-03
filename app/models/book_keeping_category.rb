@@ -28,4 +28,5 @@ class BookKeepingCategory < ApplicationRecord
     end
 
 
+
 end

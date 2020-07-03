@@ -1,0 +1,271 @@
+
+from_date = Date.parse(params['from_date'])
+to_date = Date.parse(params['to_date'])
+data_summary = Account.generateVATReportData(from_date, to_date)
+transactions = data_summary[0]
+
+
+wb = xlsx_package.workbook 
+styles = wb.styles
+title = styles.add_style :b => true
+normal = styles.add_style :b => false
+date = styles.add_style :format_code => "dd/mm/yyyy"
+date_red = styles.add_style :format_code => "dd/mm/yyyy", :fg_color => "FF0000"
+col_head = styles.add_style :b => true
+col_head_ = styles.add_style :b => true, :border => { :style => :thin, :color =>"00000000", :edges => [:bottom]}
+money = styles.add_style :format_code => '#,###,###.00'
+money_tot = styles.add_style :format_code => '#,###,###.00', :b => true, :border => { :style => :double, :color =>"00000000", :edges => [:bottom]}
+red = styles.add_style :format_code => '#,###,###.00', :fg_color => "FF0000"
+
+money_style_row = Array.new(20, money)
+money_tot_style_row = Array.new(20, money_tot)
+date_money_style_row = [date] + Array.new(20, money)
+transfer_style_row = [date_red, red, red] + Array.new(20, money)
+
+bank_rec_cell = 'not set'
+bank_pay_cell = 'not set'
+cc_pay_cell = 'not set'
+bank_pay_cc_cell = 'not set'
+
+#
+# Bank Payments worksheet
+#
+wb.add_worksheet(name: "Bank Paymts") do |sheet|
+    sheet.add_row ['MONK MAKES LIMITED'], :style => title
+    sheet.add_row ['BANK PAYMENTS'], :style => title
+    sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
+    sheet.add_row []
+    
+    sheet.add_row [''    ,''      ,''    ,'','Input',''       ,''        ,'Paid to','Paid to'   ,''         ,'Property',''          ,'Email/Web/','Bank'   , 'PayPal',''   ,''       ,''         ,'Wages &'], :style => col_head
+    sheet.add_row ['Date','Detail','Paid','','VAT','Materials','Shipping','PayPal','Credit Card','Packaging','Costs'   ,'Stationary','Software'  ,'Charges', 'Fees','Accty','Postage','Insurance','PAYE','Translation'], :style => col_head_
+    sheet.add_row []
+    first_row = 8
+    row_num = first_row
+    transactions.each do | t | 
+        if (t.include_spreadsheet_bank_payments())
+            row_num += 1
+            style = date_money_style_row
+            if (t.is_transfer)
+                style = transfer_style_row
+            end
+            sheet.add_row [t.cash_date, t.spreadsheet_description, t.with_vat, '', t.vat] + t.spreadsheet_bank_payment_cols(), :style => style
+        end
+    end
+    last_row = row_num
+    bank_pay_cell = "='" + sheet.name + "'!C" + (last_row+1).to_s + " "
+    bank_pay_cc_cell = "='" + sheet.name + "'!I" + (last_row+1).to_s + " "
+    sheet.add_row Array.new(18, ''), :style => col_head_
+    # Total formula for Bamk Payment worksheet
+    tot_formulas = ["", ""]
+    col_letters = "C_EFGHIJKLMNOPQRST" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            tot_formulas.append("=SUM(" + col_let + first_row.to_s + ":" + col_let + (last_row-1).to_s + ")")
+        else
+            tot_formulas.append("")
+        end
+    end
+    # Net_zero formula for Bamk Payment worksheet
+    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':T' + (last_row+4).to_s + ')', '', '']
+    col_letters = "FG__JKLM__P_R" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            net_z_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            net_z_formulas.append("")
+        end
+    end
+    # Excempt formula for Bamk Payment worksheet
+    ex_formulas = ['', 'Exempt', '=SUM(E' + (last_row+5).to_s + ':T' + (last_row+5).to_s + ')', '', '']
+    col_letters = "__HI____NO_Q_ST" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            ex_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            ex_formulas.append("")
+        end
+    end
+    sheet.add_row tot_formulas, :style => money_tot_style_row
+    sheet.add_row []
+    sheet.add_row ['', 'Input VAT', '=E' + (last_row+1).to_s]
+    sheet.add_row net_z_formulas, :style => money_style_row
+    sheet.add_row ex_formulas, :style => money_style_row
+    # Grand totalm check
+    sheet.add_row []
+    sheet.add_row ['', '', '=SUM(C' + (last_row+3).to_s + ':C'+(last_row+5).to_s + ')'], :style => money_tot_style_row
+end
+
+#
+# Bank Receipts worksheet
+#
+wb.add_worksheet(name: "Bank Rcpts") do |sheet|
+    sheet.add_row ['MONK MAKES LIMITED'], :style => title
+    sheet.add_row ['BANK RECEIPTS'], :style => title
+    sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
+    sheet.add_row []
+    
+    sheet.add_row [''    ,''      ,''    ,'','Output','Standard' ,'Zero' ,''      ,''      ,''        ,'        ',''       ,''      ], :style => col_head
+    sheet.add_row ['Date','Detail','Paid','','VAT'   ,'Rated'    ,'Rated','Exempt','Amazon','Interest','Country' ,'Invoice','Notes' ], :style => col_head_
+    sheet.add_row []
+    first_row = 8
+    row_num = first_row
+    transactions.each do | t | 
+        if (t.include_spreadsheet_bank_receipts())
+            row_num += 1
+            style = date_money_style_row
+            if (t.is_transfer)
+                style = transfer_style_row
+            end
+            sheet.add_row [t.cash_date, t.spreadsheet_description, t.with_vat, '', t.vat] +
+                t.spreadsheet_bank_receipt_cols() +
+                [t.country, (' ' + t.invoice_number)], :style => style
+        end
+    end
+    last_row = row_num
+    bank_rec_cell = "='" + sheet.name + "'!C" + (last_row+1).to_s + " "
+    puts "****** bank_rec_cell=" + bank_rec_cell
+    sheet.add_row Array.new(13, ''), :style => col_head_
+    # Total formula for Bamk Payment worksheet
+    tot_formulas = ["", ""]
+    col_letters = "C_EFGHIJKL" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            tot_formulas.append("=SUM(" + col_let + first_row.to_s + ":" + col_let + (last_row-1).to_s + ")")
+        else
+            tot_formulas.append("")
+        end
+    end
+    sheet.add_row tot_formulas, :style => money_tot_style_row
+    # Net_zero formula for Bank Receipt worksheet
+    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':H' + (last_row+4).to_s + ')']
+    col_letters = "__FG" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            net_z_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            net_z_formulas.append("")
+        end
+    end
+    # 'Other' formula for Bamk Payment worksheet
+    other_formulas = ['', 'Other', '=SUM(E' + (last_row+6).to_s + ':T' + (last_row+6).to_s + ')']
+    col_letters = "_____IJ" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            other_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            other_formulas.append("")
+        end
+    end
+    sheet.add_row []
+    sheet.add_row ['', 'VAT', '=E' + (last_row+1).to_s]
+    sheet.add_row net_z_formulas, :style => money_style_row
+    sheet.add_row ['', 'Exempt', '=H' + (last_row+1).to_s, '', '', '', '=H' + (last_row+1).to_s], :style => money_style_row
+    sheet.add_row other_formulas, :style => money_style_row
+    sheet.add_row [], :style => money_tot_style_row
+    sheet.add_row ['', '', '=SUM(C' + (last_row+3).to_s + ':C'+(last_row+6).to_s + ')'], :style => money_tot_style_row
+end
+
+#
+# Bank Reconciliation worksheet
+#
+wb.add_worksheet(name: "Bank Rec") do |sheet|
+    sheet.add_row ['MONK MAKES LIMITED'], :style => title
+    sheet.add_row ['BANK RECONCILIATION'], :style => title
+    sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
+    sheet.add_row []
+    sheet.add_row []
+    sheet.add_row []
+    
+    sheet.add_row ['','','','','DR','','CR' ], :style => col_head
+    sheet.add_row []
+    sheet.add_row ['','Balance b/f','','','ENTER BALANCE B/F'], :style => col_head
+    sheet.add_row []
+    this_row = sheet.add_row ['','Bank Receipts','','',bank_rec_cell], :style => money_style_row
+    sheet.add_row []
+    this_row = sheet.add_row ['','Bank Receipts','','','','',bank_pay_cell], :style => money_style_row
+    sheet.add_row []
+    this_row = sheet.add_row ['','','','','','','ENTER BALANCE C/F'], :style => money_style_row
+    sheet.add_row [], :style => money_tot_style_row
+    this_row = sheet.add_row ['','','','','=E9+E11','','=G13+G15'], :style => money_tot_style_row
+end
+
+
+
+#
+# CC Pymts worksheet
+#
+wb.add_worksheet(name: "CC Pymts") do |sheet|
+    sheet.add_row ['MONK MAKES LIMITED'], :style => title
+    sheet.add_row ['CREDIT CARD'], :style => title
+    sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
+    sheet.add_row []
+    
+    sheet.add_row [''    ,''      ,''    ,'','Input',''       ,''        ,''         ,''          ,'Email/Web/','Bank'   ], :style => col_head
+    sheet.add_row ['Date','Detail','Paid','','VAT','Materials','Shipping','Packaging','Stationary','Software'  ,'Charges'], :style => col_head_
+    sheet.add_row []
+    first_row = 8
+    row_num = first_row
+    transactions.each do | t | 
+        if (t.include_spreadsheet_cc_payments())
+            row_num += 1
+            style = date_money_style_row
+            if (t.is_transfer)
+                style = transfer_style_row
+            end
+            sheet.add_row [t.cash_date, t.spreadsheet_description, t.with_vat, '', t.vat] + t.spreadsheet_cc_payment_cols(), :style => style
+        end
+    end
+    last_row = row_num
+    cc_pay_cell = "='" + sheet.name + "'!C" + (last_row+1).to_s + " "
+    sheet.add_row Array.new(18, ''), :style => col_head_
+    # Total formula for Bamk Payment worksheet
+    tot_formulas = ["", ""]
+    col_letters = "C_EFGHIJK" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            tot_formulas.append("=SUM(" + col_let + first_row.to_s + ":" + col_let + (last_row-1).to_s + ")")
+        else
+            tot_formulas.append("")
+        end
+    end
+    # Net_zero formula for Bamk Payment worksheet
+    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':K' + (last_row+4).to_s + ')', '', '']
+    col_letters = "FGHIJ" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            net_z_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            net_z_formulas.append("")
+        end
+    end
+    # Excempt formula for Bamk Payment worksheet
+    ex_formulas = ['', 'Exempt', '=SUM(E' + (last_row+5).to_s + ':K' + (last_row+5).to_s + ')', '', '']
+    col_letters = "_____K" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            ex_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            ex_formulas.append("")
+        end
+    end
+    sheet.add_row tot_formulas, :style => money_tot_style_row
+    sheet.add_row []
+    sheet.add_row ['', 'Input VAT', '=E' + (last_row+1).to_s]
+    sheet.add_row net_z_formulas, :style => money_style_row
+    sheet.add_row ex_formulas, :style => money_style_row
+    # Grand totalm check
+    sheet.add_row []
+    sheet.add_row ['', '', '=SUM(C' + (last_row+3).to_s + ':C'+(last_row+5).to_s + ')'], :style => money_tot_style_row
+    sheet.add_row []
+    sheet.add_row []
+    sheet.add_row ['Control Account'], :style => money_tot_style_row
+    sheet.add_row []
+    sheet.add_row ['','','','DR','CR']
+    sheet.add_row []
+    sheet.add_row ['Balance b/f'                       ,'','',                    '','ENTER BALANCE B/F'],      :style => money_style_row
+    sheet.add_row ['Total payments made'               ,'','',                    '','=C' + (last_row+1).to_s], :style => money_style_row
+    sheet.add_row ['Transfer from bank current account','','',bank_pay_cc_cell,   ''],                          :style => money_style_row
+    sheet.add_row ['Balance c/f'                       ,'','','ENTER BALANCE C/F',''],                          :style => money_style_row
+    sheet.add_row [], :style => money_tot_style_row
+    sheet.add_row [''                                  ,'','','=D'+(last_row+16).to_s+'+D'+(last_row+17).to_s, '=E'+(last_row+14).to_s+'+E'+(last_row+15).to_s], :style => money_style_row
+end

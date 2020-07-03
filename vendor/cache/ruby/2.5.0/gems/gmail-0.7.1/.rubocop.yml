@@ -1,0 +1,53 @@
+inherit_from: .rubocop_todo.yml
+
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
+  SupportedStyles:
+    - ruby19
+    - hash_rockets
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+  SupportedStyles:
+    - single_quotes
+    - double_quotes
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Max: 100
+  Exclude:
+    - spec/**/*
+
+Lint/NestedMethodDefinition:
+  Enabled: false
+
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+Layout/ClosingParenthesisIndentation:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/CommentedKeyword:
+  Exclude:
+    - lib/**/*
+
+Lint/LiteralAsCondition:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Security/YAMLLoad:
+  Exclude:
+    - spec/support/obfuscation.rb

@@ -22,6 +22,7 @@
 
 <!-- Time selection and loading form -->
 <div>
+<button type="button" v-on:click="set_dates_last_last_q()" class="badge badge-info">Two Quarters Ago</button>
 <button type="button" v-on:click="set_dates_last_q()" class="badge badge-info">Last Quarter</button>
 <button type="button" v-on:click="set_dates_this_q()" class="badge badge-info">This Quarter</button>
 <span>
@@ -52,6 +53,7 @@
 <button :disabled="transactions.length == 0" type="button" v-on:click="open_adjustment_form_new()" class="badge badge-info">Add New Adjustment</button>
 <button :disabled="transactions.length == 0" type="button" v-on:click="open_expense_form_new()" class="badge badge-info">Add New Expense</button>
 <button :disabled="transactions.length == 0" type="button" v-on:click="open_amazon_form()" class="badge badge-info">Create Amazon Adjustments</button>
+<button :disabled="transactions.length == 0" type="button" v-on:click="create_spreadsheet()" class="badge badge-info">Create Spreadsheet</button>
 </div>
 
 <div v-if="filter_by_account.id != 0">
@@ -674,6 +676,9 @@ window.onload = function () {
               }
             });
           },
+          create_spreadsheet: function() { 
+            window.open("/bookkeepings/create_spreadsheet?from_date="  + this.from_date + '&to_date=' + this.to_date , '_blank')
+          },
           load_accounts: function() {
             var that;
             that = this;
@@ -759,6 +764,10 @@ window.onload = function () {
           set_dates_last_q: function() {
             this.from_date = quarter_dates("previous").StartDate;
             this.to_date = quarter_dates("previous").EndDate;
+          },
+          set_dates_last_last_q: function() {
+            this.from_date = quarter_dates("previous_previous").StartDate;
+            this.to_date = quarter_dates("previous_previous").EndDate;
           },
           set_dates_this_q: function() {
             this.from_date = quarter_dates("this").StartDate;

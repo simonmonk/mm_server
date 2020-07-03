@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get 'suppliers/suppliers_list.json', to: 'suppliers#suppliers_list'
   get 'products/:id/print_labels/:qty', to: 'products#print_labels#qty'
   get 'bookkeepings/transactions', to: 'bookkeepings#transactions'
+  get 'bookkeepings/create_spreadsheet', to: 'bookkeepings#create_spreadsheet'
   get 'bookkeepings', to: 'bookkeepings#index'
   get 'parts/:id/set_inactive/', to: 'parts#set_inactive'
 

@@ -149,6 +149,9 @@ class Adjustment < ApplicationRecord
     return adjustment_type
   end
 
+
+
+
   def is_income()
     if (value >= 0)
         return true
@@ -201,19 +204,86 @@ class Adjustment < ApplicationRecord
     return false
   end
 
+  def is_transfer()
+    return (adj_type.code == 'TRANSFER')
+  end
+
+  def spreadsheet_description()
+    return description
+  end
+
+  # part of 'transaction' polymorth 
+  # return a sparse array with the without_vat amount in the correct bookeeping column
+  def spreadsheet_bank_payment_cols()
+    if (adj_type.code == 'TRANSFER' and to_account.code == 'PPL')
+      return ['', '', with_vat]
+    elsif ((adj_type.code == 'TRANSFER' and to_account.code == 'CC'))
+      return [ '', '', '', with_vat]
+    end
+    return []
+  end
+
+  def spreadsheet_bank_receipt_cols()
+    # col I (Amazon) - Income received from Amazon (Adjustment) - either transfer from Amazon, or specific Amazon actual type (legacy)
+    # col J (Interest) - HMRC Adjustment
+    # adjustment underpayment - E.g Daisey part payment for CO2 sensors in advance - which COL?? depends on tax_region 
+    if (adj_type.code == 'TRANSFER' and from_account.code == 'AM' and to_account.code == 'CUR')
+      return ['', '', '', with_vat]
+    elsif (adj_type.code == 'AMAZON_ACTUAL')
+      return [ '', '', '', with_vat, '']
+    elsif (adj_type.code == 'UNDER_PAYMENT' and from_account.code == 'CUR')
+      puts " **** spreadsheet_bank_receipt_cols UNDERPAYMENT *****" + tax_region
+      if (tax_region == 'UK')
+        return [without_vat, '', '', '', '']
+      elsif (tax_region == 'EU')
+        return [ '', without_vat, '', '', '']
+      else # rest of world - exempt 
+        return [ '', '', without_vat, '', '']
+      end
+    elsif (adj_type.code == 'HMRC')
+      return [ '', '', '', '', with_vat]
+    end
+    return []
+  end
+
+  def include_spreadsheet_bank_payments()
+    return (from_account_id == Account.for_code('CUR').id and is_transfer())
+  end
+
+  def spreadsheet_cc_payment_cols()
+    if (adj_type.code == 'TRANSFER' and to_account.code == 'CC')
+      return ['', '', with_vat]
+    end
+    return []
+  end
+
+  def include_spreadsheet_bank_receipts()
+    return (
+      (adj_type.code == 'TRANSFER' and from_account.code == 'AM' and to_account.code == 'CUR') or
+      (adj_type.code == 'AMAZON_ACTUAL') or
+      (adj_type.code == 'HMRC') or
+      (adj_type.code == 'UNDER_PAYMENT' and from_account.code == 'CUR')
+    )
+  end
+
+  def include_spreadsheet_cc_payments()
+    return (from_account_id == Account.for_code('CC').id and is_transfer())
+  end
+
+  def country()
+    return tax_region
+  end
+
+  def invoice_number()
+    return ''
+  end
+
   def has_proof_uploaded()
     root_dir = Setting.get_setting('ROOT_DIR')
     file = Dir.glob(root_dir + '/public/adjustment_paperwork/' + name + '.pdf')
     return (file.length == 1)
   end
 
-  # def tax_region()
-  #   if (adjustment_type == 'Amazon Fees')
-  #       return 'EU' # From Belgium in fact
-  #   end
-  #   # modify to make this state and add to UI for Adjustments
-  #   return 'UK'
-  # end
 
   def boxes()
     code = adj_type.code

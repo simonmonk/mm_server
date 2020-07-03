@@ -64,6 +64,58 @@ class Shipment < ApplicationRecord
     'Sale to ' + retailer.name
   end
 
+  # part of 'transaction' polymorth 
+  # return a sparse array with the without_vat amount in the correct bookeeping column
+  def spreadsheet_bank_payment_cols()
+    return []
+  end
+
+  def spreadsheet_cc_payment_cols()
+    return []
+  end
+
+  def spreadsheet_bank_receipt_cols()
+    # col F - tax_region = 'UK'
+    # col G (zero rated) - 'EU'
+    # col H (exempt) - rest of world
+    row = []
+    if (tax_region == 'UK')
+      return [without_vat, '', '', '', '']
+    elsif (tax_region == 'EU')
+      return [ '', without_vat, '', '', '']
+    else # rest of world 
+      return [ '', '', without_vat, '', '']
+    end
+    return row
+  end
+
+  def include_spreadsheet_bank_payments()
+    return (with_vat <= 0) # because refunds are netagive payments
+  end
+
+  def include_spreadsheet_cc_payments()
+    return (with_vat <= 0) # because refunds are netagive payments
+  end
+
+  def include_spreadsheet_bank_receipts()
+    return (
+      (is_paid and with_vat > 0)  and # because refunds are netagive payments
+      (account.code == 'CUR')
+    )
+  end
+
+  def is_transfer()
+    return false
+  end
+
+  def spreadsheet_description()
+    return retailer.name + ' ' + description
+  end
+
+  def country()
+    return retailer.billing_ad_country
+  end
+
   def direction()
     return 'MONEY_IN'
   end

@@ -13,6 +13,13 @@ class BookkeepingsController < ApplicationController
     render :json => data
   end
 
+  # Generate a spreadsheet for the date range
+  def create_spreadsheet
+    # from_date = Date.parse(params['from_date'])
+    # to_date = Date.parse(params['to_date'])
+    render xlsx: "spreadsheet", template: "bookkeepings/spreadsheet.xlsx.axlsx" #, from_date: from_date, to_date: to_date
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def bookkeeping_params
     params.require(:bookkeeping).permit(:from_date, :to_date)

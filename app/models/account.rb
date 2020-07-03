@@ -1,7 +1,9 @@
 require "peddler"
+require "axlsx"
 
 class Account < ApplicationRecord
-
+    
+    
 
     def Account.current_vat_rate()
         v = Setting.get_setting('CURRENT_VAT_RATE')

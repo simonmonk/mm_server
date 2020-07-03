@@ -89,7 +89,7 @@ class OrderIn < ApplicationRecord
     return 'MONEY_OUT'
   end
 
-  def account_ids()
+  def account_ids() 
     if (account) # this guard clause for old transactions that don't have an account set.
       return [account.id]
     else
@@ -138,39 +138,107 @@ class OrderIn < ApplicationRecord
     return false
   end
 
+  # Utility fn for spreadsheet_bank_payment_cols
+  def bank_payment_col_map()
+    return [
+      ['PAR', 'MAT'], 
+      ['SHIP'],
+      [],
+      [],
+      ['PACK'],
+      ['PROP', 'EQU'],
+      ['STAT'],
+      ['SOFT'],
+      ['BANK'],
+      ['PPFEES'],
+      ['ACC'],
+      ['POST'],
+      ['INS'],
+      ['WAG', 'SUBS', 'DIR', 'HMRC'],
+      ['PS']
+  ]
+  end
 
-  # def without_vat()
-  #   if (currency != 'GBP' and exch_rate)
-  #     if (actually_paid_gbp)
-  #       return actually_paid_gbp
-  #     else
-  #       return 0
-  #     end
-  #   else
-  #     return without_vat_original_currency()
-  #   end
-  # end
+  # part of 'transaction' polymorth 
+  # return a sparse array with the without_vat amount in the correct bookeeping column
+  def spreadsheet_bank_payment_cols()
+    row = []
+    if (order_in_lines.length > 0)
+      cat = order_in_lines[0].book_keeping_category
+      in_cat = false
+      bank_payment_col_map().each do | col |
+        if (col.include?(cat.code))
+          row.append(without_vat)
+          in_cat = true
+        else
+          row.append('')
+        end
+      end
+      if (not in_cat)
+        row = [without_vat, 'Cant determine column for bookeeping category: ' + cat.code]
+      end
+    else
+      row = [without_vat, 'Cant determine bookeeping category.']
+    end
+    return row
+  end
 
-  # def vat()
-  #   if (currency != 'GBP' and exch_rate)
-  #     return vat_original_currency() / exch_rate
-  #   else
-  #     return vat_original_currency()
-  #   end
-  # end
+  def cc_payment_col_map()
+    return [
+      ['PAR', 'MAT', 'PROP', 'EQU', 'INS'], 
+      ['SHIP'],
+      ['PACK'],
+      ['STAT', 'POST'],
+      ['SOFT', 'PPFEES'],
+      ['BANK'],
+  ]
+  end
 
-  # def with_vat()
-  #   if (currency != 'GBP' and exch_rate)
-  #     # return with_vat_original_currency() / exch_rate
-  #     if (actually_paid_gbp)
-  #       return actually_paid_gbp
-  #     else
-  #       return 0
-  #     end
-  #   else
-  #     return with_vat_original_currency()
-  #   end
-  # end
+  def spreadsheet_cc_payment_cols()
+    row = []
+    if (order_in_lines.length > 0)
+      cat = order_in_lines[0].book_keeping_category
+      in_cat = false
+      cc_payment_col_map().each do | col |
+        if (col.include?(cat.code))
+          in_cat = true
+          row.append(without_vat)
+        else
+          row.append('')
+        end
+      end
+      if (not in_cat)
+        row = [without_vat, 'Cant determine column for bookeeping category: ' + cat.code]
+      end
+    else
+      row = [without_vat, 'Cant determine bookeeping category.']
+    end
+    return row
+  end
+
+  def include_spreadsheet_bank_payments()
+    return (account_ids[0] == Account.for_code('CUR').id)
+  end
+
+  def include_spreadsheet_cc_payments()
+    return (account_ids[0] == Account.for_code('CC').id)
+  end
+
+  def include_spreadsheet_bank_receipts()
+    return false
+  end
+
+  def spreadsheet_bank_receipt_cols()
+    return []
+  end
+
+  def is_transfer()
+    return false
+  end
+ 
+  def spreadsheet_description()
+    return supplier.name + " " + summary
+  end
 
   def without_vat()
     if (currency != 'GBP' and exch_rate)
