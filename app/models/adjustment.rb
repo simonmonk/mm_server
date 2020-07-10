@@ -250,10 +250,26 @@ class Adjustment < ApplicationRecord
     return (from_account_id == Account.for_code('CUR').id and is_transfer())
   end
 
+  def include_spreadsheet_rnd_payments()
+    return false
+  end  
+
+  def spreadsheet_rnd_payment_cols()
+    return []
+  end
+
   def spreadsheet_cc_payment_cols()
     if (adj_type.code == 'TRANSFER' and to_account.code == 'CC')
       return ['', '', with_vat]
     end
+    return []
+  end
+
+  def include_spreadsheet_paypal_gbp_payments()
+    return false
+  end
+
+  def spreadsheet_paypal_gbp_payment_cols()
     return []
   end
 
@@ -268,6 +284,10 @@ class Adjustment < ApplicationRecord
 
   def include_spreadsheet_cc_payments()
     return (from_account_id == Account.for_code('CC').id and is_transfer())
+  end
+
+  def spreadsheet_paypal_gbp_payment_cols()
+    return (from_account_id == Account.for_code('PPL').id and is_transfer())
   end
 
   def country()

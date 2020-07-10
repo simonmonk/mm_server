@@ -269,3 +269,138 @@ wb.add_worksheet(name: "CC Pymts") do |sheet|
     sheet.add_row [], :style => money_tot_style_row
     sheet.add_row [''                                  ,'','','=D'+(last_row+16).to_s+'+D'+(last_row+17).to_s, '=E'+(last_row+14).to_s+'+E'+(last_row+15).to_s], :style => money_style_row
 end
+
+
+#
+# PayPal GBP worksheet
+#
+wb.add_worksheet(name: "Paypal") do |sheet|
+    sheet.add_row ['MONK MAKES LIMITED'], :style => title
+    sheet.add_row ['PAYPAL GBP ACCOUNT'], :style => title
+    sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
+    sheet.add_row []
+    sheet.add_row ['EXPENDITURE'], :style => title
+    
+    sheet.add_row [''    ,''      ,'Currency'   ,''    ,'','Input',''       ,''        ,''         ,''          ,'Email/Web/','Bank',    'PayPal', 'Dollar'  ], :style => col_head
+    sheet.add_row ['Date','Detail','Conversions','Paid','','VAT','Materials','Shipping','Packaging','Stationary','Software'  ,'Charges', 'Fees',   'Amount'  ], :style => col_head_
+    sheet.add_row []
+    first_row = 10
+    row_num = first_row
+    transactions.each do | t | 
+        if (t.include_spreadsheet_paypal_gbp_payments())
+            row_num += 1
+            style = date_money_style_row
+            if (t.is_transfer)
+                style = transfer_style_row
+            end
+            sheet.add_row [t.cash_date, t.spreadsheet_description] + t.spreadsheet_paypal_gbp_payment_cols(), :style => style
+            if (t.currency == 'USD')
+                sheet.add_row [t.cash_date, 'currency conversion', t.without_vat], :style => transfer_style_row
+                row_num += 1
+            end
+        end
+    end
+    last_row = row_num
+    sheet.add_row Array.new(18, ''), :style => col_head_
+    # Total formula for Paypal Payment worksheet
+    tot_formulas = ["", ""]
+    col_letters = "CD_FGHIJKLM" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            tot_formulas.append("=SUM(" + col_let + first_row.to_s + ":" + col_let + (last_row-1).to_s + ")")
+        else
+            tot_formulas.append("")
+        end
+    end
+    # Net_zero formula for Paypal Payment worksheet
+    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':M' + (last_row+4).to_s + ')', '', '']
+    col_letters = "_GHIJK" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            net_z_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            net_z_formulas.append("")
+        end
+    end
+    # Excempt formula for Paypal worksheet
+    ex_formulas = ['', 'Exempt', '=SUM(E' + (last_row+5).to_s + ':M' + (last_row+5).to_s + ')', '', '']
+    col_letters = "______LM" # _ for missing column
+    col_letters.split('').each do | col_let |
+        if (col_let != "_")
+            ex_formulas.append("=" + col_let + (last_row+1).to_s)
+        else
+            ex_formulas.append("")
+        end
+    end
+    sheet.add_row tot_formulas, :style => money_tot_style_row
+    sheet.add_row []
+    sheet.add_row ['', 'Input VAT', '=F' + (last_row+1).to_s]
+    sheet.add_row net_z_formulas, :style => money_style_row
+    sheet.add_row ex_formulas, :style => money_style_row
+    # Grand totalm check
+    sheet.add_row []
+    sheet.add_row ['', '', '=SUM(C' + (last_row+3).to_s + ':C'+(last_row+5).to_s + ')'], :style => money_tot_style_row
+    sheet.add_row []
+    sheet.add_row []
+    sheet.add_row ['EXPENDITURE'], :style => title
+    sheet.add_row []
+    sheet.add_row [''    ,''      ,'Currency'   ,'Gross','','Output','Net' ,''        ], :style => col_head
+    sheet.add_row ['Date','Detail','Conversions','Sale' ,'','VAT'   ,'Sale','Exempt'  ], :style => col_head_
+    sheet.add_row []
+    first_row = last_row + 8
+    row_num = first_row
+    transactions.each do | t | 
+        if (t.is_shipment and t.account.code == 'PPL')
+            exempt = ''
+            if (t.currency == 'USD')
+                exempt = with_vat
+            end
+            sheet.add_row [t.cash_date, t.spreadsheet_description, '', t.with_vat, t.vat, t.without_vat, exempt], :style => money_style_row
+        end
+        if (t.is_adjustment and t.account.code == 'PPL' )
+            if (t.adjustment_type == 'EBAY')
+                sheet.add_row [t.cash_date, t.spreadsheet_description, '', t.with_vat, t.vat, t.without_vat], :style => money_style_row
+            elsif (t.adjustment_type == 'TRANSFER' and t.to_account.code = 'PPL')
+                sheet.add_row [t.cash_date, t.spreadsheet_description, t.with_vat], :style => money_style_row
+            end
+        end
+    end
+
+
+
+end
+
+
+
+
+#
+# R&D worksheet
+#
+wb.add_worksheet(name: "R&D") do |sheet|
+    sheet.add_row ['MONK MAKES LIMITED'], :style => title
+    sheet.add_row ['RESEARCH AND DEVELOPMENT'], :style => title
+    sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
+    sheet.add_row []
+    
+    sheet.add_row [], :style => col_head
+    sheet.add_row ['Date','Detail','Cost', 'Inv No.', 'Original Inv Amount' ], :style => col_head_
+    sheet.add_row []
+    first_row = 8
+    row_num = first_row
+    transactions.each do | t | 
+        if (t.include_spreadsheet_rnd_payments())
+            row_num += 1
+            sheet.add_row [t.cash_date, t.spreadsheet_description] + t.spreadsheet_rnd_payment_cols(), :style => date_money_style_row
+        end
+    end
+    last_row = row_num
+    sheet.add_row Array.new(18, ''), :style => col_head_
+    # Total formula for R&D Payment worksheet
+    tot_formulas = ["", ""]
+    
+    sheet.add_row []
+    sheet.add_row ['', '', "=SUM(C" + first_row.to_s + ":C" + (last_row-1).to_s + ")"], :style => date_money_style_row
+    sheet.add_row []
+     
+    
+end

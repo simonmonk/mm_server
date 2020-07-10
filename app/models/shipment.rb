@@ -74,6 +74,14 @@ class Shipment < ApplicationRecord
     return []
   end
 
+  def spreadsheet_paypal_gbp_payment_cols()
+    return []
+  end
+
+  def spreadsheet_rnd_payment_cols()
+    return []
+  end
+
   def spreadsheet_bank_receipt_cols()
     # col F - tax_region = 'UK'
     # col G (zero rated) - 'EU'
@@ -90,12 +98,20 @@ class Shipment < ApplicationRecord
   end
 
   def include_spreadsheet_bank_payments()
-    return (with_vat <= 0) # because refunds are netagive payments
+    return (with_vat < 0) # because refunds are netagive payments
   end
 
   def include_spreadsheet_cc_payments()
-    return (with_vat <= 0) # because refunds are netagive payments
+    return (with_vat < 0) # because refunds are netagive payments
   end
+
+  def include_spreadsheet_paypal_gbp_payments()
+    return (with_vat < 0) # because refunds are netagive payments
+  end  
+
+  def include_spreadsheet_rnd_payments()
+    return false
+  end  
 
   def include_spreadsheet_bank_receipts()
     return (

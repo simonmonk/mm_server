@@ -13,13 +13,7 @@ $ rails g scaffold Post title:string body:string
 Critical BUGS
 ==============
 
-Model accounts better.
--x Add currency to account
-- Add a new account World First (EUR)
--x For adjustment transfer - remove the exch_rate field I just added, and add a new field destination_currency_value for the destination and UI
-- For adjustment actual amazon income - add UI to use destination_currency_value and make labels unambiguous and smart based on acc selections
-** delete the transfer type of Actual Income from Amazon and just do it as a transfer from Amazon to appropriate account!
-
+When a Shipment is modified, it changes the invoice date to todays date.
 
 Bookkeeping view 2dp on all currency amounts displayed but 4 dp on exchange rate.
 

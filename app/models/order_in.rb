@@ -1,6 +1,7 @@
 class OrderIn < ApplicationRecord
   belongs_to :supplier, optional: true
   belongs_to :account, optional: true
+
   has_many :order_in_lines, :dependent => :destroy
 
   # for filtering of order ins
@@ -134,6 +135,33 @@ class OrderIn < ApplicationRecord
     end
   end
 
+  # Actually cost centre of just the first line item
+  def cost_centre()
+    if (order_in_lines.length > 0)
+      cc = order_in_lines[0].cost_centre
+      if (cc)
+        return cc.code
+      else
+        return "?"
+      end
+    else
+      return "?"
+    end
+  end
+
+  # Make a version of the order_in that just includes values from the r&d order_in_lines. I.e. change the invoice_goods_ammout
+  def rnd_version()
+    rnd_order_in = self.dup
+    rnd_order_in.invoice_goods_ammout = 0
+    order_in_lines.each do | line |
+      if (line.cost_centre.code == 'RND')
+        rnd_order_in.invoice_goods_ammout += line.price
+      end
+    end
+    return rnd_order_in
+  end
+
+
   def is_income()
     return false
   end
@@ -183,6 +211,43 @@ class OrderIn < ApplicationRecord
     return row
   end
 
+  def paypal_gbp_payment_col_map()
+    return [
+      ['PAR', 'MAT', 'PROP', 'EQU', 'INS'], 
+      ['SHIP'],
+      ['PACK'],
+      ['STAT', 'POST'],
+      ['SOFT'],
+      ['BANK'],
+      ['PPFEES']
+  ]
+  end
+
+  def spreadsheet_paypal_gbp_payment_cols()
+    row = ['', with_vat, '', vat] 
+    if (currency == 'USD')
+      return row + ['','','','','','','', without_vat_original_currency]
+    end
+    if (order_in_lines.length > 0)
+      cat = order_in_lines[0].book_keeping_category
+      in_cat = false
+      paypal_gbp_payment_col_map().each do | col |
+        if (col.include?(cat.code))
+          in_cat = true
+          row.append(without_vat)
+        else
+          row.append('')
+        end
+      end
+      if (not in_cat)
+        row = [without_vat, 'Cant determine column for bookeeping category: ' + cat.code]
+      end
+    else
+      row = [without_vat, 'Cant determine bookeeping category.']
+    end
+    return row
+  end
+
   def cc_payment_col_map()
     return [
       ['PAR', 'MAT', 'PROP', 'EQU', 'INS'], 
@@ -216,6 +281,17 @@ class OrderIn < ApplicationRecord
     return row
   end
 
+
+  def spreadsheet_rnd_payment_cols()
+    row = []
+    row.append(rnd_version.without_vat)
+    row.append(order_number)
+    row.append(with_vat)
+    return row
+  end
+
+
+
   def include_spreadsheet_bank_payments()
     return (account_ids[0] == Account.for_code('CUR').id)
   end
@@ -224,8 +300,16 @@ class OrderIn < ApplicationRecord
     return (account_ids[0] == Account.for_code('CC').id)
   end
 
+  def include_spreadsheet_paypal_gbp_payments()
+    return (account_ids[0] == Account.for_code('PPL').id)
+  end  
+
   def include_spreadsheet_bank_receipts()
     return false
+  end
+
+  def include_spreadsheet_rnd_payments()
+    return (cost_centre == 'RND')
   end
 
   def spreadsheet_bank_receipt_cols()

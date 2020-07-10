@@ -2,6 +2,7 @@ class OrderInLine < ApplicationRecord
     belongs_to :order_in
     belongs_to :part, optional: true
     belongs_to :book_keeping_category, optional: true
+    belongs_to :cost_centre, optional: true
 
     # find every OrderInLine withput a cost center and assign it to MAN
     # find every uncategorzed expense and assign it to PAR
