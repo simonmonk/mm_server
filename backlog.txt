@@ -13,6 +13,28 @@ $ rails g scaffold Post title:string body:string
 Critical BUGS
 ==============
 
+When Shipped is clicked it hung and left these shipments unshipped
+2020-07-02	2020070201	CD Soft	£540.00	Shipment Info	Line Items	Delete	
+2020-06-25	2020062503	The Pi Hut	£645.06	Shipment Info	Line Items	Delete	
+- copy current db over
+- see whats wrong
+x=Shipment.find_by invoice_number: 2020070201
+=> #<Shipment id: 536, retailer_id: 39, dispatched: nil, notes: "", created_at: "2020-07-02 14:58:37", updated_at: "2020-07-03 10:58:51", stock_subtracted: nil, retailer_shipment_id: nil, date_order_received: "2020-07-02", date_dispatched: nil, date_invoice_sent: "2020-07-02", date_payment_reminder: "2020-07-10", order_email_link: "", po_reference: "22568", invoice_number: "2020070201", shipping_cost: 0.0, shipping_provider: "TNT", shipping_provider_ac_no: "30017453", discount: nil, date_payment_received: nil, vat_rate: 0.2e2, invoice_comment: "", order_email: nil, apply_vat_to_shipping: true, is_cancelled: nil, total_invoice_collected: nil, shipping_provider_ship
+
+- fix it
+In shipments controller, line 118, the ActiveRecord::StatementInvalid (SQLite3::BusyException: database is locked: commit transaction):
+looking at JS log - 
+jquery3.self-2a83d06853bd343c7bfc2e5d4539814cfa934676e2948ed348311435eca862f5.js?body=1:10100 GET http://localhost:3000/shipments/subtract_products?shipment_id=526 500 (Internal Server Error)
+send @ jquery3.self-2a83d06853bd343c7bfc2e5d4539814cfa934676e2948ed348311435eca862f5.js?body=1:10100
+ajax @ jquery3.self-2a83d06853bd343c7bfc2e5d4539814cfa934676e2948ed348311435eca862f5.js?body=1:9683
+ship_items_update @ shipments:1104
+boundFn @ vue.self-15c2aa2cbeae74a0a82f727ef8ac94f5d810949f6b9a9dcbb1c9c407f812fe15.js?body=1:197
+invoker @ vue.self-15c2aa2cbeae74a0a82f727ef8ac94f5d810949f6b9a9dcbb1c9c407f812fe15.js?body=1:2007
+fn._withTask.fn._withTask @ vue.self-15c2aa2cbeae74a0a82f727ef8ac94f5d810949f6b9a9dcbb1c9c407f812fe15.js?body=1:1805
+jquery3.self-2a83d06853bd343c7bfc2e5d4539814cfa934676e2948ed348311435eca862f5.js?body=1:10100 PUT http://localhost:3000/shipments/526.json 500 (Internal Server Error)
+sqllite not multi-connection try changing timeout: https://stackoverflow.com/questions/7154664/ruby-sqlite3busyexception-database-is-locked
+NO!!!! - actually having the console open causes the lock errors, but also, it looked like the anti-click stuff was wrong.
+
 When a Shipment is modified, it changes the invoice date to todays date.
 
 Bookkeeping view 2dp on all currency amounts displayed but 4 dp on exchange rate.

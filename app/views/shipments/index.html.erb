@@ -602,6 +602,8 @@ window.onload = function () {
                 that.shipments = res;
                 if (callback) {
                   callback()
+                  console.log("clicked = false - callback from load_shipments")
+                  that.clicked = false; // double click on Shipped prevention
                 }
               }
             });
@@ -827,7 +829,8 @@ window.onload = function () {
               url: url,
               data: {shipment: this.shipment},
               success: function(res) {
-                that.load_shipments(0);
+                that.clicked = false;
+                that.load_shipments(0); // problem is database being locked because maybe load_shipments is hapenning 
                 that.shipment = res;
                 that.shipment_product.shipment_id = that.shipment.id;
                 if (modal) {
@@ -858,6 +861,7 @@ window.onload = function () {
           },
           ship_items_update: function() {
             if (this.clicked) { // prevent double-clicks
+              console.log("CLICK PREVENTION")
               return;
             }
             this.clicked = true;
@@ -871,7 +875,6 @@ window.onload = function () {
                   that.load_shipments(0);
                   that.load_products();
                   $('#mod_ship').modal('hide');
-                  that.clicked = true;
                 }
             });
           },
