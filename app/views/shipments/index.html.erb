@@ -33,6 +33,7 @@ Sort by:
       <option value="updated_at">Most recently changed or added</option>
       <option value="date_order_received">Date order received</option>
       <option value="date_invoice_sent">Date of Invoice</option>
+      <option value="date_payment_received">Date Payment Received</option>
       <option value="invoice_number">Invoice number</option>
       <option value="retailer_name">Customer name</option>
 </select>
@@ -139,7 +140,7 @@ Sort by:
           <tr>
             <td>Customer Shipping Provider</td>
             <td>{{shipment.shipping_provider}}</td>
-            <td>Date Payed</td>
+            <td>Date Paid</td>
             <td>{{shipment.date_payment_received}}</td>
           </tr>
           <tr>
@@ -498,6 +499,7 @@ Sort by:
 <tr>
   <th v-if="filter_by_type == 'is_new'">Order Received</th>
   <th v-if="filter_by_type != 'is_new'">Invoice Date</th>
+  <th v-if="filter_by_type == 'is_paid'">Paid Date</th>
   <th>Invoice</th>
   <th>Retailer</th>
   <th>Invoice Amount</th>
@@ -507,6 +509,7 @@ Sort by:
 <tr v-for="(shipment, index) in filtered_results">
   <td v-if="filter_by_type == 'is_new'">{{ shipment.date_order_received }} </td>
   <td v-if="filter_by_type != 'is_new'">{{ shipment.date_invoice_sent }} </td>
+  <td v-if="filter_by_type == 'is_paid'">{{ shipment.date_payment_received }} </td>
   <td>{{ shipment.invoice_number }} </td>
   <td>{{ shipment.retailer_name }}</td>
   <td v-bind:class="{ warning: shipment.is_overdue }">{{ invoice_amount_formated(index) }}</td>
@@ -923,7 +926,7 @@ window.onload = function () {
             });
             let sorted = filtered.sort(function (a, b) {
               let inverted = 1;
-              if (that.sort_by_field == 'updated_at') {
+              if (that.sort_by_field == 'updated_at' || that.sort_by_field == 'date_order_received' || that.sort_by_field == 'date_invoice_sent' || that.sort_by_field == 'date_payment_received') {
                 inverted = -1;
               }
               if (a[that.sort_by_field] > b[that.sort_by_field]) {

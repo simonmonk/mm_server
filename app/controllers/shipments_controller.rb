@@ -32,8 +32,8 @@ class ShipmentsController < ApplicationController
   end
     
   def invoice
-      @shipment.date_invoice_sent = Date.current
-      @shipment.save
+      # @shipment.date_invoice_sent = Date.current
+      # @shipment.save
       render :layout => false
   end
 
