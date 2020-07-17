@@ -261,14 +261,26 @@ end
 </tr>
     
 <% 
-    if (@shipment.discount != 0)
+    if (@shipment.discount > 0)
         total -= @shipment.discount
 %>
 <tr>
     <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
     <% if (should_show('country_of_origin')) %><td/><% end %>
-    <td/><td/><td/><td class="prod_table_td" colspan="2">Discount/Surcharge</td>
-        <td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">Discount</td><td class="prod_table_td_money"><%=number_to_currency(@shipment.discount, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
+</tr>
+
+<% end %>    
+
+    
+<% 
+    if (@shipment.discount < 0) # negative discounts are surcharges
+        total -= @shipment.discount
+%>
+<tr>
+    <% if (should_show('harmoized_tarrif_number')) %><td/><% end %>
+    <% if (should_show('country_of_origin')) %><td/><% end %>
+    <td/><td/><td/><td class="prod_table_td" colspan="2">Surcharge</td><td class="prod_table_td_money"><%=number_to_currency(-@shipment.discount, unit: currency_symbol, separator: ".", delimiter: ",")%></td>
 </tr>
 
 <% end %>    
