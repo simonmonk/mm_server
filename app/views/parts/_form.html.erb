@@ -38,8 +38,9 @@ function remove_part_supplier(part_supplier_id) {
       <%= f.collection_select(:part_category_id, @categories, :id, :name) %>
     </td>
   </tr>
-  <tr><td>Part Name</td><td><%= f.text_field :name %></td></tr>
-  <tr><td>Part Image URL</td><td><%= f.text_field :image_url %></td></tr>
+  <tr><td>Part Name</td><td><%= f.text_field :name, size: 40 %></td></tr>
+  <tr><td>Picture URL</td><td><%= f.text_field :image_url, size: 40  %></td></tr>
+  <tr><td>Picture File</td><td><%= f.file_field :image_url %></td></tr>
   <% if (part.image_url and part.image_url.length > 3) %>
     <tr><td colspan="2"><img src="<%=part.image_url%>" width="200"/></td></tr>
   <% end %>

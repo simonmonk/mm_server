@@ -73,6 +73,11 @@ end
   def create
     @part = Part.new(part_params)
     @categories = PartCategory.all
+    uploaded_io = params[:part][:image_url]
+    File.open(Rails.root.join('public', 'part_images', uploaded_io.original_filename), 'wb') do |file|
+      file.write(uploaded_io.read)
+    end
+  
     if @part.save
       redirect_to :action => "edit", :id => @part.id
     else
@@ -81,13 +86,23 @@ end
   end
 
   def update
-      if @part.update(part_params)
-        #redirect_to :action => "index", notice: 'Part was successfully updated.'  
-        render :edit
-      else
-        render :edit
+    uploaded_io = params[:part][:image_url]
+    if (uploaded_io != '')
+      File.open(Rails.root.join('public', 'part_images', uploaded_io.original_filename), 'wb') do |file|
+        file.write(uploaded_io.read)
       end
+    end
+    if @part.update(part_params)
+      if (uploaded_io != '')
+        @part.image_url = '/part_images/' + uploaded_io.original_filename
+        @part.save()
+      end
+      render :edit
+    else
+      render :edit
+    end
   end
+
 
   # DELETE /parts/1 - nope - breaks all sorts of things like orders - make active=false instead
   # DELETE /parts/1.json
