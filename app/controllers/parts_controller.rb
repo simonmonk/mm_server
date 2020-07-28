@@ -87,13 +87,13 @@ end
 
   def update
     uploaded_io = params[:part][:image_url]
-    if (uploaded_io != '')
+    if (uploaded_io.class != String)
       File.open(Rails.root.join('public', 'part_images', uploaded_io.original_filename), 'wb') do |file|
         file.write(uploaded_io.read)
       end
     end
     if @part.update(part_params)
-      if (uploaded_io != '')
+      if (uploaded_io.class != String)
         @part.image_url = '/part_images/' + uploaded_io.original_filename
         @part.save()
       end
