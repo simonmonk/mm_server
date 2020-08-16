@@ -13,6 +13,9 @@ $ rails g scaffold Post title:string body:string
 Critical BUGS
 ==============
 
+Fix quarter dates
+Fix exchange rate when updating part price
+
 When Shipped is clicked it hung and left these shipments unshipped
 2020-07-02	2020070201	CD Soft	£540.00	Shipment Info	Line Items	Delete	
 2020-06-25	2020062503	The Pi Hut	£645.06	Shipment Info	Line Items	Delete	

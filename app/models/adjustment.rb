@@ -8,6 +8,10 @@ class Adjustment < ApplicationRecord
     return Account.find_by_id(to_account_id)
   end
 
+  def account()
+    return from_account()
+  end
+
   def Adjustment.amazon_countries()
     return ['UK', 'USA', 'FR', 'DE', 'IT', 'ES', 'NL']
   end
