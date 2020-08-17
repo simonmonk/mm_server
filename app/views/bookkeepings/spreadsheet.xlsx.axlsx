@@ -66,7 +66,7 @@ wb.add_worksheet(name: "Bank Paymts") do |sheet|
         end
     end
     # Net_zero formula for Bamk Payment worksheet
-    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':T' + (last_row+4).to_s + ')', '', '']
+    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':U' + (last_row+4).to_s + ')', '', '']
     col_letters = "FG____LMN__Q_S" # _ for missing column
     col_letters.split('').each do | col_let |
         if (col_let != "_")
@@ -76,7 +76,7 @@ wb.add_worksheet(name: "Bank Paymts") do |sheet|
         end
     end
     # Excempt formula for Bamk Payment worksheet
-    ex_formulas = ['', 'Exempt', '=SUM(E' + (last_row+5).to_s + ':T' + (last_row+5).to_s + ')', '', '']
+    ex_formulas = ['', 'Exempt', '=SUM(E' + (last_row+5).to_s + ':U' + (last_row+5).to_s + ')', '', '']
     col_letters = "__HIJ____OP_R_TU" # _ for missing column
     col_letters.split('').each do | col_let |
         if (col_let != "_")
