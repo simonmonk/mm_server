@@ -67,7 +67,7 @@ wb.add_worksheet(name: "Bank Paymts") do |sheet|
     end
     # Net_zero formula for Bamk Payment worksheet
     net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':T' + (last_row+4).to_s + ')', '', '']
-    col_letters = "FG___LMN__Q_S" # _ for missing column
+    col_letters = "FG____LMN__Q_S" # _ for missing column
     col_letters.split('').each do | col_let |
         if (col_let != "_")
             net_z_formulas.append("=" + col_let + (last_row+1).to_s)
