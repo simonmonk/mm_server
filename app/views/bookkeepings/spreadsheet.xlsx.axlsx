@@ -36,8 +36,8 @@ wb.add_worksheet(name: "Bank Paymts") do |sheet|
     sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
     sheet.add_row []
     
-    sheet.add_row [''    ,''      ,''    ,'','Input',''       ,''        ,'Paid to','Paid to'   ,'Paid to','         ,'Property',''          ,'Email/Web/','Bank'   , 'PayPal',''   ,''       ,''         ,'Wages &'], :style => col_head
-    sheet.add_row ['Date','Detail','Paid','','VAT','Materials','Shipping','PayPal','Credit Card','Savings','Packaging','Costs'   ,'Stationary','Software'  ,'Charges', 'Fees','Accty','Postage','Insurance','PAYE','Translation'], :style => col_head_
+    sheet.add_row [''    ,''      ,''    ,'','Input',''       ,''        ,'Paid to','Paid to'    ,'Paid to',''         ,'Property',''          ,'Email/Web/','Bank'   , 'PayPal',''   ,''       ,''         ,'Wages &'], :style => col_head
+    sheet.add_row ['Date','Detail','Paid','','VAT','Materials','Shipping','PayPal', 'Credit Card','Savings','Packaging','Costs'   ,'Stationary','Software'  ,'Charges', 'Fees','Accty','Postage','Insurance','PAYE','Translation'], :style => col_head_
     sheet.add_row []
     first_row = 8
     row_num = first_row
