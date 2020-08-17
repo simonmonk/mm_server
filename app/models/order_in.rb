@@ -173,6 +173,7 @@ class OrderIn < ApplicationRecord
       ['SHIP'],
       [],
       [],
+      [],
       ['PACK'],
       ['PROP', 'EQU'],
       ['STAT'],

@@ -223,6 +223,8 @@ class Adjustment < ApplicationRecord
       return ['', '', with_vat]
     elsif ((adj_type.code == 'TRANSFER' and to_account.code == 'CC'))
       return [ '', '', '', with_vat]
+    elsif ((adj_type.code == 'TRANSFER' and to_account.code == 'SAVE'))
+      return [ '', '', '', '', with_vat]
     end
     return []
   end
