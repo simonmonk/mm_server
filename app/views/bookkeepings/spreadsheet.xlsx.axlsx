@@ -290,7 +290,7 @@ wb.add_worksheet(name: "Paypal") do |sheet|
     sheet.add_row ['Date','Detail','Conversions','Paid','','VAT','Materials','Shipping','Packaging','Stationary','Software'  , 'Services',     'Charges', 'Fees',   'Amount'  ], :style => col_head_
 
     sheet.add_row []
-    first_row = 10
+    first_row = 9
     row_num = first_row
     transactions.each do | t | 
         if (t.include_spreadsheet_paypal_gbp_payments())
