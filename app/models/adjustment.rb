@@ -276,7 +276,7 @@ class Adjustment < ApplicationRecord
   end
 
   def spreadsheet_paypal_gbp_payment_cols()
-    return []
+    return ['', '', with_vat]
   end
 
   def include_spreadsheet_bank_receipts()
