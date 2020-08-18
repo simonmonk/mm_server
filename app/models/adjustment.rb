@@ -272,7 +272,7 @@ class Adjustment < ApplicationRecord
   end
 
   def include_spreadsheet_paypal_gbp_payments()
-    return (adj_type.code == 'TRANSFER' and to_account.code == 'PPL')
+    return (from_account_id == Account.for_code('PPL').id and is_transfer())
   end
 
   def spreadsheet_paypal_gbp_payment_cols()
