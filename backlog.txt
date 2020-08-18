@@ -13,8 +13,12 @@ $ rails g scaffold Post title:string body:string
 Critical BUGS
 ==============
 
-Fix quarter dates
-Fix exchange rate when updating part price
+[x] spreadsheet generation transfers from another account to the current account don't appear in Bank receipts tab or in the paypal tab
+[x] Add a column for professional services on the end of the Paypal table of the spreadsheet
+[] Add Amazon to spreadsheet
+
+[] Fix quarter dates
+[] Fix exchange rate when updating part price
 
 When Shipped is clicked it hung and left these shipments unshipped
 2020-07-02	2020070201	CD Soft	£540.00	Shipment Info	Line Items	Delete	

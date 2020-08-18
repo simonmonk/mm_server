@@ -281,8 +281,14 @@ wb.add_worksheet(name: "Paypal") do |sheet|
     sheet.add_row []
     sheet.add_row ['EXPENDITURE'], :style => title
     
-    sheet.add_row [''    ,''      ,'Currency'   ,''    ,'','Input',''       ,''        ,''         ,''          ,'Email/Web/','Bank',    'PayPal', 'Dollar'  ], :style => col_head
-    sheet.add_row ['Date','Detail','Conversions','Paid','','VAT','Materials','Shipping','Packaging','Stationary','Software'  ,'Charges', 'Fees',   'Amount'  ], :style => col_head_
+    #sheet.add_row [''    ,''      ,'Currency'   ,''    ,'','Input',''       ,''        ,''         ,''          ,'Email/Web/','Bank',    'PayPal', 'Dollar'  ], :style => col_head
+    #sheet.add_row ['Date','Detail','Conversions','Paid','','VAT','Materials','Shipping','Packaging','Stationary','Software'  ,'Charges', 'Fees',   'Amount'  ], :style => col_head_
+
+    # change to add professional services column for ebay purchases such as paying Jose for translation
+    # as well as this change, need to change OrderIn[x] to select right column and columns used un formula below L []
+    sheet.add_row [''    ,''      ,'Currency'   ,''    ,'','Input',''       ,''        ,''         ,''          ,'Email/Web/', 'Professional', 'Bank',    'PayPal', 'Dollar'  ], :style => col_head
+    sheet.add_row ['Date','Detail','Conversions','Paid','','VAT','Materials','Shipping','Packaging','Stationary','Software'  , 'Services',     'Charges', 'Fees',   'Amount'  ], :style => col_head_
+
     sheet.add_row []
     first_row = 10
     row_num = first_row
@@ -304,7 +310,7 @@ wb.add_worksheet(name: "Paypal") do |sheet|
     sheet.add_row Array.new(18, ''), :style => col_head_
     # Total formula for Paypal Payment worksheet
     tot_formulas = ["", ""]
-    col_letters = "CD_FGHIJKLM" # _ for missing column
+    col_letters = "CD_FGHIJKLMN" # _ for missing column
     col_letters.split('').each do | col_let |
         if (col_let != "_")
             tot_formulas.append("=SUM(" + col_let + first_row.to_s + ":" + col_let + (last_row-1).to_s + ")")
@@ -313,7 +319,7 @@ wb.add_worksheet(name: "Paypal") do |sheet|
         end
     end
     # Net_zero formula for Paypal Payment worksheet
-    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':M' + (last_row+4).to_s + ')', '', '']
+    net_z_formulas = ['', 'Net/Zero', '=SUM(E' + (last_row+4).to_s + ':N' + (last_row+4).to_s + ')', '', '']
     col_letters = "_GHIJK" # _ for missing column
     col_letters.split('').each do | col_let |
         if (col_let != "_")
@@ -323,8 +329,8 @@ wb.add_worksheet(name: "Paypal") do |sheet|
         end
     end
     # Excempt formula for Paypal worksheet
-    ex_formulas = ['', 'Exempt', '=SUM(E' + (last_row+5).to_s + ':M' + (last_row+5).to_s + ')', '', '']
-    col_letters = "______LM" # _ for missing column
+    ex_formulas = ['', 'Exempt', '=SUM(E' + (last_row+5).to_s + ':N' + (last_row+5).to_s + ')', '', '']
+    col_letters = "______LMN" # _ for missing column
     col_letters.split('').each do | col_let |
         if (col_let != "_")
             ex_formulas.append("=" + col_let + (last_row+1).to_s)
@@ -371,7 +377,43 @@ wb.add_worksheet(name: "Paypal") do |sheet|
 end
 
 
+#
+# Amazon worksheet
+#
+wb.add_worksheet(name: "Amazon") do |sheet|
+    sheet.add_row ['MONK MAKES LIMITED'], :style => title
+    sheet.add_row ['AMAZON ACCOUNT'], :style => title
+    sheet.add_row ['QUARTER ENDS ' + to_date.strftime('%d %B %Y')], :style => title
+    sheet.add_row []
 
+    # sections for countries and nested month ends
+    country_names = ['United Kingdom', 'United States', 'France', 'Italy', 'Spain', 'Germany']
+    country_codes = ['UK',             'USA',           'FR',     'IT',    'ES',    'DE']
+
+    month_ends = []
+    transactions.each do | t | 
+        if (t.is_adjustment and t.adjustment_type == 'AMAZON_REPORTED' and not month_ends.include?(t.accounting_date))
+            puts "here"
+            month_ends.append(t.accounting_date)
+        end
+        puts month_ends
+    end
+
+    for i in 0..(country_codes.length) do
+        country_name = country_names[i]
+        country_code = country_codes[i]
+
+        sheet.add_row [country_name], :style => col_head_
+        sheet.add_row []
+        sheet.add_row ['Month','','Gross' ,''    ,''       ,'Timing'    ,'Transfer','','VAT on','Standard',   'Zero'       ,'EU'   ,'VAT on'], :style => col_head
+        sheet.add_row ['Ended','','Income','Fees','Balance','Difference','To Bank' ,'','Sales', 'Rated Sales','Rated Sales','Sales','Fees'  ], :style => col_head_
+        sheet.add_row []
+
+
+    end
+
+
+end
 
 #
 # R&D worksheet

@@ -219,6 +219,7 @@ class OrderIn < ApplicationRecord
       ['PACK'],
       ['STAT', 'POST'],
       ['SOFT'],
+      ['PS'], # added as new column in PayPal tab on spreadsheet
       ['BANK'],
       ['PPFEES']
   ]

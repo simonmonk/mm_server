@@ -281,7 +281,8 @@ class Adjustment < ApplicationRecord
 
   def include_spreadsheet_bank_receipts()
     return (
-      (adj_type.code == 'TRANSFER' and from_account.code == 'AM' and to_account.code == 'CUR') or
+      # (adj_type.code == 'TRANSFER' and from_account.code == 'AM' and to_account.code == 'CUR') or
+      (adj_type.code == 'TRANSFER' and to_account.code == 'CUR') or
       (adj_type.code == 'AMAZON_ACTUAL') or
       (adj_type.code == 'HMRC') or
       (adj_type.code == 'UNDER_PAYMENT' and from_account.code == 'CUR')
