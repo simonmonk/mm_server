@@ -293,9 +293,6 @@ class Adjustment < ApplicationRecord
     return (from_account_id == Account.for_code('CC').id and is_transfer())
   end
 
-  def spreadsheet_paypal_gbp_payment_cols()
-    return (from_account_id == Account.for_code('PPL').id and is_transfer())
-  end
 
   def country()
     return tax_region
