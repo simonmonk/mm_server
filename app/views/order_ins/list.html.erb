@@ -767,7 +767,7 @@ window.onload = function () {
             });
             let sorted = filtered.sort(function (a, b) {
               let inverted = 1;
-              if (that.sort_by_field == 'updated_at') {
+              if (that.sort_by_field == 'updated_at' || that.sort_by_field == 'placed_date') {
                 inverted = -1;
               }
               if (a[that.sort_by_field] > b[that.sort_by_field]) {
