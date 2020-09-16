@@ -205,7 +205,7 @@ class OrderInsController < ApplicationController
     order = OrderIn.find(order_id)
     part.cost = part_price
     part.currency = part_currency
-    part.exch_rate = 1 / Currency.find_by_name(part_currency).per_pound
+    part.exch_rate = Currency.find_by_name(part_currency).per_pound
     part.save
     # update the part with a new price, switch to console and print part and the new price is there. BUT reload the part edit form and the old price returns.
     # something is setting the part price as the edit form loads?
