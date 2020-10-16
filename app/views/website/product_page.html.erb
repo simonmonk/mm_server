@@ -172,6 +172,9 @@ end
           </div>
           <div class="masthead-subheading font-weight-light mb-0 text-primary text-left">
             <%=@product.long_description.html_safe%>
+            <% if (@product.compatability_image) %>
+              <img src="/img/<%=@product.compatability_image%>" width="200"/>
+            <% end %>
           </div>
         </div>
       </div>

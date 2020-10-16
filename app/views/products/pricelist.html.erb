@@ -183,6 +183,11 @@ cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each 
                 <%=product.sku%>. 
             <% end %>
             <%=product.name%>
+            <%
+            if (product.compatability_image)
+            %>
+                <img class="new_product" src="/img/<%=product.compatability_image%>" width="100"/>
+            <% end %>
         </td>
         <td class="prod_table_th_right" width="350">
         

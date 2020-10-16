@@ -117,11 +117,17 @@ function print_labels() {
     <tr><td>New in Catalog</td><td> <%= f.check_box :new_in_catalog %></td></tr>    
     <tr><td>New price in Catalog</td><td> <%= f.check_box :new_price_in_catalog %></td></tr>    
     <tr><td>End of Line in Catalog</td><td> <%= f.check_box :end_of_line_in_catalog %></td></tr>        
-    <tr><td>Release(d) date:</td><td><%= datepicker_input f, :release_date %></td><td><a href="javascript:set_date('#product_release_date', '<%=Date.current%>')">Today</a></td></tr>
+ <!--   <tr><td>Release(d) date:</td><td><%= datepicker_input f, :release_date %></td><td><a href="javascript:set_date('#product_release_date', '<%=Date.current%>')">Today</a></td></tr> -->
     <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>   
     <tr><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '50' %> </td></tr>  
     <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
-    
+    <tr><td>Compatability Icon</td><td> 
+        <%= f.select :compatability_image, 
+            options_for_select(['m_b_compat_1_2.png', 'm_b_compat_1.png', 'm_b_compat_2.png'].map{|s|[s, s]}, :selected => product.compatability_image) %>
+        <% if (product.compatability_image) %>
+            <img src="/img/<%=product.compatability_image%>" width="150"</image>
+        <% end %>
+    </td></tr>     
     <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
     <tr><td>Catalog Priority</td><td> <%= f.text_field :catalog_priority, size: '10' %> </td></tr>  
     <tr><td colspan="2">(smaller number means nearer the top. Aim for 0.0 to 100.0)</td>
