@@ -123,7 +123,7 @@ function print_labels() {
     <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
     <tr><td>Compatability Icon</td><td> 
         <%= f.select :compatability_image, 
-            options_for_select(['m_b_compat_1_2.png', 'm_b_compat_1.png', 'm_b_compat_2.png'].map{|s|[s, s]}, :selected => product.compatability_image) %>
+            options_for_select(['', 'm_b_compat_1_2.png', 'm_b_compat_1.png', 'm_b_compat_2.png'].map{|s|[s, s]}, :selected => product.compatability_image) %>
         <% if (product.compatability_image) %>
             <img src="/img/<%=product.compatability_image%>" width="150"</image>
         <% end %>
