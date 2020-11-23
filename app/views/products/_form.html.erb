@@ -1,5 +1,7 @@
 <script>
  
+
+
 function set_date(field_name, date) {
     $(field_name).val(date);
 }
@@ -43,9 +45,13 @@ function deduct(qty) {
         
 }
 
-function print_labels() {
-    window.open("/products/<%=@product.id%>/print_labels",'name','width=600,height=400')
-}
+
+$(document).ready(function(){
+    $( '.collapseWebsite' ).hide();
+    $( '.collapseCatalog' ).hide();
+    $( '.collapseParts' ).hide();
+    $( '.collapseRetailers' ).hide();
+});
 
 </script>
 
@@ -106,56 +112,64 @@ function print_labels() {
         
     <% end %>
     </td></tr>
-    <tr><td></td><td><button onClick="print_labels()">Print Sealing Labels (21) EXPERIMENTAL</button></td></tr>
 
     <tr><td>Quantity (for emergency manual ajustments)</td><td> <%= f.number_field :qty %></td></tr>
     <tr><td>Stock level warning</td><td> <%= f.number_field :stock_warning_level %></td></tr>  
-    <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
         
-    <tr><th colspan="2">Catalog</th></tr>    
-    <tr><td>Include in Catalog</td><td> <%= f.check_box :include_in_catalog %></td></tr>    
-    <tr><td>New in Catalog</td><td> <%= f.check_box :new_in_catalog %></td></tr>    
-    <tr><td>New price in Catalog</td><td> <%= f.check_box :new_price_in_catalog %></td></tr>    
-    <tr><td>End of Line in Catalog</td><td> <%= f.check_box :end_of_line_in_catalog %></td></tr>        
- <!--   <tr><td>Release(d) date:</td><td><%= datepicker_input f, :release_date %></td><td><a href="javascript:set_date('#product_release_date', '<%=Date.current%>')">Today</a></td></tr> -->
-    <tr><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>   
-    <tr><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '50' %> </td></tr>  
-    <tr><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
-    <tr><td>Compatability Icon</td><td> 
+
+
+    <tr><th onclick="$( '.collapseCatalog' ).toggle();" colspan="2">Catalog</th></tr>    
+    <tr class="collapseCatalog"><td>Include in Catalog</td><td> <%= f.check_box :include_in_catalog %></td></tr>    
+    <tr class="collapseCatalog"><td>New in Catalog</td><td> <%= f.check_box :new_in_catalog %></td></tr>    
+    <tr class="collapseCatalog"<td>New price in Catalog</td><td> <%= f.check_box :new_price_in_catalog %></td></tr>    
+    <tr class="collapseCatalog"><td>End of Line in Catalog</td><td> <%= f.check_box :end_of_line_in_catalog %></td></tr>        
+    <tr class="collapseCatalog"><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>   
+    <tr class="collapseCatalog"><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '50' %> </td></tr>  
+    <tr class="collapseCatalog"><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
+    <tr class="collapseCatalog"><td>Compatability Icon</td><td> 
         <%= f.select :compatability_image, 
             options_for_select(['', 'm_b_compat_1_2.png', 'm_b_compat_1.png', 'm_b_compat_2.png'].map{|s|[s, s]}, :selected => product.compatability_image) %>
         <% if (product.compatability_image) %>
             <img src="/img/<%=product.compatability_image%>" width="150"</image>
         <% end %>
     </td></tr>     
-    <tr><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
-    <tr><td>Catalog Priority</td><td> <%= f.text_field :catalog_priority, size: '10' %> </td></tr>  
-    <tr><td colspan="2">(smaller number means nearer the top. Aim for 0.0 to 100.0)</td>
+    <tr class="collapseCatalog"><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
+    <tr class="collapseCatalog"><td>Catalog Priority</td><td> <%= f.text_field :catalog_priority, size: '10' %> </td></tr>  
+    <tr class="collapseCatalog"><td colspan="2">(smaller number means nearer the top. Aim for 0.0 to 100.0)</td>
     <% 
         @product.product_category.products.where(include_in_catalog: true).order(catalog_priority: :asc).each do | p |
     %>
-    <tr>
+    <tr class="collapseCatalog">
         <td/><td><%=p.catalog_priority%> : <%=p.name%></td>
     </tr>
     <% end %>
 
-    <tr><th colspan="2">Website</th></tr>
-    <tr><td>Carousel 0</td><td> <%= f.text_field :carousel_0, size: '50' %> </td></tr>   
-    <tr><td>Carousel 1</td><td> <%= f.text_field :carousel_1, size: '50' %> </td></tr>   
-    <tr><td>Carousel 2</td><td> <%= f.text_field :carousel_2, size: '50' %> </td></tr>   
-    <tr><td>Carousel 3</td><td> <%= f.text_field :carousel_3, size: '50' %> </td></tr>   
-    <tr><td>Carousel 4</td><td> <%= f.text_field :carousel_4, size: '50' %> </td></tr>   
-    <tr><td>Tutorial URL</td><td> <%= f.text_field :tutorial_url, size: '50' %> </td></tr>   
-    <tr><td>Datasheet URL</td><td> <%= f.text_field :datasheet_url, size: '50' %> </td></tr>   
-    <tr><td>Instruction Manual URL</td><td> <%= f.text_field :instructions_url, size: '50' %> </td></tr>   
-    <tr><td>Video URL</td><td> <%= f.text_field :video_url_0, size: '50' %> </td></tr>   
-
+    <tr><th onclick="$( '.collapseWebsite' ).toggle();" colspan="2">Website</th></tr>
+    <tr class="collapseWebsite"><td>Carousel 0</td><td> <%= f.text_field :carousel_0, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 1</td><td> <%= f.text_field :carousel_1, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 2</td><td> <%= f.text_field :carousel_2, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 3</td><td> <%= f.text_field :carousel_3, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 4</td><td> <%= f.text_field :carousel_4, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Tutorial URL</td><td> <%= f.text_field :tutorial_url, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Datasheet URL</td><td> <%= f.text_field :datasheet_url, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Instruction Manual URL</td><td> <%= f.text_field :instructions_url, size: '50' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Lesson URL</td><td> <%= f.text_field :lessons_url, size: '50' %> </td></tr>
+    <tr class="collapseWebsite"><td>Video URL</td><td> <%= f.text_field :video_url_0, size: '50' %> </td></tr>   
 
     <tr><th colspan="2">Pricing</th></tr>
-        <tr><td colspan="2">The manufacturing cost of this product is £<%= product.production_cost.round(2) %></td><td>
+    <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+    <tr><td colspan="2">The manufacturing cost of this product is £<%= product.production_cost.round(2) %></td><td></tr>
+    <% if (@product.wholesale_price_catalog != @product.wholesale_price) %>
+            <tr><td colspan="2" class="warning">Warning Invoice wholesale price and Catalog wholesale price are NOT the same</td></tr>
+    <% end %>
+    <% if (@product.retail_price_catalog != @product.retail_price) %>
+    <tr><td colspan="2" class="warning">Warning Retail wholesale price and Catalog retail price are NOT the same</td></tr>
+<% end %>
     <tr><td>Wholesale price GBP</td><td> <%= f.text_field :wholesale_price %> (suggested £<%= @product.suggested_wholesale.round(2) %>)</td></tr>
+    <tr><td>Wholesale for Catalog</td><td> <%= f.text_field :wholesale_price_catalog %></td></tr>
     <tr><td>Profit on GBP sale</td><td>£<%= (@product.profit).round(2) %></td></tr>
     <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td>
+    <tr><td>Retail for Catalog</td><td> <%= f.text_field :retail_price_catalog %></td>
     </tr>    
         
         
@@ -178,12 +192,29 @@ function print_labels() {
         <p>You have enough parts and assemblies to make: <%= product.possible_makes %> of this product.</p>
         <p>Deduct <input id="n" type="number"/> sets of the parts and assemblies used in this product from stock. 
             <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value)"/></p>
-        <% @product.product_retailers.each do |pr| %>
-            <p><%=pr.retailer.name%> has <%=pr.lookup_stock %> in stock.</p>  
-        <% end %>
-        <p>This product uses the following parts (including parts from assemblies).</p>
         <table>
-            <tr><th>Part</th><th>Qty per product</th><th>Qty in stock</th></tr>
+            <tr><th colspan="2" onclick="$( '.collapseRetailers' ).toggle();">Show/Hide Retailer Sales History</th></tr>
+            <tr class="collapseRetailers"><th>Retailer</th><th>Units 90 days</th><th>Units 365 days</td>
+        <%  tot_units_90 = 0
+            tot_units_365 = 0
+            @product.product_retailers.each do |pr| 
+                units_90 = pr.retailer.units_sold_last_n_days(90, pr.product)
+                tot_units_90 += units_90
+                units_365 = pr.retailer.units_sold_last_n_days(365, pr.product)
+                tot_units_365 += units_365
+                if (units_365 > 0)
+            %>
+            <tr class="collapseRetailers">
+                <td><%=pr.retailer.name%></td>
+                <td><%=units_90%></td>
+                <td><%=units_365%></td>
+            </tr>
+        <% end end %>
+        <tr class="collapseRetailers"><th>Total</th><th><%=tot_units_90%></th><th><%=tot_units_365%></th></tr>
+        </table>
+        <table>
+            <tr><th colspan="2" onclick="$( '.collapseParts' ).toggle();">Show/Hide Expanded Parts List</th></tr>
+            <tr><th class="collapseParts">Part</th><th>Qty per product</th><th>Qty in stock</th></tr>
             <%
                 part_hash = {}
                 @product.product_parts.each do |product_part|
@@ -199,7 +230,7 @@ function print_labels() {
                 end
                 part_hash.each_pair do | part, qty | 
                 %>
-                <tr><td><%=part.name%></td><td><%=qty%></td><td><%=part.qty%></td></tr>
+                <tr class="collapseParts"><td><%=part.name%></td><td><%=qty%></td><td><%=part.qty%></td></tr>
                 <%
                 end
             %>

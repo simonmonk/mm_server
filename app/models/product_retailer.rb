@@ -5,6 +5,7 @@ require 'uri'
 class ProductRetailer < ApplicationRecord
   belongs_to :product
   belongs_to :retailer
+
     
   def lookup_stock
     # always returns a string: 'UNKNOWN', 'IN STOCK' or 'OUT OF STOCK' or the stock qty as a number

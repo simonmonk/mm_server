@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201016104323) do
+ActiveRecord::Schema.define(version: 20201123111518) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -301,6 +301,9 @@ ActiveRecord::Schema.define(version: 20201016104323) do
     t.string   "video_url_0"
     t.string   "instructions_url"
     t.string   "compatability_image"
+    t.decimal  "wholesale_price_catalog", precision: 10, scale: 3
+    t.decimal  "retail_price_catalog",    precision: 10, scale: 3
+    t.string   "lessons_url"
   end
 
   create_table "prospects", force: :cascade do |t|

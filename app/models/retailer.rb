@@ -59,6 +59,26 @@ class Retailer < ApplicationRecord
         return value_sold
     end
 
+    def units_sold(start_date, end_date, product)
+        units = 0
+        self.shipments.each do | shipment |
+            ship_date = shipment.date_order_received
+            if (ship_date and ship_date >= start_date and ship_date <= end_date)
+                shipment.shipment_products.each do | sp |
+                    if (sp.product.id = product.id)
+                        units += sp.qty
+                    end
+                end
+            end
+        end
+        return units
+    end
+
+    def units_sold_last_n_days(n, product)
+        start_date = Date.today-n
+        end_date = Date.today
+        return units_sold(start_date, end_date, product)
+    end
 
 
     def as_json(options={})

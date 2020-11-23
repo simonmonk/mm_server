@@ -402,6 +402,7 @@ class Shipment < ApplicationRecord
     return [customer_names, sales]
   end
 
+
   def Shipment.sales_by_region(days)
     start_date = Date.today-days
     end_date = Date.today
