@@ -59,13 +59,13 @@ class Retailer < ApplicationRecord
         return value_sold
     end
 
-    def units_sold(start_date, end_date, product)
+    def units_sold(start_date, end_date, prod)
         units = 0
         self.shipments.each do | shipment |
             ship_date = shipment.date_order_received
             if (ship_date and ship_date >= start_date and ship_date <= end_date)
                 shipment.shipment_products.each do | sp |
-                    if (sp.product.id = product.id)
+                    if (sp.product.id == prod.id)
                         units += sp.qty
                     end
                 end

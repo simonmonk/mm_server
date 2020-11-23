@@ -214,7 +214,7 @@ $(document).ready(function(){
         </table>
         <table>
             <tr><th colspan="2" onclick="$( '.collapseParts' ).toggle();">Show/Hide Expanded Parts List</th></tr>
-            <tr><th class="collapseParts">Part</th><th>Qty per product</th><th>Qty in stock</th></tr>
+            <tr class="collapseParts"><th>Part</th><th>Qty per product</th><th>Qty in stock</th></tr>
             <%
                 part_hash = {}
                 @product.product_parts.each do |product_part|
