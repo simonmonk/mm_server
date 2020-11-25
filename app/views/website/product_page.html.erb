@@ -229,6 +229,16 @@ end
       </div>
 <% end %>
 
+<% if (@product.lessons_url and @product.lessons_url.length > 3) %>
+      <!-- Datasheet Button -->
+      <div class="text-center mt-4">
+        <a class="btn btn-xl btn-outline-light" href="<%=@product.lessons_url%>">
+          <i class="fas fa-download mr-2"></i>
+          Lesson Plan
+        </a>
+      </div>
+<% end %>
+
 
       <div class="text-center mt-4 text-white">
         <h3>For further help please email support@monkmakes.com</h3>
