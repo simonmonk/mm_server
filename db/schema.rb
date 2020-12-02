@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201123111518) do
+ActiveRecord::Schema.define(version: 20201202164638) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -372,6 +372,7 @@ ActiveRecord::Schema.define(version: 20201123111518) do
     t.string   "nickname"
     t.integer  "credit_days",                          default: 7
     t.boolean  "include_in_website",                   default: true
+    t.string   "billing_ad_email"
   end
 
   create_table "sales", force: :cascade do |t|
