@@ -105,6 +105,7 @@ Rails.application.routes.draw do
   resources :retailers do
     collection do
       get :add_product
+      get :copy_product_retailers
       get :export_csv
     end
   end

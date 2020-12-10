@@ -6,6 +6,10 @@ function add_product() {
     var product_id = list.options[list.selectedIndex].value;
     document.location = "/retailers/add_product?product_id=" + product_id + "&amp;retailer_id=<%= retailer.id %>"
 }  
+
+function copy_product_retailers() {
+    document.location = "/retailers/copy_product_retailers?retailer_id=<%= retailer.id %>"
+}  
     
 function copy_address() {
     $('#retailer_delivery_ad_line1').val($('#retailer_billing_ad_line1').val());
@@ -41,6 +45,22 @@ function copy_address() {
     <tr><td>Nickname (brand)</td><td><%= f.text_field :nickname, size: '40' %></td></tr>  
     <tr><td>Active</td><td><%= f.check_box :active %></td></tr> 
     <tr><td>Include on our Website</td><td><%= f.check_box :include_in_website %></td></tr> 
+
+    <%
+      retailer_list = [Retailer.new(name: 'NONE', id: 0)]
+      retailer_list += Retailer.all
+    %>
+    <tr>
+      <td>Main Retailer</td>
+      <td>  
+        <%= f.collection_select(:original_retailer_id, retailer_list, :id, :name) %>
+        <% if (retailer.original_retailer_id != 0) %>
+        <br/>
+        <button onClick='copy_product_retailers()'>Copy Product/Retailer list</button>
+        <% end %>
+      </td>
+    </tr>
+
     <tr><td>General contact name</td><td><%= f.text_field :contact_name, size: '40' %></td></tr>    
     <tr><td>Contact email</td><td><%= f.text_field :contact_email, size: '40' %></td></tr>    
     <tr><td>Default Days Credit</td><td><%= f.text_field :credit_days %></td></tr>
@@ -120,7 +140,7 @@ function copy_address() {
   <thead>
     <tr>
       <th>Product</th>
-      <th>Stock*</th>
+      <th>URL</th>
       <th>Supplier's SKU</th>
       <th colspan="3"></th>
     </tr>
@@ -131,9 +151,9 @@ function copy_address() {
     %>
       <tr>
         <td><%= product_retailer.product.name %></td>
-        <td><%= product_retailer.lookup_stock %></td>  
+        <td><%= product_retailer.url %></td>  
         <td><%= product_retailer.sku %></td>  
-        <td><%= link_to "Setup", edit_product_retailer_path(product_retailer) %></td>
+        <td><%= link_to "Edit", edit_product_retailer_path(product_retailer) %></td>
         <td><%= button_to 'Remove', product_retailer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
       <% 

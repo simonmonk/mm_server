@@ -46,6 +46,23 @@ def add_product
     redirect_to :action => "edit", :id => retailer_id
 end
 
+def copy_product_retailers
+  retailer_id = params[:retailer_id]
+  retailer = Retailer.find(retailer_id)
+  puts "retailer.name=" + retailer.name
+  prs_to_copy = ProductRetailer.where(retailer_id: retailer.original_retailer_id)
+  existing_pr_product_ids = ProductRetailer.where(retailer_id: retailer_id).collect { | pr | pr.product.id }
+  puts existing_pr_product_ids.to_s
+  prs_to_copy.each do | pr_to_copy |
+    if ( not existing_pr_product_ids.include? pr_to_copy.id )
+      new_pr = ProductRetailer.new(:product_id => pr_to_copy.product_id, :retailer_id => retailer_id, :sku => pr_to_copy.sku, :url => pr_to_copy.url)
+      puts "creating pr: " + new_pr.to_s
+      new_pr.save
+    end
+  end
+  redirect_to :action => "edit", :id => retailer_id
+end
+
   # POST /retailers
   # POST /retailers.json
   def create
@@ -95,6 +112,6 @@ end
       :vat_number, :pref_shipping_provider, :pref_shipping_provider_ac_no, :pref_shipping_provider_shipping_type,
       :active, :show_foreign_sku, :is_retail, :logo_url, :logo_buy_url, :region_id,
       :mm_products_url, :base_url, :tax_region, :fao_billing, :nickname, :credit_days,
-      :include_in_website, :billing_ad_email)
+      :include_in_website, :billing_ad_email, :original_retailer_id)
     end
 end
