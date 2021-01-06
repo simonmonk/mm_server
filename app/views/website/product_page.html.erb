@@ -173,7 +173,7 @@ end
           <div class="masthead-subheading font-weight-light mb-0 text-primary text-left">
             <%=@product.long_description.html_safe%>
             <p><%=@product.sku%></p>
-            <% if (@product.compatability_image) %>
+            <% if (@product.compatability_image and @product.compatability_image.length > 0) %>
               <img src="/img/<%=@product.compatability_image%>" width="200"/>
             <% end %>
           </div>

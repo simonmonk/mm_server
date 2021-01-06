@@ -10,6 +10,13 @@ $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
 
+Flag icons 64px wide
+================
+https://www.countryflags.com/germany-flag-icon/
+consider buying whole set as we will prob need a lot eventually
+
+
+
 Retailer Regional Varients
 ===========================
 - original_retailer_id - null if is original
