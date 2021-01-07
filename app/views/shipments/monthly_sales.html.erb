@@ -127,14 +127,14 @@ canvas{
 <br/>
 <h1>Sales by Product £</h1>
 
-<h2>Top 20 in last 365 days</h2>
+<h2>Top 30 in last 365 days</h2>
 
 <table width="100%"><tr> <!-- Single row table with 2 columns -->
 
 <td> <!-- Left column -->
     <canvas id="sales_by_product" style="width:400px;"></canvas>
     <%
-    result = Shipment.sales_by_product_top_n(365, 20)
+    result = Shipment.sales_by_product_top_n(365, 30)
     products = result[0]
     sales = result[1]
     units = result[2]
@@ -189,7 +189,7 @@ canvas{
 
 
 
-<h2>Top 20 in last 90 days</h2>
+<h2>Top 30 in last 90 days</h2>
 
 <table width="100%"><tr> <!-- Single row table with 2 columns -->
 
@@ -198,7 +198,7 @@ canvas{
     <canvas id="sales_by_product90" ></canvas>
 
     <%
-    result = Shipment.sales_by_product_top_n(90, 20)
+    result = Shipment.sales_by_product_top_n(90, 30)
     products90 = result[0]
     sales90 = result[1]
     units90 = result[2]
