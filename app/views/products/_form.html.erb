@@ -45,6 +45,17 @@ function deduct(qty) {
         
 }
 
+function calc_prices() {
+    var with_vat_field = document.getElementById("with_vat_field");
+    var retail_price_field = document.getElementById("product_retail_price");
+    var wholesale_price_field = document.getElementById("product_wholesale_price");
+    
+    with_vat = Number(with_vat_field.value)
+    retail_without_vat = with_vat / 1.2
+    wholesale = retail_without_vat * 0.6
+    retail_price_field.value = retail_without_vat
+    wholesale_price_field.value = wholesale
+}
 
 $(document).ready(function(){
     $( '.collapseWebsite' ).hide();
@@ -170,6 +181,7 @@ $(document).ready(function(){
     <tr><td>Profit on GBP sale</td><td>£<%= (@product.profit).round(2) %></td></tr>
     <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td>
     <tr><td>Retail for Catalog</td><td> <%= f.text_field :retail_price_catalog %></td>
+    <tr><td>Retail with VAT</td><td> <input value="<%=@product.retail_price * 1.2%>" id="with_vat_field"/><button onClick="calc_prices()">Back Calculate</button></td>
     </tr>    
         
         
