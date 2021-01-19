@@ -192,8 +192,9 @@ class ProductsController < ApplicationController
         :barcode, :barcode_value, :high_res_image_share, :new_in_catalog,
         :new_price_in_catalog, :end_of_line_in_catalog, :rohs_compliant,
         :catalog_priority, :carousel_0, :carousel_1, :carousel_2, :carousel_3,
-        :carousel_4, :tutorial_url, :datasheet_url, :video_url_0, :instructions_url,
-        :compatability_image, :wholesale_price_catalog, :retail_price_catalog, :lessons_url
+        :carousel_4, :tutorial_url, :datasheet_url, :video_url_0, :video_url_1, 
+        :video_url_2, :instructions_url, :compatability_image, :wholesale_price_catalog, 
+        :retail_price_catalog, :lessons_url
       )
     end
 end

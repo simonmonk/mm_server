@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201210090546) do
+ActiveRecord::Schema.define(version: 20210119103318) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -304,6 +304,8 @@ ActiveRecord::Schema.define(version: 20201210090546) do
     t.decimal  "wholesale_price_catalog", precision: 10, scale: 3
     t.decimal  "retail_price_catalog",    precision: 10, scale: 3
     t.string   "lessons_url"
+    t.string   "video_url_1"
+    t.string   "video_url_2"
   end
 
   create_table "prospects", force: :cascade do |t|
