@@ -83,7 +83,7 @@ end
     <td><%=transaction.placed_date%></td>
     <td><%=transaction.organisation%></td>
     <td><%=transaction.rnd_summary%></td>
-    <td><%=number_to_currency(transaction.with_vat, unit: '£', separator: ".", delimiter: ",")%></td>
+    <td><%=number_to_currency(transaction.rnd_cost, unit: '£', separator: ".", delimiter: ",")%></td>
 </tr>
 
 <% end %>    
