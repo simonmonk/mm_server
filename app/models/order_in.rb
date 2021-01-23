@@ -543,22 +543,18 @@ class OrderIn < ApplicationRecord
         end
         desc += d + ", "
       end
-      return desc
     end
+    return desc
   end
 
   def rnd_cost()
     total = 0
-    if (self.order_in_lines.length == 1 and self.order_in_lines[0].cost_centre.code == 'RND')
-      return self.without_vat()
-    else
-      self.order_in_lines.each do | line |
-        if (line.cost_centre.code == 'RND')
-          total += line.price
-        end
+    self.order_in_lines.each do | line |
+      if (line.cost_centre.code == 'RND')
+        total += line.price
       end
-      return total
     end
+    return total
   end
 
 end
