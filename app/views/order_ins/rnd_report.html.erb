@@ -62,6 +62,7 @@ OrderIn.all.each do | order_in |
         total += order_in.rnd_cost
     end
 end
+total_monthly = total * 30.4 / (to_date-from_date).to_i
 
 %>
 
@@ -88,6 +89,7 @@ end
 
 <% end %>    
 <tr><th>Total</th><th/><th/><th><%=number_to_currency(total, unit: '£', separator: ".", delimiter: ",")%></th></tr>
+<tr><th>Per 30.4 days</th><th/><th/><th><%=number_to_currency(total_monthly, unit: '£', separator: ".", delimiter: ",")%></th></tr>
 
 
 </table>
