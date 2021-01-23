@@ -16,11 +16,13 @@ https://www.countryflags.com/germany-flag-icon/
 consider buying whole set as we will prob need a lot eventually
 
 
+R and D report
+==============
+Add method rnd_cost to order_in which in turn sums line items, or of only one 
+item and it is rnd then use the total ex vat
 
-Retailer Regional Varients
-===========================
-- original_retailer_id - null if is original
-* copy_product_retailers
+Reports page set date range - iterate to make a list with totals in the view temnplate
+
 
 
 Critical BUGS

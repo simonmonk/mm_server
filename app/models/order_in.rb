@@ -149,7 +149,8 @@ class OrderIn < ApplicationRecord
     end
   end
 
-  # Make a version of the order_in that just includes values from the r&d order_in_lines. I.e. change the invoice_goods_ammout
+  # Make a version of the order_in that just includes values from the r&d order_in_lines. 
+  # I.e. change the invoice_goods_ammout
   def rnd_version()
     rnd_order_in = self.dup
     rnd_order_in.invoice_goods_ammout = 0
@@ -521,5 +522,43 @@ class OrderIn < ApplicationRecord
                         :is_received, :has_proof_uploaded, :without_vat, :vat, :with_vat, :accounting_date, :transaction_type,
                         :accounts, :transaction_summary, :direction, :account_ids ])
   end  
+
+  def contains_rnd()
+    self.order_in_lines.each do | line |
+      if (line.cost_centre and line.cost_centre.code == 'RND')
+        return true
+      end
+    end
+    return false
+  end
+
+  def rnd_summary()
+    desc = ""
+    self.order_in_lines.each do | line |
+      if (line.cost_centre.code == 'RND')
+        if (line.part)
+          d = line.part.name
+        else
+          d = line.description
+        end
+        desc += d + ", "
+      end
+      return desc
+    end
+  end
+
+  def rnd_cost()
+    total = 0
+    if (self.order_in_lines.length == 1 and self.order_in_lines[0].cost_centre.code == 'RND')
+      return self.without_vat()
+    else
+      self.order_in_lines.each do | line |
+        if (line.cost_centre.code == 'RND')
+          total += line.price
+        end
+      end
+      return total
+    end
+  end
 
 end

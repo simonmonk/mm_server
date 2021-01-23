@@ -264,7 +264,9 @@ class OrderInsController < ApplicationController
   end
 
 
-
+  def rnd_report()
+    render :layout => false
+  end
 
 
   def destroy

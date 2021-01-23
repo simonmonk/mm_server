@@ -148,6 +148,7 @@ Rails.application.routes.draw do
       get :delete_json
       post :import_invoice
       post :upload
+      get :rnd_report
     end
   end
   resources :suppliers do

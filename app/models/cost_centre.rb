@@ -1,5 +1,5 @@
 class CostCentre < ApplicationRecord
 
-    has_many :order_ins
+    has_many :order_in_lines
 
 end

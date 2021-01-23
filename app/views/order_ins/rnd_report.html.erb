@@ -1,0 +1,93 @@
+<style>
+
+@page {
+    margin-top: 2.5cm;
+ }
+    
+    
+h1 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-left: 20px;
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}   
+    
+    
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+        
+table {
+    border-collapse: collapse;
+}
+    
+td, th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.money {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: right;
+}
+    
+tr {
+    page-break-inside: avoid;
+}
+    
+
+</style>
+
+
+
+<%
+
+from_date = Date.parse(params[:from])
+puts from_date
+to_date = Date.parse(params[:to])
+
+costs = []
+total = 0
+OrderIn.all.each do | order_in |
+    if (order_in.placed_date and order_in.contains_rnd() and
+            (order_in.placed_date >= from_date) and
+            (order_in.placed_date <= to_date))
+        costs.append(order_in)
+        total += order_in.rnd_cost
+    end
+end
+
+%>
+
+<h1>R&D Costs from <%=from_date%> to <%=to_date%> (<%= (to_date-from_date).to_i %> days)</h1>
+
+<table>
+<tr>
+    <th>Date</th>
+    <th>Organisation</th>
+    <th>Description</th>
+    <th>Cost</th>
+</tr>
+
+<% costs.each do | transaction | 
+    
+%>
+
+<tr>
+    <td><%=transaction.placed_date%></td>
+    <td><%=transaction.organisation%></td>
+    <td><%=transaction.rnd_summary%></td>
+    <td><%=number_to_currency(transaction.with_vat, unit: '£', separator: ".", delimiter: ",")%></td>
+</tr>
+
+<% end %>    
+<tr><th>Total</th><th/><th/><th><%=number_to_currency(total, unit: '£', separator: ".", delimiter: ",")%></th></tr>
+
+
+</table>
