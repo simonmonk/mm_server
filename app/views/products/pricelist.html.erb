@@ -192,8 +192,7 @@ cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each 
         <td class="prod_table_th_right" width="350">
         
         <% 
-            if (cat.priority != 1000 && product.wholesale_price_catalog && product.wholesale_price_catalog > 0 
-                && product.retail_price_catalog && product.retail_price_catalog > 0)
+            if (cat.priority != 1000 && product.wholesale_price_catalog && product.wholesale_price_catalog > 0 && product.retail_price_catalog && product.retail_price_catalog > 0)
                 wholesale_price_string = number_to_currency(product.wholesale_price_catalog, unit: currency_symbol, separator: ".", delimiter: ",")
                 retail_price_string = number_to_currency(product.retail_price_catalog, unit: currency_symbol, separator: ".", delimiter: ",")
         %>
