@@ -92,7 +92,11 @@ class Product < ApplicationRecord
     end
     
     def profit
-        return [self.wholesale_price - self.production_cost, 0].max
+        if (self.wholesale_price_catalog)
+            return [self.wholesale_price_catalog - self.production_cost, 0].max
+        else
+            return 0
+        end
     end
 
     # suggested wholesale price add 40% to manufacturing cost
@@ -103,10 +107,10 @@ class Product < ApplicationRecord
 
     # suggested retail 40% gross margin for retailer on wholesale price
     def suggested_retail
-    	if (! self.wholesale_price)
+    	if (! self.wholesale_price_catalog)
     		return 0
     	end
-        return self.wholesale_price / (1 - 0.4) # 40% margin
+        return self.wholesale_price_catalog / (1 - 0.4) # 40% margin
     end
     
 

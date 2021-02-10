@@ -181,11 +181,12 @@ $(document).ready(function(){
     <tr><td>Wholesale price GBP</td><td> <%= f.text_field :wholesale_price %> (suggested £<%= @product.suggested_wholesale.round(2) %>)</td></tr>
     <tr><td>Wholesale for Catalog</td><td> <%= f.text_field :wholesale_price_catalog %></td></tr>
     <tr><td>Profit on GBP sale</td><td>£<%= (@product.profit).round(2) %></td></tr>
-    <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested £<%= @product.suggested_retail.round(2) %>)</td>
+    <tr><td>Retail price GBP</td><td> <%= f.text_field :retail_price %> (suggested by wholesale catalog price £<%= @product.suggested_retail.round(2) %>)</td>
     <tr><td>Retail for Catalog</td><td> <%= f.text_field :retail_price_catalog %></td>
+    <!--
     <tr><td>Retail with VAT</td><td> <input value="<%=@product.retail_price * 1.2%>" id="with_vat_field"/><button onClick="calc_prices()">Back Calculate</button></td>
     </tr>    
-        
+    -->
         
     <tr><th colspan="2">Shipping</th></tr>    
     <tr><td>Country of Origin</td><td> <%= f.text_field :country_of_origin, size: '20' %> </td></tr>  
