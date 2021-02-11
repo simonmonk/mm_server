@@ -184,7 +184,7 @@ cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each 
             <% end %>
             <%=product.name%>
             <%
-            if (product.compatability_image)
+            if (product.compatability_image && product.compatability_image.length > 2)
             %>
                 <img class="new_product" src="/img/<%=product.compatability_image%>" width="100"/>
             <% end %>
