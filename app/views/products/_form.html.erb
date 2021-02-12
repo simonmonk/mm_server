@@ -134,9 +134,9 @@ $(document).ready(function(){
     <tr class="collapseCatalog"><td>New in Catalog</td><td> <%= f.check_box :new_in_catalog %></td></tr>    
     <tr class="collapseCatalog"<td>New price in Catalog<td> <%= f.check_box :new_price_in_catalog %></td></tr>    
     <tr class="collapseCatalog"><td>End of Line in Catalog</td><td> <%= f.check_box :end_of_line_in_catalog %></td></tr>        
-    <tr class="collapseCatalog"><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '50' %> </td></tr>   
-    <tr class="collapseCatalog"><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '50' %> </td></tr>  
-    <tr class="collapseCatalog"><td>Product URL</td><td> <%= f.text_field :product_url, size: '50' %> </td></tr> 
+    <tr class="collapseCatalog"><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '80' %> </td></tr>   
+    <tr class="collapseCatalog"><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '80' %> </td></tr>  
+    <tr class="collapseCatalog"><td>Product URL</td><td> <%= f.text_field :product_url, size: '80' %> </td></tr> 
     <tr class="collapseCatalog"><td>Compatability Icon</td><td> 
         <%= f.select :compatability_image, 
             options_for_select(['', 'm_b_compat_1_2.png', 'm_b_compat_1.png', 'm_b_compat_2.png'].map{|s|[s, s]}, :selected => product.compatability_image) %>
@@ -156,18 +156,18 @@ $(document).ready(function(){
     <% end %>
 
     <tr><th onclick="$( '.collapseWebsite' ).toggle();" colspan="2">Website</th></tr>
-    <tr class="collapseWebsite"><td>Carousel 0</td><td> <%= f.text_field :carousel_0, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Carousel 1</td><td> <%= f.text_field :carousel_1, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Carousel 2</td><td> <%= f.text_field :carousel_2, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Carousel 3</td><td> <%= f.text_field :carousel_3, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Carousel 4</td><td> <%= f.text_field :carousel_4, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Tutorial URL</td><td> <%= f.text_field :tutorial_url, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Datasheet URL</td><td> <%= f.text_field :datasheet_url, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Instruction Manual URL</td><td> <%= f.text_field :instructions_url, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Lesson URL</td><td> <%= f.text_field :lessons_url, size: '50' %> </td></tr>
-    <tr class="collapseWebsite"><td>Video URL 1 (use /embed/)</td><td> <%= f.text_field :video_url_0, size: '50' %> </td></tr>   
-    <tr class="collapseWebsite"><td>Video URL 2</td><td> <%= f.text_field :video_url_1, size: '50' %> </td></tr> 
-    <tr class="collapseWebsite"><td>Video URL 3</td><td> <%= f.text_field :video_url_2, size: '50' %> </td></tr> 
+    <tr class="collapseWebsite"><td>Carousel 0</td><td> <%= f.text_field :carousel_0, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 1</td><td> <%= f.text_field :carousel_1, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 2</td><td> <%= f.text_field :carousel_2, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 3</td><td> <%= f.text_field :carousel_3, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Carousel 4</td><td> <%= f.text_field :carousel_4, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Tutorial URL</td><td> <%= f.text_field :tutorial_url, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Datasheet URL</td><td> <%= f.text_field :datasheet_url, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Instruction Manual URL</td><td> <%= f.text_field :instructions_url, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Lesson URL</td><td> <%= f.text_field :lessons_url, size: '80' %> </td></tr>
+    <tr class="collapseWebsite"><td>Video URL 1 (use /embed/)</td><td> <%= f.text_field :video_url_0, size: '80' %> </td></tr>   
+    <tr class="collapseWebsite"><td>Video URL 2</td><td> <%= f.text_field :video_url_1, size: '80' %> </td></tr> 
+    <tr class="collapseWebsite"><td>Video URL 3</td><td> <%= f.text_field :video_url_2, size: '80' %> </td></tr> 
 
     <tr><th colspan="2">Pricing</th></tr>
     <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
