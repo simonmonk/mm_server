@@ -9,6 +9,10 @@ $ rails generate scaffold Region name:string
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
+Raz SEO
+=======
+
+
 
 Flag icons 64px wide
 ====================

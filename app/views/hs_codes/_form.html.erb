@@ -1,0 +1,25 @@
+<%= form_for(hs_code) do |f| %>
+  <% if hs_code.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(hs_code.errors.count, "error") %> prohibited this hs_code from being saved:</h2>
+
+      <ul>
+      <% hs_code.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+    <tr><td>Code</td><td><%= f.text_field :code, size: '50' %></td></tr>
+    <tr><td>Nickname</td><td><%= f.text_field :nickname, size: '50' %></td></tr>
+    <tr><td>Description</td><td><%= f.text_area :description, size: '50x10'%></td></tr>
+    <tr><td>URL</td><td><%= f.text_field :url, size: '50' %></td></tr>
+    <tr><td>Notes</td><td><%= f.text_area :notes, size: '50x10' %>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

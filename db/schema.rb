@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210119103318) do
+ActiveRecord::Schema.define(version: 20210213113753) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -128,6 +128,16 @@ ActiveRecord::Schema.define(version: 20210119103318) do
     t.integer  "cost_centre_id"
     t.boolean  "is_checked",      default: false
     t.string   "vat_action"
+  end
+
+  create_table "hs_codes", force: :cascade do |t|
+    t.string   "code"
+    t.string   "nickname"
+    t.string   "description"
+    t.string   "url"
+    t.string   "notes"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "notifications", force: :cascade do |t|

@@ -32,6 +32,13 @@ Rails.application.routes.draw do
   get 'bookkeepings/create_spreadsheet', to: 'bookkeepings#create_spreadsheet'
   get 'bookkeepings', to: 'bookkeepings#index'
   get 'parts/:id/set_inactive/', to: 'parts#set_inactive'
+  
+
+  resources :hs_codes do
+    collection do
+      get :extract_hs_codes_from_products
+    end
+  end  
 
   
   resources :accounts do

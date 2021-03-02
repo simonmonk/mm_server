@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @hs_code.code %>
+</p>
+
+<p>
+  <strong>Nickname:</strong>
+  <%= @hs_code.nickname %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @hs_code.description %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @hs_code.url %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @hs_code.notes %>
+</p>
+
+<%= link_to 'Edit', edit_hs_code_path(@hs_code) %> |
+<%= link_to 'Back', hs_codes_path %>

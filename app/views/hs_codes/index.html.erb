@@ -1,0 +1,46 @@
+<script>
+function extract_hs_codes_from_products() {
+    document.location = "/hs_codes/extract_hs_codes_from_products"
+} 
+</script>
+
+<p id="notice"><%= notice %></p>
+
+<h1>HS Codes</h1>
+
+<input type="button" onClick="extract_hs_codes_from_products()" value="Extract HS Codes from Products"></input>
+<br/>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Nickname</th>
+      <th>Description</th>
+      <th>Url</th>
+      <th>Notes</th>
+      <th>Used for</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @hs_codes.each do |hs_code| %>
+      <tr>
+        <td><%= hs_code.code %></td>
+        <td><%= hs_code.nickname %></td>
+        <td><%= hs_code.description %></td>
+        <td><%= hs_code.url %></td>
+        <td><%= hs_code.notes %></td>
+        <td><%= hs_code.used_in_products%></td>
+        <td><%= link_to 'Show', hs_code %></td>
+        <td><%= link_to 'Edit', edit_hs_code_path(hs_code) %></td>
+        <td><%= link_to 'Destroy', hs_code, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Hs Code', new_hs_code_path %>
