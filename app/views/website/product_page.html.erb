@@ -81,7 +81,7 @@ function set_region(region) {
             active = 'active' if (i == 1)
 %>
           <div class="carousel-item <%=active%>">
-            <img src="<%=im%>" height="400" alt="..."/>
+            <img src="<%=im%>" height="400" alt="<%=@product.name%>"/>
           </div>
 <%
         end
@@ -168,7 +168,7 @@ end
       <!-- Details Section Content -->
       <div class="row">
         <div>
-          <div class="text-center"><img class="img-fluid" src="<%=@product.product_photo_uri%>" width="500" alt="..."/>
+          <div class="text-center"><img class="img-fluid" src="<%=@product.product_photo_uri%>" width="500" alt="<%=@product.name%>"/>
           </div>
           <div class="masthead-subheading font-weight-light mb-0 text-primary text-left">
             <%=@product.long_description.html_safe%>
@@ -186,7 +186,7 @@ end
             <% end %>
             <p><%=@product.sku%></p>
             <% if (@product.compatability_image and @product.compatability_image.length > 0) %>
-              <img src="/img/<%=@product.compatability_image%>" width="200"/>
+              <img src="/img/<%=@product.compatability_image%>" width="200" alt="micro:bit version compatability"/>
             <% end %>
           </div>
         </div>
