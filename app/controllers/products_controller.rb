@@ -129,7 +129,10 @@ class ProductsController < ApplicationController
     redirect_to :action => "edit", :id => product_id
   end
     
-
+  def bring_all_prices_inline_with_catalog
+    Product.bring_all_prices_inline_with_catalog
+    redirect_to :action => "index"
+  end
 
   # POST /products
   # POST /products.json

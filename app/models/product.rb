@@ -202,4 +202,37 @@ class Product < ApplicationRecord
         return bc
     end
 
+    # change prices so that if they have catalog prices, the invoice prices are set to be the same.
+    def bring_prices_inline_with_catalog()
+        if (self.active and self.include_in_catalog)
+            if (self.wholesale_price_catalog and self.wholesale_price_catalog > 0 and self.wholesale_price_catalog != self.wholesale_price)
+                old_wholesale_price = self.wholesale_price
+                self.wholesale_price = self.wholesale_price_catalog
+                self.save()
+                t = Transaction.new
+                t.transaction_type = 'Update Product Pricing'
+                t.description = "Changed Wholesale Price of " + self.name + " from: " + old_wholesale_price.to_s + " to " + self.wholesale_price.to_s
+                puts t.description
+                t.save
+            end
+            if (self.retail_price_catalog and self.retail_price_catalog > 0 and self.retail_price_catalog != self.retail_price)
+                old_retail_price = self.retail_price
+                self.retail_price = self.retail_price_catalog
+                self.save()
+                t = Transaction.new
+                t.transaction_type = 'Update Product Pricing'
+                t.description = "Changed Retail Price of " + self.name + " from: " + old_retail_price.to_s + " to " + self.retail_price.to_s
+                puts t.description
+                t.save
+            end
+        end
+    end
+
+    
+    def Product.bring_all_prices_inline_with_catalog()
+        Product.all.each do | product |
+            product.bring_prices_inline_with_catalog
+        end
+    end
+
 end

@@ -22,6 +22,16 @@ function create_image_list() {
     window.open("/products/image_links", '_blank')
 }
 
+function bring_all_prices_inline_with_catalog() {
+    if (confirm("Are you sure?")) {
+        $.ajax({url: "/products/bring_all_prices_inline_with_catalog", 
+            success: function(result) {
+                alert("Prices updated - see details in System Admin->Log")
+            }
+        });
+    }
+}
+
 
 const barcode_length = 12;
 var field;
@@ -54,6 +64,8 @@ window.onload = function() {
 <%= button_to 'New Product', new_product_path, :method => "get" %>
 
 <input type="button" value="Export Hi Res Image Link List" onClick="javascript:create_image_list()"/>
+<input type="button" value="Update Invoice Prices to Catalog Prices" onClick="javascript:bring_all_prices_inline_with_catalog()"/>
+
 
 <p></p>
 Valid From <input type="text" value="<%=Date.current.next_month.beginning_of_month.strftime("%-d %B %Y")%>" id="valid_from_field"/>

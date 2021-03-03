@@ -98,6 +98,7 @@ Rails.application.routes.draw do
       get :product_id_from_barcode
       get :print_labels
       get :stock_label
+      get :bring_all_prices_inline_with_catalog
     end
   end
   resources :assemblies do
