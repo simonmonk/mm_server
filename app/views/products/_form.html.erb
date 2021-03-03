@@ -193,7 +193,7 @@ $(document).ready(function(){
     <tr><td>Weight(grams)</td><td> <%= f.text_field :weight_g %> grams (<%=product.weight_g/1000%>kg, <%=product.weight_g*0.00220462.round(2)%>lbs)</td></tr>
     <tr valign="top"><td>Customs Description (invoice)</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
 
-    <tr><td>HS Code</td>
+    <tr><td>HS Code (Work in progress - ignore)</td>
     <td>  
       <%= f.collection_select(:hs_code_id, HsCode.all, :id, :summary) %>
     </td>

@@ -32,9 +32,9 @@ World Map with icons for retialers on? Google Maps API?
 HS Codes
 ========
 x scaffold for new table of code
-add attribute hs_code_id
-script to go through products lazy add HS codes used by all exisiting products and establish relationship to product table 
-add drop-down list to select HS tarrif
+x add attribute hs_code_id
+x script to go through products lazy add HS codes used by all exisiting products and establish relationship to product table 
+x add drop-down list to select HS tarrif
 delete free text field harmoized_tarrif_number
 make invoice and quote use new object rather than harmoized_tarrif_number - can do with getter method once the field has gone.
 
