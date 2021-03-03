@@ -64,11 +64,16 @@ class HsCodesController < ApplicationController
   def extract_hs_codes_from_products
     @hs_codes = HsCode.all
     Product.all.each do | product |
-      hs = product.harmoized_tarrif_number.strip
-      puts hs
-      if (not HsCode.find_by_code(hs))
-        puts "adding code"
-        HsCode.new(code: hs, notes: "found in product: " + product.name).save
+      if (product.active)
+        hs = product.harmoized_tarrif_number.strip
+        if (not HsCode.find_by_code(hs))
+          puts "adding code"
+          HsCode.new(code: hs, notes: "found in product: " + product.name).save
+        end
+        hs_code = HsCode.find_by_code(hs)
+        product.hs_code_id = hs_code.id
+        puts "setting code for " + product.name + " to code id=" + hs_code.id.to_s + " (" + hs_code.code + ")"
+        product.save
       end
     end
     render :index

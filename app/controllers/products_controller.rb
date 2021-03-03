@@ -197,7 +197,7 @@ class ProductsController < ApplicationController
         :catalog_priority, :carousel_0, :carousel_1, :carousel_2, :carousel_3,
         :carousel_4, :tutorial_url, :datasheet_url, :video_url_0, :video_url_1, 
         :video_url_2, :instructions_url, :compatability_image, :wholesale_price_catalog, 
-        :retail_price_catalog, :lessons_url
+        :retail_price_catalog, :lessons_url, :hs_code_id
       )
     end
 end

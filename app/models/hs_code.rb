@@ -1,5 +1,7 @@
 class HsCode < ApplicationRecord
 
+    has_many :products
+
     def used_in_products
         msg = ""
         Product.all.each do | product |
@@ -9,6 +11,10 @@ class HsCode < ApplicationRecord
             end
         end
         return msg
+    end
+
+    def summary
+        return code + " (" + nickname.to_s + ")"
     end
 
 end

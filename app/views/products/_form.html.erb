@@ -192,6 +192,13 @@ $(document).ready(function(){
     <tr><td>Country of Origin</td><td> <%= f.text_field :country_of_origin, size: '20' %> </td></tr>  
     <tr><td>Weight(grams)</td><td> <%= f.text_field :weight_g %> grams (<%=product.weight_g/1000%>kg, <%=product.weight_g*0.00220462.round(2)%>lbs)</td></tr>
     <tr valign="top"><td>Customs Description (invoice)</td><td> <%= f.text_area :customs_description, size: '50x3' %> </td></tr>  
+
+    <tr><td>HS Code</td>
+    <td>  
+      <%= f.collection_select(:hs_code_id, HsCode.all, :id, :summary) %>
+    </td>
+    </tr>
+
     <tr><td>Harmonized Tarrif Number</td><td> <%= f.text_field :harmoized_tarrif_number, size: '40' %> </td></tr>    
     
     </table> 

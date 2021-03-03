@@ -5,6 +5,7 @@ class Product < ApplicationRecord
     has_many :shipment_products
     
     belongs_to :product_category
+    belongs_to :hs_code
     
     validates :name, presence: true
     validates :qty, numericality: { greater_than_or_equal_to: 0 }

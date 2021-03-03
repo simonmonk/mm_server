@@ -9,6 +9,8 @@ $ rails generate scaffold Region name:string
 $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
+
+
 Raz SEO
 =======
 Images - autoamtic resizing logic and relocating into sensible directory structure on web server via ftp
@@ -25,6 +27,17 @@ for each product
 change form to allow upload of image files from MM server, straight to the right place.
 
 World Map with icons for retialers on? Google Maps API?
+
+
+HS Codes
+========
+x scaffold for new table of code
+add attribute hs_code_id
+script to go through products lazy add HS codes used by all exisiting products and establish relationship to product table 
+add drop-down list to select HS tarrif
+delete free text field harmoized_tarrif_number
+make invoice and quote use new object rather than harmoized_tarrif_number - can do with getter method once the field has gone.
+
 
 
 
@@ -185,32 +198,6 @@ adding items to list - make default qty 0.
 x Packing list - shipping type not appearing in packing list
 Need to refresh to get line items not red if they were ever red.
 
-
-
-Catalog and Website
---------------------
-Add new HTML genberation for:
-- List of retailers. To do this will need to add to db: url for customer logo (), cust logo for buy link (70x30), 
-          region (Region table)
-- Product Pages (Is this time for a new Vue/Bootstrap website)
--- types of pages we have:
-welcome - appeal to potential retailers
-products list - for retailers
-products groups (micro:bit)
-product page - information for end users
-contact - for potential retailers
--- what we should also have
-- help forum for end users. Ask here, reply here, not private emails
-- customer portal online P.O.
-- Learn pages like Adafruit?
-
-- this looks good - downloaded the app. https://mobirise.com
-
-
-How to do this.
-- How are images handled?
-- Where does the verbose product details and getting started material go? Still a job for a CMS when you get to the actual body.
-- Is there a nice CMS that uses Node? and maybe produces PDF like AdaFruit
 
 
 

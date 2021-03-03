@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210213113753) do
+ActiveRecord::Schema.define(version: 20210303133812) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(version: 20210213113753) do
     t.string   "lessons_url"
     t.string   "video_url_1"
     t.string   "video_url_2"
+    t.integer  "hs_code_id"
   end
 
   create_table "prospects", force: :cascade do |t|
