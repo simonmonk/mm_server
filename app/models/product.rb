@@ -86,7 +86,7 @@ class Product < ApplicationRecord
     # it also creates thunbnails to give faster website loading for generated pages
     # Run this on the live database, so that the links are updated.
     def Product.migrate_all_images
-        products.all.each do | product |
+        Product.all.each do | product |
             if (product.active)
                 puts "Moving Images for product: " + product.name
                 product.move_images_to_website()
