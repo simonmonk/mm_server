@@ -1,3 +1,7 @@
+require 'fileutils'
+require "open-uri"
+require 'ImageResize'
+
 class Product < ApplicationRecord
     has_many :product_parts
     has_many :product_assemblies
@@ -48,6 +52,10 @@ class Product < ApplicationRecord
         return total
     end
 
+
+
+    ##### start of methods for website generation
+
     def webpage_name
         return product_url.split('/').last
     end
@@ -73,6 +81,61 @@ class Product < ApplicationRecord
         end
         return rets
     end
+
+    # Move all old wordpress-style images to /images and redirect the image locations in the database too
+    # it also creates thunbnails to give faster website loading for generated pages
+    # Run this on the live database, so that the links are updated.
+    def Product.migrate_all_images
+        products.all.each do | product |
+            if (product.active)
+                puts "Moving Images for product: " + product.name
+                product.move_images_to_website()
+            end
+        end
+    end
+
+    def move_images_to_website
+        image_sources = [:product_photo_uri, :carousel_0, :carousel_1, :carousel_2, :carousel_3, :carousel_4]
+        image_sources.each do | im_src |
+            im_url = self[im_src]
+            if (im_url and im_url.length > 0)
+                move_image(im_url, im_src)
+            end
+        end
+    end
+
+    def move_image(im_url, image_field)
+        puts "Moving image: " + im_url
+        extension = im_url.split('.').last
+        filename_org = im_url.split('/').last
+        temp_dir = Setting.get_setting('TEMP_DIR')
+        filename_thumb = temp_dir + 'thumb.' + extension
+        File.open(filename_org, 'wb') do | fo |
+            fo.write(open(im_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read)
+        end
+        Image.resize(filename_org, filename_thumb, 200, 2000)
+        org_file_path = webpage_name() + "/" + filename_org
+        thumb_file_path = webpage_name() + "/thumb_" + filename_org
+        rcp(filename_org, "images/" + org_file_path)
+        rcp(filename_thumb, "images/" + thumb_file_path)
+        puts "saving: " + image_field.to_s
+        update_attribute(image_field, "https://monkmakes.com/images/" + org_file_path)
+    end
+
+    def rcp(local_file, remote_file)
+        scp_upload_command_1 = "ssh -i /Users/si/certs/MMServerKeys/MMServer2020.pem ec2-user@3.11.90.43 'mkdir /data/www/images/" + webpage_name() + "'"
+        scp_upload_command_2 = "scp -i /Users/si/certs/MMServerKeys/MMServer2020.pem " + local_file + " ec2-user@3.11.90.43:/data/www/" + remote_file
+        
+        #scp_upload_command = "rsync -i /Users/si/certs/MMServerKeys/MMServer2020.pem -r " + local_file + " ec2-user@3.11.90.43:/data/www/" + remote_file
+        puts scp_upload_command_1
+        system(scp_upload_command_1)
+        puts scp_upload_command_2
+        system(scp_upload_command_2)
+        
+    end
+
+
+    ##### end of methods for website generation
     
     def units_and_value_shipped(start_date, end_date)
         #shipments = Shipment.where("date_order_received >= :start_date AND date_order_received < :end_date", {start_date: start_date, end_date: end_date})

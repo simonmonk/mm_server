@@ -134,7 +134,8 @@ $(document).ready(function(){
     <tr class="collapseCatalog"><td>New in Catalog</td><td> <%= f.check_box :new_in_catalog %></td></tr>    
     <tr class="collapseCatalog"<td>New price in Catalog</td><td> <%= f.check_box :new_price_in_catalog %></td></tr>    
     <tr class="collapseCatalog"><td>End of Line in Catalog</td><td> <%= f.check_box :end_of_line_in_catalog %></td></tr>        
-    <tr class="collapseCatalog"><td>Photo URI</td><td> <%= f.text_field :product_photo_uri, size: '80' %> </td></tr>   
+    <tr class="collapseCatalog"><td>Photo URL</td><td><%= f.text_field :product_photo_uri, size: '80' %></td></tr>  
+
     <tr class="collapseCatalog"><td>Link for high res images</td><td> <%= f.text_field :high_res_image_share, size: '80' %> </td></tr>  
     <tr class="collapseCatalog"><td>Product URL</td><td> <%= f.text_field :product_url, size: '80' %> </td></tr> 
     <tr class="collapseCatalog"><td>Compatability Icon</td><td> 

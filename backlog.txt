@@ -14,6 +14,13 @@ $ rails g scaffold Post title:string body:string
 Raz SEO
 =======
 Images - autoamtic resizing logic and relocating into sensible directory structure on web server via ftp
+image sizes 
+- full-size image
+- products page
+-- product thumbnails - width 10rem - measured as 133px so resize to 200px wide _thumb
+- product page
+-- carousel images and main image - use full size
+
 
 one-off update and reorganisation
 for each product  

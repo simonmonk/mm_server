@@ -79,3 +79,8 @@ gem 'barby'
 gem 'rubyzip'
 gem 'axlsx'
 gem 'axlsx_rails'
+
+gem 'public_suffix'
+gem 'addressable'
+gem 'down'
+gem "ImageResize", "~> 0.0.5"
