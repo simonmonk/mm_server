@@ -94,6 +94,8 @@ class Product < ApplicationRecord
         end
     end
 
+    # This needs fixing to cope with image urls that have spaces in
+    # assuming it can get the original file, it should replace spaces with underscores in the target file
     def move_images_to_website
         image_sources = [:product_photo_uri, :carousel_0, :carousel_1, :carousel_2, :carousel_3, :carousel_4]
         image_sources.each do | im_src |
@@ -115,7 +117,7 @@ class Product < ApplicationRecord
                 fo.write(open(im_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read)
             end
         rescue
-            puts "Original image file missing: " + filename_org
+            puts "**** Original image file missing: " + filename_org
             return
         end
         Image.resize(filename_org, filename_thumb, 200, 2000)
@@ -131,7 +133,7 @@ class Product < ApplicationRecord
             puts u.status[1]
             if (u.status[1] == 'OK')
                 puts "Saving NEW URL: " + new_url + " for product: " + self.name
-                update_attribute(image_field, new_url)
+                # update_attribute(image_field, new_url)
             end
         rescue
             puts "Error opening Image URL: " + new_url
