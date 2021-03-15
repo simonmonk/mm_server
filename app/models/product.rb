@@ -92,6 +92,7 @@ class Product < ApplicationRecord
                 product.move_images_to_website()
             end
         end
+        return 0
     end
 
     # This needs fixing to cope with image urls that have spaces in
