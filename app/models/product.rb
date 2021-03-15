@@ -114,12 +114,23 @@ class Product < ApplicationRecord
             fo.write(open(im_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read)
         end
         Image.resize(filename_org, filename_thumb, 200, 2000)
+        # put the two images onto the server
         org_file_path = webpage_name() + "/" + filename_org
         thumb_file_path = webpage_name() + "/thumb_" + filename_org
         rcp(filename_org, "images/" + org_file_path)
         rcp(filename_thumb, "images/" + thumb_file_path)
-        puts "saving: " + image_field.to_s
-        update_attribute(image_field, "https://monkmakes.com/images/" + org_file_path)
+        # only update url if the image can be read withjout error.
+        new_url = "https://monkmakes.com/images/" + org_file_path
+        begin
+            u = open(new_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE) 
+            puts u.status[1]
+            if (u.status[1] == 'OK')
+                puts "Saving NEW URL: " + new_url + " for product: " + self.name
+                update_attribute(image_field, new_url)
+            end
+        rescue
+            puts "Error opening Image URL: " + new_url
+        end
     end
 
     def rcp(local_file, remote_file)
