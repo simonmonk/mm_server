@@ -147,7 +147,13 @@ class Product < ApplicationRecord
         system(scp_upload_command_1)
         puts scp_upload_command_2
         system(scp_upload_command_2)
-        
+    end
+
+    def product_photo_thumbnail_url()
+        path_file = File.split(self.product_photo_uri)
+        path = path_file[0]
+        file = "thumb_" + path_file[1]
+        return File.join(path, file)
     end
 
 
