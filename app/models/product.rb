@@ -110,8 +110,13 @@ class Product < ApplicationRecord
         filename_org = im_url.split('/').last
         temp_dir = Setting.get_setting('TEMP_DIR')
         filename_thumb = temp_dir + 'thumb.' + extension
-        File.open(filename_org, 'wb') do | fo |
-            fo.write(open(im_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read)
+        begin
+            File.open(filename_org, 'wb') do | fo |
+                fo.write(open(im_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read)
+            end
+        rescue
+            puts "Original image file missing: " + filename_org
+            return
         end
         Image.resize(filename_org, filename_thumb, 200, 2000)
         # put the two images onto the server
