@@ -134,8 +134,8 @@ class Product < ApplicationRecord
     end
 
     def rcp(local_file, remote_file)
-        scp_upload_command_1 = "ssh -i /Users/si/certs/MMServerKeys/MMServer2020.pem ec2-user@3.11.90.43 'mkdir /data/www/images/" + webpage_name() + "'"
-        scp_upload_command_2 = "scp -i /Users/si/certs/MMServerKeys/MMServer2020.pem " + local_file + " ec2-user@3.11.90.43:/data/www/" + remote_file
+        scp_upload_command_1 = "ssh -i /home/si/MMServer2020.pem ec2-user@3.11.90.43 'mkdir /data/www/images/" + webpage_name() + "'"
+        scp_upload_command_2 = "scp -i /home/si/MMServer2020.pem " + local_file + " ec2-user@3.11.90.43:/data/www/" + remote_file
         
         #scp_upload_command = "rsync -i /Users/si/certs/MMServerKeys/MMServer2020.pem -r " + local_file + " ec2-user@3.11.90.43:/data/www/" + remote_file
         puts scp_upload_command_1
