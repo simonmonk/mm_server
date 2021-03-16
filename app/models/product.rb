@@ -108,8 +108,14 @@ class Product < ApplicationRecord
     end
 
     def move_image(im_url, image_field)
-        puts "Moving image: " + im_url
         extension = im_url.split('.').last
+        # filename may have crap like this on the end: ?fit=960%2C960
+        # but it doesn't matter beacause the page loads anyway
+        if (im_url.split(' ').length > 1)
+            # could be a bit smarter here - but no urls with spaces found in db.
+            puts "***** url with spaces: " + im_url
+            return
+        end
         filename_org = im_url.split('/').last
         temp_dir = Setting.get_setting('TEMP_DIR')
         filename_thumb = temp_dir + 'thumb.' + extension
@@ -118,7 +124,7 @@ class Product < ApplicationRecord
                 fo.write(open(im_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read)
             end
         rescue
-            puts "**** Original image file missing: " + filename_org
+            puts "**** Original image file missing: " + im_url
             return
         end
         Image.resize(filename_org, filename_thumb, 200, 2000)
@@ -129,12 +135,12 @@ class Product < ApplicationRecord
         rcp(filename_thumb, "images/" + thumb_file_path)
         # only update url if the image can be read withjout error.
         new_url = "https://monkmakes.com/images/" + org_file_path
+        puts "Moving image from: " + im_url + " to: " + new_url
         begin
             u = open(new_url, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE) 
-            puts u.status[1]
             if (u.status[1] == 'OK')
                 puts "Saving NEW URL: " + new_url + " for product: " + self.name
-                # update_attribute(image_field, new_url)
+                update_attribute(image_field, new_url)
             end
         rescue
             puts "Error opening Image URL: " + new_url
@@ -142,10 +148,10 @@ class Product < ApplicationRecord
     end
 
     def rcp(local_file, remote_file)
+        # cert location for server vs local is different
         scp_upload_command_1 = "ssh -i /home/si/MMServer2020.pem ec2-user@3.11.90.43 'mkdir /data/www/images/" + webpage_name() + "'"
         scp_upload_command_2 = "scp -i /home/si/MMServer2020.pem " + local_file + " ec2-user@3.11.90.43:/data/www/" + remote_file
         
-        #scp_upload_command = "rsync -i /Users/si/certs/MMServerKeys/MMServer2020.pem -r " + local_file + " ec2-user@3.11.90.43:/data/www/" + remote_file
         puts scp_upload_command_1
         system(scp_upload_command_1)
         puts scp_upload_command_2
@@ -208,9 +214,11 @@ class Product < ApplicationRecord
     def possible_makes
         n = 100000000000000
         self.product_parts.each do |pp|
-            stock_to_needed = (pp.part.qty / pp.qty).to_i()
-            if (stock_to_needed < n)
-                n = stock_to_needed
+            if (pp.qty > 0.0)
+                stock_to_needed = (pp.part.qty / pp.qty).to_i()
+                if (stock_to_needed < n)
+                    n = stock_to_needed
+                end
             end
         end
         self.product_assemblies.each do |pa|

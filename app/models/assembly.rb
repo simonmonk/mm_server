@@ -31,9 +31,11 @@ class Assembly < ApplicationRecord
     def possible_makes
         n = 100000000000000
         self.assembly_parts.each do |ap|
-            stock_to_needed = (ap.part.qty / ap.qty).to_i()
-            if (stock_to_needed < n)
-                n = stock_to_needed
+            if (ap.qty > 0)
+                stock_to_needed = (ap.part.qty / ap.qty).to_i()
+                if (stock_to_needed < n)
+                    n = stock_to_needed
+                end
             end
         end
        return n

@@ -54,7 +54,7 @@ class AssembliesController < ApplicationController
   def add_part
     part_id = params[:part_id]
     assembly_id = params[:assembly_id]
-    qty = params[:qty].to_i
+    qty = params[:qty].to_f
     results = AssemblyPart.where(part_id: part_id, assembly_id: assembly_id)
     if (results.length > 0)
         ap = results[0]

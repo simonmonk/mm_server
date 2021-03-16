@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210303133812) do
+ActiveRecord::Schema.define(version: 20210315124325) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20210303133812) do
   end
 
   create_table "assembly_parts", force: :cascade do |t|
-    t.integer  "qty"
+    t.float    "qty"
     t.integer  "part_id"
     t.integer  "assembly_id"
     t.datetime "created_at",  null: false
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(version: 20210303133812) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "fieldname"
-    t.integer  "qty"
+    t.float    "qty"
     t.index ["part_id"], name: "index_product_parts_on_part_id"
     t.index ["product_id"], name: "index_product_parts_on_product_id"
   end
