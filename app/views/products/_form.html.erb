@@ -145,6 +145,7 @@ $(document).ready(function(){
             <img src="/img/<%=product.compatability_image%>" width="150"</image>
         <% end %>
     </td></tr>     
+    <tr class="collapseCatalog"><td>Short Description</td><td> <%= f.text_area :short_description, size: '50x2' %> </td></tr> 
     <tr class="collapseCatalog"><td>Catalog Description (HTML)</td><td> <%= f.text_area :long_description, size: '50x10' %> </td></tr>   
     <tr class="collapseCatalog"><td>Catalog Priority</td><td> <%= f.text_field :catalog_priority, size: '10' %> </td></tr>  
     <tr class="collapseCatalog"><td colspan="2">(smaller number means nearer the top. Aim for 0.0 to 100.0)</td>
