@@ -5,14 +5,14 @@ valid_from_date = params['from_date']
 
 %>
 
-Name,SKU,Wholesale (GBP),SRP (GBP),Weight (g),Harmonized Tarrif No,Country of Origin,High Res Images,Product Info Page
+Name,SKU,Wholesale (GBP),SRP (GBP),Weight (g),Harmonized Tarrif No,Country of Origin,High Res Images,Product Info Page,Short description,Long Description
 <%
 categories = ProductCategory.all.order(priority: :asc)
 i = 0
 categories.each do | cat |
     cat.products.where(include_in_catalog: true).order(catalog_priority: :asc).each do | product |
 %>
-<%=product.name%>,<%=product.sku%>,<%=product.wholesale_price%>,<%=product.retail_price%>,<%=product.weight_g%>,<%=product.harmoized_tarrif_number%>,<%=product.country_of_origin%>,<%=product.high_res_image_share%>,<%=product.product_url%>
+<%=product.name%>,<%=product.sku%>,<%=product.wholesale_price%>,<%=product.retail_price%>,<%=product.weight_g%>,<%=product.harmoized_tarrif_number%>,<%=product.country_of_origin%>,<%=product.high_res_image_share%>,<%=product.product_url%>,<%=product.high_res_image_share%>,<%=product.short_description%>,<%=product.high_res_image_share%>,<%=product.long_description%>
 <%
     end
 end
