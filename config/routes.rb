@@ -157,6 +157,7 @@ Rails.application.routes.draw do
       post :import_invoice
       post :upload
       get :rnd_report
+      get :document_list
     end
   end
   resources :suppliers do

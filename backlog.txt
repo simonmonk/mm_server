@@ -10,28 +10,19 @@ $ rails db:migrate
 $ rails g scaffold Post title:string body:string
 
 
+Panels
+======
+New table for Panels
+Panel
+- belongs to Assembly
+- has many Parts
++ name
++ cam_file_name
++ qty_panel
+* qty_boards
 
-Raz SEO
-=======
-Images - autoamtic resizing logic and relocating into sensible directory structure on web server via ftp
-image sizes 
-- full-size image
-- products page
--- product thumbnails - width 10rem - measured as 133px so resize to 200px wide _thumb
-- product page
--- carousel images and main image - use full size
 
 
-one-off update and reorganisation
-for each product  
-  lazy make a remote folder with the base product name
-  for each image field
-    download the image files
-    resize to width of N
-    save remotely in jpg format with compression (photo) or png screen if org is screen
-    change URL on the @product and save
-
-change form to allow upload of image files from MM server, straight to the right place.
 
 World Map with icons for retialers on? Google Maps API?
 

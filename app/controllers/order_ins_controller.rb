@@ -268,6 +268,10 @@ class OrderInsController < ApplicationController
     render :layout => false
   end
 
+  def document_list()
+    render :layout => false
+  end
+
 
   def destroy
     @order_in.destroy

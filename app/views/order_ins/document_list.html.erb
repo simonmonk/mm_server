@@ -1,0 +1,90 @@
+<style>
+
+@page {
+    margin-top: 2.5cm;
+ }
+    
+    
+h1 {
+    text-align: left;
+    margin-top: 2px;  
+    margin-left: 20px;
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}   
+    
+    
+h2 {
+    text-align: center;
+    margin-top: 2px;  
+    margin-bottom: 2px;  
+    font: 36px arial, bold, sans-serif;
+}    
+        
+table {
+    border-collapse: collapse;
+}
+    
+td, th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.money {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: right;
+}
+    
+tr {
+    page-break-inside: avoid;
+}
+    
+
+</style>
+
+<%
+from_date = Date.parse(params[:from])
+puts from_date
+to_date = Date.parse(params[:to])
+%>
+
+<h1>Purchase Document List from <%=from_date%> to <%=to_date%> (<%= (to_date-from_date).to_i %> days)</h1>
+
+<table>
+<tr>
+    <th>Date</th>
+    <th>Organisation</th>
+    <th>Description</th>
+    <th>Value</th>
+    <th>Document File</th>
+</tr>
+
+
+<%
+OrderIn.all.each do | transaction |
+    if (transaction.placed_date and
+            (transaction.placed_date >= from_date) and
+            (transaction.placed_date <= to_date))
+        transaction_id = transaction.created_at.strftime("%Y") + "_" + transaction.id.to_s + ".pdf"
+%>
+
+
+
+
+<tr>
+    <td><%=transaction.placed_date%></td>
+    <td><%=transaction.organisation%></td>
+    <td><%=transaction.rnd_summary%></td>
+    <td><%=number_to_currency(transaction.invoice_total_ammount, unit: '', separator: ".", delimiter: ",")%></td>
+    <td><%=transaction_id%></td>
+</tr>
+
+<%      
+    end 
+end
+%>    
+
+
+</table>

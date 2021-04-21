@@ -57,7 +57,7 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
 
 
 
-  <% PartCategory.all.each do |cat| %>
+  <% PartCategory.all.order(name: :asc).each do |cat| %>
 
     <h3><%= cat.name %></h3>
 
