@@ -11,7 +11,7 @@
   </thead>
 
   <tbody>
-    <% @part_categories.each do |part_category| %>
+    <% @part_categories.order(name: :asc).each do |part_category| %>
       <tr>
         <td><%= part_category.name %></td>
         <td><%= link_to 'Show', part_category %></td>
