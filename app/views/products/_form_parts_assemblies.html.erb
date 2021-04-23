@@ -32,9 +32,8 @@
 
     
 <select id="parts_list">
-<% parts = Part.active_parts()
-    parts.each do |part| %>
-    <option value='<%= part.id %>'><%= part.name %></option>option>
+<%  Part.parts_grouped_for_dropdowns.each do |part| %>
+    <option value='<%= part.id %>'><%= part.name_with_category %></option>option>
 <% end %>
 </select>    
 qty <input type="number" id="part_qty_field" value="1"/> 

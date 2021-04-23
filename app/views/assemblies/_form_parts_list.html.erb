@@ -1,4 +1,16 @@
 <h2>Parts Used</h2>
+<% if (@assembly.is_panel)%>
+<p>Parts here should include the SMD components (for 1 board) and the bare BCB</p>
+<p>This will automatically be multiplied by <%=@assembly.panel_num_boards%> when deducting parts</p>
+<% end %>
+
+<% if (@assembly.parent_assembly_id != 0)%>
+<p>This is a board made from a Panel, so don't add SMD parts here, 
+they will be on <a href="/assemblies/<%=@assembly.parent_assembly_id%>/edit">the Panel</a>.
+You should include other components like header pins, bubble bag and label here.</p>
+<% end %>
+
+
 <table>
   <thead>
     <tr>
@@ -29,9 +41,8 @@
 
 
 <select id="parts_list">
-<%  parts = Part.active_parts()
-    parts.each do |part| %>
-    <option value='<%= part.id %>'><%= part.name %></option>
+<%  Part.parts_grouped_for_dropdowns.each do |part| %>
+    <option value='<%= part.id %>'><%= part.name_with_category %></option>
 <% end %>
 </select>    
 qty <input type="number" id="part_qty_field" value="1"/> 

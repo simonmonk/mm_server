@@ -15,9 +15,25 @@ class Part < ApplicationRecord
     end
     
     # return all the Active parts
-    # sorted alphabeticaly for use in lists
+    # sorted alphabeticaly
     def Part.active_parts
         Part.all.where(active: true).order(name: :asc)
+    end
+
+    def name_with_category
+        return part_category.name + " -> " + name
+    end
+
+    def Part.parts_grouped_for_dropdowns
+        parts = []
+        PartCategory.all.order(name: :asc).each do |cat| 
+            cat.parts.order(name: :asc).each do |part|
+                if (part.active)
+                    parts.append(part)
+                end
+            end
+        end
+        return parts
     end
     
     def purchase_cost_all_stock

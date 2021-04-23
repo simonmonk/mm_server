@@ -26,21 +26,25 @@ class AssembliesController < ApplicationController
   end
     
   def deduct_stock
-      assembly_id = params['assembly_id']
-      n = params['qty'].to_i
-      n_fails = params['qty_fails'].to_i
-      assembly = Assembly.find(assembly_id)
-      assembly.assembly_parts.each do |ap|
-        ap.part.qty = ap.part.qty - ap.qty * n
-        ap.part.save
-      end
-      assembly.qty = assembly.qty + n - n_fails
-      assembly.save
-      t = Transaction.new
-      t.transaction_type = 'Deduct Stock for Assembly'
-      t.description = "Removed parts from stock to make " + n.to_s + " new " + assembly.name
-      t.save
-      redirect_to :action => "edit", :id => assembly_id
+    assembly_id = params['assembly_id']
+    n = params['qty'].to_i
+    n_fails = params['qty_fails'].to_i
+    assembly = Assembly.find(assembly_id)
+    panel_scaler = 1
+    if (assembly.is_panel)
+      panel_scaler = assembly.panel_num_boards
+    end
+    assembly.assembly_parts.each do |ap|
+      ap.part.qty = ap.part.qty - ap.qty * n * panel_scaler
+      ap.part.save
+    end
+    assembly.qty = assembly.qty + n - n_fails
+    assembly.save
+    t = Transaction.new
+    t.transaction_type = 'Deduct Stock for Assembly'
+    t.description = "Removed parts from stock to make " + n.to_s + " new " + assembly.name
+    t.save
+    redirect_to :action => "edit", :id => assembly_id
   end
       
     
@@ -110,6 +114,7 @@ class AssembliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def assembly_params
-      params.require(:assembly).permit(:name, :qty, :labour, :stock_warning_level, :active, :assembly_category_id, :qty_fails)
+      params.require(:assembly).permit(:name, :qty, :labour, :stock_warning_level, :active, :assembly_category_id, :qty_fails,
+      :parent_assembly_id, :notes, :panel_num_boards)
     end
 end

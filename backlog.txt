@@ -12,15 +12,12 @@ $ rails g scaffold Post title:string body:string
 
 Panels
 ======
-New table for Panels
-Panel
-- belongs to Assembly
-- has many Parts
-+ name
-+ cam_file_name
-+ qty_panel
-* qty_boards
+Start by reorganising Parts - sorted categories and sorted parts within cat
 
+PartPopulatedPCB - assembly category, allow assembly to have assemblies - useful anyway
+- has many parts
+Do this by adding parent_assembly_id field to Assembly
+- how to avoid loops - don't just trust user not to be stupid
 
 
 

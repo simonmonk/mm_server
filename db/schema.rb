@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210315124325) do
+ActiveRecord::Schema.define(version: 20210423093128) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -56,6 +56,9 @@ ActiveRecord::Schema.define(version: 20210315124325) do
     t.integer  "stock_warning_level"
     t.boolean  "active"
     t.integer  "assembly_category_id"
+    t.integer  "parent_assembly_id"
+    t.string   "notes"
+    t.integer  "panel_num_boards"
   end
 
   create_table "assembly_categories", force: :cascade do |t|
@@ -63,6 +66,7 @@ ActiveRecord::Schema.define(version: 20210315124325) do
     t.integer  "priority"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "is_panel"
   end
 
   create_table "assembly_parts", force: :cascade do |t|

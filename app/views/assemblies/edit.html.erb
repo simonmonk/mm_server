@@ -4,7 +4,7 @@ $(function() {
 });  
 </script>
 
-<h1>Editing Assembly: <%= @assembly.name%></h1>
+<h1>Editing Assembly <% if (@assembly.is_panel) %> (PANEL) <% end %>: <%= @assembly.name%></h1>
 
 <a href="#" target="popup" onclick="window.open('/assemblies/stock_label?id=<%=@assembly.id%>','name','width=600,height=400')">Print Assembly Label</a>
 

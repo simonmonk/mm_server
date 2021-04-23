@@ -57,7 +57,10 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
 
 
 
-  <% PartCategory.all.order(name: :asc).each do |cat| %>
+  <% PartCategory.all.order(name: :asc).each do |cat| 
+    parts = cat.parts.order(name: :asc)
+    if (parts.length > 0)
+  %>
 
     <h3><%= cat.name %></h3>
 
@@ -76,7 +79,7 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
   </thead>
 
   <tbody>
-    <% parts = cat.parts.order(name: :asc)
+    <% 
     parts.each do |part| 
         style_class = ""
         if (part.qty <= part.stock_warning_level)
@@ -106,6 +109,7 @@ SCAN BARCODE <input type="text" id="barcode_input" onInput="barcode_changed(even
             end
           end
         end
+      end
         %>
       </tr>
     <% end %>

@@ -69,6 +69,6 @@ class AssemblyCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def assembly_category_params
-      params.require(:assembly_category).permit(:name, :priority)
+      params.require(:assembly_category).permit(:name, :priority, :is_panel)
     end
 end

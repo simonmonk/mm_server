@@ -1,3 +1,11 @@
+
+<%
+ass_type = "Assembly"
+if (@assembly.is_panel)
+  ass_type = "Panel"
+end
+%>
+
 <script>
     
 $(function() {
@@ -49,6 +57,7 @@ function deduct(qty, qty_fails) {
   <% end %>
 
 
+
 <table><tr>
     
 <% if (not @assembly.active) %>
@@ -62,9 +71,23 @@ function deduct(qty, qty_fails) {
   <%= f.collection_select(:assembly_category_id, AssemblyCategory.all, :id, :name) %>
 </td>
 </tr>
+
+<tr>
+<td>From Panel (for bagged PCBs)</td>
+<td>  
+  <%= f.collection_select(:parent_assembly_id, Assembly.panel_assemblies, :id, :name) %>
+</td>
+</tr>
+
+<% if (@assembly.is_panel) %>
+  <tr><td>Boards per panel</td><td><%= f.number_field :panel_num_boards %></td></tr>
+<% end %>
+
 <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
 <tr><td>Quantity</td><td><%= f.number_field :qty %></td></tr>
 <tr><td>Stock warning level</td><td><%= f.number_field :stock_warning_level %></td></tr>
+<tr><td>Notes</td><td><%= f.text_area :notes, size: '50x10' %></td></tr>
+
     
 <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
 </table>
@@ -76,8 +99,10 @@ function deduct(qty, qty_fails) {
 
 <td>
         <p>The manufacturing cost of this assembly is £ <%= assembly.production_cost.round(2) %></p>
-        <p>You have enough parts to make: <%= assembly.possible_makes %> of this assembly.</p>
-            <p>Deduct <input id="n" type="number"/> sets of the parts used in this assembly from stock.</p>
+        <p>You have enough parts to make: <%= assembly.possible_makes %> of this <%= ass_type %>.</p>
+            <p>Deduct <input id="n" type="number"/> sets of the parts used in this assembly from stock.
+            <% if (@assembly.is_panel) %> (number of panels times parts) <% end %>
+            </p>
             <p>Failures in this batch <input id="n_fails" type="number"/>.</p>
             <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value, document.getElementById('n_fails').value)"/></p>
     </td>

@@ -29,7 +29,8 @@ class Assembly < ApplicationRecord
     end
     
     def possible_makes
-        n = 100000000000000
+        big_number = 100000000000000
+        n = big_number
         self.assembly_parts.each do |ap|
             if (ap.qty > 0)
                 stock_to_needed = (ap.part.qty / ap.qty).to_i()
@@ -38,7 +39,13 @@ class Assembly < ApplicationRecord
                 end
             end
         end
-       return n
+        if (n == big_number)
+            return 0
+        end
+        if (is_panel)
+            return n / panel_num_boards
+        end
+        return n
     end
     
     def Assembly.total_value
@@ -54,6 +61,23 @@ class Assembly < ApplicationRecord
             ass.assembly_category_id = 1
             ass.save()
         end
+    end
+
+    def is_panel
+        if (assembly_category)
+            return assembly_category.is_panel
+        end
+        return false
+    end
+
+    def Assembly.panel_assemblies
+        assemblies = [Assembly.new(name: 'NONE', id: 0)]
+        Assembly.active_assemblies.each do | ass |
+            if (ass.is_panel)
+                assemblies.append(ass)
+            end
+        end
+        return assemblies
     end
     
 end
