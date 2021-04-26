@@ -26,7 +26,7 @@ You should include other components like header pins, bubble bag and label here.
     </tr>
   </thead>
   <tbody>
-  <% if (@assembly.parent_assembly_id > 0)%>
+  <% if (@assembly.parent_assembly_id and @assembly.parent_assembly_id > 0)%>
   <tr>
     <td/>
     <td>Board from <a href="/assemblies/<%=@assembly.parent_assembly_id%>/edit"><%=@assembly.panel.name%></a></td>
