@@ -7,7 +7,7 @@
 <p>This will automatically be multiplied by <%=@assembly.panel_num_boards%> when deducting parts</p>
 <% end %>
 
-<% if (@assembly.parent_assembly_id > 0)%>
+<% if (@assembly.parent_assembly_id and @assembly.parent_assembly_id > 0)%>
 <p>This is a board made from a Panel, so don't add SMD parts here, 
 they will be on <a href="/assemblies/<%=@assembly.parent_assembly_id%>/edit">the Panel</a>.
 You should include other components like header pins, bubble bag and label here.</p>
