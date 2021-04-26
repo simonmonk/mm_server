@@ -39,6 +39,15 @@ class Assembly < ApplicationRecord
                 end
             end
         end
+        # for assemblies that are made from a panel
+        if (parent_assembly_id > 0)
+            panel_assembly = Assembly.find(parent_assembly_id)
+            n_boards = panel_assembly.qty * panel_assembly.panel_num_boards
+            if (n_boards < n)
+                n = n_boards
+            end
+        end
+        # nothing constrained show show a sensible number
         if (n == big_number)
             return 0
         end
@@ -69,6 +78,11 @@ class Assembly < ApplicationRecord
         end
         return false
     end
+
+    def panel
+        Assembly.find_by_id(parent_assembly_id)
+    end
+
 
     def Assembly.panel_assemblies
         assemblies = [Assembly.new(name: 'NONE', id: 0)]

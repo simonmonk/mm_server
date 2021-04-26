@@ -1,10 +1,13 @@
 <h2>Parts Used</h2>
+
+
+
 <% if (@assembly.is_panel)%>
 <p>Parts here should include the SMD components (for 1 board) and the bare BCB</p>
 <p>This will automatically be multiplied by <%=@assembly.panel_num_boards%> when deducting parts</p>
 <% end %>
 
-<% if (@assembly.parent_assembly_id)%>
+<% if (@assembly.parent_assembly_id > 0)%>
 <p>This is a board made from a Panel, so don't add SMD parts here, 
 they will be on <a href="/assemblies/<%=@assembly.parent_assembly_id%>/edit">the Panel</a>.
 You should include other components like header pins, bubble bag and label here.</p>
@@ -18,11 +21,20 @@ You should include other components like header pins, bubble bag and label here.
       <th>Part</th>
       <th>Qty</th>
       <th>Cost</th>
-    <th>Qty in stock</th>
+      <th>Qty in stock</th>
       <th colspan="3"></th>
     </tr>
   </thead>
   <tbody>
+  <% if (@assembly.parent_assembly_id > 0)%>
+  <tr>
+    <td/>
+    <td>Board from <a href="/assemblies/<%=@assembly.parent_assembly_id%>/edit"><%=@assembly.panel.name%></a></td>
+    <td>1</td>
+    <td><%=@assembly.panel.production_cost%></td>
+    <td><%=@assembly.panel.qty * @assembly.panel.panel_num_boards%></td>
+  </tr>
+  <% end %>
     <% @assembly.assembly_parts.each do |assembly_part| %>
       <tr>
         <td><a href="/parts/<%= assembly_part.part.id %>/edit"><%= assembly_part.part.stock_name %></a></td>

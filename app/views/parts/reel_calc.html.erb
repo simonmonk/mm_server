@@ -1,0 +1,70 @@
+<h1>Part Reel Component Counter</h1>
+
+<div id="app">
+
+<table>
+<tr>
+    <td>Inner diameter (mm)</td>
+    <td><input v-model="d0" type="text" value="" class="form-control"/></td>
+</tr>
+<tr>
+    <td>Outer diameter (mm)</td>
+    <td><input v-model="d1" type="text" value="" class="form-control"/></td>
+</tr>
+<tr>
+    <td>Tape thickness (mm)</td>
+    <td><input v-model="t" type="text" value="" class="form-control"/></td>
+</tr>
+<tr>
+    <td>Component Spacing (mm)</td>
+    <td><input v-model="c" type="text" value="" class="form-control"/></td>
+</tr>
+<tr>
+  <td colspan=2><button type="button" v-on:click="calculate" class="btn btn-primary">Calculate</button></td>
+</tr>
+<tr>
+    <td>Number of turns</td>
+    <td>{{n}}</td>
+</tr>
+<tr>
+    <td>Total length</td>
+    <td>{{l}} mm</td>
+</tr>
+<tr>
+    <td>Component Count</td>
+    <td><b>{{nn}}</b></td>
+</tr>
+
+</table>
+
+</div>
+
+
+
+<script>
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+          d0: 50.0,
+          d1: 150.0,
+          t: 1,
+          c: 4,
+          n: 0,
+          l: 0,
+          nn: 0
+        },
+        methods: {
+          calculate: function() { 
+              let r0 = this.d0 / 2;
+              let r1 = this.d1 / 2;
+              this.n = (r1-r0)/this.t;
+              this.l = Math.round(3.142159 * this.n * (r1-r0)); 
+              this.nn = Math.round(this.l / this.c);
+          }
+        }
+    });
+}
+
+</script>

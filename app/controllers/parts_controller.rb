@@ -19,6 +19,9 @@ class PartsController < ApplicationController
   def barcode
   end
 
+  def reel_calc
+  end
+
 
   # GET /parts/1
   # GET /parts/1.json

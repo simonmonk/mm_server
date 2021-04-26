@@ -34,6 +34,13 @@ class AssembliesController < ApplicationController
     if (assembly.is_panel)
       panel_scaler = assembly.panel_num_boards
     end
+    # if its a bagged PCB from a panel, deduct num boards / panel size from the Panel assembly ?? // todo
+    if (assembly.parent_assembly_id > 0)
+      panel_assembly = Assembly.find(assembly.parent_assembly_id)
+      panel_assembly.qty -= (n / panel_assembly.panel_num_boards)
+      panel_assembly.save
+    end
+    # deduct the parts
     assembly.assembly_parts.each do |ap|
       ap.part.qty = ap.part.qty - ap.qty * n * panel_scaler
       ap.part.save

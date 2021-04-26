@@ -84,7 +84,7 @@ function deduct(qty, qty_fails) {
 <% end %>
 
 <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
-<tr><td>Quantity</td><td><%= f.number_field :qty %></td></tr>
+<tr><td>Quantity <%=ass_type%></td><td><%= f.number_field :qty %></td></tr>
 <tr><td>Stock warning level</td><td><%= f.number_field :stock_warning_level %></td></tr>
 <tr><td>Notes</td><td><%= f.text_area :notes, size: '50x10' %></td></tr>
 

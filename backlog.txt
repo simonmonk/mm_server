@@ -19,6 +19,28 @@ PartPopulatedPCB - assembly category, allow assembly to have assemblies - useful
 Do this by adding parent_assembly_id field to Assembly
 - how to avoid loops - don't just trust user not to be stupid
 
+testing
+Ass: AQ for Pi400 Panel 
+-- Pi AQ bare PCB - 120
+
+Ass: AQ for Pi 400 bagged PCB
+-- board from AQ for Pi400 Panel 0
+-- header socket 307
+
+Make 5 Panels
+YY - bare pcb count should be 120-5*4 = 100
+YY - Panel quantity should show 5
+
+Make 20 bagged PCBs
+YY - before Boards from panel should show 20
+YY - header socket 307-20=287
+YN - after boards from panel should be back to 0
+---- board from panel still 20, these arent deducted when bagged PCBs made, 
+-----also 'enough parts to make' calc does not include boards from panels.
+
+
+
+
 
 
 World Map with icons for retialers on? Google Maps API?

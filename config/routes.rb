@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       get :export_parts
       get :stock_label
       get :set_inactive
+      get :reel_calc
     end
   end
 
