@@ -47,9 +47,9 @@ window.onload = function () {
     var app = new Vue({
         el: '#app',
         data: {
-          d0: 50.0,
+          d0: 60.0,
           d1: 150.0,
-          t: 1,
+          t: 0.7,
           c: 4,
           n: 0,
           l: 0,
@@ -60,7 +60,7 @@ window.onload = function () {
               let r0 = this.d0 / 2;
               let r1 = this.d1 / 2;
               this.n = (r1-r0)/this.t;
-              this.l = Math.round(3.142159 * this.n * (r1-r0)); 
+              this.l = Math.round(3.142159 * this.n * 2 * (r1-r0)); 
               this.nn = Math.round(this.l / this.c);
           }
         }
