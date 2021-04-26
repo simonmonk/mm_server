@@ -40,7 +40,7 @@ class Assembly < ApplicationRecord
             end
         end
         # for assemblies that are made from a panel
-        if (parent_assembly_id > 0)
+        if (parent_assembly_id and parent_assembly_id > 0)
             panel_assembly = Assembly.find(parent_assembly_id)
             n_boards = panel_assembly.qty * panel_assembly.panel_num_boards
             if (n_boards < n)
