@@ -88,7 +88,9 @@ function deduct(qty, qty_fails) {
 <tr><td>Stock warning level</td><td><%= f.number_field :stock_warning_level %></td></tr>
 <tr><td>Notes</td><td><%= f.text_area :notes, size: '30x10' %></td></tr>
 <% if (@assembly.is_panel) %>
-  <tr><td>Labour (per individual board) (£)</td><td><%= f.text_field :labour %></td></tr>
+  <tr><td colspan=2>A whole panel might take 1/10 hr = £1. So per board £0.10/board for panel of 10. 
+  This labour is just the PnP cost NOT breaking, sanding, flashing etc.</td></tr>
+  <tr><td>PnP Labour (per board) (£)</td><td><%= f.text_field :labour %></td></tr>
 <% else %>
   <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
 <%end%>
