@@ -31,7 +31,7 @@ You should include other components like header pins, bubble bag and label here.
     <td/>
     <td>Board from <a href="/assemblies/<%=@assembly.parent_assembly_id%>/edit"><%=@assembly.panel.name%></a></td>
     <td>1</td>
-    <td><%=@assembly.panel.production_cost%></td>
+    <td><%=@assembly.panel.production_cost.round(2)%></td>
     <td><%=@assembly.panel.qty * @assembly.panel.panel_num_boards%></td>
   </tr>
   <% end %>
