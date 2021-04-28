@@ -25,6 +25,10 @@ class Assembly < ApplicationRecord
         if (self.labour)
             total += self.labour
         end
+        if (uses_panel)
+            panel = Assembly.find(parent_assembly_id)
+            total += panel.production_cost
+        end
         return total
     end
     
@@ -77,6 +81,10 @@ class Assembly < ApplicationRecord
             return assembly_category.is_panel
         end
         return false
+    end
+
+    def uses_panel
+        return (parent_assembly_id and parent_assembly_id > 0)
     end
 
     def panel

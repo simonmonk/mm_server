@@ -86,10 +86,12 @@ function deduct(qty, qty_fails) {
 <tr><td>Active</td><td><%= f.check_box :active %></td></tr>
 <tr><td>Quantity <%=ass_type%></td><td><%= f.number_field :qty %></td></tr>
 <tr><td>Stock warning level</td><td><%= f.number_field :stock_warning_level %></td></tr>
-<tr><td>Notes</td><td><%= f.text_area :notes, size: '50x10' %></td></tr>
-
-    
-<tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+<tr><td>Notes</td><td><%= f.text_area :notes, size: '30x10' %></td></tr>
+<% if (@assembly.is_panel) %>
+  <tr><td>Labour for whole panel (£)</td><td><%= f.text_field :labour %></td></tr>
+<% else %>
+  <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+<%end%>
 </table>
   <div class="actions">
     <%= f.submit "Save" %>
@@ -100,7 +102,7 @@ function deduct(qty, qty_fails) {
 <td>
       <% if (@assembly.is_panel and @assembly.panel_num_boards) %>
         <p>The manufacturing cost of this whole Panel is £ <%= (assembly.production_cost * @assembly.panel_num_boards).round(2) %> 
-        or <%= assembly.production_cost.round(2)%> per board.</p>
+        or £<%= assembly.production_cost.round(2)%> per board.</p>
       <% else %>
         <p>The manufacturing cost of this assembly is £ <%= assembly.production_cost.round(2) %></p>
       <% end %>
@@ -112,6 +114,7 @@ function deduct(qty, qty_fails) {
             <input type="button" value="DO IT" onClick="javascript:deduct(document.getElementById('n').value, document.getElementById('n_fails').value)"/></p>
     </td>
 </tr></table>
+
 <hr/>
 
 
