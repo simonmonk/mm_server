@@ -47,12 +47,12 @@ class Assembly < ApplicationRecord
                 n = n_boards
             end
         end
+        if (is_panel and panel_num_boards)
+            return n / panel_num_boards
+        end
         # nothing constrained show show a sensible number
         if (n == big_number)
             return 0
-        end
-        if (is_panel)
-            return n / panel_num_boards
         end
         return n
     end
