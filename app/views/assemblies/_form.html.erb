@@ -98,7 +98,12 @@ function deduct(qty, qty_fails) {
 </td>
 
 <td>
+      <% if (@assembly.is_panel and @assembly.panel_num_boards) %>
+        <p>The manufacturing cost of this whole Panel is £ <%= (assembly.production_cost * @assembly.panel_num_boards).round(2) %> 
+        or <%= assembly.production_cost.round(2)%> per board.</p>
+      <% else %>
         <p>The manufacturing cost of this assembly is £ <%= assembly.production_cost.round(2) %></p>
+      <% end %>
         <p>You have enough parts to make: <%= assembly.possible_makes %> of this <%= ass_type %>.</p>
             <p>Deduct <input id="n" type="number"/> sets of the parts used in this assembly from stock.
             <% if (@assembly.is_panel) %> (number of panels times parts) <% end %>
