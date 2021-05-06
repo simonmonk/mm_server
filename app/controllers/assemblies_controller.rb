@@ -45,7 +45,8 @@ class AssembliesController < ApplicationController
       ap.part.qty = ap.part.qty - ap.qty * n * panel_scaler
       ap.part.save
     end
-    assembly.qty = assembly.qty + n - n_fails
+    puts n_fails / panel_scaler
+    assembly.qty = assembly.qty + n - (n_fails.to_f / panel_scaler)
     assembly.save
     t = Transaction.new
     t.transaction_type = 'Deduct Stock for Assembly'
