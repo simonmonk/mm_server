@@ -5,6 +5,7 @@ class AssemblyCategoriesController < ApplicationController
   # GET /assembly_categories.json
   def index
     @assembly_categories = AssemblyCategory.all
+    render json: @assembly_categories.as_json()
   end
 
   # GET /assembly_categories/1

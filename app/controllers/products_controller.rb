@@ -73,11 +73,13 @@ class ProductsController < ApplicationController
 
 
   # deduct quatities of all the parts and assemblies used for qty of this product.
+  # ADD FACILITY TO RECORD MANUFACTURING FAILURES
   def deduct_stock
       product_id = params['product_id']
       n = params['qty'].to_i
+      n_fails = params['qty_fails'].to_i
       product = Product.find(product_id)
-      product.deduct_stock(n)
+      product.deduct_stock(n, n_fails)
       redirect_to :action => "edit", :id => product_id
   end
     
@@ -198,7 +200,7 @@ class ProductsController < ApplicationController
         :catalog_priority, :carousel_0, :carousel_1, :carousel_2, :carousel_3,
         :carousel_4, :tutorial_url, :datasheet_url, :video_url_0, :video_url_1, 
         :video_url_2, :instructions_url, :compatability_image, :wholesale_price_catalog, 
-        :retail_price_catalog, :lessons_url, :hs_code_id
+        :retail_price_catalog, :lessons_url, :hs_code_id, :build_time_mins,
       )
     end
 end

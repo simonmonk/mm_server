@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   get 'bookkeepings/create_spreadsheet', to: 'bookkeepings#create_spreadsheet'
   get 'bookkeepings', to: 'bookkeepings#index'
   get 'parts/:id/set_inactive/', to: 'parts#set_inactive'
+  get 'shipments/product_sales', to: 'shipments#product_sales'
   
 
   resources :hs_codes do
@@ -105,10 +106,12 @@ Rails.application.routes.draw do
   resources :assemblies do
     collection do
       get :deduct_stock
+      get :deduct_stock_json
       get :add_part
       get :delete_part
       get :stock_report
       get :stock_label
+      get :manufacture
     end
   end
   resources :retailers do
@@ -134,6 +137,7 @@ Rails.application.routes.draw do
       get :get_shipments
       get :weekly_sales
       get :monthly_sales
+      get :product_sales
     end
   end
   resources :order_ins do

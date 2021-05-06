@@ -21,6 +21,7 @@
 
 <h2>Full Sales Report</h2>
 <button type="button" v-on:click="monthly_sales_report()" class="btn btn-primary">Sales Report</button>
+<button type="button" v-on:click="product_sales_report()" class="btn btn-primary">Product Report</button>
 
 
 <h2>Amazon</h2>
@@ -55,6 +56,9 @@ window.onload = function () {
             },
             document_list: function() {
                 window.open("/order_ins/document_list?from=" + this.financial_from_date + "&to=" + this.financial_to_date, '_blank')
+            },
+            product_sales_report: function() {
+                window.open("/shipments/product_sales.csv", '_blank')
             },
         },
         computed: {

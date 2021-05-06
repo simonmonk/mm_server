@@ -1,0 +1,198 @@
+<h1>Manufacturing</h1>
+
+<div id="app">
+<div class="container-fluid">
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-assembly-tab" data-toggle="tab" href="#nav-assembly" role="tab" aria-controls="nav-assembly" aria-selected="true">Assemblies</a>
+    <a class="nav-item nav-link" id="nav-product-tab" data-toggle="tab" href="#nav-product" role="tab" aria-controls="nav-product" aria-selected="false">Products</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-assembly" role="tabpanel" aria-labelledby="nav-assembly-tab">
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Assembly Category</label>
+    <select class="col-sm" v-model="assembly_category">
+            <option v-for="(assembly_cat, index) in assembly_categories" v-bind:value="assembly_cat">{{assembly_cat.name}}</option>
+    </select>
+   </div>
+
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Assembly</label>
+    <select class="col-sm" v-model="assembly">
+            <option v-for="(assembly, index) in assembly_category.active_assemblies" v-bind:value="assembly">{{assembly.name}}</option>
+    </select>
+   </div>
+
+
+   <div v-if="assembly.id > 0" class="form-group row">
+    <button type="button" v-on:click="edit_assembly" class="btn btn-primary">Open Assembly in New Tab</button>
+   </div>
+
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Quantity in Stock</label>
+    <label class="col-sm-2 col-form-label">{{assembly.qty}}</label>
+   </div>
+
+   <div class="form-group row">
+    <label v-if="assembly.is_panel" class="col-sm-2 col-form-label">Parts to Make (Panels)</label>
+    <label v-else class="col-sm-2 col-form-label">Parts to Make</label>
+    <label class="col-sm-2 col-form-label">{{assembly.possible_makes}}</label>
+   </div>
+
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Build time (mins)</label>
+    <label class="col-sm-2 col-form-label">{{assembly.build_time_mins}}</label>
+   </div>
+
+   <div class="form-group row">
+    <label v-if="assembly_category.is_panel" class="col-sm-2 col-form-label">Quantity of Panels Assembled</label>
+    <label v-else class="col-sm-2 col-form-label">Quantity of Assemblies Made</label>
+    <input v-model="quantity_made" type="text" value="" class="col-sm" placeholder=""/>
+   </div>
+
+   <div class="form-group row">
+    <label v-if="assembly_category.is_panel" class="col-sm-2 col-form-label">Individual Board Fails</label>
+    <label v-else class="col-sm-2 col-form-label">Quantity of Failures</label>
+    <input v-model="quantity_fails" type="text" value="" class="col-sm" placeholder=""/>
+   </div>
+
+   <div class="form-group row">
+    <button type="button" :disabled="assembly.id == 0 || quantity_made < 1 || quantity_made > assembly.possible_makes" v-on:click="deduct_assemblies" class="btn btn-primary">I Just Made These</button>
+   </div>
+  </div>
+
+  <div class="tab-pane fade" id="nav-product" role="tabpanel" aria-labelledby="nav-product-tab">
+    <div class="form-group row">
+
+    <label class="col-sm-2 col-form-label">Product Category</label>
+        <select class="col-sm" v-model="product_category">
+            <option v-for="(product_cat, index) in product_categories" v-bind:value="product_cat">{{product_cat.name}}</option>
+    </select>
+    </div>
+
+    <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Product</label>
+    <select class="col-sm" v-model="product">
+            <option v-for="(product, index) in product_category.active_products" v-bind:value="product">{{product.name}}</option>
+    </select>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Quantity in Stock</label>
+        <label class="col-sm-2 col-form-label">{{product.qty}}</label>
+    </div>
+
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Parts to Make</label>
+    <label class="col-sm-2 col-form-label">{{product.possible_makes}}</label>
+   </div>
+
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Build time (mins)</label>
+    <label class="col-sm-2 col-form-label">{{product.build_time_mins}}</label>
+   </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Quantity of Products Made</label>
+        <input v-model="quantity_made" type="text" value="" class="col-sm" placeholder=""/>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Quantity of Failures</label>
+        <input v-model="quantity_fails" type="text" value="" class="col-sm" placeholder=""/>
+    </div>
+
+    <div class="form-group row">
+    <button type="button" :disabled="product.id == 0 || quantity_made < 1 || quantity_made > product.possible_makes" v-on:click="deduct_products" class="btn btn-primary">I Just Made These</button>
+    </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+window.onload = function () {
+    var app = new Vue({
+        el: '#app',
+        data: {
+            assembly_categories: [],
+            assembly_category: {name: ""},
+            assembly: {id: 0, name: ""},
+            quantity_made: 0,
+            quantity_fails: 0,
+            product_categories: [],
+            product_category: {name: ""},
+            product: {id: 0, name: ""},
+        },
+        mounted: function() {
+            this.load_assemblies();
+            this.load_products();
+        },
+        methods: {
+            load_assemblies: function() { 
+            var that;
+            that = this;
+            $.ajax({
+              url: '/assembly_categories.json',
+              success: function(res) {
+                that.assembly_categories = res;
+              }
+            });
+          },
+          clear_assemblies: function() {
+            this.assembly = {id: 0, name: ""};
+            this.load_assemblies();
+          },
+          clear_products: function() {
+            this.product = {id: 0, name: ""};
+            this.load_products();
+          },
+          load_products: function() { 
+            var that;
+            that = this;
+            $.ajax({
+              url: '/product_categories.json',
+              success: function(res) {
+                that.product_categories = res;
+              }
+            });
+          },
+          deduct_assemblies: function() { 
+            if (confirm("Are you sure?")) {
+                var that;
+                that = this;
+                $.ajax({
+                  url: '/assemblies/deduct_stock?assembly_id=' + this.assembly.id + '&qty=' + this.quantity_made + '&qty_fails=' + this.quantity_fails,
+                  success: function(res) {
+                    alert("Saved Assemblies")
+                    that.clear_assemblies();
+                  }
+                });
+            }
+          },
+          deduct_products: function() { 
+            if (confirm("Are you sure?")) {
+                var that;
+                that = this;
+                $.ajax({
+                  url: '/products/deduct_stock?product_id=' + this.product.id + '&qty=' + this.quantity_made + '&qty_fails=' + this.quantity_fails,
+                  success: function(res) {
+                    alert("Saved Products")
+                    that.clear_products();
+                  }
+                });
+            }
+          },
+          edit_assembly: function() {
+            window.open("/assemblies/" + this.assembly.id + "/edit", '_blank')
+          }
+        }
+    });
+}
+
+</script>

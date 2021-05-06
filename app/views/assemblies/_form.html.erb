@@ -90,9 +90,11 @@ function deduct(qty, qty_fails) {
 <% if (@assembly.is_panel) %>
   <tr><td colspan=2>A whole panel might take 1/10 hr = £1. So per board £0.10/board for panel of 10. 
   This labour is just the PnP cost NOT breaking, sanding, flashing etc.</td></tr>
-  <tr><td>PnP Labour (per board) (£)</td><td><%= f.text_field :labour %></td></tr>
+  <tr><td>Processing Time Per Panel (mins)</td><td><%= f.text_field :build_time_mins %></td></tr>
+  <tr><td>PnP Labour (per board) (£)</td><td><%= f.text_field :labour %>(suggested: £<%= @assembly.calculated_labour_cost %>)</td></tr>
 <% else %>
-  <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+  <tr><td>Processing Time (mins)</td><td><%= f.text_field :build_time_mins %></td></tr>
+  <tr><td>Labour (£)</td><td><%= f.text_field :labour %>(suggested: £<%= @assembly.calculated_labour_cost %>)</td></tr>
 <%end%>
 </table>
   <div class="actions">

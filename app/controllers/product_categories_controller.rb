@@ -5,6 +5,7 @@ class ProductCategoriesController < ApplicationController
   # GET /product_categories.json
   def index
     @product_categories = ProductCategory.all
+    render json: @product_categories.as_json()
   end
 
   # GET /product_categories/1

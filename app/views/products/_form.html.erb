@@ -172,7 +172,8 @@ $(document).ready(function(){
     <tr class="collapseWebsite"><td>Video URL 3</td><td> <%= f.text_field :video_url_2, size: '80' %> </td></tr> 
 
     <tr><th colspan="2">Pricing</th></tr>
-    <tr><td>Labour (£)</td><td><%= f.text_field :labour %></td></tr>
+    <tr><td>Processing Time (mins)</td><td><%= f.text_field :build_time_mins %></td></tr>
+    <tr><td>Labour (£)</td><td><%= f.text_field :labour %> (suggested: £<%= @product.calculated_labour_cost %>)</td></tr>
     <tr><td colspan="2">The manufacturing cost of this product is £<%= product.production_cost.round(2) %></td><td></tr>
     <% if (@product.wholesale_price_catalog != @product.wholesale_price) %>
             <tr><td colspan="2" class="warning">Warning Invoice wholesale price and Catalog wholesale price are NOT the same</td></tr>

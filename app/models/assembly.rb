@@ -31,6 +31,20 @@ class Assembly < ApplicationRecord
         end
         return total
     end
+
+    def calculated_labour_cost
+        if (not build_time_mins || build_time_mins == 0)
+            return 0
+        else
+            hourly_rate = Setting.get_setting('HOURLY_RATE')
+            pounds_per_min = hourly_rate.to_f / 60.0
+            if (is_panel and panel_num_boards and panel_num_boards > 0)
+                return (pounds_per_min * build_time_mins / panel_num_boards).round(2)
+            else
+                return (pounds_per_min * build_time_mins).round(2)
+            end
+        end
+    end
     
     def possible_makes
         big_number = 100000000000000
@@ -101,5 +115,9 @@ class Assembly < ApplicationRecord
         end
         return assemblies
     end
+
+    def as_json(options={})
+        super(:methods => [:possible_makes, :is_panel])
+    end  
     
 end

@@ -2,6 +2,7 @@ class ShipmentsController < ApplicationController
   before_action :set_shipment, only: [:show, :edit, :update, :destroy, :invoice, :quote, :packing_list, :order_details]
   skip_before_filter :verify_authenticity_token 
 
+
   # GET /shipments
   # GET /shipments.json
   def index
@@ -46,6 +47,10 @@ class ShipmentsController < ApplicationController
   end
 
   def packing_list
+    render :layout => false
+  end
+
+  def product_sales
     render :layout => false
   end
     

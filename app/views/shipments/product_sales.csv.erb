@@ -1,0 +1,29 @@
+<%
+    products = Product.all.where(active: true, include_in_catalog: true).order(name: :asc)
+
+    first_date = Date.new(2018,1,1)
+    last_date = Date.today()
+
+    start_dates = []
+    end_dates = []
+
+    date = first_date
+    while (date < last_date)
+        date = date.next_month()
+        start_dates.append(date)
+        end_dates.append(date.next_month-1.day)
+    end
+%>
+"date",<%products.each do | product |%>"<%= product.name%>",<% end %>
+<%
+    for i in 1..start_dates.length-1 do
+%>
+<%=end_dates[i]%>,<%
+        products.each do | product |
+            units = product.units_and_value_shipped(start_dates[i], end_dates[i])[0]
+%><%=units%>,<%
+    end
+%>
+<%
+end
+%>

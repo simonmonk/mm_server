@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210423093128) do
+ActiveRecord::Schema.define(version: 20210506092332) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 20210423093128) do
     t.integer  "parent_assembly_id"
     t.string   "notes"
     t.integer  "panel_num_boards"
+    t.float    "build_time_mins"
   end
 
   create_table "assembly_categories", force: :cascade do |t|
@@ -321,6 +322,7 @@ ActiveRecord::Schema.define(version: 20210423093128) do
     t.string   "video_url_1"
     t.string   "video_url_2"
     t.integer  "hs_code_id"
+    t.float    "build_time_mins"
   end
 
   create_table "prospects", force: :cascade do |t|

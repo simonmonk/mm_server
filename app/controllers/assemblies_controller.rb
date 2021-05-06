@@ -35,7 +35,7 @@ class AssembliesController < ApplicationController
       panel_scaler = assembly.panel_num_boards
     end
     # if its a bagged PCB from a panel, deduct num boards / panel size from the Panel assembly ?? // todo
-    if (assembly.parent_assembly_id > 0)
+    if (assembly.parent_assembly_id and assembly.parent_assembly_id > 0)
       panel_assembly = Assembly.find(assembly.parent_assembly_id)
       panel_assembly.qty -= (n / panel_assembly.panel_num_boards)
       panel_assembly.save
@@ -52,6 +52,35 @@ class AssembliesController < ApplicationController
     t.description = "Removed parts from stock to make " + n.to_s + " new " + assembly.name
     t.save
     redirect_to :action => "edit", :id => assembly_id
+  end
+
+  def deduct_stock_json
+    assembly_id = params['assembly_id']
+    n = params['qty'].to_i
+    n_fails = params['qty_fails'].to_i
+    assembly = Assembly.find(assembly_id)
+    panel_scaler = 1
+    if (assembly.is_panel)
+      panel_scaler = assembly.panel_num_boards
+    end
+    # if its a bagged PCB from a panel, deduct num boards / panel size from the Panel assembly ?? // todo
+    if (assembly.parent_assembly_id > 0)
+      panel_assembly = Assembly.find(assembly.parent_assembly_id)
+      panel_assembly.qty -= (n / panel_assembly.panel_num_boards)
+      panel_assembly.save
+    end
+    # deduct the parts
+    assembly.assembly_parts.each do |ap|
+      ap.part.qty = ap.part.qty - ap.qty * n * panel_scaler
+      ap.part.save
+    end
+    assembly.qty = assembly.qty + n - n_fails
+    assembly.save
+    t = Transaction.new
+    t.transaction_type = 'Deduct Stock for Assembly'
+    t.description = "Removed parts from stock to make " + n.to_s + " new " + assembly.name
+    t.save
+    render :json => assembly
   end
       
     
@@ -122,6 +151,6 @@ class AssembliesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def assembly_params
       params.require(:assembly).permit(:name, :qty, :labour, :stock_warning_level, :active, :assembly_category_id, :qty_fails,
-      :parent_assembly_id, :notes, :panel_num_boards)
+      :parent_assembly_id, :notes, :panel_num_boards, :build_time_mins)
     end
 end

@@ -52,6 +52,15 @@ class Product < ApplicationRecord
         return total
     end
 
+    def calculated_labour_cost
+        if (not build_time_mins || build_time_mins == 0)
+            return 0
+        else
+            hourly_rate = Setting.get_setting('HOURLY_RATE')
+            pounds_per_min = hourly_rate.to_f / 60.0
+            return (pounds_per_min * build_time_mins).round(2)
+        end
+    end
 
 
     ##### start of methods for website generation
@@ -272,7 +281,7 @@ class Product < ApplicationRecord
     end
 
     # deduct quatities of all the parts and assemblies used for n of this product.
-    def deduct_stock(n)
+    def deduct_stock(n, n_fails = 0)
         self.product_parts.each do |pp|
             pp.part.qty = pp.part.qty - pp.qty * n
             pp.part.save
@@ -281,7 +290,7 @@ class Product < ApplicationRecord
             pp.assembly.qty = pp.assembly.qty - pp.qty * n
             pp.assembly.save
         end
-        self.qty = self.qty + n
+        self.qty = self.qty + n - n_fails
         self.save
         t = Transaction.new
         t.transaction_type = 'Deduct Stock for Product'
@@ -331,5 +340,9 @@ class Product < ApplicationRecord
             product.bring_prices_inline_with_catalog
         end
     end
+
+    def as_json(options={})
+        super(:methods => [:possible_makes])
+    end  
 
 end
