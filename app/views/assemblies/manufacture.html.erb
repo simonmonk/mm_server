@@ -78,6 +78,10 @@
     </select>
     </div>
 
+    <div v-if="product.id > 0" class="form-group row">
+        <button type="button" v-on:click="edit_product" class="btn btn-primary">Open Product in New Tab</button>
+    </div>
+
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Quantity in Stock</label>
         <label class="col-sm-2 col-form-label">{{product.qty}}</label>
@@ -190,7 +194,10 @@ window.onload = function () {
           },
           edit_assembly: function() {
             window.open("/assemblies/" + this.assembly.id + "/edit", '_blank')
-          }
+          },
+          edit_product: function() {
+            window.open("/products/" + this.product.id + "/edit", '_blank')
+          },
         }
     });
 }
