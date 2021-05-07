@@ -10,7 +10,8 @@ function add_supplier() {
     
 function remove_part_supplier(part_supplier_id) {
     document.location = "/parts/remove_part_supplier?part_supplier_id=" + part_supplier_id + "&amp;part_id=<%= part.id %>"
-}       
+}     
+
     
 </script>
 
@@ -119,6 +120,7 @@ function remove_part_supplier(part_supplier_id) {
         <td><%= part_supplier.code %></td>
         <td><a href="<%=part_supplier.supplier.website%>" target="_blank">Supplier Website (new tab)</a></td>
         <td><input type="button" value="Remove" onClick="javascript:remove_part_supplier(<%= part_supplier.id %>)"/></td>
+        <td>id=<%=part_supplier.id%></td>
       </tr>
     <% end %>
   </tbody>
