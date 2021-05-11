@@ -221,7 +221,8 @@ class Product < ApplicationRecord
     # calculate the number of products that can be made constrained by
     # the numbers of parts and assemplies available
     def possible_makes
-        n = 100000000000000
+        n_max = 100000000000000
+        n = n_max
         self.product_parts.each do |pp|
             if (pp.qty > 0.0)
                 stock_to_needed = (pp.part.qty / pp.qty).to_i()
@@ -236,11 +237,48 @@ class Product < ApplicationRecord
                 n = stock_to_needed
             end
         end
-        if (n == 100000000000000)
+        if (n == n_max)
             return 0
         else
             return n
         end
+    end
+
+    # some products are just bagged boards, and ready to be included in a kit or sold as products in their own right
+    def is_single_assembly_product
+        return (product_parts.length == 0 and product_assemblies.length == 1)
+    end
+
+    def stock_level_inc_ready_made_assemblies
+        if (is_single_assembly_product)
+            ass = product_assemblies[0]
+            return qty + ass.qty
+        else
+            return qty
+        end
+    end
+
+    def units_sold_per_month
+        total_units = 0
+        first_sale_date = Date.today
+        last_sale_date = Date.new
+        self.shipment_products.each do | sp |
+            if (sp.shipment and sp.shipment.date_order_received and sp.qty)
+                if (sp.shipment.date_order_received < first_sale_date)
+                    first_sale_date = sp.shipment.date_order_received
+                end
+                if (sp.shipment and sp.shipment.date_order_received > last_sale_date)
+                    last_sale_date = sp.shipment.date_order_received
+                end
+                total_units += sp.qty
+            end
+        end
+        days = last_sale_date - first_sale_date
+        months = days.to_f / 30.0
+        units_per_month = (total_units / months).round(2)
+        months_worth = (stock_level_inc_ready_made_assemblies / units_per_month).round(2)
+        return "Lifetime sales of " + total_units.to_s + " from " + first_sale_date.to_s + " to " + last_sale_date.to_s + 
+            " equating to sales of " + units_per_month.to_s + " per month, meaning you have " + months_worth.to_s + " months worth of stock."
     end
 
     # find a prpduct by SKU with some fancy processing rules for
@@ -342,7 +380,7 @@ class Product < ApplicationRecord
     end
 
     def as_json(options={})
-        super(:methods => [:possible_makes])
+        super(:methods => [:possible_makes, :stock_level_inc_ready_made_assemblies, :units_sold_per_month])
     end  
 
 end

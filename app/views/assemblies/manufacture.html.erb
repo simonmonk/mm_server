@@ -1,6 +1,10 @@
+<div id="app">
+
 <h1>Manufacturing</h1>
 
-<div id="app">
+<h1>Record Makings</h1>
+
+
 <div class="container-fluid">
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -114,6 +118,25 @@
 </div>
 
 </div>
+
+
+<h2>Product Status</h2>
+
+<div v-for="(product_cat, index) in product_categories">
+<h3>{{product_cat.name}}</h3>
+
+<div v-for="(product, index) in product_cat.active_products" class="list-group">
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{product.name}}</h5>
+      <small>{{product.stock_level_inc_ready_made_assemblies}} in stock</small>
+    </div>
+    <p class="mb-1">{{product.units_sold_per_month}}</p>
+  </a>
+</div>
+
+</div>
+
 
 </div>
 
