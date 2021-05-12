@@ -251,7 +251,8 @@ class Product < ApplicationRecord
 
     def stock_level_inc_ready_made_assemblies
         if (is_single_assembly_product)
-            ass = product_assemblies[0]
+            ass = product_assemblies[0].assembly
+            puts ass
             return qty + ass.qty
         else
             return qty
@@ -277,8 +278,11 @@ class Product < ApplicationRecord
         months = days.to_f / 30.0
         units_per_month = (total_units / months).round(2)
         months_worth = (stock_level_inc_ready_made_assemblies / units_per_month).round(2)
-        return "Lifetime sales of " + total_units.to_s + " from " + first_sale_date.to_s + " to " + last_sale_date.to_s + 
-            " equating to sales of " + units_per_month.to_s + " per month, meaning you have " + months_worth.to_s + " months worth of stock."
+        return {:total_units => total_units, 
+                :first_sale_date => first_sale_date,
+                :units_per_month => units_per_month,
+                :months_worth => months_worth
+            }
     end
 
     # find a prpduct by SKU with some fancy processing rules for

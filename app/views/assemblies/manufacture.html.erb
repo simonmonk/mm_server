@@ -129,9 +129,10 @@
   <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">{{product.name}}</h5>
-      <small>{{product.stock_level_inc_ready_made_assemblies}} in stock</small>
+      <p class="mb-1">Lifetime sales: {{product.units_sold_per_month.total_units}}</p>
+      <small>{{product.stock_level_inc_ready_made_assemblies}} in stock ({{product.units_sold_per_month.months_worth}} months)</small>
     </div>
-    <p class="mb-1">{{product.units_sold_per_month}}</p>
+    
   </a>
 </div>
 
