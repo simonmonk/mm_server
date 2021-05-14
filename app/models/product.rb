@@ -252,7 +252,6 @@ class Product < ApplicationRecord
     def stock_level_inc_ready_made_assemblies
         if (is_single_assembly_product)
             ass = product_assemblies[0].assembly
-            puts ass
             return qty + ass.qty
         else
             return qty
