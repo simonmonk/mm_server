@@ -274,7 +274,7 @@ DEPENDENCIES
   axlsx
   axlsx_rails
   barby
-  bootstrap
+  bootstrap (~> 4.5.0)
   bootstrap-datepicker-rails
   byebug
   chart-js-rails

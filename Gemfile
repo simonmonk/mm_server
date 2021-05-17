@@ -66,7 +66,7 @@ gem "html_to_plain_text"
 gem 'vuejs-rails'
 gem "chartkick"
 
-gem 'bootstrap'
+gem 'bootstrap', "~> 4.5.0"
 gem 'jquery-rails'
 gem 'rb-readline'
 
