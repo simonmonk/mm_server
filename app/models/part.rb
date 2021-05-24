@@ -91,9 +91,18 @@ class Part < ApplicationRecord
         end
         assemblies = self.assembly_parts.collect {|ap| ap.assembly }
         assemblies.each do | assembly |
+            # for any product assemblies of this assembly, add the product.
             assembly.product_assemblies.each do | pa |
                 if pa.product and pa.product.active
                     products.append(pa.product)
+                end
+            end
+            # for a panel its different - find the parent assembly and add its product
+            if (assembly.is_panel and assembly.bagged_pcb)
+                assembly.bagged_pcb.product_assemblies.each do | pa |
+                    if pa.product and pa.product.active
+                        products.append(pa.product)
+                    end
                 end
             end
         end

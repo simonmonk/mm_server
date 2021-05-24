@@ -101,10 +101,15 @@ class Assembly < ApplicationRecord
         return (parent_assembly_id and parent_assembly_id > 0)
     end
 
+    # The panel which this bagged PCB uses
     def panel
         Assembly.find_by_id(parent_assembly_id)
     end
 
+    # The bagged PCB in which this panel is used
+    def bagged_pcb
+        Assembly.find_by_parent_assembly_id self.id
+    end
 
     def Assembly.panel_assemblies
         assemblies = [Assembly.new(name: 'NONE', id: 0)]
