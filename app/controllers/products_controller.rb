@@ -6,6 +6,10 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all.where(active: true).order(:product_category_id)
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render :json => @products, :level => 'with_stats'}
+    end
   end
 
   # GET /products/1

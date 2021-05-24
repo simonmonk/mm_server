@@ -494,6 +494,7 @@ Sort by:
   </div>
 </div>
 
+<p>{{status}}</p>
 
 <!-- Orders List Table -->
 <table>
@@ -538,6 +539,7 @@ window.onload = function () {
         el: '#app',
         data: {
           clicked: false,
+          status: "Loading Please Wait ...",
           filter_by_type: 'is_new',
           num_days: 90,
           sort_by_field: 'updated_at',
@@ -572,7 +574,7 @@ window.onload = function () {
             product: {name: ''}
           },
           products: [],
-          new_label: {qty_on_label: 0}
+          new_label: {qty_on_label: 0},
         },
         mounted: function() {
           var that;
@@ -590,6 +592,7 @@ window.onload = function () {
         },
         methods: {
           load_shipments: function(days, callback) { 
+            this.status = "Loading Please Wait ..."
             var that;
             that = this;
             if (days == 0) { // load at least 90 days worth
@@ -608,6 +611,7 @@ window.onload = function () {
                   callback()
                   console.log("clicked = false - callback from load_shipments")
                   that.clicked = false; // double click on Shipped prevention
+                  that.status = "";
                 }
               }
             });

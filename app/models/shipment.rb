@@ -532,10 +532,17 @@ class Shipment < ApplicationRecord
     return self.retailer.name_with_nickname
   end
 
+
   def as_json(options={})
-    super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer,
+    if (options[:level] == 'concise') # because we don't want expensive computed fields of Product from shipment_product
+      return super(:methods => [:retailer_name, :total_invoice_amount, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer,
+                        :without_vat, :vat, :with_vat, :accounting_date, :accounts, :transaction_summary,
+                        :account_ids], options => options)
+    else
+      return super(:methods => [:retailer_name, :total_invoice_amount, :is_amazon, :is_new, :is_unpaid, :is_paid, :is_overdue, :shipment_products, :retailer,
                         :without_vat, :vat, :with_vat, :accounting_date, :transaction_type, :accounts, :transaction_summary, :direction,
-                        :account_ids, :has_proof_uploaded])
+                        :account_ids, :has_proof_uploaded], options => options)
+    end
   end
     
 end

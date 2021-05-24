@@ -14,7 +14,7 @@ class ShipmentsController < ApplicationController
     cutoff_date = Date.current - days.days
     respond_to do |format|
         format.html { render :index }
-        format.json { render :json => Shipment.where("updated_at > ?", cutoff_date).order('updated_at desc') }
+        format.json { render :json => Shipment.where("updated_at > ?", cutoff_date).order('updated_at desc'), :level => 'concise'}
     end
   end
 

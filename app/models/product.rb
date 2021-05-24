@@ -381,9 +381,14 @@ class Product < ApplicationRecord
             product.bring_prices_inline_with_catalog
         end
     end
+    
 
     def as_json(options={})
-        super(:methods => [:possible_makes, :stock_level_inc_ready_made_assemblies, :units_sold_per_month])
-    end  
-
+        puts "prod " + options.to_s
+        if (options[:level] == 'with_stats')
+            return super(:methods => [:possible_makes, :stock_level_inc_ready_made_assemblies, :units_sold_per_month])
+        else
+            return super()
+        end  
+    end
 end

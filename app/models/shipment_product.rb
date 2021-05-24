@@ -5,6 +5,7 @@ class ShipmentProduct < ApplicationRecord
   belongs_to :product
 
   def as_json(options={})
+    puts options
     super(:methods => [:product, :line_total])
   end
     
@@ -75,6 +76,10 @@ class ShipmentProduct < ApplicationRecord
             end
         end
     end
-
+ 
+  def as_json(options={})
+    puts "ship prod " + options.to_s
+    super(:methods => [:product, :line_total], options => options)
+  end
     
 end
