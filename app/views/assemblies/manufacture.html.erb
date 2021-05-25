@@ -120,25 +120,6 @@
 </div>
 
 
-<h2>Product Status</h2>
-
-<div v-for="(product_cat, index) in product_categories">
-<h3>{{product_cat.name}}</h3>
-
-<div v-for="(product, index) in product_cat.active_products" class="list-group">
-  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{product.name}}</h5>
-      <p class="mb-1">Lifetime sales: {{product.units_sold_per_month.total_units}}</p>
-      <small>{{product.stock_level_inc_ready_made_assemblies}} in stock ({{product.units_sold_per_month.months_worth}} months)</small>
-    </div>
-    
-  </a>
-</div>
-
-</div>
-
-
 </div>
 
 
