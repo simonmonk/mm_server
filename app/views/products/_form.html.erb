@@ -260,6 +260,41 @@ $(document).ready(function(){
                 end
             %>
         </table>
+        <table>
+        <tr><th colspan="2" onclick="$( '.collapsePartsTree' ).toggle();">Show/Hide Parts Tree</th></tr>
+        <%
+            @product.product_parts.each do |product_part|
+        %>
+                <p class="collapsePartsTree">* Part: <%=product_part.part.name%>__<%=product_part.part.id%></p>
+        <%
+            end
+        %>
+        <%
+            @product.product_assemblies.each do |product_assembly|
+                ass = product_assembly.assembly
+                if (ass.uses_panel)
+        %>
+                <p class="collapsePartsTree">PCB: <%= ass.name %> </p>
+        <%
+                    panel = ass.panel
+                    panel.assembly_parts.each do |assembly_part|
+        %>
+                    <p class="collapsePartsTree">** Part: <%= assembly_part.part.name %>__ <%= assembly_part.part.id%></p>
+        <%
+                    end
+                else
+        %>
+            <p class="collapsePartsTree">ASS: <%= ass.name %> </p> 
+        <%
+                    ass.assembly_parts.each do |assembly_part|
+        %>
+                        <p class="collapsePartsTree">** Part: <%= assembly_part.part.name %>__ <%= assembly_part.part.id%></p>
+        <%
+                    end
+                end
+            end
+        %>
+        </table>
     </td>
 </tr></table>
 
